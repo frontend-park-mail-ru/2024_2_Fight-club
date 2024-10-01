@@ -30,7 +30,7 @@ class AdCard {
 
         templateContainer
             .querySelector('.ad-card__button')
-            .addEventListener('click', this.#addToFavorite)
+            .addEventListener('click', () => this.#addToFavorite())
         this.parent.appendChild(templateContainer)
 
         setTimeout(() => {
