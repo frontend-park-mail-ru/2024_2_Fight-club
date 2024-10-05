@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "vite --port 80",
+    "build": "vite build",
     "prestart": "npm run compile:templates",
-    "start": "node ./server/server.js",
-    "compile:templates": "handlebars public/components/AdCard/AdCard.hbs public/components/AuthPopup/AuthPopup.hbs -f public/components/precompiled-templates.js"
+    "compile:templates": "handlebars components/AdCard/AdCard.hbs components/AuthPopup/AuthPopup.hbs -f components/precompiled-templates.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "@eslint/js": "^9.11.1",
     "eslint": "^9.11.1",
     "globals": "^15.9.0",
-    "prettier": "3.3.3"
+    "prettier": "3.3.3",
+    "vite": "^5.4.8"
   }
 }
