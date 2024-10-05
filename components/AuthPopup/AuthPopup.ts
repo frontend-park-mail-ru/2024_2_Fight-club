@@ -1,8 +1,8 @@
 'use strict'
 
-import Validation from '../../modules/Validation.js'
+import Validation from '../../modules/Validation'
 
-import { login, register } from '../../modules/Auth.js'
+import { login, register } from '../../modules/Auth'
 
 class AuthPopup {
     #config

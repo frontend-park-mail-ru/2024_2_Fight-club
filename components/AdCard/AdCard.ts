@@ -5,12 +5,16 @@ const SCROLL_DELAY = 200
 /** Карточка объявления на главной странице */
 class AdCard {
     #data
-    #currentImgIndex
-    #circles
+    #currentImgIndex: number
+    #circles: []
+    private parent: HTMLDivElement | null | undefined
 
     /** @param {object} data - информация о карточке
      @param {HTMLDivElement} parent - родитель, в чьем списке детей будет карточка */
-    constructor(data, parent) {
+    constructor(
+        data: { pictures: any[] },
+        parent: HTMLDivElement | null | undefined
+    ) {
         this.#data = data
         this.parent = parent
 
@@ -24,7 +28,6 @@ class AdCard {
     }
 
     render() {
-        // eslint-disable-next-line no-undef
         const template = Handlebars.templates['AdCard.hbs']
         const templateContainer = document.createElement('div')
 

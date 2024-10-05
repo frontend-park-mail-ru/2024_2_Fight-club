@@ -5,7 +5,7 @@ const EMAIL_REGEXP = /.+@.+/
 const PASSWORD_REGEXP = /^[a-zA-Z0-9!@#$%^&*()_+=-]{8,16}$/
 
 class Validation {
-    static validateName(nameInput) {
+    static validateName(nameInput: HTMLInputElement) {
         const res = {
             ok: true,
             text: undefined,
@@ -19,7 +19,7 @@ class Validation {
         return res
     }
 
-    static validateUsername(usernameInput) {
+    static validateUsername(usernameInput: HTMLInputElement) {
         return this.#validateAny(usernameInput, USERNAME_REGEXP, {
             WRONG_LENGTH: 'Длина логина - от 6 до 20 символов',
             REGEXP_MISMATCH:
@@ -27,7 +27,7 @@ class Validation {
         })
     }
 
-    static validatePassword(passwordInput) {
+    static validatePassword(passwordInput: HTMLInputElement) {
         return this.#validateAny(passwordInput, PASSWORD_REGEXP, {
             WRONG_LENGTH: 'Длина пароля - от 8 до 16 символов',
             REGEXP_MISMATCH:
@@ -35,14 +35,17 @@ class Validation {
         })
     }
 
-    static validateEmail(emailInput) {
+    static validateEmail(emailInput: HTMLInputElement) {
         return this.#validateAny(emailInput, EMAIL_REGEXP, {
             WRONG_LENGTH: 'Почта - от 6 до 40 символов',
             REGEXP_MISMATCH: 'Почта должна иметь формат admin@example.com',
         })
     }
 
-    static validatePasswords(passwordInput, passwordRepeatInput) {
+    static validatePasswords(
+        passwordInput: HTMLInputElement,
+        passwordRepeatInput: HTMLInputElement
+    ) {
         const res = {
             ok: true,
             text: undefined,
@@ -68,7 +71,11 @@ class Validation {
      * @returns res.text contains validation error text
      */
 
-    static #validateAny(inputElem, regexp, errorMessages) {
+    static #validateAny(
+        inputElem: HTMLInputElement,
+        regexp: RegExp,
+        errorMessages: object
+    ) {
         const res = {
             ok: true,
             text: undefined,
@@ -92,7 +99,7 @@ class Validation {
      * @param {HTMLInputElement} inputElem
      * @private
      */
-    static #validateLen(inputElem) {
+    static #validateLen(inputElem: HTMLInputElement) {
         return (
             inputElem.value.length <= inputElem.maxLength &&
             inputElem.value.length >= inputElem.minLength

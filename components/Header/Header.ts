@@ -1,6 +1,6 @@
 'use strict'
 
-import { logout } from '../../modules/Auth.js'
+import { logout } from '../../modules/Auth'
 
 class Header {
     #config

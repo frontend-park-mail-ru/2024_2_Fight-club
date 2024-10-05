@@ -1,9 +1,9 @@
 'use strict'
 
-import Header from './components/Header/Header.js'
-import AuthPopup from './components/AuthPopup/AuthPopup.js'
-import MainPage from './components/MainPage/MainPage.js'
-import Ajax from './modules/Ajax.js'
+import Header from './components/Header/Header'
+import AuthPopup from './components/AuthPopup/AuthPopup'
+import MainPage from './components/MainPage/MainPage'
+import Ajax from './modules/Ajax'
 
 const root = document.getElementById('root')
 const pageContainer = document.createElement('div')

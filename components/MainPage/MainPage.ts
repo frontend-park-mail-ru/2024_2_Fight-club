@@ -1,8 +1,8 @@
 'use strict'
 
-import Filter from '../Filter/Filter.js'
-import AdCard from '../AdCard/AdCard.js'
-import MainPhoto from '../MainPhoto/MainPhoto.js'
+import Filter from '../Filter/Filter'
+import AdCard from '../AdCard/AdCard'
+import MainPhoto from '../MainPhoto/MainPhoto'
 
 /** Главная страница с витриной объявлений, поиском и фильтрами */
 class MainPage {
@@ -11,7 +11,7 @@ class MainPage {
     #pageContent
     #adsContainer
 
-    constructor(root) {
+    constructor(root: HTMLDivElement) {
         this.#root = root
 
         this.#mainPhotoContainer = new MainPhoto()
