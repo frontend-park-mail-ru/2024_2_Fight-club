@@ -1,11 +1,22 @@
 'use strict'
 
+interface PostParams {
+    url: string
+    body: object
+}
+
+interface RequestParams {
+    url: string
+    body?: object
+    method: string
+}
+
 class Ajax {
     /**
      * @public
      * @param {string} url
      */
-    static get(url) {
+    static get(url: string): Promise<any> {
         return this.#makeRequest({
             method: 'GET',
             url: url,
@@ -14,10 +25,9 @@ class Ajax {
 
     /**
      * @public
-     * @param {string} url
-     * @param {object} body
+     * @param {PostParams} postParams
      */
-    static post({ url, body }) {
+    static post({ url, body }: PostParams): Promise<any> {
         return this.#makeRequest({ method: 'POST', url, body })
     }
 
@@ -27,19 +37,21 @@ class Ajax {
      * @param {object} body
      * @returns {Promise<*>}
      */
-    static delete({ url, body }) {
+    static delete({ url, body }: PostParams): Promise<any> {
         return this.#makeRequest({ method: 'DELETE', url, body })
     }
 
     /**
      * @private
-     * @param {string} method
-     * @param {string} url
-     * @param {object} body
+     * @param {RequestParams} params
      * @returns {Promise<any>} response
      */
-    static async #makeRequest({ method, url, body = undefined }) {
-        let request
+    static async #makeRequest({
+        method,
+        url,
+        body = {},
+    }: RequestParams): Promise<any> {
+        let request: Request
         if (method === 'GET') {
             request = new Request(url, {
                 method: method,
@@ -48,7 +60,7 @@ class Ajax {
                 },
                 credentials: 'include',
             })
-        } else if (method === 'POST' || method === 'DELETE') {
+        } else {
             request = new Request(url, {
                 method: method,
                 headers: {

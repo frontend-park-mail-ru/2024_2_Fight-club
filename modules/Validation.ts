@@ -4,11 +4,21 @@ const USERNAME_REGEXP = /^[A-Za-z0-9][A-Za-z0-9-_.]{3,19}[A-Za-z0-9]$/
 const EMAIL_REGEXP = /.+@.+/
 const PASSWORD_REGEXP = /^[a-zA-Z0-9!@#$%^&*()_+=-]{8,16}$/
 
+interface ErrorMessage {
+    WRONG_LENGTH: string
+    REGEXP_MISMATCH: string
+}
+
+interface ValidationResult {
+    ok: boolean
+    text: string
+}
+
 class Validation {
     static validateName(nameInput: HTMLInputElement) {
-        const res = {
+        const res: ValidationResult = {
             ok: true,
-            text: undefined,
+            text: '',
         }
 
         if (!this.#validateLen(nameInput)) {
@@ -46,9 +56,9 @@ class Validation {
         passwordInput: HTMLInputElement,
         passwordRepeatInput: HTMLInputElement
     ) {
-        const res = {
+        const res: ValidationResult = {
             ok: true,
-            text: undefined,
+            text: '',
         }
 
         if (passwordInput.value !== passwordRepeatInput.value) {
@@ -74,11 +84,11 @@ class Validation {
     static #validateAny(
         inputElem: HTMLInputElement,
         regexp: RegExp,
-        errorMessages: object
+        errorMessages: ErrorMessage
     ) {
-        const res = {
+        const res: ValidationResult = {
             ok: true,
-            text: undefined,
+            text: '',
         }
 
         if (!this.#validateLen(inputElem)) {

@@ -2,15 +2,31 @@
 
 import Ajax from './Ajax'
 
+interface RegisterParams {
+    name: string
+    username: string
+    password: string
+    email: string
+}
+
+interface LoginParams {
+    username: string
+    password: string
+}
+
 /**
  * @public
  * @description Посылает запрос на регистрацию пользователя
- * @param {string} username
- * @param {string} password
- * @param {string} email
+ * @param {RegisterParams} params
  * @returns {Promise<any>}
  */
-export const register = async ({ name, username, password, email }) => {
+
+export const register = async ({
+    name,
+    username,
+    password,
+    email,
+}: RegisterParams): Promise<any> => {
     const url = BACKEND_URL + '/auth/register'
     const body = {
         name: name,
@@ -25,11 +41,13 @@ export const register = async ({ name, username, password, email }) => {
 /**
  * @public
  * @description Посылает запрос на вход пользователя в аккаунт
- * @param {string} username
- * @param {string} password
+ * @param {LoginParams} loginParams
  * @returns {Promise<any>}
  */
-export const login = async ({ username, password }) => {
+export const login = async ({
+    username,
+    password,
+}: LoginParams): Promise<any> => {
     const url = BACKEND_URL + '/auth/login'
     const body = {
         username: username,
@@ -42,7 +60,7 @@ export const login = async ({ username, password }) => {
  * @public
  * @returns {Promise<*>}
  */
-export const logout = async () => {
+export const logout = async (): Promise<any> => {
     const url = BACKEND_URL + '/auth/logout'
     const body = {}
     return Ajax.delete({ url, body })

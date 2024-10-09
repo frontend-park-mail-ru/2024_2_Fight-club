@@ -12,7 +12,7 @@ class AuthPopup {
      *
      * @param {('auth' | 'signup')} currentState
      */
-    constructor(currentState = 'auth') {
+    constructor(currentState: 'auth' | 'signup' = 'auth') {
         this.overlay = document.createElement('div')
         this.overlay.classList.add('overlay')
 
@@ -95,7 +95,7 @@ class AuthPopup {
      * @description Функция для валидации данных
      * @returns {boolean} прошла ли валидацию форма
      */
-    #validateData() {
+    #validateData(): boolean {
         if (this.#currentState === 'auth') {
             return this.#validateAuthData()
         }
@@ -105,7 +105,7 @@ class AuthPopup {
     /**
      * @returns {boolean} прошла ли валидацию форма
      */
-    #validateAuthData() {
+    #validateAuthData(): boolean {
         const form = document.forms['auth-form']
 
         const usernameInput = form.elements.username
@@ -134,7 +134,7 @@ class AuthPopup {
     /**
      * @returns {boolean} прошла ли валидацию форма
      */
-    #validateRegistrationData() {
+    #validateRegistrationData(): boolean {
         const form = document.forms['auth-form']
 
         const nameInput = form.elements.name
@@ -204,7 +204,7 @@ class AuthPopup {
         )
     }
 
-    showErrorMessage(inputElem, errorMsg) {
+    showErrorMessage(inputElem: HTMLInputElement, errorMsg: string) {
         inputElem.classList.add('popup__input__error')
         const exclamation = inputElem.parentElement.querySelector(
             '.popup__exclamation'
@@ -217,7 +217,7 @@ class AuthPopup {
         validationMessageContainer.textContent = errorMsg
     }
 
-    hideErrorMsg(inputElem) {
+    hideErrorMsg(inputElem: HTMLInputElement) {
         const parentElem = inputElem.parentElement
         inputElem.classList.remove('popup__input__error')
         parentElem
@@ -280,7 +280,7 @@ class AuthPopup {
      * @private
      * @param {string} message
      */
-    #setFailureMessage(message) {
+    #setFailureMessage(message: string): void {
         const failureMessageElem = document.querySelector(
             '.popup__failure-message'
         )
@@ -292,7 +292,7 @@ class AuthPopup {
         failureMessageElem.textContent = message
     }
 
-    #closeOverlay(parent) {
+    #closeOverlay(parent: HTMLInputElement): void {
         parent.querySelector('.overlay').remove()
         document.body.classList.remove('no-scroll')
     }
@@ -302,7 +302,7 @@ class AuthPopup {
      * @param {HTMLElement} parent
      *
      */
-    render(parent) {
+    render(parent: HTMLElement): void {
         // eslint-disable-next-line no-undef
         const template = Handlebars.templates['AuthPopup.hbs']
         const templateContainer = document.createElement('div')
@@ -315,7 +315,7 @@ class AuthPopup {
         setTimeout(() => this.#addEventListeners(parent), 0)
     }
 
-    #addEventListeners(parent) {
+    #addEventListeners(parent: HTMLInputElement): void {
         // Close overlay
         const form = parent.querySelector('.popup')
         form.onclick = (e) => e.stopPropagation()
