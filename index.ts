@@ -5,10 +5,10 @@ import AuthPopup from './components/AuthPopup/AuthPopup'
 import MainPage from './components/MainPage/MainPage'
 import Ajax from './modules/Ajax'
 
-const root = document.getElementById('root')
-const pageContainer = document.createElement('div')
+import { BACKEND_URL } from './modules/Consts'
 
-window.BACKEND_URL = `http://${window.location.hostname}:8080/api`
+const root = document.getElementById('root')!
+const pageContainer = document.createElement('div')
 
 /** Объект с коллбеками для header`а */
 const headerCallbacks = {

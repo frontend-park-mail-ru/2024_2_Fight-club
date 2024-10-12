@@ -1,4 +1,4 @@
 node_modules/
 .idea/
-public/components/precompiled-templates.js
-public/images/
+/components/precompiled-templates.js
+/images/

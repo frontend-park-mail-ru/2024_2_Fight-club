@@ -1,6 +1,7 @@
 'use strict'
 
 import Ajax from './Ajax'
+import { BACKEND_URL } from './Consts'
 
 interface RegisterParams {
     name: string
