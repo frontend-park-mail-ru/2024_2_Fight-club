@@ -1,0 +1,70 @@
+.photo-container {
+    background: url('../../images/journey.jpg') no-repeat center center / cover;
+    height: 553px;
+    width: 100%;
+    position: relative;
+}
+
+.hosts {
+    display: flex;
+    justify-content: space-between;
+    width: 35%;
+    margin: 0 auto;
+    padding-top: 4%;
+}
+
+.hosts a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+    font-style: italic;
+    text-shadow: 1px;
+}
+
+.search-container {
+    width: 50%;
+    height: 9%;
+    padding-top: 1%;
+    margin: 0 auto;
+    display: flex;
+}
+
+.custom-search {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+}
+
+.custom-search input {
+    width: 100%;
+    border-radius: 10px 0 0 10px;
+    outline: none;
+    border: none;
+    padding: 5px 10px 0 5%;
+    font-size: 18px;
+}
+
+.custom-search input::placeholder {
+    font-size: 18px;
+    font-style: italic;
+}
+
+.custom-search button {
+    background-color: #ffffff;
+    background-image: url('/images/search.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 30px;
+
+    border: none;
+    border-radius: 0 10px 10px 0;
+    width: 30px;
+    height: 100%;
+    margin: 0;
+    padding-right: 5%;
+    padding-top: 5px;
+    cursor: pointer;
+}

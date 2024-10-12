@@ -1,28 +1,29 @@
 {
-  "name": "2024_2_fight-club",
-  "version": "1.0.0",
-  "description": "## Репозиторий команды Бойцовский клуб проект Cian",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "vite --port 80",
-    "build": "vite build",
-    "prestart": "npm run compile:templates",
-    "compile:templates": "handlebars components/AdCard/AdCard.hbs components/AuthPopup/AuthPopup.hbs -f components/precompiled-templates.js"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@types/handlebars": "^4.0.40",
-    "express": "^4.21.0",
-    "handlebars": "^4.7.8"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.11.1",
-    "eslint": "^9.11.1",
-    "globals": "^15.9.0",
-    "prettier": "3.3.3",
-    "typescript": "^5.6.2",
-    "vite": "^5.4.8"
-  }
+    "name": "2024_2_fight-club",
+    "version": "1.0.0",
+    "description": "## Репозиторий команды Бойцовский клуб проект Cian",
+    "main": "index.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "vite --port 80",
+        "build": "vite build",
+        "prestart": "npm run eslint:fix && npm run compile:templates",
+        "compile:templates": "handlebars components/AdCard/AdCard.hbs components/AuthPopup/AuthPopup.hbs -f components/precompiled-templates.js",
+        "eslint:fix": "npx  eslint --fix "
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.21.0",
+        "handlebars": "^4.7.8"
+    },
+    "devDependencies": {
+        "@types/handlebars": "^4.0.40",
+        "@eslint/js": "^9.11.1",
+        "eslint": "^9.11.1",
+        "globals": "^15.9.0",
+        "prettier": "3.3.3",
+        "sass": "^1.79.4",
+        "vite": "^5.4.8"
+    }
 }

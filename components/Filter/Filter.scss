@@ -1,0 +1,112 @@
+#main-content {
+    width: 93%;
+    margin: 100px auto auto;
+    display: grid;
+    grid-template-areas: 'aside addvert';
+
+    grid-template-columns: 25% 1fr;
+}
+
+.filter {
+    pointer-events: none;
+    opacity: 0.5;
+    grid-area: aside;
+    padding-inline-start: 5%;
+    padding-inline-end: 5%;
+    border-radius: 20px;
+    background-color: #ffffff;
+    margin-left: 50px;
+    margin-right: auto;
+    border: 1px solid black;
+    padding-top: 4%;
+    max-height: fit-content;
+}
+
+.filter-group {
+    background-color: #ffffff;
+    margin-bottom: 5%;
+}
+
+.filter-group span {
+    display: flex;
+    align-items: center;
+    height: 40px;
+}
+
+.filter-group a {
+    font-size: 20px;
+    margin-left: -5px;
+}
+
+.filter-group p {
+    font-size: 20px;
+    padding-left: 2%;
+}
+
+.filter-element {
+    position: relative;
+    padding-left: 25px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.filter-element input {
+    display: none;
+}
+
+.filter-element label {
+    font-size: 20px;
+
+    &:after {
+        content: '';
+        display: block;
+        height: 14px;
+        width: 14px;
+        outline: 1px solid #939598;
+        position: absolute;
+        top: 20%;
+        left: 0;
+        border-radius: 5px;
+    }
+}
+
+.filter-element input:checked + label:after {
+    outline: 1px solid #939598;
+    border: 2px solid #fff;
+    width: 10px;
+    height: 10px;
+    background-color: #ffa552;
+}
+
+.filter-element input {
+    display: none;
+}
+
+.filter button {
+    margin-left: 10%;
+    width: 80%;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.apply-button {
+    color: #ffffff;
+    background-color: #ffa552;
+    margin-bottom: 10px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.reset-button {
+    color: #000000;
+    background-color: #ffffff;
+    border-width: 1px;
+    margin-bottom: 5%;
+    cursor: pointer;
+}
+
+.advert {
+    grid-area: addvert;
+}
