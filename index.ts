@@ -4,6 +4,7 @@ import Header from './components/Header/Header';
 import AuthPopup from './components/AuthPopup/AuthPopup';
 import MainPage from './components/MainPage/MainPage';
 import Ajax from './modules/Ajax';
+import './components/precompiled-templates';
 
 import { BACKEND_URL } from './modules/Consts';
 
