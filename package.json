@@ -7,6 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "vite --port 80",
         "build": "vite build",
+        "preview": "vite preview",
         "prestart": "npm run eslint:fix && npm run compile:templates",
         "compile:templates": "handlebars components/AdCard/AdCard.hbs components/AuthPopup/AuthPopup.hbs -f components/precompiled-templates.js",
         "eslint:fix": "npx  eslint --fix "
