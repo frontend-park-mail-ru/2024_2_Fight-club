@@ -11,6 +11,9 @@ export default [
         },
     },
     {
+        ignores: ['dist/*'],
+    },
+    {
         languageOptions: {
             globals: {
                 ...globals.browser,
