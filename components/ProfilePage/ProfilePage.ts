@@ -50,7 +50,7 @@ class ProfilePage{
      * @param {string} birthdate
      * @returns {number} 
      */
-    #calculateAge(birthdate: string) {
+    #calculateAge(birthdate: string): number {
         //TODO
         return 10;
     }
@@ -60,7 +60,7 @@ class ProfilePage{
      * @param {number} sex
      * @returns {string} 
      */
-    #calculateSex(sex: number) {
+    #calculateSex(sex: number): "Не указано" | "Муж." | "Жен." {
         if (sex === 0) return 'Не указано';
         else if (sex === 1) return 'Муж.';
         else return 'Жен.';
@@ -72,7 +72,10 @@ class ProfilePage{
      * @param {string} longAddress
      * @returns {Object} 
      */
-    #splitAddress(longAddress: string){
+    #splitAddress(longAddress: string): {
+        city: string,
+        address: string
+    }{
         const parts = longAddress.split(',');
         const city = parts.slice(0, 2).join(', ').trim();
         const address = parts.slice(2).join(', ').trim();
