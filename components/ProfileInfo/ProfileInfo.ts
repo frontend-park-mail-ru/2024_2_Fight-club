@@ -7,6 +7,10 @@ class ProfileInfo {
         this.#data = data;
     }
 
+    /**
+     * 
+     * @param {HTMLElement} parent 
+     */
     render(parent: HTMLElement){
         const template = Handlebars.templates['ProfileInfo.hbs'];
         parent.insertAdjacentHTML('afterbegin', template(this.#data));
