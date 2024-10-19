@@ -1,0 +1,83 @@
+<div class='ad-page'>
+    <main>
+        <div class='advert-images-carousel'>
+            <div class='advert-images-carousel__main-img-div js-main-img-div'>
+                <img class='advert-images-carousel__img-background' />
+                <img class='advert-images-carousel__main-img' />
+            </div>
+            <div class='advert-images-carousel__secondary_images'>
+                {{#each images}}
+                    <img
+                        class='advert-images-carousel__secondary_img js-carousel-img'
+                        src='{{this}}'
+                    />
+                {{/each}}
+            </div>
+        </div>
+
+        <div class='advert-desc'>
+            <div class='advert-desc__text-data'>
+                <span class='advert-desc__label'>Страна:</span>
+                <span class='advert-desc__value'>{{country}}</span>
+                <span class='advert-desc__label'>Город:</span>
+                <span class='advert-desc__value'>{{city}}</span>
+                <span class='advert-desc__label'>Комнаты:</span>
+                <span class='advert-desc__value'>{{roomsCount}}</span>
+                <span class='advert-desc__label'>Описание:</span>
+                <span class='advert-desc__value'>{{desc}}</span>
+            </div>
+        </div>
+    </main>
+
+    <div
+        class='ad-page__fullscreen-overlay ad-page__fullscreen-overlay_hidden js-fullscreen-overlay'
+    >
+        <img
+            class='ad-page__fullscreen-overlay__image js-main-image-fullscreen'
+        />
+    </div>
+
+    <aside class='profile-container'>
+        <div class='profile-container__center'>
+            <div class='profile-container__photo'>
+                <img
+                    src='../../images/default_user_icon.png'
+                    class='profile-container__photo__img1'
+                />
+            </div>
+            <p class='profile-container__p1'>{{author.name}}</p>
+            <p class='profile-container__p2'>{{author.locationMain}}</p>
+            <hr class='profile-container__hr' />
+        </div>
+
+        <div class='profile-container__div'>
+            <div class='profile-container__p'>Рейтинг:</div>
+            <div class='profile-container__info'>
+                <span class='profile-container__score-container'>
+                    <img
+                        class='profile-container__img2'
+                        src='../../images/star.png'
+                        alt='star'
+                    />
+                    <span
+                        class='profile-container__score'
+                    >{{author.score}}</span>
+                </span>
+            </div>
+        </div>
+        <div class='profile-container__div'>
+            <div class='profile-container__p'>Пол:</div>
+            <p class='profile-container__info'>{{author.sex}}</p>
+        </div>
+        <div class='profile-container__div'>
+            <div class='profile-container__p'>Возраст:</div>
+            <p class='profile-container__info'>{{author.age}}</p>
+        </div>
+
+        <button class='profile-container__write-msg-button'>Напишите Leo прямо
+            сейчас
+        </button>
+
+        <a class='profile-container__show-on-map-button'>Показать на карте</a>
+    </aside>
+</div>
