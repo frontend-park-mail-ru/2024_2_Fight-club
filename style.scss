@@ -1,10 +1,11 @@
-@use "components/Header/Header.scss";
-@use "components/AdCard/AdCard.scss";
-@use "components/Filter/Filter.scss";
-@use "components/AuthPopup/AuthPopup.scss";
-@use "components/MainPhoto/MainPhoto.scss";
-@use "components/MainPage/MainPage.scss";
-@use "components/ProfilePopup/ProfilePopup.scss";
+@use 'components/Header/Header.scss';
+@use 'components/AdCard/AdCard.scss';
+@use 'components/Filter/Filter.scss';
+@use 'components/AuthPopup/AuthPopup.scss';
+@use 'components/MainPhoto/MainPhoto.scss';
+@use 'components/MainPage/MainPage.scss';
+@use 'components/ProfilePopup/ProfilePopup.scss';
+@use 'components/AdPage/AdPage.sass';
 
 * {
     margin: 0;
