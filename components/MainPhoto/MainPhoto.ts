@@ -2,8 +2,10 @@
 
 class MainPhoto {
     #mainPhotoContainer;
+    #onSearchButtonClick;
 
-    constructor() {
+    constructor(onSearch: any) {
+        this.#onSearchButtonClick = onSearch;
         this.#mainPhotoContainer = document.createElement('div');
         this.#mainPhotoContainer.classList.add('photo-container');
 
@@ -26,7 +28,6 @@ class MainPhoto {
         beHost.text = 'Стать хостом';
         findHost.href = '#';
         beHost.href = '#';
-        searchCityForm.action = '#';
         search.placeholder = 'Поиск по городам';
 
         searchButtonDiv.classList.add('custom-search');
@@ -36,6 +37,11 @@ class MainPhoto {
         hostsHrefs.appendChild(findHost);
         hostsHrefs.appendChild(beHost);
         this.#mainPhotoContainer.appendChild(hostsHrefs);
+
+        searchCityForm.onsubmit = (e) => {
+            e.preventDefault();
+            this.#onSearchButtonClick(search.value);
+        };
 
         searchButtonDiv.appendChild(search);
         searchButtonDiv.appendChild(findButton);
