@@ -1,6 +1,7 @@
 'use strict';
 
 import ProfileInfo from '../ProfileInfo/ProfileInfo';
+import ProfileData from '../ProfileData/ProfileData';
 import {profile} from '../../modules/Profile';
 
 class ProfilePage{   
@@ -105,9 +106,19 @@ class ProfilePage{
             age: this.#age,
             avatar: this.#avatar,
         };
-        console.log(profileData);
+
         const profileInfo = new ProfileInfo(profileData);
         profileInfo.render(parent);
+    }
+
+    /**
+     * @private
+     * @description Рендер правой колонки
+     * @param {HTMLElement} parent
+     */
+    #renderProfileData(parent: HTMLElement){
+        const profileData = new ProfileData();
+        profileData.render(parent);
     }
    
     
@@ -127,6 +138,7 @@ class ProfilePage{
         const dataContainer = document.createElement('div');
         dataContainer.id = 'data-container';
         dataContainer.classList.add('profile__data-container');
+        this.#renderProfileData(dataContainer);
 
         profileContent.appendChild(profileContainer);
         profileContent.appendChild(dataContainer);
