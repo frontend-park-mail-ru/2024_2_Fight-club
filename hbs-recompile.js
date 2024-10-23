@@ -3,6 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const getAllHbsFiles = (dirPath) => {
     let hbsFiles = [];
 
@@ -26,9 +29,7 @@ const getAllHbsFiles = (dirPath) => {
 };
 
 const recompileTemplates = () => {
-    const hbsFiles = getAllHbsFiles(
-        path.resolve(import.meta.dirname, 'components')
-    );
+    const hbsFiles = getAllHbsFiles(path.resolve(__dirname, 'components'));
     // Формируем команду для компиляции всех найденных файлов
     const hbsFilesCommand = hbsFiles.join(' '); // Собираем все файлы в строку для команды
     const command = `handlebars ${hbsFilesCommand} -f components/precompiled-templates.js`;
@@ -62,6 +63,6 @@ const handlebarsCompilePlugin = () => {
 export default handlebarsCompilePlugin;
 
 // If file was executed directly
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+if (process.argv && process.argv[1] === fileURLToPath(import.meta.url)) {
     recompileTemplates();
 }
