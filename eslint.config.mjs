@@ -1,8 +1,9 @@
 import globals from 'globals';
-import pluginJs from '@eslint/js';
+import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default [
+    js.configs.recommended,
     ...tseslint.configs.recommended,
     {
         files: ['**/*.js', '**/*.ts', '**/*.mjs'],
@@ -11,7 +12,7 @@ export default [
         },
     },
     {
-        ignores: ['dist/*'],
+        ignores: ['dist/*', 'components/precompiled-templates.js'],
     },
     {
         languageOptions: {
@@ -22,10 +23,8 @@ export default [
             },
         },
     },
-    pluginJs.configs.recommended,
     {
         rules: {
-            'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
             semi: ['error', 'always'],
             quotes: ['error', 'single'],
             indent: ['error', 4],
