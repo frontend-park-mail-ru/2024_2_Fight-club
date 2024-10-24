@@ -1,8 +1,10 @@
 'use strict';
 
+import {clearPage} from '../../modules/Clear';
+
 class ProfileData{
-    #headerConfig
-    #content
+    #headerConfig;
+    #content;
 
     constructor() {
         this.#headerConfig = {
@@ -21,7 +23,36 @@ class ProfileData{
         };
 
         this.#content = document.createElement('div');
-        this.#content.classList.add('data-container__content')
+        this.#content.id = 'content';
+        this.#content.classList.add('data-container__content');
+
+        this.#addButtonEventListener();
+    }
+
+    #addButtonEventListener(){
+        const editButton = document.getElementById('edit-button');
+        editButton?.addEventListener('click', (e)=>{
+            e.preventDefault();
+            this.#renderForm();
+        });
+    }
+
+    #fileUploadEventListener(){
+        const fileUpload = document.getElementById('avatar') as HTMLInputElement;
+        fileUpload?.addEventListener('change', (e)=>{
+            e.preventDefault();
+            if (fileUpload && fileUpload.files && fileUpload.files.length > 0) {
+                const fileName = fileUpload.files[0].name;
+                const wrapper = fileUpload.closest('.edit-form__avatar__file-upload-wrapper');              
+                if (wrapper) {
+                    wrapper.setAttribute('data-text', fileName);
+                }
+            }
+        });
+    }
+
+    #addEventListeners(){
+        this.#fileUploadEventListener();
     }
 
     //TODO Когда карты появятся
@@ -30,8 +61,8 @@ class ProfileData{
         wrapper.classList.add('data-container__wrapper');
 
         const map = document.createElement('img');
-        map.classList.add('data-container__wrapper__img')
-        map.src = "/images/myMap.jpg";
+        map.classList.add('data-container__wrapper__img');
+        map.src = '/images/myMap.jpg';
 
         wrapper.appendChild(map);
         this.#content.appendChild(wrapper);
@@ -39,6 +70,14 @@ class ProfileData{
 
     #renderReviews(){}
     #renderAchievments(){}
+
+    #renderForm(){
+        clearPage('header', 'content');
+        const template = Handlebars.templates['EditForm.hbs'];
+        const container = document.getElementById('container');
+        container?.insertAdjacentHTML('afterbegin', template({}));
+        this.#addEventListeners();
+    }
 
     /**
      * @private
@@ -52,11 +91,11 @@ class ProfileData{
             headerHref.textContent = title;
             headerHref.addEventListener('click', (e)=>{
                 e.preventDefault();
-                action;
-            })
+                action();
+            });
 
             header.appendChild(headerHref);
-        })
+        });
     }
 
     /**
@@ -66,18 +105,20 @@ class ProfileData{
      */
     render(parent: HTMLElement): void {
         const dataContainer = document.createElement('div');
+        dataContainer.id = 'container';
         dataContainer.classList.add('data-container');
 
         const header = document.createElement('div');
+        header.id = 'header';
         header.classList.add('data-container__header');
         this.#renderHeader(header);
         dataContainer.appendChild(header);
 
         this.#renderMap();
-        dataContainer.appendChild(this.#content)
+        dataContainer.appendChild(this.#content);
 
         parent.appendChild(dataContainer);
     }
 }
 
-export default ProfileData
+export default ProfileData;

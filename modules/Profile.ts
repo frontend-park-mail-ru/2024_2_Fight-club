@@ -27,7 +27,7 @@ export const editProfile = async({
         ...(username && {username}),
         ...(email && {email}),
         ...(password && {password}),
-    }
+    };
     
     return Ajax.put({url, body});
-}   
+};   
