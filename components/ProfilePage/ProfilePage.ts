@@ -61,7 +61,7 @@ class ProfilePage{
      * @param {number} sex
      * @returns {string} 
      */
-    #calculateSex(sex: number): "Не указано" | "Муж." | "Жен." {
+    #calculateSex(sex: number): 'Не указано' | 'Муж.' | 'Жен.' {
         if (sex === 0) return 'Не указано';
         else if (sex === 1) return 'Муж.';
         else return 'Жен.';
@@ -126,24 +126,24 @@ class ProfilePage{
      * @description Рендер всех элементов
      * @param {HTMLElement} parent
      */
-    render(parent: HTMLElement) {
+    async render(parent: HTMLElement) {
         const profileContent = document.createElement('div');
         profileContent.id = 'profile-content';
 
         const profileContainer = document.createElement('div');
         profileContainer.id = 'profile-container';
         profileContainer.classList.add('profile__profile-container');
-        this.#renderProfileInfo(profileContainer);
-
+        
         const dataContainer = document.createElement('div');
         dataContainer.id = 'data-container';
         dataContainer.classList.add('profile__data-container');
-        this.#renderProfileData(dataContainer);
-
+        
         profileContent.appendChild(profileContainer);
         profileContent.appendChild(dataContainer);
-
         parent.appendChild(profileContent);
+
+        await this.#renderProfileInfo(profileContainer);
+        this.#renderProfileData(dataContainer);
     }
 }
 
