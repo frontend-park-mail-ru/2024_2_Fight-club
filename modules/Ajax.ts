@@ -42,6 +42,15 @@ class Ajax {
     }
 
     /**
+     * @public
+     * @param {PostParams} postParams
+     * @returns {Promise<*>}
+     */
+    static put({url, body}: PostParams): Promise<any> {
+        return this.#makeRequest({method: 'PUT', url, body});
+    }
+
+    /**
      * @private
      * @param {RequestParams} params
      * @returns {Promise<any>} response
