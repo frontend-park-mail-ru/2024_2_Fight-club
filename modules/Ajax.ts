@@ -1,14 +1,14 @@
 'use strict';
 
 interface PostParams {
-    url: string
-    body: object
+    url: string;
+    body: object;
 }
 
 interface RequestParams {
-    url: string
-    body?: object
-    method: string
+    url: string;
+    body?: object;
+    method: string;
 }
 
 class Ajax {

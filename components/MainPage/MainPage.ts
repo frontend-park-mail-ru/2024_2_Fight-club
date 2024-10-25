@@ -2,8 +2,9 @@
 
 import Filter from '../Filter/Filter';
 import AdCard from '../AdCard/AdCard';
+import { AdCardData } from '../../modules/Types';
 import MainPhoto from '../MainPhoto/MainPhoto';
-import { BACKEND_URL } from '../../modules/Consts';
+import APIClient from '../../modules/ApiClient';
 
 /** Главная страница с витриной объявлений, поиском и фильтрами */
 class MainPage {
@@ -11,11 +12,22 @@ class MainPage {
     #mainPhotoContainer;
     #pageContent;
     #adsContainer;
+    #adsData: any;
 
     constructor(root: HTMLDivElement) {
         this.#root = root;
+        this.#adsData = [];
 
-        this.#mainPhotoContainer = new MainPhoto();
+        this.#mainPhotoContainer = new MainPhoto(
+            async (locationMain: string) => {
+                const filters = {
+                    locationMain: locationMain,
+                };
+                const data = await APIClient.getAds(filters);
+                this.#adsData = data;
+                this.render();
+            }
+        );
 
         this.#pageContent = document.createElement('div');
         this.#pageContent.id = 'main-content';
@@ -27,22 +39,28 @@ class MainPage {
         // Здесь будет витрина
         this.#adsContainer = document.createElement('div');
         this.#adsContainer.classList.add('advert');
+
+        APIClient.getAds().then((data) => {
+            this.#adsData = data;
+            this.render();
+        });
     }
 
     /**
      * @public
      */
     async render() {
-        try {
-            const response = await fetch(BACKEND_URL + '/ads');
-            let data = await response.json();
-            data = data['places'];
-            for (const [_, d] of Object.entries(data)) {
-                const card = new AdCard(d, this.#adsContainer);
-                card.render();
-            }
-        } catch (error) {
-            console.error(error);
+        this.#adsContainer.replaceChildren();
+        for (const fetchedCardData of this.#adsData) {
+            const cardData: AdCardData = {
+                id: fetchedCardData.id,
+                images: fetchedCardData.Images,
+                locationMain: fetchedCardData.location_main,
+                locationStreet: fetchedCardData.location_street,
+                author: fetchedCardData.author,
+            };
+            const card = new AdCard(cardData, this.#adsContainer);
+            card.render();
         }
 
         this.#pageContent.appendChild(this.#adsContainer);

@@ -1,38 +1,37 @@
 'use strict';
 
-import { logout } from '../../modules/Auth';
+import APIClient from '../../modules/ApiClient';
 
 class ProfilePopup {
     #config;
     #events = {
-        logoutEvent:
-            async () => {
-                const response = await logout();
-                if (response.ok) {
-                    location.reload();
-                }
-                throw new Error('Failed to logout');
-            },
+        logoutEvent: async () => {
+            const response = await APIClient.logout();
+            if (response.ok) {
+                location.reload();
+            }
+            throw new Error('Failed to logout');
+        },
         profileEvent: null, //TODO
-        donateEvent: null   //TODO or DELETE
+        donateEvent: null, //TODO or DELETE
     };
 
     constructor() {
         this.#config = {
-            profile : {
+            profile: {
                 title: 'Профиль',
                 href: '/profile',
                 event: this.#events.profileEvent,
             },
-            donate : {
+            donate: {
                 title: 'Донаты',
                 href: '/donate',
                 event: this.#events.donateEvent,
             },
-            logout : {
+            logout: {
                 title: 'Выйти',
                 href: '#',
-                event: this.#events.logoutEvent
+                event: this.#events.logoutEvent,
             },
         };
 
@@ -61,7 +60,7 @@ class ProfilePopup {
     #closeOverlay(parent: HTMLElement): void {
         const overlay = parent.querySelector('.profile-overlay');
         if (overlay != null) {
-            overlay.addEventListener('click', ()=> {
+            overlay.addEventListener('click', () => {
                 overlay.remove();
                 document.body.classList.remove('no-scroll');
             });
@@ -73,14 +72,12 @@ class ProfilePopup {
      * @description Добавляет обработчики для меню попапа
      */
     #addEventListeners() {
-        Object.entries(this.#config).forEach(([name, {event}])=>{
-            if (event !== null) { //Временно пока нет других eventов
+        Object.entries(this.#config).forEach(([name, { event }]) => {
+            if (event !== null) {
+                //Временно пока нет других eventов
                 const listElement = document.getElementById(name);
                 if (listElement) {
-                    listElement.addEventListener(
-                        'click', 
-                        event
-                    );
+                    listElement.addEventListener('click', event);
                 }
             }
         });
