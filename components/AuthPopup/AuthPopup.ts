@@ -1,8 +1,7 @@
 'use strict';
 
+import APIClient from '../../modules/ApiClient';
 import Validation from '../../modules/Validation';
-
-import { login, register } from '../../modules/Auth';
 
 class AuthPopup {
     #config;
@@ -235,7 +234,7 @@ class AuthPopup {
 
         if (this.#currentState === 'signup') {
             try {
-                const res = await register({
+                const res = await APIClient.register({
                     name: data['name'],
                     username: data['username'],
                     password: data['password'],
@@ -252,7 +251,7 @@ class AuthPopup {
             return;
         }
 
-        login({
+        APIClient.login({
             username: data['username'],
             password: data['password'],
         })

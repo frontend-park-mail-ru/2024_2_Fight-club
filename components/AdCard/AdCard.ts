@@ -2,30 +2,18 @@
 
 const SCROLL_DELAY = 200;
 
-export interface CardData {
-    id: number;
-    images: string[];
-    locationMain: string;
-    locationStreet: string;
-    author: AuthorData;
-}
-
-interface AuthorData {
-    uuid: string;
-    avatar: string;
-    score: number;
-}
+import { AdCardData } from '../../modules/Types';
 
 /** Карточка объявления на главной странице */
 class AdCard {
-    #data: CardData;
+    #data: AdCardData;
     #currentImgIndex: number;
     #circles: HTMLDivElement[];
     private parent: HTMLDivElement | null | undefined;
 
     /** @param {object} data - информация о карточке
      @param {HTMLDivElement} parent - родитель, в чьем списке детей будет карточка */
-    constructor(data: CardData, parent: HTMLDivElement | null | undefined) {
+    constructor(data: AdCardData, parent: HTMLDivElement | null | undefined) {
         this.#data = data;
         this.parent = parent!;
 

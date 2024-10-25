@@ -2,13 +2,9 @@
 
 import Filter from '../Filter/Filter';
 import AdCard from '../AdCard/AdCard';
-import { CardData } from '../AdCard/AdCard';
+import { AdCardData } from '../../modules/Types';
 import MainPhoto from '../MainPhoto/MainPhoto';
-import { BACKEND_URL } from '../../modules/Consts';
-
-interface AdsFilters {
-    locationMain?: string;
-}
+import APIClient from '../../modules/ApiClient';
 
 /** Главная страница с витриной объявлений, поиском и фильтрами */
 class MainPage {
@@ -16,17 +12,20 @@ class MainPage {
     #mainPhotoContainer;
     #pageContent;
     #adsContainer;
+    #adsData: any;
 
     constructor(root: HTMLDivElement) {
         this.#root = root;
+        this.#adsData = [];
 
         this.#mainPhotoContainer = new MainPhoto(
             async (locationMain: string) => {
-                const filters: AdsFilters = {
+                const filters = {
                     locationMain: locationMain,
                 };
-                const data = await this.fetchData(filters);
-                this.render(data);
+                const data = await APIClient.getAds(filters);
+                this.#adsData = data;
+                this.render();
             }
         );
 
@@ -41,36 +40,19 @@ class MainPage {
         this.#adsContainer = document.createElement('div');
         this.#adsContainer.classList.add('advert');
 
-        this.fetchData().then((data) => this.render(data));
-    }
-
-    async fetchData(filter?: AdsFilters) {
-        try {
-            let response;
-            if (filter && filter.locationMain) {
-                console.log(123);
-                response = await fetch(
-                    BACKEND_URL + `/getPlacesPerCity/${filter.locationMain}`
-                );
-            } else {
-                response = await fetch(BACKEND_URL + '/ads');
-            }
-            let data = await response.json();
-            data = data['places'];
-            return data;
-        } catch (error) {
-            console.error(error);
-        }
+        APIClient.getAds().then((data) => {
+            this.#adsData = data;
+            this.render();
+        });
     }
 
     /**
      * @public
      */
-    async render(data: any) {
+    async render() {
         this.#adsContainer.replaceChildren();
-
-        for (const fetchedCardData of data) {
-            const cardData: CardData = {
+        for (const fetchedCardData of this.#adsData) {
+            const cardData: AdCardData = {
                 id: fetchedCardData.id,
                 images: fetchedCardData.Images,
                 locationMain: fetchedCardData.location_main,

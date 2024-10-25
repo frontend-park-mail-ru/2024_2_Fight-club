@@ -4,10 +4,8 @@ import Header from './components/Header/Header';
 import AuthPopup from './components/AuthPopup/AuthPopup';
 import MainPage from './components/MainPage/MainPage';
 import ProfilePopup from './components/ProfilePopup/ProfilePopup';
-import Ajax from './modules/Ajax';
 import './components/precompiled-templates';
-
-import { BACKEND_URL } from './modules/Consts';
+import APIService from './modules/ApiClient';
 
 const root = document.getElementById('root')!;
 const pageContainer = document.createElement('div');
@@ -51,16 +49,8 @@ function renderProfileList() {
 
 /** Главная функция */
 const main = async () => {
-    const response = await Ajax.get(BACKEND_URL + '/getSessionData');
-    let isAuthorized = false;
-    if (response.ok) {
-        isAuthorized = true;
-        const sessionInfo = await response.json();
-    } else if (response.status !== 401) {
-        console.error('Wrong response from server', response);
-    }
-
-    const header = new Header(headerCallbacks, isAuthorized);
+    const sessionData = await APIService.getSessionData();
+    const header = new Header(headerCallbacks, sessionData ? true : false);
     root.appendChild(header.getMainContainer());
 
     pageContainer.classList.add('page-container');
