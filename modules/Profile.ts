@@ -46,9 +46,11 @@ export const editProfile = async({
     };
 
     formData.append('metadata', JSON.stringify(metadata));
-    if (avatar) {
-        formData.append('avatar', avatar);
-    }
+    formData.append('avatar', avatar);
+
+    formData.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+    });
 
     return Ajax.put({url, body: formData});
 };   

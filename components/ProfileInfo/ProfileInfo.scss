@@ -5,7 +5,7 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    height: 90%;
+    height: 93%;
     max-width: 280px;
     padding-inline-start: 40px;
     padding-inline-end: 40px;
@@ -24,7 +24,7 @@
     border-width: 1px;
     width: 200px;
     height: 200px;
-    margin-top: 10%;
+    margin-top: 15%;
 }
 
 .profile-container__photo__img1 {
@@ -34,20 +34,20 @@
 }
 
 .profile-container__p1 {
-    margin-top: 5%;
+    margin-top: 7%;
     font-style: italic;
     font-size: 28px;
     font-weight: 500;
 }
 
 .profile-container__p2 {
-    margin-top: 5%;
+    margin-top: 7%;
     font-style: italic;
     font-size: 20px;
 }
 
 .profile-container__hr {
-    margin-top: 5%;
+    margin-top: 6%;
     width: 100%;
 }
 
@@ -58,7 +58,7 @@
     align-items: center;
     padding-left: 10px;
     width: 100%;
-    margin-top: 5%;
+    margin-top: 6%;
 }
 
 .profile-container__score-container {
@@ -80,7 +80,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 5%;
+    margin-top: 6%;
 }
 
 .profile-container__p {
@@ -96,8 +96,7 @@
 }
 
 .profile-container__edit-container {
-    margin-top: 5%;
-    margin-bottom: 5%;
+    margin-top: 10%;
     width: 100%;
 }
 

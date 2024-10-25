@@ -27,7 +27,8 @@ class ProfilePage{
         const response = await profile();
         if (response.ok) {
             const data = await response.json();
-            this.#name = data.Name;
+
+            this.#name = data.name;
             this.#username = data.Username;
             this.#email = data.Email;
             this.#guestCount = data.GuestCount;
@@ -77,9 +78,15 @@ class ProfilePage{
         city: string,
         address: string
     }{
-        const parts = longAddress.split(',');
-        const city = parts.slice(0, 2).join(', ').trim();
-        const address = parts.slice(2).join(', ').trim();
+        let city, address;
+        if (longAddress) {
+            const parts = longAddress.split(',');
+            city = parts.slice(0, 2).join(', ').trim();
+            address = parts.slice(2).join(', ').trim();
+        } else {
+            city = 'Не указано';
+            address = 'Не указано';
+        }
         return {
             city: city,
             address: address,

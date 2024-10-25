@@ -61,6 +61,8 @@ class Ajax {
         body = {},
     }: RequestParams): Promise<any> {
         let request: Request;
+        const isFormData = body instanceof FormData;
+
         if (method === 'GET') {
             request = new Request(url, {
                 method: method,
@@ -69,23 +71,14 @@ class Ajax {
                 },
                 credentials: 'include',
             });
-        } else if (method === 'PUT') {
-            request = new Request(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                credentials: 'include',
-                body: JSON.stringify(body),
-            });
         } else {
             request = new Request(url, {
                 method: method,
-                headers: {
+                headers: isFormData ? {} : {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify(body),
+                body: isFormData ? body : JSON.stringify(body),
             });
         }
 
