@@ -1,4 +1,4 @@
-<form class="edit-form" enctype="multipart/form-data">
+<form id="form" class="edit-form" enctype="multipart/form-data">
     <div class="edit-form__title">
         <p class="edit-form__title__p1">Обновление профиля</p>
     </div>
@@ -19,19 +19,40 @@
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Пол:</p>
-                <input id="email" name="email" class="edit-form__input-line__input" type="email">
+                <div class="edit-form__sex">
+                    <span class="edit-form__sex__radio">
+                        <input id="sexNS" name="sex" type="radio" checked>
+                        <span class="custom-radio"></span>
+                        <label for="sexNS">Не указано</label>
+                    </span>
+
+                    <span class="edit-form__sex__radio">
+                        <input id="sexM" name="sex" type="radio">
+                        <span class="custom-radio"></span>
+                        <label for="sexM">Муж.</label>
+                    </span>
+                    
+                    <span class="edit-form__sex__radio">
+                        <input id="sexF" name="sex" type="radio">
+                        <span class="custom-radio"></span>
+                        <label for="sexF">Жен.</label>
+                    </span>
+                </div>
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Адрес:</p>
-                <input id="email" name="email" class="edit-form__input-line__input" type="email">
+                <input id="address" name="address" class="edit-form__input-line__input" type="text">
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">День рождения:</p>
-                <input id="email" name="email" class="edit-form__input-line__input" type="email">
+                <input id="birthdate" name="birthdate" class="edit-form__input-line__input" type="date">
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Хост:</p>
-                <input id="email" name="email" class="edit-form__input-line__input" type="email">
+                <label class="edit-form__toggle">
+                    <input id="isHost" name="isHost" class="edit-form__toggle__input" type="checkbox">
+                    <span class="edit-form__toggle__slider round"></span>
+                </label>
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Пароль:</p>
@@ -49,8 +70,8 @@
             </div>
 
             <div class="edit-form__buttons">
-                <button type="submit" class="edit-form__buttons__submit-button">Обновить</button>
-                <button type="reset" class="edit-form__buttons__reset-button">Сбросить</button>
+                <button id="submit" type="submit" class="edit-form__buttons__submit-button">Обновить</button>
+                <button id="reset" type="reset" class="edit-form__buttons__reset-button">Сбросить</button>
             </div>
         </div>
     </div>

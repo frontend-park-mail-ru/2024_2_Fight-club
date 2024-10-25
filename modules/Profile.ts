@@ -4,10 +4,15 @@ import Ajax from './Ajax';
 import { BACKEND_URL } from './Consts';
 
 interface EditParams {
-    name: string
     username: string
-    password: string
+    name: string
     email: string
+    sex: number
+    address: string
+    birthdate: Date
+    isHost: boolean
+    password: string
+    avatar: File
 }
 
 export const profile = async (): Promise<any> => {
@@ -16,18 +21,34 @@ export const profile = async (): Promise<any> => {
 };
 
 export const editProfile = async({
-    name,
     username,
-    password,
+    name,
     email,
+    sex,
+    address,
+    birthdate,
+    isHost,
+    password,
+    avatar,
 }: EditParams): Promise<any> => {
     const url = BACKEND_URL + '/putUser';
-    const body = {
-        ...(name && {name}),
-        ...(username && {username}),
-        ...(email && {email}),
-        ...(password && {password}),
+    const formData = new FormData();
+
+    const metadata = {
+        username: username,
+        name: name,
+        email: email,
+        sex: sex,
+        address: address,
+        birthdate: birthdate,
+        isHost: isHost,
+        password: password,
     };
-    
-    return Ajax.put({url, body});
+
+    formData.append('metadata', JSON.stringify(metadata));
+    if (avatar) {
+        formData.append('avatar', avatar);
+    }
+
+    return Ajax.put({url, body: formData});
 };   

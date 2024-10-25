@@ -1,5 +1,6 @@
 'use strict';
 
+import {editProfile} from '../../modules/Profile';
 import {clearPage} from '../../modules/Clear';
 
 class ProfileData{
@@ -51,8 +52,39 @@ class ProfileData{
         });
     }
 
+    async #putData(){
+        const inputs = document.getElementsByTagName('input');
+        const data = {
+            username: inputs[0].value,
+            name: inputs[1].value,
+            email: inputs[2].value,
+            sex: inputs[3].checked ? 0 : inputs[4].checked ? 1 : -1,
+            address: inputs[6].value,
+            birthdate: new Date(inputs[7].value+'T00:00:00.000+00:00'),
+            isHost: inputs[8].checked,
+            password: inputs[9].value,
+            avatar: inputs[10].files[0]
+        };
+
+        const response = await editProfile(data);
+        if (response.ok) {
+            clearPage('form');
+        } else {
+            console.error('Wrong response from server', response);
+        }
+    }
+
+    #submitButtonEventListener(){
+        const submitButton = document.getElementById('submit');
+        submitButton?.addEventListener('click', (e)=>{
+            e.preventDefault();
+            this.#putData();
+        });
+    }
+
     #addEventListeners(){
         this.#fileUploadEventListener();
+        this.#submitButtonEventListener();
     }
 
     //TODO Когда карты появятся

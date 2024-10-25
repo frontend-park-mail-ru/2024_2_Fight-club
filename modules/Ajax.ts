@@ -69,6 +69,15 @@ class Ajax {
                 },
                 credentials: 'include',
             });
+        } else if (method === 'PUT') {
+            request = new Request(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                credentials: 'include',
+                body: JSON.stringify(body),
+            });
         } else {
             request = new Request(url, {
                 method: method,

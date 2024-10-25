@@ -198,3 +198,108 @@
         flex-direction: column
         justify-content: space-between
         align-items: center
+
+
+.edit-form__sex
+    display: flex
+    flex-direction: column
+
+.edit-form__sex__radio
+    font-size: 20px
+    position: relative
+    padding-left: 30px 
+    margin-bottom: 12px
+    cursor: pointer
+    display: inline-block
+
+.edit-form__sex__radio input
+    position: absolute
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+    z-index: 1
+    opacity: 0
+    cursor: pointer
+
+.custom-radio
+    position: absolute
+    top: 0
+    left: 0
+    height: 20px
+    width: 20px
+    background-color: #ccc
+    border-radius: 50%
+
+    &::after
+        content: ""
+        position: absolute
+        display: block
+        top: 50%
+        left: 50%
+        width: 12px
+        height: 12px
+        border-radius: 50%
+        background-color: white
+        transform: translate(-50%, -50%)
+
+    input:checked + & 
+        background-color: #FFA552
+        &::after
+            width: 10px
+            height: 10px
+            background-color: white
+            transform: translate(-50%, -50%) 
+
+
+.edit-form__toggle
+    position: relative
+    display: inline-block
+    width: 80px
+    height: 34px
+
+    &__input
+        opacity: 0
+        width: 0
+        height: 0
+
+    &__slider
+        position: absolute
+        cursor: pointer
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        background-color: #ccc
+        -webkit-transition: .4s
+        transition: .4s
+
+        &::before
+            position: absolute
+            content: ""
+            height: 26px
+            width: 26px
+            left: 4px
+            bottom: 4px
+            background-color: white
+            -webkit-transition: .4s
+            transition: .4s
+
+    &__input:checked + &__slider
+        background-color: #FFA552
+
+    &__input:focus + &__slider
+        box-shadow: 0 0 1px #FFA552
+
+    &__input:checked + &__slider::before
+        -webkit-transform: translateX(45px) 
+        -ms-transform: translateX(45px)
+        transform: translateX(45px)
+
+    &__slider.round
+        border-radius: 34px
+
+        &::before
+            border-radius: 50%
+
+    

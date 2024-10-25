@@ -32,7 +32,7 @@ const headerCallbacks = {
 const profilePopupCallbacks = {
     profilePage: renderProfilePage,
     donatePage: null,
-}
+};
 
 function renderMainPage() {
     const mainPage = new MainPage(pageContainer);
