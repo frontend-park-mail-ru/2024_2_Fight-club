@@ -9,6 +9,7 @@ class ProfilePage{
     #username: string | undefined;
     #city: string | undefined;
     #address: string | undefined;
+    #birthdate: Date | undefined;
     #email: string | undefined;
     #guestCount: number | undefined;
     #score: number | undefined;
@@ -16,8 +17,18 @@ class ProfilePage{
     #isHost: boolean | undefined;
     #age: number | undefined;
     #avatar: string | undefined;
+
+    #renderProfileInfoCallback;
     
-    constructor() {}
+    constructor() {
+        //Колбэк для повторного рендера левого столбца после обновления формы
+        this.#renderProfileInfoCallback = async () => {
+            const profileInfoContainer = document.getElementById('profile-container');
+            if (profileInfoContainer){
+                await this.#renderProfileInfo(profileInfoContainer);
+            }
+        };
+    }
 
     /**
      * @private
@@ -35,6 +46,7 @@ class ProfilePage{
             this.#score = data.Score;
             this.#isHost = data.IsHost;
             this.#avatar = data.Avatar;
+            this.#birthdate = data.Birthdate;
 
             this.#sex = this.#calculateSex(data.Sex);
             this.#age = this.#calculateAge(data.Birthdate);
@@ -63,9 +75,9 @@ class ProfilePage{
      * @returns {string} 
      */
     #calculateSex(sex: number): 'Не указано' | 'Муж.' | 'Жен.' {
-        if (sex === 0) return 'Не указано';
-        else if (sex === 1) return 'Муж.';
-        else return 'Жен.';
+        if (sex === 1) return 'Муж.';
+        else if (sex === 2) return 'Жен.';
+        else return 'Не указано';
     }
 
     /**
@@ -105,6 +117,7 @@ class ProfilePage{
             username: this.#username,
             city: this.#city,
             address: this.#address,
+            birthdate: this.#birthdate,
             email: this.#email,
             guestCount: this.#guestCount,
             score: this.#score,
@@ -124,7 +137,22 @@ class ProfilePage{
      * @param {HTMLElement} parent
      */
     #renderProfileData(parent: HTMLElement){
-        const profileData = new ProfileData();
+        const data = {
+            name: this.#name,
+            username: this.#username,
+            city: this.#city,
+            address: this.#address,
+            birthdate: this.#birthdate,
+            email: this.#email,
+            guestCount: this.#guestCount,
+            score: this.#score,
+            sex: this.#sex,
+            isHost: this.#isHost,
+            age: this.#age,
+            avatar: this.#avatar,
+        };
+        
+        const profileData = new ProfileData(data, this.#renderProfileInfoCallback);
         profileData.render(parent);
     }
    

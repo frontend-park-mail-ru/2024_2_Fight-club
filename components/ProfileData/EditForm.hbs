@@ -7,15 +7,15 @@
         <div class="edit-form__data__first-column">
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Никнейм:</p>
-                <input id="username" name="username" class="edit-form__input-line__input" type="text">
+                <input id="username" name="username" class="edit-form__input-line__input" type="text" placeholder="{{this.username}}">
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Имя:</p>
-                <input id="name" name="name" class="edit-form__input-line__input" type="text">
+                <input id="name" name="name" class="edit-form__input-line__input" type="text" placeholder="{{this.name}}">
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Почта:</p>
-                <input id="email" name="email" class="edit-form__input-line__input" type="email">
+                <input id="email" name="email" class="edit-form__input-line__input" type="email" placeholder="{{this.email}}">
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Пол:</p>
@@ -41,7 +41,7 @@
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Адрес:</p>
-                <input id="address" name="address" class="edit-form__input-line__input" type="text">
+                <input id="address" name="address" class="edit-form__input-line__input" type="text" placeholder="{{this.address}}">
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">День рождения:</p>
@@ -63,7 +63,7 @@
 
         <div class="edit-form__data__second-column">
             <div class="edit-form__avatar__image-container">
-                <img src="../../images/default_user_icon.png" class="edit-form__avatar__image-container__image">
+                <img src="{{this.avatar}}" class="edit-form__avatar__image-container__image">
             </div>
             <div class="edit-form__avatar__file-upload-wrapper" data-text="Select your file!">
                 <input id="avatar" name="avatar" type="file" class="edit-form__avatar__file-upload-wrapper__input" value="">
