@@ -65,8 +65,15 @@ class ProfilePage{
      * @returns {number} 
      */
     #calculateAge(birthdate: string): number {
-        //TODO
-        return 10;
+        const birthDate = new Date(birthdate);
+        const today = new Date();
+        
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
     }
 
     /**
@@ -137,22 +144,7 @@ class ProfilePage{
      * @param {HTMLElement} parent
      */
     #renderProfileData(parent: HTMLElement){
-        const data = {
-            name: this.#name,
-            username: this.#username,
-            city: this.#city,
-            address: this.#address,
-            birthdate: this.#birthdate,
-            email: this.#email,
-            guestCount: this.#guestCount,
-            score: this.#score,
-            sex: this.#sex,
-            isHost: this.#isHost,
-            age: this.#age,
-            avatar: this.#avatar,
-        };
-        
-        const profileData = new ProfileData(data, this.#renderProfileInfoCallback);
+        const profileData = new ProfileData(this.#renderProfileInfoCallback);
         profileData.render(parent);
     }
    

@@ -1,30 +1,44 @@
 'use strict';
 
-import {editProfile} from '../../modules/Profile';
+import {editProfile, profile} from '../../modules/Profile';
 import {clearPage} from '../../modules/Clear';
 
 interface userData {
     name: string | undefined;
     username: string | undefined;
-    city: string | undefined;
     address: string | undefined;
-    birthdate: Date | undefined;
+    birthdate: string | undefined;
     email: string | undefined;
-    guestCount: number | undefined;
-    score: number | undefined;
     sex: string | undefined;
     isHost: boolean | undefined;
-    age: number | undefined;
     avatar: string | undefined;
+}
+
+interface sexTypes {
+    male: boolean;
+    female: boolean;
+    ns: boolean;
 }
 
 class ProfileData{
     #headerConfig;
     #content;
-    #profileData: userData;
+    #profileData: userData = {
+        name: undefined,
+        username: undefined,
+        address: undefined,
+        birthdate: undefined,
+        email: undefined,
+        sex: undefined,
+        isHost: undefined,
+        avatar: undefined,
+    };
     #renderProfileInfo;
+    #sex: sexTypes;
+    #showBirthdate: boolean;
+    #uploadAvatarImage: File;
 
-    constructor(profileData: userData, renderProfileInfoCallback: any) {
+    constructor(renderProfileInfoCallback: any) {
         this.#headerConfig = {
             myMap: {
                 title: 'Карта путешествий',
@@ -44,9 +58,61 @@ class ProfileData{
         this.#content.id = 'content';
         this.#content.classList.add('data-container__content');
 
-        this.#profileData = profileData;
+        this.#sex = {
+            male: false,
+            female: false,
+            ns: false
+        };
+        this.#showBirthdate = false;
+        
         this.#renderProfileInfo = renderProfileInfoCallback;
         this.#addButtonEventListener();
+    }
+
+    #rememberSexValue(sexValue: number){
+        if (sexValue == 1) {
+            this.#sex.male = true;
+            this.#sex.female = false;
+            this.#sex.ns = false;
+        } else if (sexValue == 2) {
+            this.#sex.male = false;
+            this.#sex.female = true;
+            this.#sex.ns = false;
+        } else {
+            this.#sex.male = false;
+            this.#sex.female = false;
+            this.#sex.ns = true;
+        }
+    }
+
+    /**
+     * @private
+     * @param {number} sex
+     * @returns {string} 
+     */
+    #calculateSex(sex: number): 'Не указано' | 'Муж.' | 'Жен.' {
+        if (sex === 1) return 'Муж.';
+        else if (sex === 2) return 'Жен.';
+        else return 'Не указано';
+    }
+
+    async #getProfileData() {
+        const response = await profile();
+        if (response.ok) {
+            const data = await response.json();
+            this.#profileData.name = data.name;
+            this.#profileData.username = data.Username;
+            this.#profileData.email = data.Email;
+            this.#profileData.isHost = data.IsHost;
+            this.#profileData.avatar = data.Avatar;
+            this.#profileData.birthdate = data.Birthdate.slice(0,10);
+            if (this.#profileData.birthdate != '0001-01-01') this.#showBirthdate = true;
+            this.#profileData.address = data.Address;
+            this.#profileData.sex = this.#calculateSex(data.Sex);
+            this.#rememberSexValue(data.Sex);
+        } else if (response.status !== 401) {
+            console.error('Wrong response from server', response);
+        }
     }
 
     /**
@@ -63,18 +129,29 @@ class ProfileData{
 
     /**
      * @private
-     * @description Изменение надписи в input для фото
+     * @description Изменение фото при загрузке
      */
     #fileUploadEventListener(): void{
         const fileUpload = document.getElementById('avatar') as HTMLInputElement;
+        const avatarImage = document.querySelector('.edit-form__avatar__image-container__image') as HTMLImageElement;
+
         fileUpload?.addEventListener('change', (e)=>{
             e.preventDefault();
             if (fileUpload && fileUpload.files && fileUpload.files.length > 0) {
+                this.#uploadAvatarImage = fileUpload.files[0]; 
                 const fileName = fileUpload.files[0].name;
                 const wrapper = fileUpload.closest('.edit-form__avatar__file-upload-wrapper');              
                 if (wrapper) {
                     wrapper.setAttribute('data-text', fileName);
                 }
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    if (avatarImage) {
+                        avatarImage.src = reader.result as string;
+                    }
+                };
+                reader.readAsDataURL(this.#uploadAvatarImage);
             }
         });
     }
@@ -93,19 +170,30 @@ class ProfileData{
         });
     }
 
+    #resetButtonEventLisener(){
+        const resetButton = document.querySelector('.js-reset-button');
+        resetButton?.addEventListener('click', ()=>{
+            const image = document.querySelector('.js-avatar-upload-image') as HTMLImageElement;
+            const wrapper = document.querySelector('.js-avatar-upload-wrapper') as HTMLInputElement;
+            if (this.#profileData.avatar) image.src = this.#profileData.avatar;
+            wrapper.setAttribute('data-text', 'Select your file!');
+        });
+    }
+
     /**
      * @private
      */
     #addEventListeners(): void{
         this.#fileUploadEventListener();
         this.#submitButtonEventListener();
+        this.#resetButtonEventLisener();
     }
 
     /**
      * @private
      * @description Изменение надписи в input для фото
      */
-    async #putData(): Promise<any>{
+    async #putData(): Promise<void>{
         const inputs = document.getElementsByTagName('input');
         const data = {
             username: inputs[0].value,
@@ -118,7 +206,7 @@ class ProfileData{
             password: inputs[9].value,
             avatar: inputs[10]?.files?.[0] ?? null,
         };
-        console.log(data);
+
         const response = await editProfile(data);
         if (response.ok) {
             clearPage('form', 'profile');
@@ -142,7 +230,6 @@ class ProfileData{
      */
     #addCheckedRadio(): void{
         const sexInputs = document.getElementsByName('sex') as NodeListOf<HTMLInputElement>;
-        (sexInputs[0] as HTMLInputElement).checked = false;
         if (this.#profileData.sex == 'Не указано'){
             (sexInputs[0] as HTMLInputElement).checked = true;
         } else if (this.#profileData.sex == 'Муж.') {
@@ -158,7 +245,6 @@ class ProfileData{
      */
     #addCheckedSlider(): void {
         const slider = document.getElementById('isHost') as HTMLInputElement;
-        console.log(this.#profileData.isHost)
         if (this.#profileData.isHost){
             slider.checked = true;
         }
@@ -181,11 +267,16 @@ class ProfileData{
     #renderReviews(){}
     #renderAchievments(){}
 
-    #renderForm(){
-        clearPage('header', 'content');
+    async #renderForm(){
+        clearPage('header', 'content', 'form');
+        await this.#getProfileData();
         const template = Handlebars.templates['EditForm.hbs'];
         const container = document.getElementById('container');
-        container?.insertAdjacentHTML('afterbegin', template(this.#profileData));
+        container?.insertAdjacentHTML('afterbegin', template({
+            data: this.#profileData,
+            sex: this.#sex,
+            showBirthdate: this.#showBirthdate
+        }));
         this.#addCheckedRadio();
         this.#addCheckedSlider();
         this.#addEventListeners();
