@@ -1,4 +1,7 @@
 <form id="form" class="edit-form" enctype="multipart/form-data">
+    <div class="edit-form__close">
+        <img src="../../images/svg/cross.svg" width="30px" height="30px" class="edit-form__close__cross js-close-cross">
+    </div>
     <div class="edit-form__title">
         <p class="edit-form__title__p1">Обновление профиля</p>
     </div>
@@ -45,7 +48,7 @@
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">День рождения:</p>
-                <input id="birthdate" name="birthdate" class="edit-form__input-line__input" type="date" {{#if showBirthdate}} value="{{data.birthdate}}" {{/if}}>
+                <input id="birthdate" name="birthdate" class="edit-form__input-line__input" type="date" min="1900-01-01" {{#if showBirthdate}} value="{{data.birthdate}}" {{/if}}>
             </div>
             <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Хост:</p>

@@ -36,7 +36,7 @@ class ProfileData{
     #renderProfileInfo;
     #sex: sexTypes;
     #showBirthdate: boolean;
-    #uploadAvatarImage: File;
+    #uploadAvatarImage?: File;
 
     constructor(renderProfileInfoCallback: any) {
         this.#headerConfig = {
@@ -69,6 +69,11 @@ class ProfileData{
         this.#addButtonEventListener();
     }
 
+    /**
+     * @private
+     * @param {number} sexValue
+     * @description Запоминаем значение для корректного дефолтного значения пола
+     */
     #rememberSexValue(sexValue: number){
         if (sexValue == 1) {
             this.#sex.male = true;
@@ -96,6 +101,10 @@ class ProfileData{
         else return 'Не указано';
     }
 
+    /**
+     * @private
+     * @description Получение данных
+     */
     async #getProfileData() {
         const response = await profile();
         if (response.ok) {
@@ -170,6 +179,10 @@ class ProfileData{
         });
     }
 
+    /**
+     * @private
+     * @description Добавление функционала по очистке аватара
+     */
     #resetButtonEventLisener(){
         const resetButton = document.querySelector('.js-reset-button');
         resetButton?.addEventListener('click', ()=>{
@@ -182,11 +195,32 @@ class ProfileData{
 
     /**
      * @private
+     * @description Закрытие формы
+     */
+    #closeFormEventListener(){
+        const cross = document.querySelector('.js-close-cross');
+        cross?.addEventListener('click', ()=>{
+            clearPage('form');
+            const dataContainer = document.getElementById('container');
+            const header = document.createElement('div');
+            header.id = 'header';
+            header.classList.add('data-container__header');
+
+            dataContainer?.appendChild(header);
+            this.#renderHeader(header);
+
+            dataContainer?.appendChild(this.#content);
+        });
+    }
+
+    /**
+     * @private
      */
     #addEventListeners(): void{
         this.#fileUploadEventListener();
         this.#submitButtonEventListener();
         this.#resetButtonEventLisener();
+        this.#closeFormEventListener();
     }
 
     /**
@@ -267,6 +301,10 @@ class ProfileData{
     #renderReviews(){}
     #renderAchievments(){}
 
+    /**
+     * @private
+     * @description Рендер формы изменения данных
+     */
     async #renderForm(){
         clearPage('header', 'content', 'form');
         await this.#getProfileData();
