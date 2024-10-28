@@ -6,6 +6,7 @@ import MainPage from './components/MainPage/MainPage';
 import ProfilePopup from './components/ProfilePopup/ProfilePopup';
 import './components/precompiled-templates';
 import APIService from './modules/ApiClient';
+import AdPage from './components/AdPage/AdPage';
 
 const root = document.getElementById('root')!;
 const pageContainer = document.createElement('div');
@@ -37,6 +38,32 @@ function renderFavoritesPage() {}
 
 function renderNotificationsPage() {}
 
+const renderAdvertPage = () => {
+    const page = new AdPage({
+        country: 'Россия',
+        city: 'Москва',
+        desc: `Двухэтажный дом в 20 минутах от Москвы-реки. Вам будет
+                доступна просторная комната с большим шкафом. Готовить будем
+                поочередно :) С нетерпением жду нашей встречи`,
+        images: [
+            'images/pic1.jpg',
+            'images/pic2.jpg',
+            'images/pic3.jpg',
+            'images/pic4.jpg',
+        ],
+        author: {
+            name: 'Leo Dicaprio',
+            locationMain: 'Россия, г. Москва',
+            score: 4.98,
+            sex: 'Муж',
+            age: 49,
+        },
+        mainPictureIndex: 0,
+        roomsCount: 4,
+    });
+    page.render(pageContainer);
+};
+
 function renderSignInPage() {
     const auth = new AuthPopup();
     auth.render(root);
@@ -56,7 +83,8 @@ const main = async () => {
     pageContainer.classList.add('page-container');
     root.appendChild(pageContainer);
 
-    renderMainPage();
+    // renderMainPage();
+    renderAdvertPage();
 };
 
 main();

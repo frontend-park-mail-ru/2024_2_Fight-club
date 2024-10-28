@@ -3,7 +3,6 @@ import handlebarsCompilePlugin from './hbs-recompile.js';
 
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
-    base: '/2024_2_Fight-club/',
     plugins: [handlebarsCompilePlugin()],
     server: {
         host: 'localhost',

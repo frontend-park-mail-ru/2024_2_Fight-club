@@ -12,6 +12,16 @@ const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
 const SECONDARY_IMG_SELECTED_CLASS_NAME =
     'advert-images-carousel__secondary_img_current';
 
+interface AdPageData {
+    images: string[];
+    mainPictureIndex: number;
+    author: any;
+    country: string;
+    city: string;
+    desc: string;
+    roomsCount: number;
+}
+
 class AdPage {
     #templateContainer: HTMLDivElement;
     #mainImg: HTMLImageElement;
@@ -20,44 +30,15 @@ class AdPage {
     #backgroundImg: HTMLImageElement;
     #fullscreenImage: HTMLImageElement;
     #overlay: HTMLDivElement;
+    #images: string[];
 
-    data: {
-        images: string[];
-        mainPictureIndex: number;
-        author: any;
-        country: string;
-        city: string;
-        desc: string;
-        roomsCount: number;
-    };
+    constructor(data: AdPageData) {
+        this.#images = data.images;
 
-    constructor(data: object) {
-        this.data = {
-            country: 'Россия',
-            city: 'Москва',
-            desc: `Двухэтажный дом в 20 минутах от Москвы-реки. Вам будет
-                    доступна просторная комната с большим шкафом. Готовить будем
-                    поочередно :) С нетерпением жду нашей встречи`,
-            images: [
-                'images/pic1.jpg',
-                'images/pic2.jpg',
-                'images/pic3.jpg',
-                'images/pic4.jpg',
-            ],
-            author: {
-                name: 'Leo Dicaprio',
-                locationMain: 'Россия, г. Москва',
-                score: 4.98,
-                sex: 'Муж',
-                age: 49,
-            },
-            mainPictureIndex: 0,
-            roomsCount: 4,
-        };
-        this.#currentIndex = this.data.mainPictureIndex;
+        this.#currentIndex = data.mainPictureIndex;
         const template = Handlebars.templates['AdPage.hbs'];
         this.#templateContainer = document.createElement('div');
-        this.#templateContainer.innerHTML = template(this.data);
+        this.#templateContainer.innerHTML = template(data);
 
         this.#mainImg = this.#templateContainer.querySelector(
             MAIN_IMG_SELECTOR
@@ -94,7 +75,7 @@ class AdPage {
     }
 
     showImage(index: number) {
-        this.#mainImg.src = this.#backgroundImg.src = this.data.images[index];
+        this.#mainImg.src = this.#backgroundImg.src = this.#images[index];
 
         this.#carouselImages[this.#currentIndex].classList.remove(
             SECONDARY_IMG_SELECTED_CLASS_NAME
@@ -107,7 +88,7 @@ class AdPage {
     }
 
     #displayOverlay() {
-        this.#fullscreenImage.src = this.data.images[this.#currentIndex];
+        this.#fullscreenImage.src = this.#images[this.#currentIndex];
         this.#overlay.classList.remove(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
     }
 
