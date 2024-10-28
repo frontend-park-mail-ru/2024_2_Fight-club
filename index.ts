@@ -8,6 +8,7 @@ import './components/precompiled-templates';
 import APIService from './modules/ApiClient';
 import AdPage from './components/AdPage/AdPage';
 import ApiClient from './modules/ApiClient';
+import EditAdvertPage from './components/EditAdvertPage/EditAdvertPage';
 
 const root = document.getElementById('root')!;
 const pageContainer = document.createElement('div');
@@ -61,6 +62,27 @@ const renderAdvertPage = async (id: number) => {
     page.render(pageContainer);
 };
 
+const renderEditAdvertPage = async (id: number) => {
+    const info = (await ApiClient.getAd(id))['place'];
+
+    const page = new EditAdvertPage({
+        images: info['Images'],
+        author: {
+            uuid: '3',
+            avatar: '',
+            sex: 'М',
+            age: 32,
+            score: 5,
+            name: 'Майкл Джордан',
+        },
+        country: info['location_main'],
+        city: info['location_street'],
+        desc: 'Всем привет! Давайте жить ко мне!',
+        roomsCount: 3,
+    });
+    pageContainer.appendChild(page.getElement());
+};
+
 function renderSignInPage() {
     const auth = new AuthPopup();
     auth.render(root);
@@ -81,7 +103,7 @@ const main = async () => {
     root.appendChild(pageContainer);
 
     // renderMainPage();
-    renderAdvertPage(1);
+    renderEditAdvertPage(1);
 };
 
 main();
