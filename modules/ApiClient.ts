@@ -3,8 +3,8 @@
 import Ajax from './Ajax';
 import { RegisterParams, AdsFilters, LoginParams } from './Types';
 
-const APIClient = {
-    BASE_URL: `http://${window.location.hostname}:8008/api`,
+class APIClient {
+    BASE_URL = `http://${window.location.hostname}:8008/api`;
 
     /**
      * @public
@@ -29,7 +29,19 @@ const APIClient = {
             console.error(error);
         }
         return [];
-    },
+    }
+
+    async getAd(id: number) {
+        const response = await Ajax.get(this.BASE_URL + `/ads/${id}`);
+        const adInfo = await response.json();
+        return adInfo;
+    }
+
+    async getUser(uuid: string) {
+        const response = await Ajax.get(this.BASE_URL + `/getUserById/${uuid}`);
+        const userInfo = await response.json();
+        return userInfo;
+    }
 
     async getSessionData() {
         const response = await Ajax.get(this.BASE_URL + '/getSessionData');
@@ -40,7 +52,7 @@ const APIClient = {
             console.error('Wrong response from server', response);
         }
         return undefined;
-    },
+    }
 
     /**
      * @public
@@ -55,13 +67,13 @@ const APIClient = {
             password: password,
         };
         return Ajax.post({ url, body });
-    },
+    }
 
     async logout() {
         const url = this.BASE_URL + '/auth/logout';
         const body = {};
         return Ajax.delete({ url, body });
-    },
+    }
 
     /**
      * @public
@@ -79,7 +91,7 @@ const APIClient = {
         };
 
         return Ajax.post({ url, body });
-    },
-};
+    }
+}
 
-export default APIClient;
+export default new APIClient();

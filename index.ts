@@ -7,6 +7,7 @@ import ProfilePopup from './components/ProfilePopup/ProfilePopup';
 import './components/precompiled-templates';
 import APIService from './modules/ApiClient';
 import AdPage from './components/AdPage/AdPage';
+import ApiClient from './modules/ApiClient';
 
 const root = document.getElementById('root')!;
 const pageContainer = document.createElement('div');
@@ -38,28 +39,24 @@ function renderFavoritesPage() {}
 
 function renderNotificationsPage() {}
 
-const renderAdvertPage = () => {
+const renderAdvertPage = async (id: number) => {
+    const info = (await ApiClient.getAd(id))['place'];
+    // const authorInfo = await ApiClient.getUser(info['author_uuid']);
+
     const page = new AdPage({
-        country: 'Россия',
-        city: 'Москва',
-        desc: `Двухэтажный дом в 20 минутах от Москвы-реки. Вам будет
-                доступна просторная комната с большим шкафом. Готовить будем
-                поочередно :) С нетерпением жду нашей встречи`,
-        images: [
-            'images/pic1.jpg',
-            'images/pic2.jpg',
-            'images/pic3.jpg',
-            'images/pic4.jpg',
-        ],
+        images: info['Images'],
         author: {
-            name: 'Leo Dicaprio',
-            locationMain: 'Россия, г. Москва',
-            score: 4.98,
-            sex: 'Муж',
-            age: 49,
+            uuid: '3',
+            avatar: '',
+            sex: 'М',
+            age: 32,
+            score: 5,
+            name: 'Майкл Джордан',
         },
-        mainPictureIndex: 0,
-        roomsCount: 4,
+        country: info['location_main'],
+        city: info['location_street'],
+        desc: 'Всем привет! Давайте жить ко мне!',
+        roomsCount: 3,
     });
     page.render(pageContainer);
 };
@@ -84,7 +81,7 @@ const main = async () => {
     root.appendChild(pageContainer);
 
     // renderMainPage();
-    renderAdvertPage();
+    renderAdvertPage(1);
 };
 
 main();

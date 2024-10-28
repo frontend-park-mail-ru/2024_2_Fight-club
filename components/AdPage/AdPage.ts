@@ -12,10 +12,18 @@ const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
 const SECONDARY_IMG_SELECTED_CLASS_NAME =
     'advert-images-carousel__secondary_img_current';
 
+interface AdPageAuthorData {
+    uuid: string;
+    name: string;
+    avatar: string;
+    sex: string;
+    age: number;
+    score: number;
+}
+
 interface AdPageData {
     images: string[];
-    mainPictureIndex: number;
-    author: any;
+    author: AdPageAuthorData;
     country: string;
     city: string;
     desc: string;
@@ -35,7 +43,7 @@ class AdPage {
     constructor(data: AdPageData) {
         this.#images = data.images;
 
-        this.#currentIndex = data.mainPictureIndex;
+        this.#currentIndex = 0;
         const template = Handlebars.templates['AdPage.hbs'];
         this.#templateContainer = document.createElement('div');
         this.#templateContainer.innerHTML = template(data);
