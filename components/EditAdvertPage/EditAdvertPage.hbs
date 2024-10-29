@@ -48,6 +48,16 @@
                         rows='10'
                         name='{{this.name}}'
                     ></textarea>
+                {{else if this.isSelect}}
+                    <select
+                        name='{{this.name}}'
+                        class='js-cities ad-page__edit-form__select'
+                    >
+                        {{#each this.options}}
+                            <option value='{{this}}'>{{this}}</option>
+                        {{/each}}
+                    </select>
+
                 {{else}}
                     <input
                         class='ad-page__edit-form__input'
@@ -56,6 +66,7 @@
                         type='{{this.type}}'
                         minlength='{{this.minLen}}'
                         maxlength='{{this.maxLen}}'
+                        value='{{this.defaultValue}}'
                         {{!-- required='{{this.required}}' --}}
                     />
                 {{/if}}
@@ -72,47 +83,4 @@
         />
     </div>
 
-    <aside class='profile-container'>
-        <div class='profile-container__center'>
-            <div class='profile-container__photo'>
-                <img
-                    src='../../images/default_user_icon.png'
-                    class='profile-container__photo__img1'
-                />
-            </div>
-            <p class='profile-container__p1'>{{author.name}}</p>
-            <p class='profile-container__p2'>{{author.locationMain}}</p>
-            <hr class='profile-container__hr' />
-        </div>
-
-        <div class='profile-container__div'>
-            <div class='profile-container__p'>Рейтинг:</div>
-            <div class='profile-container__info'>
-                <span class='profile-container__score-container'>
-                    <img
-                        class='profile-container__img2'
-                        src='../../images/star.png'
-                        alt='star'
-                    />
-                    <span
-                        class='profile-container__score'
-                    >{{author.score}}</span>
-                </span>
-            </div>
-        </div>
-        <div class='profile-container__div'>
-            <div class='profile-container__p'>Пол:</div>
-            <p class='profile-container__info'>{{author.sex}}</p>
-        </div>
-        <div class='profile-container__div'>
-            <div class='profile-container__p'>Возраст:</div>
-            <p class='profile-container__info'>{{author.age}}</p>
-        </div>
-
-        <button class='profile-container__write-msg-button'>Напишите Leo прямо
-            сейчас
-        </button>
-
-        <a class='profile-container__show-on-map-button'>Показать на карте</a>
-    </aside>
 </div>
