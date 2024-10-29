@@ -1,5 +1,6 @@
 'use strict';
 
+import Validation from '../../modules/Validation';
 import {editProfile, profile} from '../../modules/Profile';
 import {clearPage} from '../../modules/Clear';
 
@@ -126,6 +127,162 @@ class ProfileData{
 
     /**
      * @private
+     * @description Изменение надписи в input для фото
+     */
+    async #putData(): Promise<void>{
+        const inputs = document.getElementsByTagName('input');
+        const data = {
+            username: inputs[0].value,
+            name: inputs[1].value,
+            email: inputs[2].value,
+            sex: inputs[3].checked ? 3 : (inputs[4].checked ? 1 : 2),
+            address: inputs[6].value,
+            birthdate: new Date(inputs[7].value+'T00:00:00.000+00:00'),
+            isHost: inputs[8].checked,
+            password: inputs[9].value,
+            avatar: inputs[10]?.files?.[0] ?? null,
+        };
+
+        const response = await editProfile(data);
+        if (response.ok) {
+            clearPage('form', 'profile');
+            const dataContainer = document.getElementById('container');
+            const header = document.createElement('div');
+            header.id = 'header';
+            header.classList.add('data-container__header');
+
+            dataContainer?.appendChild(header);
+            this.#renderHeader(header);
+
+            dataContainer?.appendChild(this.#content);
+        } else {
+            console.error('Wrong response from server', response);
+        }
+    }
+
+    /**
+     * @private
+     * @returns {boolean} Прошла ли форма валидацию
+     * @description Валидация полей формы
+     */
+    #validateData(): boolean {
+        const form = document.querySelector('.edit-form') as any;
+        const nameInput = form.elements.name;
+        const usernameInput = form.elements.username;
+        const emailInput = form.elements.email;
+        const addressInput = form.elements.address;
+        const birthdateInput = form.elements.birthdate;
+
+        const nameValidInfo = Validation.validateName(nameInput);
+        const usernameValidInfo = Validation.validateUsername(usernameInput);
+        const emailValidInfo = Validation.validateEmail(emailInput);
+        const addressValidInfo = Validation.validateAddress(addressInput);
+        const birthdateValidInfo = Validation.validateBirthdate(birthdateInput);
+
+        if (!nameValidInfo.ok) {
+            this.#showErrorMessage(nameInput, nameValidInfo.text);
+        } else {
+            this.#hideErrorMsg(nameInput);
+        }
+
+        if (!usernameValidInfo.ok) {
+            this.#showErrorMessage(usernameInput, usernameValidInfo.text);
+        } else {
+            this.#hideErrorMsg(usernameInput);
+        }
+
+        if (!emailValidInfo.ok) {
+            this.#showErrorMessage(emailInput, emailValidInfo.text);
+        } else {
+            this.#hideErrorMsg(emailInput);
+        }
+
+        if (!addressValidInfo.ok) {
+            this.#showErrorMessage(addressInput, addressValidInfo.text);
+        } else {
+            this.#hideErrorMsg(addressInput);
+        }
+
+        if (!birthdateValidInfo.ok) {
+            this.#showErrorMessage(birthdateInput, birthdateValidInfo.text);
+        } else {
+            this.#hideErrorMsg(birthdateInput);
+        }
+        
+        return (
+            nameValidInfo.ok &&
+            usernameValidInfo.ok &&
+            emailValidInfo.ok &&
+            addressValidInfo.ok &&
+            birthdateValidInfo.ok
+        );
+    }
+
+    /**
+     * @private
+     * @param {HTMLInputElement} inputElem
+     * @param {string} errorMsg Текст ошибки
+     * @description Добавляем к input его ошибку
+     */
+    #showErrorMessage(inputElem: HTMLInputElement, errorMsg: string) {
+        inputElem.classList.add('edit-form__input__error');
+        const exclamation = inputElem.parentElement!.querySelector(
+            '.edit-form__input-line__exclamation'
+        )!;
+        exclamation.classList.remove('none');
+
+        const validationMessageContainer =
+            inputElem.parentElement!.querySelector(
+                '.edit-form__input-line__validationMessage'
+            )!;
+
+        validationMessageContainer.textContent = errorMsg;
+    }
+
+    /**
+     * @private
+     * @param {HTMLInputElement} inputElem
+     * @description Убираем у input его ошибку
+     */
+    #hideErrorMsg(inputElem: HTMLInputElement) {
+        const parentElem = inputElem.parentElement!;
+        inputElem.classList.remove('edit-form__input__error');
+        parentElem
+            .querySelector('.edit-form__input-line__validationMessage')!
+            .classList.add('none');
+        parentElem.querySelector('.edit-form__input-line__exclamation')!.classList.add('none');
+    }
+
+    /**
+     * @private
+     * @description Показываем и скрываем ошибки валидации
+     */
+    #showErrorMessageEventListener(): void {
+        Array.prototype.forEach.call(
+            (document.querySelectorAll('input.js-validate') as NodeListOf<HTMLInputElement>),
+            (element) => {
+                const exclamation = element.parentElement.querySelector(
+                    '.edit-form__input-line__exclamation'
+                );
+
+                if (exclamation === undefined) return;
+
+                const validationMessageContainer =
+                    element.parentElement.querySelector(
+                        '.edit-form__input-line__validationMessage'
+                    );
+
+                exclamation.onmouseover = () =>
+                    validationMessageContainer.classList.remove('none');
+
+                exclamation.onmouseout = () =>
+                    validationMessageContainer.classList.add('none');
+            }
+        );
+    }
+
+    /**
+     * @private
      * @description Кнопка "Изменить" в ProfileInfo рендерит форму изменения данных
      */
     #addButtonEventListener(): void{
@@ -173,9 +330,14 @@ class ProfileData{
         const submitButton = document.getElementById('submit');
         submitButton?.addEventListener('click', async (e)=>{
             e.preventDefault();
-            await this.#putData();
-            await this.#renderProfileInfo();
-            this.#addButtonEventListener();
+            const isDataClean = this.#validateData();
+            if (isDataClean) {
+                await this.#putData();
+                await this.#renderProfileInfo();
+                this.#addButtonEventListener();
+            } else {
+                console.log('error');
+            }
         });
     }
 
@@ -221,41 +383,7 @@ class ProfileData{
         this.#submitButtonEventListener();
         this.#resetButtonEventLisener();
         this.#closeFormEventListener();
-    }
-
-    /**
-     * @private
-     * @description Изменение надписи в input для фото
-     */
-    async #putData(): Promise<void>{
-        const inputs = document.getElementsByTagName('input');
-        const data = {
-            username: inputs[0].value,
-            name: inputs[1].value,
-            email: inputs[2].value,
-            sex: inputs[3].checked ? 3 : (inputs[4].checked ? 1 : 2),
-            address: inputs[6].value,
-            birthdate: new Date(inputs[7].value+'T00:00:00.000+00:00'),
-            isHost: inputs[8].checked,
-            password: inputs[9].value,
-            avatar: inputs[10]?.files?.[0] ?? null,
-        };
-
-        const response = await editProfile(data);
-        if (response.ok) {
-            clearPage('form', 'profile');
-            const dataContainer = document.getElementById('container');
-            const header = document.createElement('div');
-            header.id = 'header';
-            header.classList.add('data-container__header');
-
-            dataContainer?.appendChild(header);
-            this.#renderHeader(header);
-
-            dataContainer?.appendChild(this.#content);
-        } else {
-            console.error('Wrong response from server', response);
-        }
+        this.#showErrorMessageEventListener();
     }
 
     /**
