@@ -1,5 +1,7 @@
 'use strict';
 
+import { getCookie } from './Utils';
+
 interface PostParams {
     url: string;
     body: object;
@@ -65,6 +67,7 @@ class Ajax {
                 method: method,
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRF-Token': `Bearer ${getCookie('csrf_token')}`,
                 },
                 credentials: 'include',
                 body: JSON.stringify(body),
