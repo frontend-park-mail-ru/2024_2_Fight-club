@@ -2,6 +2,8 @@
 
 import ApiClient from '../../modules/ApiClient';
 
+import { CITIES } from '../../modules/Consts';
+
 const MAIN_IMG_DIV_SELECTOR = '.js-main-img-div';
 const MAIN_IMG_SELECTOR = '.advert-images-carousel__main-img';
 const BACKGROUND_IMG_SELECTOR = '.advert-images-carousel__img-background';
@@ -39,6 +41,24 @@ interface InputConfig {
     name: string;
     type: string;
     isTextArea?: boolean;
+    isSelect?: boolean;
+    options?: string[];
+}
+
+// TODO: DELETE THIS USELESS FUNCTION. IT WAS CREATED FOR BRAINLESS BACKENDERS
+function makeid(length: number) {
+    let result = '';
+    const characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+        );
+        counter += 1;
+    }
+    return result;
 }
 
 class EditAdvertPage {
@@ -63,14 +83,11 @@ class EditAdvertPage {
 
         const inputsConfig: InputConfig[] = [
             {
-                label: 'Страна',
-                name: 'country',
-                type: 'text',
-            },
-            {
                 label: 'Город',
                 name: 'city',
                 type: 'text',
+                isSelect: true,
+                options: CITIES,
             },
             {
                 label: 'Адрес',
@@ -207,14 +224,28 @@ class EditAdvertPage {
         e.preventDefault();
         const formElement = e.target as HTMLFormElement;
         const formData = new FormData(formElement);
-        this.#uploadedImages.forEach((imageUrl) => {
-            formData.set('images', imageUrl);
+
+        const formData2Send = new FormData();
+        formData2Send.set(
+            'metadata',
+            JSON.stringify({
+                location_main: formData.get('city') as string,
+                location_street: formData.get('address') as string,
+                position: [0, 0],
+                distance: 0,
+                desc: formData.get('desc') as string,
+                roomsCount: parseInt(formData.get('roomsCount') as string),
+                address: formData.get('address') as string,
+                id: makeid(7),
+            })
+        );
+
+        this.#uploadedImages.forEach((img: File) => {
+            formData2Send.append('images', img);
         });
-        const data = formData.getAll('images');
 
         // Log the extracted data
-        console.log(data);
-        // ApiClient.createAdvert();
+        ApiClient.createAdvert(formData2Send);
     };
 
     public getElement() {

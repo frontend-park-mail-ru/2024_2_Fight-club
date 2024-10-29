@@ -54,6 +54,7 @@ class Ajax {
         body = {},
     }: RequestParams): Promise<any> {
         let request: Request;
+        const isFormData = body instanceof FormData;
         if (method === 'GET') {
             request = new Request(url, {
                 method: method,
@@ -63,14 +64,17 @@ class Ajax {
                 credentials: 'include',
             });
         } else {
+            const headers: HeadersInit = {
+                'X-CSRF-Token': `Bearer ${getCookie('csrf_token')}`,
+            };
+            if (!isFormData) {
+                headers['Content-Type'] = 'application/json';
+            }
             request = new Request(url, {
                 method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': `Bearer ${getCookie('csrf_token')}`,
-                },
+                headers: headers,
                 credentials: 'include',
-                body: JSON.stringify(body),
+                body: isFormData ? body : JSON.stringify(body),
             });
         }
 
