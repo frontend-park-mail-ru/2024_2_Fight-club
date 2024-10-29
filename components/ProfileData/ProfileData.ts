@@ -34,10 +34,10 @@ class ProfileData{
         isHost: undefined,
         avatar: undefined,
     };
-    #renderProfileInfo;
     #sex: sexTypes;
     #showBirthdate: boolean;
     #uploadAvatarImage?: File;
+    #renderProfileInfo;
 
     constructor(renderProfileInfoCallback: any) {
         this.#headerConfig = {
@@ -75,7 +75,7 @@ class ProfileData{
      * @param {number} sexValue
      * @description Запоминаем значение для корректного дефолтного значения пола
      */
-    #rememberSexValue(sexValue: number){
+    #rememberSexValue(sexValue: number): void {
         if (sexValue == 1) {
             this.#sex.male = true;
             this.#sex.female = false;
@@ -106,7 +106,7 @@ class ProfileData{
      * @private
      * @description Получение данных
      */
-    async #getProfileData() {
+    async #getProfileData(): Promise<void> {
         const response = await profile();
         if (response.ok) {
             const data = await response.json();
@@ -127,7 +127,7 @@ class ProfileData{
 
     /**
      * @private
-     * @description Изменение надписи в input для фото
+     * @description Put данных в бд
      */
     async #putData(): Promise<void>{
         const inputs = document.getElementsByTagName('input');
@@ -224,7 +224,7 @@ class ProfileData{
      * @param {string} errorMsg Текст ошибки
      * @description Добавляем к input его ошибку
      */
-    #showErrorMessage(inputElem: HTMLInputElement, errorMsg: string) {
+    #showErrorMessage(inputElem: HTMLInputElement, errorMsg: string): void {
         inputElem.classList.add('edit-form__input__error');
         const exclamation = inputElem.parentElement!.querySelector(
             '.edit-form__input-line__exclamation'
@@ -244,7 +244,7 @@ class ProfileData{
      * @param {HTMLInputElement} inputElem
      * @description Убираем у input его ошибку
      */
-    #hideErrorMsg(inputElem: HTMLInputElement) {
+    #hideErrorMsg(inputElem: HTMLInputElement): void {
         const parentElem = inputElem.parentElement!;
         inputElem.classList.remove('edit-form__input__error');
         parentElem
@@ -285,7 +285,7 @@ class ProfileData{
      * @private
      * @description Кнопка "Изменить" в ProfileInfo рендерит форму изменения данных
      */
-    #addButtonEventListener(): void{
+    #addButtonEventListener(): void {
         const editButton = document.getElementById('edit-button');
         editButton?.addEventListener('click', (e)=>{
             e.preventDefault();
@@ -297,7 +297,7 @@ class ProfileData{
      * @private
      * @description Изменение фото при загрузке
      */
-    #fileUploadEventListener(): void{
+    #fileUploadEventListener(): void {
         const fileUpload = document.getElementById('avatar') as HTMLInputElement;
         const avatarImage = document.querySelector('.edit-form__avatar__image-container__image') as HTMLImageElement;
 
@@ -326,7 +326,7 @@ class ProfileData{
      * @private
      * @description Отпаравка формы
      */
-    #submitButtonEventListener(): void{
+    #submitButtonEventListener(): void {
         const submitButton = document.getElementById('submit');
         submitButton?.addEventListener('click', async (e)=>{
             e.preventDefault();
@@ -335,8 +335,6 @@ class ProfileData{
                 await this.#putData();
                 await this.#renderProfileInfo();
                 this.#addButtonEventListener();
-            } else {
-                console.log('error');
             }
         });
     }
@@ -345,7 +343,7 @@ class ProfileData{
      * @private
      * @description Добавление функционала по очистке аватара
      */
-    #resetButtonEventLisener(){
+    #resetButtonEventLisener(): void {
         const resetButton = document.querySelector('.js-reset-button');
         resetButton?.addEventListener('click', ()=>{
             const image = document.querySelector('.js-avatar-upload-image') as HTMLImageElement;
@@ -359,7 +357,7 @@ class ProfileData{
      * @private
      * @description Закрытие формы
      */
-    #closeFormEventListener(){
+    #closeFormEventListener(): void {
         const cross = document.querySelector('.js-close-cross');
         cross?.addEventListener('click', ()=>{
             clearPage('form');
@@ -378,7 +376,7 @@ class ProfileData{
     /**
      * @private
      */
-    #addEventListeners(): void{
+    #addEventListeners(): void {
         this.#fileUploadEventListener();
         this.#submitButtonEventListener();
         this.#resetButtonEventLisener();
@@ -390,7 +388,7 @@ class ProfileData{
      * @private
      * @description Определяем какой radio по дефолту отмечен
      */
-    #addCheckedRadio(): void{
+    #addCheckedRadio(): void {
         const sexInputs = document.getElementsByName('sex') as NodeListOf<HTMLInputElement>;
         if (this.#profileData.sex == 'Не указано'){
             (sexInputs[0] as HTMLInputElement).checked = true;
@@ -433,7 +431,7 @@ class ProfileData{
      * @private
      * @description Рендер формы изменения данных
      */
-    async #renderForm(){
+    async #renderForm(): Promise<void> {
         clearPage('header', 'content', 'form');
         await this.#getProfileData();
         const template = Handlebars.templates['EditForm.hbs'];
