@@ -2,7 +2,7 @@
 
 import Filter from '../Filter/Filter';
 import AdCard from '../AdCard/AdCard';
-import { AdCardData } from '../../modules/Types';
+import { AdvertData } from '../../modules/Types';
 import MainPhoto from '../MainPhoto/MainPhoto';
 import APIClient from '../../modules/ApiClient';
 
@@ -12,22 +12,19 @@ class MainPage {
     #mainPhotoContainer;
     #pageContent;
     #adsContainer;
-    #adsData: any;
+    #adsData: AdvertData[];
 
     constructor(root: HTMLDivElement) {
         this.#root = root;
         this.#adsData = [];
 
-        this.#mainPhotoContainer = new MainPhoto(
-            async (locationMain: string) => {
-                const filters = {
-                    locationMain: locationMain,
-                };
-                const data = await APIClient.getAds(filters);
-                this.#adsData = data;
-                this.render();
-            }
-        );
+        this.#mainPhotoContainer = new MainPhoto(async (city: string) => {
+            const data = await APIClient.getAds({
+                city: city,
+            });
+            this.#adsData = data;
+            this.render();
+        });
 
         this.#pageContent = document.createElement('div');
         this.#pageContent.id = 'main-content';
@@ -51,14 +48,7 @@ class MainPage {
      */
     async render() {
         this.#adsContainer.replaceChildren();
-        for (const fetchedCardData of this.#adsData) {
-            const cardData: AdCardData = {
-                id: fetchedCardData.id,
-                images: fetchedCardData.Images,
-                locationMain: fetchedCardData.location_main,
-                locationStreet: fetchedCardData.location_street,
-                author: fetchedCardData.author,
-            };
+        for (const cardData of this.#adsData) {
             const card = new AdCard(cardData, this.#adsContainer);
             card.render();
         }

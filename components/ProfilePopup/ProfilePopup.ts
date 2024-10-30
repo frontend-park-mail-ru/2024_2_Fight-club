@@ -2,6 +2,11 @@
 
 import APIClient from '../../modules/ApiClient';
 
+interface ProfilePopupCallbacks {
+    profilePage: () => void;
+    donatePage: null;
+}
+
 class ProfilePopup {
     #config;
     #events = {
@@ -17,7 +22,7 @@ class ProfilePopup {
     };
     #profilePopupCallbacks;
 
-    constructor(popupCallbacks: any) {
+    constructor(popupCallbacks: ProfilePopupCallbacks) {
         this.#profilePopupCallbacks = popupCallbacks;
         this.#config = {
             profile: {
@@ -29,6 +34,10 @@ class ProfilePopup {
                 title: 'Донаты',
                 href: '/donate',
                 event: this.#profilePopupCallbacks.donatePage,
+            },
+            myAdvertisements: {
+                title: 'Мои объявления',
+                href: '/ads/?author=me',
             },
             logout: {
                 title: 'Выйти',

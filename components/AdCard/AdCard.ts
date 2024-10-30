@@ -2,18 +2,19 @@
 
 const SCROLL_DELAY = 200;
 
-import { AdCardData } from '../../modules/Types';
+import router from '../../modules/Router';
+import { AdvertData } from '../../modules/Types';
 
 /** Карточка объявления на главной странице */
 class AdCard {
-    #data: AdCardData;
+    #data: AdvertData;
     #currentImgIndex: number;
     #circles: HTMLDivElement[];
     private parent: HTMLDivElement | null | undefined;
 
     /** @param {object} data - информация о карточке
      @param {HTMLDivElement} parent - родитель, в чьем списке детей будет карточка */
-    constructor(data: AdCardData, parent: HTMLDivElement | null | undefined) {
+    constructor(data: AdvertData, parent: HTMLDivElement | null | undefined) {
         this.#data = data;
         this.parent = parent!;
 
@@ -30,6 +31,10 @@ class AdCard {
         const templateContainer = document.createElement('div');
 
         templateContainer.innerHTML = template(this.#data);
+
+        templateContainer.onclick = () => {
+            router.navigateTo(`/ads/?id=${this.#data.id}`);
+        };
 
         templateContainer
             .querySelector('.ad-card__button')!
@@ -76,8 +81,12 @@ class AdCard {
     /**
      * Функция, которая показывает нужную фотографию в зависимости от позиции курсора
      */
-    #onMouseMove(e: any, areaFraction: number, imgElem: HTMLImageElement) {
-        const rect = e.target.getBoundingClientRect();
+    #onMouseMove(
+        e: MouseEvent,
+        areaFraction: number,
+        imgElem: HTMLImageElement
+    ) {
+        const rect = (e.target as HTMLElement).getBoundingClientRect();
         const x = e.clientX - rect.left;
         if (x < 0) return;
 

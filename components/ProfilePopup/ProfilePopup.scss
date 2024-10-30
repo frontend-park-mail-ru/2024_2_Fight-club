@@ -11,7 +11,7 @@
     height: 100%;
 }
 
-.profile-list{
+.profile-list {
     position: relative;
     top: 120px;
     left: 88%;
@@ -21,17 +21,20 @@
     border: solid;
     border-radius: 10px;
     border-width: 2px;
-    border-color: #635B5B;
+    border-color: #635b5b;
     background-color: #ffffff;
     margin-right: 10px;
 }
 
 .profile-list__href {
+    font-size: 20px;
+    font-weight: 600;
     text-decoration: none;
-    color: #635B5B;
+    color: #635b5b;
     font-style: italic;
+    cursor: pointer;
 }
 
-.profile-list__underline{
+.profile-list__underline {
     margin-bottom: 20px;
 }

@@ -1,5 +1,7 @@
 'use strict';
 
+import { getCookie } from './Utils';
+
 interface PostParams {
     url: string;
     body: object;
@@ -16,7 +18,7 @@ class Ajax {
      * @public
      * @param {string} url
      */
-    static get(url: string): Promise<any> {
+    static get(url: string) {
         return this.#makeRequest({
             method: 'GET',
             url: url,
@@ -27,7 +29,7 @@ class Ajax {
      * @public
      * @param {PostParams} postParams
      */
-    static post({ url, body }: PostParams): Promise<any> {
+    static post({ url, body }: PostParams) {
         return this.#makeRequest({ method: 'POST', url, body });
     }
 
@@ -37,32 +39,17 @@ class Ajax {
      * @param {object} body
      * @returns {Promise<*>}
      */
-    static delete({ url, body }: PostParams): Promise<any> {
+    static delete({ url, body }: PostParams) {
         return this.#makeRequest({ method: 'DELETE', url, body });
     }
 
-    /**
-     * @public
-     * @param {PostParams} postParams
-     * @returns {Promise<*>}
-     */
-    static put({url, body}: PostParams): Promise<any> {
-        return this.#makeRequest({method: 'PUT', url, body});
-    }
-
-    /**
-     * @private
-     * @param {RequestParams} params
-     * @returns {Promise<any>} response
-     */
     static async #makeRequest({
         method,
         url,
         body = {},
-    }: RequestParams): Promise<any> {
+    }: RequestParams): Promise<Response> {
         let request: Request;
         const isFormData = body instanceof FormData;
-
         if (method === 'GET') {
             request = new Request(url, {
                 method: method,
@@ -72,11 +59,15 @@ class Ajax {
                 credentials: 'include',
             });
         } else {
+            const headers: HeadersInit = {
+                'X-CSRF-Token': `Bearer ${getCookie('csrf_token')}`,
+            };
+            if (!isFormData) {
+                headers['Content-Type'] = 'application/json';
+            }
             request = new Request(url, {
                 method: method,
-                headers: isFormData ? {} : {
-                    'Content-Type': 'application/json',
-                },
+                headers: headers,
                 credentials: 'include',
                 body: isFormData ? body : JSON.stringify(body),
             });

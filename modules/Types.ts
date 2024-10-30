@@ -11,21 +11,30 @@ export interface LoginParams {
 }
 
 export interface AdsFilters {
-    locationMain?: string;
+    city?: string;
 }
 
-interface AuthorData {
-    uuid: string;
-    avatar: string;
-    score: number;
-}
+// interface AuthorData {
+//     uuid: string;
+//     avatar: string;
+//     score: number;
+// }
 
-export interface AdCardData {
-    id: number;
+// Interface of a response from DB
+export interface AdvertData {
+    id: string;
     images: string[];
-    locationMain: string;
-    locationStreet: string;
-    author: AuthorData;
+    city: string;
+    address: string;
+    description: string;
+    publicationDate: string;
+    roomsNumber: string;
+
+    // author: AuthorData;
+    authorAvatar: string;
+    authorName: string;
+    authorRating: string;
+    authorUUID: string;
 }
 
 export interface EditParams {

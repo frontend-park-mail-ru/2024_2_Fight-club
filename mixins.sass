@@ -1,0 +1,23 @@
+@mixin button
+    margin: 0
+    background-color: #FFA552
+    color: white
+    padding: 5px 20px
+    min-width: fit-content
+    min-height: 35px
+    height: fit-content
+    font-style: normal
+    max-width: 150px
+    border-radius: 10px
+    border: none
+    font-size: 16px
+    font-weight: 600
+    cursor: pointer
+    transition: transform 0.1s, box-shadow 0.1s, background-color 0.1s
+
+    &:hover
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15)
+    
+    &:active
+        transform: translateY(2px)
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2)

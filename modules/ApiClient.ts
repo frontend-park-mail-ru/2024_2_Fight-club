@@ -3,8 +3,8 @@
 import Ajax from './Ajax';
 import { RegisterParams, AdsFilters, LoginParams, EditParams } from './Types';
 
-const APIClient = {
-    BASE_URL: `http://${window.location.hostname}:8008/api`,
+class APIClient {
+    BASE_URL = `http://${window.location.hostname}:8008/api`;
 
     /**
      * @public
@@ -13,11 +13,9 @@ const APIClient = {
     async getAds(filters?: AdsFilters) {
         try {
             let response;
-            if (filters && filters.locationMain) {
+            if (filters && filters.city) {
                 console.log(123);
-                response = await fetch(
-                    this.BASE_URL + `/getPlacesPerCity/${filters.locationMain}`
-                );
+                response = await fetch(this.BASE_URL + `/ads/${filters.city}`);
             } else {
                 response = await fetch(this.BASE_URL + '/ads');
             }
@@ -29,10 +27,30 @@ const APIClient = {
             console.error(error);
         }
         return [];
-    },
+    }
+
+    async getAd(uuid: string) {
+        const response = await Ajax.get(this.BASE_URL + `/ads/${uuid}`);
+        const adInfo = await response.json();
+        return adInfo;
+    }
+
+    async deleteAd(uuid: string) {
+        const response = await Ajax.delete({
+            url: this.BASE_URL + `/ads/${uuid}`,
+            body: {},
+        });
+        return response;
+    }
+
+    async getUser(uuid: string) {
+        const response = await Ajax.get(this.BASE_URL + `/users/${uuid}`);
+        const userInfo = await response.json();
+        return userInfo;
+    }
 
     async getSessionData() {
-        const response = await Ajax.get(this.BASE_URL + '/getSessionData');
+        const response = await Ajax.get(this.BASE_URL + '/session');
         if (response.ok) {
             const sessionInfo = await response.json();
             return sessionInfo;
@@ -40,7 +58,14 @@ const APIClient = {
             console.error('Wrong response from server', response);
         }
         return undefined;
-    },
+    }
+
+    async createAdvert(data: FormData) {
+        return await Ajax.post({
+            url: this.BASE_URL + '/ads',
+            body: data,
+        });
+    }
 
     /**
      * @public
@@ -55,13 +80,13 @@ const APIClient = {
             password: password,
         };
         return Ajax.post({ url, body });
-    },
+    }
 
     async logout() {
         const url = this.BASE_URL + '/auth/logout';
         const body = {};
         return Ajax.delete({ url, body });
-    },
+    }
 
     /**
      * @public
@@ -79,19 +104,19 @@ const APIClient = {
         };
 
         return Ajax.post({ url, body });
-    },
+    }
 
-    async city (name: string): Promise<any>  {
+    async city(name: string) {
         const url = this.BASE_URL + `/getPlacesPerCity/${name}`;
         return Ajax.get(url);
-    },
+    }
 
-    async profile (): Promise<any> {
+    async profile() {
         const url = this.BASE_URL + '/getUserById';
         return Ajax.get(url);
-    },
+    }
 
-    async editProfile ({
+    async editProfile({
         username,
         name,
         email,
@@ -101,10 +126,10 @@ const APIClient = {
         isHost,
         password,
         avatar,
-    }: EditParams): Promise<any> {
+    }: EditParams) {
         const url = this.BASE_URL + '/putUser';
         const formData = new FormData();
-    
+
         const metadata = {
             username: username,
             name: name,
@@ -115,14 +140,14 @@ const APIClient = {
             isHost: isHost,
             password: password,
         };
-    
+
         formData.append('metadata', JSON.stringify(metadata));
-        if (avatar){
+        if (avatar) {
             formData.append('avatar', avatar);
         }
-    
-        return Ajax.put({url, body: formData});
-    }
-};
 
-export default APIClient;
+        return Ajax.put({ url, body: formData });
+    }
+}
+
+export default new APIClient();

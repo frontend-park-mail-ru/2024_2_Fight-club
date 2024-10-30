@@ -2,7 +2,7 @@
 
 import Validation from '../../modules/Validation';
 import APIClient from '../../modules/ApiClient';
-import {clearPage} from '../../modules/Clear';
+import { clearPage } from '../../modules/Clear';
 
 interface userData {
     name: string | undefined;
@@ -21,7 +21,7 @@ interface sexTypes {
     ns: boolean;
 }
 
-class ProfileData{
+class ProfileData {
     #headerConfig;
     #content;
     #profileData: userData = {
@@ -39,7 +39,7 @@ class ProfileData{
     #uploadAvatarImage?: File;
     #renderProfileInfo;
 
-    constructor(renderProfileInfoCallback: any) {
+    constructor(renderProfileInfoCallback: () => void) {
         this.#headerConfig = {
             myMap: {
                 title: 'Карта путешествий',
@@ -52,7 +52,7 @@ class ProfileData{
             achievments: {
                 title: 'Достижения',
                 action: this.#renderAchievments,
-            }
+            },
         };
 
         this.#content = document.createElement('div');
@@ -62,10 +62,10 @@ class ProfileData{
         this.#sex = {
             male: false,
             female: false,
-            ns: false
+            ns: false,
         };
         this.#showBirthdate = false;
-        
+
         this.#renderProfileInfo = renderProfileInfoCallback;
         this.#addButtonEventListener();
     }
@@ -94,7 +94,7 @@ class ProfileData{
     /**
      * @private
      * @param {number} sex
-     * @returns {string} 
+     * @returns {string}
      */
     #calculateSex(sex: number): 'Не указано' | 'Муж.' | 'Жен.' {
         if (sex === 1) return 'Муж.';
@@ -115,8 +115,9 @@ class ProfileData{
             this.#profileData.email = data.Email;
             this.#profileData.isHost = data.IsHost;
             this.#profileData.avatar = data.Avatar;
-            this.#profileData.birthdate = data.Birthdate.slice(0,10);
-            if (this.#profileData.birthdate != '0001-01-01') this.#showBirthdate = true;
+            this.#profileData.birthdate = data.Birthdate.slice(0, 10);
+            if (this.#profileData.birthdate != '0001-01-01')
+                this.#showBirthdate = true;
             this.#profileData.address = data.Address;
             this.#profileData.sex = this.#calculateSex(data.Sex);
             this.#rememberSexValue(data.Sex);
@@ -129,15 +130,15 @@ class ProfileData{
      * @private
      * @description Put данных в бд
      */
-    async #putData(): Promise<void>{
+    async #putData(): Promise<void> {
         const inputs = document.getElementsByTagName('input');
         const data = {
             username: inputs[0].value,
             name: inputs[1].value,
             email: inputs[2].value,
-            sex: inputs[3].checked ? 3 : (inputs[4].checked ? 1 : 2),
+            sex: inputs[3].checked ? 3 : inputs[4].checked ? 1 : 2,
             address: inputs[6].value,
-            birthdate: new Date(inputs[7].value+'T00:00:00.000+00:00'),
+            birthdate: new Date(inputs[7].value + 'T00:00:00.000+00:00'),
             isHost: inputs[8].checked,
             password: inputs[9].value,
             avatar: inputs[10]?.files?.[0] ?? null,
@@ -166,7 +167,7 @@ class ProfileData{
      * @description Валидация полей формы
      */
     #validateData(): boolean {
-        const form = document.querySelector('.edit-form') as any;
+        const form = document.querySelector('.edit-form') as HTMLFormElement;
         const nameInput = form.elements.name;
         const usernameInput = form.elements.username;
         const emailInput = form.elements.email;
@@ -208,7 +209,7 @@ class ProfileData{
         } else {
             this.#hideErrorMsg(birthdateInput);
         }
-        
+
         return (
             nameValidInfo.ok &&
             usernameValidInfo.ok &&
@@ -250,7 +251,9 @@ class ProfileData{
         parentElem
             .querySelector('.edit-form__input-line__validationMessage')!
             .classList.add('none');
-        parentElem.querySelector('.edit-form__input-line__exclamation')!.classList.add('none');
+        parentElem
+            .querySelector('.edit-form__input-line__exclamation')!
+            .classList.add('none');
     }
 
     /**
@@ -259,7 +262,9 @@ class ProfileData{
      */
     #showErrorMessageEventListener(): void {
         Array.prototype.forEach.call(
-            (document.querySelectorAll('input.js-validate') as NodeListOf<HTMLInputElement>),
+            document.querySelectorAll(
+                'input.js-validate'
+            ) as NodeListOf<HTMLInputElement>,
             (element) => {
                 const exclamation = element.parentElement.querySelector(
                     '.edit-form__input-line__exclamation'
@@ -287,7 +292,7 @@ class ProfileData{
      */
     #addButtonEventListener(): void {
         const editButton = document.getElementById('edit-button');
-        editButton?.addEventListener('click', (e)=>{
+        editButton?.addEventListener('click', (e) => {
             e.preventDefault();
             this.#renderForm();
         });
@@ -298,15 +303,21 @@ class ProfileData{
      * @description Изменение фото при загрузке
      */
     #fileUploadEventListener(): void {
-        const fileUpload = document.getElementById('avatar') as HTMLInputElement;
-        const avatarImage = document.querySelector('.edit-form__avatar__image-container__image') as HTMLImageElement;
+        const fileUpload = document.getElementById(
+            'avatar'
+        ) as HTMLInputElement;
+        const avatarImage = document.querySelector(
+            '.edit-form__avatar__image-container__image'
+        ) as HTMLImageElement;
 
-        fileUpload?.addEventListener('change', (e)=>{
+        fileUpload?.addEventListener('change', (e) => {
             e.preventDefault();
             if (fileUpload && fileUpload.files && fileUpload.files.length > 0) {
-                this.#uploadAvatarImage = fileUpload.files[0]; 
+                this.#uploadAvatarImage = fileUpload.files[0];
                 const fileName = fileUpload.files[0].name;
-                const wrapper = fileUpload.closest('.edit-form__avatar__file-upload-wrapper');              
+                const wrapper = fileUpload.closest(
+                    '.edit-form__avatar__file-upload-wrapper'
+                );
                 if (wrapper) {
                     wrapper.setAttribute('data-text', fileName);
                 }
@@ -328,7 +339,7 @@ class ProfileData{
      */
     #submitButtonEventListener(): void {
         const submitButton = document.getElementById('submit');
-        submitButton?.addEventListener('click', async (e)=>{
+        submitButton?.addEventListener('click', async (e) => {
             e.preventDefault();
             const isDataClean = this.#validateData();
             if (isDataClean) {
@@ -345,9 +356,13 @@ class ProfileData{
      */
     #resetButtonEventLisener(): void {
         const resetButton = document.querySelector('.js-reset-button');
-        resetButton?.addEventListener('click', ()=>{
-            const image = document.querySelector('.js-avatar-upload-image') as HTMLImageElement;
-            const wrapper = document.querySelector('.js-avatar-upload-wrapper') as HTMLInputElement;
+        resetButton?.addEventListener('click', () => {
+            const image = document.querySelector(
+                '.js-avatar-upload-image'
+            ) as HTMLImageElement;
+            const wrapper = document.querySelector(
+                '.js-avatar-upload-wrapper'
+            ) as HTMLInputElement;
             if (this.#profileData.avatar) image.src = this.#profileData.avatar;
             wrapper.setAttribute('data-text', 'Select your file!');
         });
@@ -359,7 +374,7 @@ class ProfileData{
      */
     #closeFormEventListener(): void {
         const cross = document.querySelector('.js-close-cross');
-        cross?.addEventListener('click', ()=>{
+        cross?.addEventListener('click', () => {
             clearPage('form');
             const dataContainer = document.getElementById('container');
             const header = document.createElement('div');
@@ -389,8 +404,10 @@ class ProfileData{
      * @description Определяем какой radio по дефолту отмечен
      */
     #addCheckedRadio(): void {
-        const sexInputs = document.getElementsByName('sex') as NodeListOf<HTMLInputElement>;
-        if (this.#profileData.sex == 'Не указано'){
+        const sexInputs = document.getElementsByName(
+            'sex'
+        ) as NodeListOf<HTMLInputElement>;
+        if (this.#profileData.sex == 'Не указано') {
             (sexInputs[0] as HTMLInputElement).checked = true;
         } else if (this.#profileData.sex == 'Муж.') {
             (sexInputs[1] as HTMLInputElement).checked = true;
@@ -405,13 +422,13 @@ class ProfileData{
      */
     #addCheckedSlider(): void {
         const slider = document.getElementById('isHost') as HTMLInputElement;
-        if (this.#profileData.isHost){
+        if (this.#profileData.isHost) {
             slider.checked = true;
         }
     }
 
     //TODO Когда карты появятся
-    #renderMap(){
+    #renderMap() {
         const wrapper = document.createElement('div');
         wrapper.id = 'wrapper';
         wrapper.classList.add('data-container__wrapper');
@@ -424,8 +441,8 @@ class ProfileData{
         this.#content.appendChild(wrapper);
     }
 
-    #renderReviews(){}
-    #renderAchievments(){}
+    #renderReviews() {}
+    #renderAchievments() {}
 
     /**
      * @private
@@ -436,11 +453,14 @@ class ProfileData{
         await this.#getProfileData();
         const template = Handlebars.templates['EditForm.hbs'];
         const container = document.getElementById('container');
-        container?.insertAdjacentHTML('afterbegin', template({
-            data: this.#profileData,
-            sex: this.#sex,
-            showBirthdate: this.#showBirthdate
-        }));
+        container?.insertAdjacentHTML(
+            'afterbegin',
+            template({
+                data: this.#profileData,
+                sex: this.#sex,
+                showBirthdate: this.#showBirthdate,
+            })
+        );
         this.#addCheckedRadio();
         this.#addCheckedSlider();
         this.#addEventListeners();
@@ -452,11 +472,11 @@ class ProfileData{
      * @param {HTMLDivElement} header
      */
     #renderHeader(header: HTMLDivElement): void {
-        Object.entries(this.#headerConfig).forEach(([_, {title, action}])=>{
+        Object.entries(this.#headerConfig).forEach(([_, { title, action }]) => {
             const headerHref = document.createElement('a');
             headerHref.classList.add('data-container__header__action');
             headerHref.textContent = title;
-            headerHref.addEventListener('click', (e)=>{
+            headerHref.addEventListener('click', (e) => {
                 e.preventDefault();
                 action();
             });
