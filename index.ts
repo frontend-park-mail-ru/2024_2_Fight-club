@@ -6,6 +6,7 @@ import ProfilePopup from './components/ProfilePopup/ProfilePopup';
 
 import MainPage from './components/MainPage/MainPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
+import CityPage from './components/CityPage/CityPage';
 
 import Ajax from './modules/Ajax';
 import {clearPage} from './modules/Clear';
@@ -39,7 +40,10 @@ function renderMainPage() {
     mainPage.render();
 }
 
-function renderMapPage() {}
+function renderMapPage() {
+    const cityPage = new CityPage();
+    cityPage.render(pageContainer);
+}
 
 function renderArticlesPage() {}
 
