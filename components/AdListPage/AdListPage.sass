@@ -6,8 +6,17 @@
     margin: 0 auto
 
     &__title
-        margin: 30px 0
         font-weight: 500
+
+    &__upper-container
+        display: flex
+        justify-content: space-between
+        align-items: end
+        margin: 20px 0
+    &__add-button
+        @include mixins.button
+        background-color: #FF5255
+
     
 .horizontal-ad-card
     border: 1px solid black

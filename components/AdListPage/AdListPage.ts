@@ -13,6 +13,11 @@ function AdListPage(data: HorizontalAdCardData[]) {
 
     pageContainer.innerHTML = template(data);
     const advertListElement = pageContainer.querySelector('.js-advert-list');
+    const createAdvertElement = pageContainer.querySelector(
+        '.js-add-btn'
+    ) as HTMLButtonElement;
+    createAdvertElement.onclick = () =>
+        router.navigateTo('/ads/?action=create');
 
     const card = HorizontalAdCard(
         '1',
