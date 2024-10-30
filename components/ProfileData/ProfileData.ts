@@ -1,7 +1,7 @@
 'use strict';
 
 import Validation from '../../modules/Validation';
-import {editProfile, profile} from '../../modules/Profile';
+import APIClient from '../../modules/ApiClient';
 import {clearPage} from '../../modules/Clear';
 
 interface userData {
@@ -107,7 +107,7 @@ class ProfileData{
      * @description Получение данных
      */
     async #getProfileData(): Promise<void> {
-        const response = await profile();
+        const response = await APIClient.profile();
         if (response.ok) {
             const data = await response.json();
             this.#profileData.name = data.name;
@@ -143,7 +143,7 @@ class ProfileData{
             avatar: inputs[10]?.files?.[0] ?? null,
         };
 
-        const response = await editProfile(data);
+        const response = await APIClient.editProfile(data);
         if (response.ok) {
             clearPage('form', 'profile');
             const dataContainer = document.getElementById('container');

@@ -2,7 +2,7 @@
 
 import ProfileInfo from '../ProfileInfo/ProfileInfo';
 import ProfileData from '../ProfileData/ProfileData';
-import {profile} from '../../modules/Profile';
+import APIClient from '../../modules/ApiClient';
 
 class ProfilePage{   
     #name: string | undefined;
@@ -35,7 +35,7 @@ class ProfilePage{
      * @description Получение данных с бэка и заполнение полей класса
      */
     async #getProfileData() {
-        const response = await profile();
+        const response = await APIClient.profile();
         if (response.ok) {
             const data = await response.json();
 

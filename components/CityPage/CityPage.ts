@@ -2,7 +2,7 @@
 
 import Filter from '../Filter/Filter';
 import AdCard from '../AdCard/AdCard';
-import {city} from '../../modules/City';
+import APIClient from '../../modules/ApiClient';
 
 const isMockMode = true;
 const mockCity = {
@@ -39,7 +39,7 @@ class CityPage {
             return;
         }
 
-        const response = await city(name);
+        const response = await APIClient.city(name);
         if (response.ok){
             const data = await response.json();
             this.#name = data['name'];

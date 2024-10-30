@@ -27,3 +27,15 @@ export interface AdCardData {
     locationStreet: string;
     author: AuthorData;
 }
+
+export interface EditParams {
+    username: string
+    name: string
+    email: string
+    sex: number
+    address: string
+    birthdate: Date
+    isHost: boolean
+    password: string
+    avatar: File | null
+}

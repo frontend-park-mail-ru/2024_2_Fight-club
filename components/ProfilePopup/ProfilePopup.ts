@@ -15,8 +15,9 @@ class ProfilePopup {
         profileEvent: null, //TODO
         donateEvent: null, //TODO or DELETE
     };
+    #profilePopupCallbacks;
 
-    constructor(popupCallbacks: profilePopupCallbacks) {
+    constructor(popupCallbacks: any) {
         this.#profilePopupCallbacks = popupCallbacks;
         this.#config = {
             profile: {
