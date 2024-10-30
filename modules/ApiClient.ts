@@ -13,11 +13,9 @@ class APIClient {
     async getAds(filters?: AdsFilters) {
         try {
             let response;
-            if (filters && filters.locationMain) {
+            if (filters && filters.city) {
                 console.log(123);
-                response = await fetch(
-                    this.BASE_URL + `/ads/${filters.locationMain}`
-                );
+                response = await fetch(this.BASE_URL + `/ads/${filters.city}`);
             } else {
                 response = await fetch(this.BASE_URL + '/ads');
             }
@@ -106,19 +104,19 @@ class APIClient {
         };
 
         return Ajax.post({ url, body });
-    },
+    }
 
-    async city (name: string): Promise<any>  {
+    async city(name: string) {
         const url = this.BASE_URL + `/getPlacesPerCity/${name}`;
         return Ajax.get(url);
-    },
+    }
 
-    async profile (): Promise<any> {
+    async profile() {
         const url = this.BASE_URL + '/getUserById';
         return Ajax.get(url);
-    },
+    }
 
-    async editProfile ({
+    async editProfile({
         username,
         name,
         email,
@@ -128,10 +126,10 @@ class APIClient {
         isHost,
         password,
         avatar,
-    }: EditParams): Promise<any> {
+    }: EditParams) {
         const url = this.BASE_URL + '/putUser';
         const formData = new FormData();
-    
+
         const metadata = {
             username: username,
             name: name,
@@ -142,14 +140,14 @@ class APIClient {
             isHost: isHost,
             password: password,
         };
-    
+
         formData.append('metadata', JSON.stringify(metadata));
-        if (avatar){
+        if (avatar) {
             formData.append('avatar', avatar);
         }
-    
-        return Ajax.put({url, body: formData});
+
+        return Ajax.put({ url, body: formData });
     }
-};
+}
 
 export default new APIClient();
