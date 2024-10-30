@@ -2,6 +2,7 @@
 
 const SCROLL_DELAY = 200;
 
+import router from '../../modules/Router';
 import { AdCardData } from '../../modules/Types';
 
 /** Карточка объявления на главной странице */
@@ -30,6 +31,10 @@ class AdCard {
         const templateContainer = document.createElement('div');
 
         templateContainer.innerHTML = template(this.#data);
+
+        templateContainer.onclick = () => {
+            router.navigateTo(`/ads/?id=${this.#data.id}`);
+        };
 
         templateContainer
             .querySelector('.ad-card__button')!

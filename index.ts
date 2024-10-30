@@ -115,9 +115,7 @@ const main = async () => {
 };
 
 router.addRoute('/', async () => {
-    // const data = await ApiClient.getMainPageData();
-    // renderMainPage(data);
-    renderAdListPage();
+    renderMainPage();
 });
 
 router.addRoute('/ads/', async (params: URLSearchParams) => {
