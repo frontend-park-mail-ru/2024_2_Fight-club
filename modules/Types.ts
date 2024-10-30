@@ -14,16 +14,25 @@ export interface AdsFilters {
     city?: string;
 }
 
-interface AuthorData {
-    uuid: string;
-    avatar: string;
-    score: number;
-}
+// interface AuthorData {
+//     uuid: string;
+//     avatar: string;
+//     score: number;
+// }
 
-export interface AdCardData {
-    id: number;
+// Interface of a response from DB
+export interface AdvertData {
+    id: string;
     images: string[];
     city: string;
     address: string;
-    author: AuthorData;
+    description: string;
+    publicationDate: string;
+    roomsNumber: string;
+
+    // author: AuthorData;
+    authorAvatar: string;
+    authorName: string;
+    authorRating: string;
+    authorUUID: string;
 }
