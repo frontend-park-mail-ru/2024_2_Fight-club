@@ -31,7 +31,7 @@ class APIClient {
             if (filters && filters.locationMain) {
                 console.log(123);
                 response = await fetch(
-                    this.BASE_URL + `/getPlacesPerCity/${filters.locationMain}`
+                    this.BASE_URL + `/ads/${filters.locationMain}`
                 );
             } else {
                 response = await fetch(this.BASE_URL + '/ads');
@@ -53,13 +53,13 @@ class APIClient {
     }
 
     async getUser(uuid: string) {
-        const response = await Ajax.get(this.BASE_URL + `/getUserById/${uuid}`);
+        const response = await Ajax.get(this.BASE_URL + `/users/${uuid}`);
         const userInfo = await response.json();
         return userInfo;
     }
 
     async getSessionData() {
-        const response = await Ajax.get(this.BASE_URL + '/getSessionData');
+        const response = await Ajax.get(this.BASE_URL + '/session');
         if (response.ok) {
             const sessionInfo = await response.json();
             return sessionInfo;
@@ -71,7 +71,7 @@ class APIClient {
 
     async createAdvert(data: AdvertData | FormData) {
         return await Ajax.post({
-            url: this.BASE_URL + '/createAd',
+            url: this.BASE_URL + '/ads',
             body: data,
         });
     }
