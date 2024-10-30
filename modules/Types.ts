@@ -11,7 +11,7 @@ export interface LoginParams {
 }
 
 export interface AdsFilters {
-    locationMain?: string;
+    city?: string;
 }
 
 interface AuthorData {
@@ -23,7 +23,7 @@ interface AuthorData {
 export interface AdCardData {
     id: number;
     images: string[];
-    locationMain: string;
-    locationStreet: string;
+    city: string;
+    address: string;
     author: AuthorData;
 }
