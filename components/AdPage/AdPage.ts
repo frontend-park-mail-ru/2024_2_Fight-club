@@ -1,5 +1,7 @@
 'use strict';
 
+import { AdvertData } from '../../modules/Types';
+
 const MAIN_IMG_DIV_SELECTOR = '.js-main-img-div';
 const MAIN_IMG_SELECTOR = '.advert-images-carousel__main-img';
 const BACKGROUND_IMG_SELECTOR = '.advert-images-carousel__img-background';
@@ -12,24 +14,6 @@ const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
 const SECONDARY_IMG_SELECTED_CLASS_NAME =
     'advert-images-carousel__secondary_img_current';
 
-interface AdPageAuthorData {
-    uuid: string;
-    name: string;
-    avatar: string;
-    sex: string;
-    age: number;
-    score: number;
-}
-
-interface AdPageData {
-    images: string[];
-    author: AdPageAuthorData;
-    country: string;
-    city: string;
-    desc: string;
-    roomsCount: number;
-}
-
 class AdPage {
     #templateContainer: HTMLDivElement;
     #mainImg: HTMLImageElement;
@@ -40,7 +24,7 @@ class AdPage {
     #overlay: HTMLDivElement;
     #images: string[];
 
-    constructor(data: AdPageData) {
+    constructor(data: AdvertData) {
         this.#images = data.images;
 
         this.#currentIndex = 0;

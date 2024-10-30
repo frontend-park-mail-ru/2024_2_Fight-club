@@ -245,13 +245,12 @@ class EditAdvertPage {
         formData2Send.set(
             'metadata',
             JSON.stringify({
-                location_main: formData.get('city') as string,
-                location_street: formData.get('address') as string,
+                cityName: formData.get('city') as string,
+                address: formData.get('address') as string,
                 position: [0, 0],
                 distance: 0,
                 desc: formData.get('desc') as string,
-                roomsCount: parseInt(formData.get('roomsCount') as string),
-                address: formData.get('address') as string,
+                roomsNumber: parseInt(formData.get('roomsCount') as string),
                 id: makeid(7),
             })
         );

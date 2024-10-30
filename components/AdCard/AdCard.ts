@@ -3,18 +3,18 @@
 const SCROLL_DELAY = 200;
 
 import router from '../../modules/Router';
-import { AdCardData } from '../../modules/Types';
+import { AdvertData } from '../../modules/Types';
 
 /** Карточка объявления на главной странице */
 class AdCard {
-    #data: AdCardData;
+    #data: AdvertData;
     #currentImgIndex: number;
     #circles: HTMLDivElement[];
     private parent: HTMLDivElement | null | undefined;
 
     /** @param {object} data - информация о карточке
      @param {HTMLDivElement} parent - родитель, в чьем списке детей будет карточка */
-    constructor(data: AdCardData, parent: HTMLDivElement | null | undefined) {
+    constructor(data: AdvertData, parent: HTMLDivElement | null | undefined) {
         this.#data = data;
         this.parent = parent!;
 
