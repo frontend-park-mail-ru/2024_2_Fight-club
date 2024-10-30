@@ -18,7 +18,7 @@ class Ajax {
      * @public
      * @param {string} url
      */
-    static get(url: string): Promise<any> {
+    static get(url: string) {
         return this.#makeRequest({
             method: 'GET',
             url: url,
@@ -29,7 +29,7 @@ class Ajax {
      * @public
      * @param {PostParams} postParams
      */
-    static post({ url, body }: PostParams): Promise<any> {
+    static post({ url, body }: PostParams) {
         return this.#makeRequest({ method: 'POST', url, body });
     }
 
@@ -39,20 +39,15 @@ class Ajax {
      * @param {object} body
      * @returns {Promise<*>}
      */
-    static delete({ url, body }: PostParams): Promise<any> {
+    static delete({ url, body }: PostParams) {
         return this.#makeRequest({ method: 'DELETE', url, body });
     }
 
-    /**
-     * @private
-     * @param {RequestParams} params
-     * @returns {Promise<any>} response
-     */
     static async #makeRequest({
         method,
         url,
         body = {},
-    }: RequestParams): Promise<any> {
+    }: RequestParams): Promise<Response> {
         let request: Request;
         const isFormData = body instanceof FormData;
         if (method === 'GET') {

@@ -219,7 +219,7 @@ class AuthPopup {
     /**
      * @private
      */
-    async #onFormSubmit(e: any) {
+    async #onFormSubmit(e: Event) {
         e.preventDefault();
 
         if (!this.#validateData()) {
@@ -227,7 +227,8 @@ class AuthPopup {
         }
 
         const data = {};
-        Array.from(e.target.elements).forEach((el) => {
+        const target = e.target as HTMLFormElement;
+        Array.from(target.elements).forEach((el) => {
             const { name, value } = el;
             data[name] = value;
         });

@@ -1,5 +1,9 @@
+interface urlHandlerFunc {
+    (...args: URLSearchParams[]): void;
+}
+
 class Router {
-    private routes: { [key: string]: Function } = {};
+    private routes: { [key: string]: urlHandlerFunc } = {};
 
     constructor() {
         // Привязываем обработчик на изменение истории браузера
@@ -7,7 +11,7 @@ class Router {
     }
 
     // Метод для добавления маршрута
-    addRoute(path: string, handler: Function) {
+    addRoute(path: string, handler: urlHandlerFunc) {
         this.routes[path] = handler;
     }
 
@@ -35,15 +39,16 @@ class Router {
 const router = new Router();
 
 document.addEventListener('click', (event: Event) => {
-    if (event.target.tagName === 'A') {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'A') {
         event.preventDefault();
-        const href = event.target.getAttribute('href');
+        const href = target.getAttribute('href');
 
         // Обновляем URL без перезагрузки страницы
         window.history.pushState({}, '', href);
 
         // Вызываем событие или логику для обработки маршрута
-        router.navigateTo(href);
+        if (href) router.navigateTo(href);
     }
 });
 

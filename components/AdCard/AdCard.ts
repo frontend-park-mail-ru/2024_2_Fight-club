@@ -81,8 +81,12 @@ class AdCard {
     /**
      * Функция, которая показывает нужную фотографию в зависимости от позиции курсора
      */
-    #onMouseMove(e: any, areaFraction: number, imgElem: HTMLImageElement) {
-        const rect = e.target.getBoundingClientRect();
+    #onMouseMove(
+        e: MouseEvent,
+        areaFraction: number,
+        imgElem: HTMLImageElement
+    ) {
+        const rect = (e.target as HTMLElement).getBoundingClientRect();
         const x = e.clientX - rect.left;
         if (x < 0) return;
 
