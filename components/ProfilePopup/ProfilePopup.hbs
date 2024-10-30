@@ -1,12 +1,16 @@
-<div class="profile-overlay">
-    <div class="profile-list">
+<div class='profile-overlay'>
+    <div class='profile-list'>
         {{#each this}}
             <div>
-                <a href="{{this.href}}" id="{{@key}}" class="profile-list__href">
-                    <h2>{{this.title}}</h2>
+                <a
+                    href='{{this.href}}'
+                    id='{{@key}}'
+                    class='profile-list__href'
+                >
+                    {{this.title}}
                 </a>
             </div>
-            <hr class="profile-list__underline">
+            <hr class='profile-list__underline' />
         {{/each}}
     </div>
 </div>

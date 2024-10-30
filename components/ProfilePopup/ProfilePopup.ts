@@ -28,6 +28,10 @@ class ProfilePopup {
                 href: '/donate',
                 event: this.#events.donateEvent,
             },
+            myAdvertisements: {
+                title: 'Мои объявления',
+                href: '/ads/?author=me',
+            },
             logout: {
                 title: 'Выйти',
                 href: '#',
