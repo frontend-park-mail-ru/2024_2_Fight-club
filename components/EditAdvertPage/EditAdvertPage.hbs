@@ -47,6 +47,8 @@
                         class='ad-page__edit-form__text-area'
                         rows='10'
                         name='{{this.name}}'
+                        required
+                        minlength='{{this.minLen}}'
                     ></textarea>
                 {{else if this.isSelect}}
                     <select
@@ -66,8 +68,12 @@
                         type='{{this.type}}'
                         minlength='{{this.minLen}}'
                         maxlength='{{this.maxLen}}'
-                        value='{{this.defaultValue}}'
+                        min='{{this.min}}'
+                        max='{{this.max}}'
+                        value='{{this.value}}'
+                        required
                         {{!-- required='{{this.required}}' --}}
+                        {{!<!-- TODO: UNCOMMENT UPPER PART -->}}
                     />
                 {{/if}}
             {{/each}}

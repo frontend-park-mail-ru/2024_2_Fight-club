@@ -62,24 +62,21 @@ const renderAdvertPage = async (id: number) => {
     page.render(pageContainer);
 };
 
-const renderEditAdvertPage = async (id: number) => {
-    const info = (await ApiClient.getAd(id))['place'];
+const renderEditAdvertPage = async (uuid: string) => {
+    const info = (await ApiClient.getAd(uuid))['place'];
 
     const page = new EditAdvertPage({
         images: info['Images'],
-        author: {
-            uuid: '3',
-            avatar: '',
-            sex: 'М',
-            age: 32,
-            score: 5,
-            name: 'Майкл Джордан',
-        },
-        country: info['location_main'],
-        city: info['location_street'],
+        city: info['location_main'],
+        address: info['location_street'],
         desc: 'Всем привет! Давайте жить ко мне!',
         roomsCount: 3,
     });
+    pageContainer.appendChild(page.getElement());
+};
+
+const renderCreateAdvertPage = async () => {
+    const page = new EditAdvertPage();
     pageContainer.appendChild(page.getElement());
 };
 
@@ -103,7 +100,8 @@ const main = async () => {
     root.appendChild(pageContainer);
 
     // renderMainPage();
-    renderEditAdvertPage(1);
+    // renderEditAdvertPage('Y9yjMvB');
+    renderCreateAdvertPage();
 };
 
 main();

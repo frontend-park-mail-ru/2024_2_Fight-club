@@ -18,19 +18,19 @@ const SECONDARY_IMG_SELECTED_CLASS_NAME =
 const ADD_IMG_BTN_SELECTOR = '.js-add-img-btn';
 const FILE_INPUT_SELECTOR = '.js-file-input';
 
-interface AdPageAuthorData {
-    uuid: string;
-    name: string;
-    avatar: string;
-    sex: string;
-    age: number;
-    score: number;
-}
+// interface AdPageAuthorData {
+//     uuid: string;
+//     name: string;
+//     avatar: string;
+//     sex: string;
+//     age: number;
+//     score: number;
+// }
 
 interface AdPageData {
     images: string[];
-    author: AdPageAuthorData;
-    country: string;
+    // author: AdPageAuthorData;
+    address: string;
     city: string;
     desc: string;
     roomsCount: number;
@@ -43,6 +43,11 @@ interface InputConfig {
     isTextArea?: boolean;
     isSelect?: boolean;
     options?: string[];
+    value?: string | number;
+    minLen?: number;
+    maxLen?: number;
+    min?: number;
+    max?: number;
 }
 
 // TODO: DELETE THIS USELESS FUNCTION. IT WAS CREATED FOR BRAINLESS BACKENDERS
@@ -72,8 +77,8 @@ class EditAdvertPage {
     #imageURLs: string[];
     #uploadedImages: File[];
 
-    constructor(data: AdPageData) {
-        this.#imageURLs = data.images;
+    constructor(data?: AdPageData) {
+        this.#imageURLs = data ? data.images : [];
 
         this.#currentIndex = 0;
         this.#uploadedImages = [];
@@ -88,22 +93,32 @@ class EditAdvertPage {
                 type: 'text',
                 isSelect: true,
                 options: CITIES,
+                value: data?.city,
             },
             {
                 label: 'Адрес',
                 name: 'address',
                 type: 'text',
+                value: data?.address,
+                minLen: 5,
+                maxLen: 100,
             },
             {
                 label: 'Число комнат',
                 name: 'roomsCount',
                 type: 'number',
+                value: data?.roomsCount,
+                min: 1,
+                max: 20,
             },
             {
                 label: 'Описание',
                 name: 'desc',
                 type: 'textarea',
                 isTextArea: true,
+                value: data?.desc,
+                minLen: 20,
+                maxLen: 1000,
             },
         ];
         this.#templateContainer.innerHTML = template({
@@ -132,10 +147,11 @@ class EditAdvertPage {
 
         this.#addEventListeners();
 
-        this.#showImage(this.#currentIndex);
+        if (data) this.#showImage(this.#currentIndex);
     }
 
     #showImage(index: number) {
+        console.log(this.#imageURLs);
         this.#mainImg.src = this.#backgroundImg.src = this.#imageURLs[index];
 
         this.#carouselImages[this.#currentIndex].classList.remove(
@@ -245,7 +261,10 @@ class EditAdvertPage {
         });
 
         // Log the extracted data
-        ApiClient.createAdvert(formData2Send);
+        const response = await ApiClient.createAdvert(formData2Send);
+        if (response.ok) {
+            // TODO: REDIRECT TO ADVERT LIST PAGE
+        }
     };
 
     public getElement() {
