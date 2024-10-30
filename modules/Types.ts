@@ -36,3 +36,15 @@ export interface AdvertData {
     authorRating: string;
     authorUUID: string;
 }
+
+export interface EditParams {
+    username: string
+    name: string
+    email: string
+    sex: number
+    address: string
+    birthdate: Date
+    isHost: boolean
+    password: string
+    avatar: File | null
+}

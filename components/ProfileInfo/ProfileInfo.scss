@@ -1,0 +1,115 @@
+.profile-container{
+    margin: 40px 0px 40px 250px;
+    border: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 90%;
+    max-height: 90%;
+    max-width: 280px;
+    padding-inline-start: 40px;
+    padding-inline-end: 40px;
+    background-color: white;
+}
+
+.profile-container__center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-container__photo {
+    border: solid;
+    border-radius: 50%;
+    border-width: 1px;
+    width: 200px;
+    height: 200px;
+    margin-top: 10%;
+}
+
+.profile-container__photo__img1 {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+}
+
+.profile-container__p1 {
+    margin-top: 7%;
+    font-style: italic;
+    font-size: 28px;
+    font-weight: 500;
+}
+
+.profile-container__p2 {
+    margin-top: 7%;
+    font-style: italic;
+    font-size: 20px;
+}
+
+.profile-container__hr {
+    margin-top: 6%;
+    width: 100%;
+}
+
+.profile-container__raiting {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    width: 100%;
+    margin-top: 6%;
+}
+
+.profile-container__score-container {
+    display: flex;
+    align-items: center;
+}
+
+.profile-container__img2 {
+    padding-right: 10px;
+}
+
+.profile-container__score {
+    font-size: 20px;
+    font-weight: 300;
+    font-style: italic;
+}
+
+.profile-container__div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 6%;
+}
+
+.profile-container__p {
+    font-style: italic;
+    font-size: 20px;
+    width: 45%;
+}
+
+.profile-container__info {
+    font-style: italic;
+    font-size: 20px;
+    width: 55%;
+}
+
+.profile-container__edit-container {
+    margin-top: 10%;
+    width: 100%;
+}
+
+.profile-container__edit-button {
+    background-color: #FFA552;
+    color: white;
+    width: 150px;
+    border-radius: 10px;
+    border: none;
+    height: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 5%;
+}

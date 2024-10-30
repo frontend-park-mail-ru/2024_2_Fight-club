@@ -7,6 +7,7 @@ class MainPhoto {
     constructor(onSearch: (searchQuery: string) => void) {
         this.#onSearchButtonClick = onSearch;
         this.#mainPhotoContainer = document.createElement('div');
+        this.#mainPhotoContainer.id = 'main-photo';
         this.#mainPhotoContainer.classList.add('photo-container');
 
         this.#render();

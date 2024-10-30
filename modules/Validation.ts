@@ -3,6 +3,9 @@
 const USERNAME_REGEXP = /^[A-Za-z0-9][A-Za-z0-9-_.]{3,19}[A-Za-z0-9]$/;
 const EMAIL_REGEXP = /.+@.+/;
 const PASSWORD_REGEXP = /^[a-zA-Z0-9!@#$%^&*()_+=-]{8,16}$/;
+const ADDRESS_REGEXP = /^[A-Za-zА-Яа-яёЁ]+,\s?(г\.?|пгт\.?|село|поселок)\s?[А-Яа-яA-Za-zёЁ]+,\s?ул\.\s?(\d+-[я-я]?\s)?[А-Яа-яA-Za-zёЁ]+,\s?д\.\s?\d+([/]\d+[А-Яа-я]?)?$/;
+
+
 
 interface ErrorMessage {
     WRONG_LENGTH: string
@@ -64,6 +67,31 @@ class Validation {
         if (passwordInput.value !== passwordRepeatInput.value) {
             res.ok = false;
             res.text = 'Пароли не совпадают';
+        }
+
+        return res;
+    }
+
+    static validateAddress(addressInput: HTMLInputElement) {
+        return this.#validateAny(addressInput, ADDRESS_REGEXP, {
+            WRONG_LENGTH: 'Адрес должен быть длиной от 10 до 100 символов',
+            REGEXP_MISMATCH: 'Адрес должен быть в формате: <Страна>, г./пгт./село/поселок <Город>, ул. <Улица>, д. <Номер дома>',
+        });
+    }
+
+    static validateBirthdate(birthdateInput: HTMLInputElement) {
+        const res: ValidationResult = {
+            ok: true,
+            text: '',
+        };
+
+        const birthdate = new Date(birthdateInput.value);
+        const earliestDate = new Date('1900-01-01');
+        const today = new Date();
+
+        if (birthdate < earliestDate || birthdate > today) {
+            res.ok = false;
+            res.text = `Дата рождения должна быть в пределах от 01.01.1900 до ${today.getDate()}.${today.getMonth()+1}.${today.getFullYear()}`;
         }
 
         return res;
