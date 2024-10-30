@@ -3,21 +3,6 @@
 import Ajax from './Ajax';
 import { RegisterParams, AdsFilters, LoginParams } from './Types';
 
-interface AdvertData {
-    images: File[];
-    metadata: {
-        location_main: string;
-        location_street: string;
-        position: number[];
-        distance: 0;
-    };
-    // country: string;
-    // city: string;
-    // address: string;
-    // roomsCount: number;
-    // desc: string;
-}
-
 class APIClient {
     BASE_URL = `http://${window.location.hostname}:8008/api`;
 
@@ -77,7 +62,7 @@ class APIClient {
         return undefined;
     }
 
-    async createAdvert(data: AdvertData | FormData) {
+    async createAdvert(data: FormData) {
         return await Ajax.post({
             url: this.BASE_URL + '/ads',
             body: data,
