@@ -33,4 +33,18 @@ class Router {
 }
 
 const router = new Router();
+
+document.addEventListener('click', (event: Event) => {
+    if (event.target.tagName === 'A') {
+        event.preventDefault();
+        const href = event.target.getAttribute('href');
+
+        // Обновляем URL без перезагрузки страницы
+        window.history.pushState({}, '', href);
+
+        // Вызываем событие или логику для обработки маршрута
+        router.navigateTo(href);
+    }
+});
+
 export default router;
