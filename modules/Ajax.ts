@@ -42,6 +42,15 @@ class Ajax {
     }
 
     /**
+     * @public
+     * @param {PostParams} postParams
+     * @returns {Promise<*>}
+     */
+    static put({url, body}: PostParams): Promise<any> {
+        return this.#makeRequest({method: 'PUT', url, body});
+    }
+
+    /**
      * @private
      * @param {RequestParams} params
      * @returns {Promise<any>} response
@@ -52,6 +61,8 @@ class Ajax {
         body = {},
     }: RequestParams): Promise<any> {
         let request: Request;
+        const isFormData = body instanceof FormData;
+
         if (method === 'GET') {
             request = new Request(url, {
                 method: method,
@@ -63,11 +74,11 @@ class Ajax {
         } else {
             request = new Request(url, {
                 method: method,
-                headers: {
+                headers: isFormData ? {} : {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify(body),
+                body: isFormData ? body : JSON.stringify(body),
             });
         }
 

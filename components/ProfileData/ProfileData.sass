@@ -1,0 +1,347 @@
+.data-container
+    background-color: white
+    margin: 40px 200px 40px 0px
+    width: 80%
+    height: 90%
+    max-height: 90%
+    border: solid
+    border-width: 1px 
+    border-radius: 10px
+
+.data-container__wrapper
+    position: relative
+    width: 100%
+    height: 100%
+
+    &__img
+        position: absolute
+        width: 100%
+        height: 87%
+
+.data-container__header
+    display: flex
+    flex-direction: row
+    align-items: center
+    justify-content: space-around
+    height: 80px
+    width: 100%
+    border-bottom: solid
+    border-bottom-width: 1px
+
+    &__action
+        text-decoration: none
+        font-size: 22px
+        font-style: italic
+        cursor: pointer
+        color: #635B5B
+
+.data-container__content
+    height: 100%
+    width: 100%
+
+.edit-form
+    padding: 30px 50px 40px 80px
+    height: 90%
+
+    &__close
+        display: flex
+        height: min-content
+
+        &__cross
+            margin-left: auto
+            cursor: pointer
+
+    &__title
+        padding-right: 50px
+        display: flex
+        align-items: center
+        justify-content: center
+        font-size: 28px
+        margin-bottom: 40px
+        
+        &__p1
+            background-color: white
+ 
+    &__input-line
+        display: flex
+        flex-direction: row
+        align-items: center
+        height: min-content
+        position: relative
+
+        &__title
+            width: 120px
+            font-size: 22px
+            font-style: italic
+    
+        &__input
+            height: 30px
+            width: 250px
+            border: solid
+            border-width: 1px
+            border-radius: 5px
+            padding-left: 10px
+            padding-right: 10px
+        
+        &__exclamation
+            margin-left: 10px
+            cursor: pointer
+
+        &__validationMessage
+            position: absolute
+            background-color: #ffffff
+            border: 1px solid #E10505
+            border-radius: 10px
+            margin: 0
+            left: 450px
+            display: flex
+            justify-content: center
+            align-items: center
+
+            min-width: 300px
+            max-width: fit-content
+
+            min-height: 40px
+            max-height: fit-content
+
+            padding: 2px 10px
+            font-size: 20px
+            font-style: italic
+            z-index: 100
+    
+    &__avatar
+        display: flex
+        flex-direction: row
+        align-items: center
+
+        &__image-container
+            width: 250px
+            height: 250px
+            border-radius: 50%
+            padding-right: 20px
+
+            &__image
+                border-radius: 50%
+                width: 250px
+                height: 250px
+
+        &__file-upload-wrapper
+            $defaultColor: #4daf7c
+            $height: 40px 
+            position: relative
+            width: 80%
+            height: $height
+            border: 1px solid #000
+            border-radius: 5px 10px 10px 5px
+            overflow: hidden
+
+            &::after
+                content: attr(data-text)
+                font-size: 16px
+                position: absolute
+                top: 0
+                left: 0
+                background: #fff
+                padding: 8px 12px
+                display: block
+                width: calc(100% - 45px)
+                pointer-events: none
+                z-index: 20
+                height: $height - 12px
+                line-height: $height - 12px
+                color: #999
+                border-radius: 5px 0 0 5px
+                font-weight: 300
+
+            &::before
+                content: 'Upload'
+                position: absolute
+                top: 0
+                right: 0
+                display: inline-block
+                height: $height
+                background: $defaultColor
+                color: #fff
+                font-weight: 700
+                z-index: 25
+                font-size: 14px
+                line-height: $height
+                padding: 0 12px
+                text-transform: uppercase
+                pointer-events: none
+                border-radius: 0 5px 5px 0 
+                box-sizing: border-box 
+                border-left: 1px solid #000 
+
+            &__input
+                opacity: 0
+                position: absolute
+                top: 0
+                right: 0
+                bottom: 0
+                left: 0
+                z-index: 99
+                height: $height
+                margin: 0
+                padding: 0
+                display: block
+                cursor: pointer
+                width: 100%
+                    
+    &__buttons
+        height: min-content
+        display: flex
+        flex-direction: column
+        justify-content: space-around
+        height: 100px
+
+        &__submit-button
+            height: 35px
+            width: 200px
+            border: none
+            border-radius: 10px
+            background-color: #4daf7c
+            color: white
+            cursor: pointer
+            font-size: 16px
+            font-weight: bold
+
+        &__reset-button
+            height: 35px
+            width: 200px
+            border: none
+            border-radius: 10px
+            background-color: #e64229
+            color: white
+            cursor: pointer
+            font-size: 16px
+            font-weight: bold
+
+.edit-form__data
+    height: 80%
+    width: 100%
+    display: flex
+    flex-direction: row
+
+    &__first-column
+        width: 50%
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+
+    &__second-column
+        width: 50%
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        align-items: center
+
+
+.edit-form__sex
+    display: flex
+    flex-direction: column
+
+.edit-form__sex__radio
+    font-size: 20px
+    position: relative
+    padding-left: 30px 
+    margin-bottom: 12px
+    cursor: pointer
+    display: inline-block
+
+.edit-form__sex__radio input
+    position: absolute
+    left: 0
+    top: 0
+    width: 100%
+    height: 100%
+    z-index: 1
+    opacity: 0
+    cursor: pointer
+
+.custom-radio
+    position: absolute
+    top: 0
+    left: 0
+    height: 20px
+    width: 20px
+    background-color: #ccc
+    border-radius: 50%
+
+    &::after
+        content: ""
+        position: absolute
+        display: block
+        top: 50%
+        left: 50%
+        width: 12px
+        height: 12px
+        border-radius: 50%
+        background-color: white
+        transform: translate(-50%, -50%)
+
+    input:checked + & 
+        background-color: #FFA552
+        &::after
+            width: 10px
+            height: 10px
+            background-color: white
+            transform: translate(-50%, -50%) 
+
+
+.edit-form__toggle
+    position: relative
+    display: inline-block
+    width: 80px
+    height: 34px
+
+    &__input
+        opacity: 0
+        width: 0
+        height: 0
+
+    &__slider
+        position: absolute
+        cursor: pointer
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        background-color: #ccc
+        -webkit-transition: .4s
+        transition: .4s
+
+        &::before
+            position: absolute
+            content: ""
+            height: 26px
+            width: 26px
+            left: 4px
+            bottom: 4px
+            background-color: white
+            -webkit-transition: .4s
+            transition: .4s
+
+    &__input:checked + &__slider
+        background-color: #FFA552
+
+    &__input:focus + &__slider
+        box-shadow: 0 0 1px #FFA552
+
+    &__input:checked + &__slider::before
+        -webkit-transform: translateX(45px) 
+        -ms-transform: translateX(45px)
+        transform: translateX(45px)
+
+    &__slider.round
+        border-radius: 34px
+
+        &::before
+            border-radius: 50%
+
+.edit-form__input__error
+    border-width: 2px !important
+    border-color: #E10505 !important
+
+.none 
+    display: none

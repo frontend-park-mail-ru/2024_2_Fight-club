@@ -2,8 +2,15 @@
 
 import Header from './components/Header/Header';
 import AuthPopup from './components/AuthPopup/AuthPopup';
-import MainPage from './components/MainPage/MainPage';
 import ProfilePopup from './components/ProfilePopup/ProfilePopup';
+
+import MainPage from './components/MainPage/MainPage';
+import ProfilePage from './components/ProfilePage/ProfilePage';
+import CityPage from './components/CityPage/CityPage';
+
+import Ajax from './modules/Ajax';
+import {clearPage} from './modules/Clear';
+
 import './components/precompiled-templates';
 import APIService from './modules/ApiClient';
 
@@ -22,12 +29,21 @@ const headerCallbacks = {
     profileList: renderProfileList,
 };
 
+/** Объект с коллбеками для попапа профиля */
+const profilePopupCallbacks = {
+    profilePage: renderProfilePage,
+    donatePage: null,
+};
+
 function renderMainPage() {
     const mainPage = new MainPage(pageContainer);
     mainPage.render();
 }
 
-function renderMapPage() {}
+function renderMapPage() {
+    const cityPage = new CityPage();
+    cityPage.render(pageContainer);
+}
 
 function renderArticlesPage() {}
 
@@ -43,8 +59,14 @@ function renderSignInPage() {
 }
 
 function renderProfileList() {
-    const profileList = new ProfilePopup();
+    const profileList = new ProfilePopup(profilePopupCallbacks);
     profileList.render(root);
+}
+
+function renderProfilePage() {
+    clearPage('main-photo', 'main-content');
+    const profilePage = new ProfilePage();
+    profilePage.render(pageContainer);
 }
 
 /** Главная функция */

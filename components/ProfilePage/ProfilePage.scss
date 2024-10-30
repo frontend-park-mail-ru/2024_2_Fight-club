@@ -1,0 +1,14 @@
+#profile-content {
+    display: grid;
+    grid-template-areas: 
+        'profile actions';
+    grid-template-columns: 35% 1fr;
+}
+
+.profile__profile-container {
+    grid-area: profile;
+}
+
+.profile__data-container {
+    grid-area: actions;
+}

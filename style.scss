@@ -5,6 +5,10 @@
 @use "components/MainPhoto/MainPhoto.scss";
 @use "components/MainPage/MainPage.scss";
 @use "components/ProfilePopup/ProfilePopup.scss";
+@use "components/ProfilePage/ProfilePage.scss";
+@use "components/ProfileInfo/ProfileInfo.scss";
+@use "components/ProfileData/ProfileData.sass";
+@use "components/CityPage/CityPage.sass";
 
 * {
     margin: 0;
@@ -16,3 +20,9 @@ body {
     background-color: #f6f6f6;
     margin: 0 0 50px;
 }
+
+@font-face {
+    font-family: MarckScript-Regular;
+    src: url("./fonts/MarckScript-Regular.ttf");
+}
+
