@@ -26,7 +26,11 @@ class CityPage {
         this.#places = [];
     }
 
-    async #getCityData(name: string) {
+    /**
+     * @param {string} name Строка запроса из поиска на главной странице
+     * @description Получение данных о городе
+     */
+    async #getCityData(name: string): Promise<void> {
         //Устанавливает моки вместо данных с сервера
         if (isMockMode){
             this.#name = mockCity.name;
@@ -47,7 +51,11 @@ class CityPage {
         }
     }
 
-    #renderCityInformation(parent: HTMLElement){
+    /**
+     * @param {HTMLElement} parent
+     * @description Рендер информации о городе
+     */
+    #renderCityInformation(parent: HTMLElement): void {
         const template = Handlebars.templates['CityPhoto.hbs'];
         parent.insertAdjacentHTML('afterbegin', template({
             name: this.#name,
@@ -56,12 +64,20 @@ class CityPage {
         }));
     }
 
-    #renderFilter(pageContent: HTMLDivElement){
+    /**
+     * @param {HTMLDivElement} pageContent
+     * @description Рендер фильтра
+     */
+    #renderFilter(pageContent: HTMLDivElement): void {
         const filter = new Filter();
         pageContent.appendChild(filter.getFilter());
     }
 
-    #renderPlaces(pageContent: HTMLDivElement){
+    /**
+     * @param {HTMLDivElement} pageContent
+     * @description Рендер объявлений
+     */
+    #renderPlaces(pageContent: HTMLDivElement): void {
         const adsContainer = document.createElement('div');
         adsContainer.classList.add('advert');
         for (const [_, d] of Object.entries(this.#places)) {
@@ -71,7 +87,11 @@ class CityPage {
         pageContent.appendChild(adsContainer);
     }
 
-    async render(parent: HTMLElement) {
+    /**
+     * @param {HTMLElement} parent
+     * @description Рендер страницы
+     */
+    async render(parent: HTMLElement): Promise<void> {
         parent.replaceChildren();
         await this.#getCityData(this.#queryName);
 
