@@ -1,0 +1,64 @@
+@use '../../mixins'
+
+.ad-list-page
+    margin-top: 40px
+    width: 80%
+    margin: 0 auto
+
+    &__title
+        margin: 30px 0
+        font-weight: 500
+    
+.horizontal-ad-card
+    border: 1px solid black
+    border-radius: 10px
+    display: flex
+    flex-direction: row
+    gap: 40px
+    padding: 15px
+
+    &__img
+        width: 250px
+        border-radius: 10px
+
+    &__info
+        display: flex
+        width: 100%
+        flex-direction: column
+        justify-content: space-between
+        position: relative
+
+    &__notification-bell
+        position: absolute
+        width: 32px
+        top: 0px
+        right: 0px
+        cursor: pointer
+
+    &__city
+        font-size: 32px
+    
+    &__address
+        font-size: 20px
+
+    &__buttons-container
+        display: flex
+        gap: 30px
+
+    &__open-btn
+        @include mixins.button
+        width: 200px
+        height: 38px
+        background-color: #5289FF
+
+    &__edit-btn
+        @include mixins.button
+        height: 38px
+
+    &__del-btn
+        @include mixins.button
+        background-color: #FF5900
+        height: 38px
+        
+        
+    

@@ -52,6 +52,14 @@ class APIClient {
         return adInfo;
     }
 
+    async deleteAd(uuid: string) {
+        const response = await Ajax.delete({
+            url: this.BASE_URL + `/ads/${uuid}`,
+            body: {},
+        });
+        return response;
+    }
+
     async getUser(uuid: string) {
         const response = await Ajax.get(this.BASE_URL + `/users/${uuid}`);
         const userInfo = await response.json();
