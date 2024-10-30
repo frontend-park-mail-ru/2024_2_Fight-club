@@ -30,10 +30,10 @@ const headerCallbacks = {
     profileList: renderProfileList,
 };
 
-function renderMainPage() {
+const renderMainPage = () => {
     const mainPage = new MainPage(pageContainer);
     mainPage.render();
-}
+};
 
 function renderMapPage() {}
 
@@ -49,17 +49,9 @@ const renderAdvertPage = async (id: string) => {
     const info = (await ApiClient.getAd(id))['place'];
 
     const page = new AdPage({
-        images: info['Images'],
-        author: {
-            uuid: '3',
-            avatar: '',
-            sex: 'М',
-            age: 32,
-            score: 5,
-            name: 'Майкл Джордан',
-        },
-        country: info['location_main'],
-        city: info['location_street'],
+        images: info['images'],
+        city: info['city'],
+        address: info['address'],
         desc: 'Всем привет! Давайте жить ко мне!',
         roomsCount: 3,
     });
@@ -95,7 +87,7 @@ function renderProfileList() {
 }
 
 const renderAdListPage = () => {
-    const page = AdListPage({});
+    const page = AdListPage([]);
     pageContainer.appendChild(page);
 };
 
@@ -109,9 +101,6 @@ const main = async () => {
     root.appendChild(pageContainer);
 
     renderMainPage();
-    // renderEditAdvertPage('rIfIn1W');
-    // renderCreateAdvertPage();
-    // renderAdListPage();
 };
 
 router.addRoute('/', async () => {
@@ -121,14 +110,13 @@ router.addRoute('/', async () => {
 router.addRoute('/ads/', async (params: URLSearchParams) => {
     const adId = params.get('id');
     const action = params.get('action');
+    const author = params.get('author');
 
-    if (!adId) {
-        return;
-    }
-
-    if (!action) {
+    if (author === 'me') {
+        renderAdListPage();
+    } else if (!action && adId) {
         renderAdvertPage(adId);
-    } else if (action === 'edit') {
+    } else if (action === 'edit' && adId) {
         renderEditAdvertPage(adId);
     } else if (action === 'create') {
         renderCreateAdvertPage();
