@@ -46,8 +46,8 @@ class APIClient {
         return [];
     }
 
-    async getAd(id: number) {
-        const response = await Ajax.get(this.BASE_URL + `/ads/${id}`);
+    async getAd(uuid: string) {
+        const response = await Ajax.get(this.BASE_URL + `/ads/${uuid}`);
         const adInfo = await response.json();
         return adInfo;
     }
