@@ -3,6 +3,7 @@
 import ApiClient from '../../modules/ApiClient';
 
 import { CITIES } from '../../modules/Consts';
+import router from '../../modules/Router';
 
 const MAIN_IMG_DIV_SELECTOR = '.js-main-img-div';
 const MAIN_IMG_SELECTOR = '.advert-images-carousel__main-img';
@@ -28,12 +29,13 @@ const FILE_INPUT_SELECTOR = '.js-file-input';
 // }
 
 interface AdPageData {
+    id: string;
     images: string[];
     // author: AdPageAuthorData;
     address: string;
     city: string;
-    desc: string;
-    roomsCount: number;
+    description: string;
+    roomsNumber: number;
 }
 
 interface InputConfig {
@@ -50,22 +52,6 @@ interface InputConfig {
     max?: number;
 }
 
-// TODO: DELETE THIS USELESS FUNCTION. IT WAS CREATED FOR BRAINLESS BACKENDERS
-function makeid(length: number) {
-    let result = '';
-    const characters =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-        result += characters.charAt(
-            Math.floor(Math.random() * charactersLength)
-        );
-        counter += 1;
-    }
-    return result;
-}
-
 class EditAdvertPage {
     #templateContainer: HTMLDivElement;
     #mainImg: HTMLImageElement;
@@ -76,8 +62,12 @@ class EditAdvertPage {
     #overlay: HTMLDivElement;
     #imageURLs: string[];
     #uploadedImages: File[];
+    #action: 'create' | 'edit';
+    #id: string | undefined;
 
-    constructor(data?: AdPageData) {
+    constructor(action: 'create' | 'edit', data?: AdPageData) {
+        this.#action = action;
+        this.#id = data?.id;
         this.#imageURLs = data ? data.images : [];
 
         this.#currentIndex = 0;
@@ -107,7 +97,7 @@ class EditAdvertPage {
                 label: 'Число комнат',
                 name: 'roomsCount',
                 type: 'number',
-                value: data?.roomsCount,
+                value: data?.roomsNumber,
                 min: 1,
                 max: 20,
             },
@@ -116,7 +106,7 @@ class EditAdvertPage {
                 name: 'desc',
                 type: 'textarea',
                 isTextArea: true,
-                value: data?.desc,
+                value: data?.description,
                 minLen: 20,
                 maxLen: 1000,
             },
@@ -124,6 +114,8 @@ class EditAdvertPage {
         this.#templateContainer.innerHTML = template({
             ...data,
             inputs: inputsConfig,
+            actionButtonTitle:
+                this.#action === 'create' ? 'Создать' : 'Изменить',
         });
 
         this.#mainImg = this.#templateContainer.querySelector(
@@ -151,7 +143,6 @@ class EditAdvertPage {
     }
 
     #showImage(index: number) {
-        console.log(this.#imageURLs);
         this.#mainImg.src = this.#backgroundImg.src = this.#imageURLs[index];
 
         this.#carouselImages[this.#currentIndex].classList.remove(
@@ -249,9 +240,8 @@ class EditAdvertPage {
                 address: formData.get('address') as string,
                 position: [0, 0],
                 distance: 0,
-                desc: formData.get('desc') as string,
+                description: formData.get('desc') as string,
                 roomsNumber: parseInt(formData.get('roomsCount') as string),
-                id: makeid(7),
             })
         );
 
@@ -260,9 +250,23 @@ class EditAdvertPage {
         });
 
         // Log the extracted data
-        const response = await ApiClient.createAdvert(formData2Send);
-        if (response.ok) {
-            // TODO: REDIRECT TO ADVERT LIST PAGE
+        let response;
+        if (this.#action == 'create') {
+            response = await ApiClient.createAdvert(formData2Send);
+
+            if (response?.ok) {
+                const data = await response.json();
+                const id = data['place']['id'];
+                router.navigateTo(`/ads/?id=${id}`);
+            }
+        } else if (this.#action == 'edit' && this.#id) {
+            response = await ApiClient.updateAdvert(this.#id, formData2Send);
+
+            if (response?.ok) {
+                router.navigateTo(`/ads/?id=${this.#id}`);
+            }
+        } else {
+            console.error('Wrong action type: ', this.#action);
         }
     };
 
