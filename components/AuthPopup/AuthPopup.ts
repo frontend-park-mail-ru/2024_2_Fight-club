@@ -1,16 +1,13 @@
 'use strict';
 
 import APIClient from '../../modules/ApiClient';
+import router from '../../modules/Router';
 import Validation from '../../modules/Validation';
 
 class AuthPopup {
     #config;
     #currentState;
 
-    /**
-     *
-     * @param {('auth' | 'signup')} currentState
-     */
     constructor(currentState: 'auth' | 'signup' = 'auth') {
         this.#currentState = currentState;
         document.body.classList.add('no-scroll');
@@ -219,7 +216,7 @@ class AuthPopup {
     /**
      * @private
      */
-    async #onFormSubmit(e: Event) {
+    async #onFormSubmit(parent: HTMLElement, e: Event) {
         e.preventDefault();
 
         if (!this.#validateData()) {
@@ -242,8 +239,11 @@ class AuthPopup {
                     email: data['email'],
                 });
 
-                if (res.ok) location.reload();
-                else if (res.status === 409)
+                if (res.ok) {
+                    this.#closeOverlay(parent);
+                    router.navigateTo('/');
+                    localStorage.setItem('userId', res['user']['id']);
+                } else if (res.status === 409)
                     this.#setFailureMessage('Такой аккаунт уже создан!');
                 else this.#setFailureMessage('Неизвестная ошибка на сервере');
             } catch (err) {
@@ -252,19 +252,29 @@ class AuthPopup {
             return;
         }
 
-        APIClient.login({
-            username: data['username'],
-            password: data['password'],
-        })
-            .then((r) => {
-                if (r.ok) location.reload();
-                else {
-                    this.#setFailureMessage('Неверный логин или пароль!');
-                }
-            })
-            .catch((err) => {
-                this.#setFailureMessage('Неизвестная ошибка: ' + err.message);
+        try {
+            const response = await APIClient.login({
+                username: data['username'],
+                password: data['password'],
             });
+            const responseAsJson = await response.json();
+
+            if (response.ok) {
+                this.#closeOverlay(parent);
+                router.navigateTo('/');
+                localStorage.setItem('userId', responseAsJson['userId']);
+            } else {
+                this.#setFailureMessage('Неверный логин или пароль!');
+            }
+        } catch (err) {
+            let errorMessage;
+            if (typeof err === 'string') {
+                errorMessage = err.toUpperCase();
+            } else if (err instanceof Error) {
+                errorMessage = err.message;
+            }
+            this.#setFailureMessage('Неизвестная ошибка: ' + errorMessage);
+        }
     }
 
     /**
@@ -275,6 +285,9 @@ class AuthPopup {
         const failureMessageElem = document.querySelector(
             '.popup__failure-message'
         );
+        if (!failureMessageElem) {
+            return;
+        }
 
         if (message === null) {
             failureMessageElem.classList.add('none');
@@ -283,8 +296,8 @@ class AuthPopup {
         failureMessageElem.textContent = message;
     }
 
-    #closeOverlay(parent: HTMLInputElement): void {
-        parent.querySelector('.overlay').remove();
+    #closeOverlay(parent: HTMLElement): void {
+        parent.querySelector('.overlay')?.remove();
         document.body.classList.remove('no-scroll');
     }
 
@@ -309,7 +322,7 @@ class AuthPopup {
         // Close overlay
         const form: HTMLFormElement = parent.querySelector('.popup')!;
         form.onclick = (e) => e.stopPropagation();
-        form.onsubmit = (e) => this.#onFormSubmit(e);
+        form.onsubmit = (e) => this.#onFormSubmit(parent, e);
 
         parent
             .querySelector('.close-cross')!
