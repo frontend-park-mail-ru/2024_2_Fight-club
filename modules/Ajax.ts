@@ -41,6 +41,10 @@ class Ajax {
         return this.#makeRequest({ method: 'PUT', url, body });
     }
 
+    static patch({ url, body }: PostParams) {
+        return this.#makeRequest({ method: 'PATCH', url, body });
+    }
+
     /**
      * @public
      * @param {string} url
