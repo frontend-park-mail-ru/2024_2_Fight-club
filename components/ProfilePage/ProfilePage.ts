@@ -17,6 +17,7 @@ class ProfilePage{
     #isHost: boolean | undefined;
     #age: number | undefined;
     #avatar: string | undefined;
+    #showAge: boolean;
 
     #renderProfileInfoCallback;
     
@@ -28,6 +29,7 @@ class ProfilePage{
                 await this.#renderProfileInfo(profileInfoContainer);
             }
         };
+        this.#showAge = true;
     }
 
     /**
@@ -40,18 +42,18 @@ class ProfilePage{
             const data = await response.json();
 
             this.#name = data.name;
-            this.#username = data.Username;
-            this.#email = data.Email;
-            this.#guestCount = data.GuestCount;
-            this.#score = data.Score;
-            this.#isHost = data.IsHost;
-            this.#avatar = data.Avatar;
-            this.#birthdate = data.Birthdate;
+            this.#username = data.username;
+            this.#email = data.email;
+            this.#guestCount = data.guestCount;
+            this.#score = data.score;
+            this.#isHost = data.isHost;
+            this.#avatar = data.avatar;
+            this.#birthdate = data.birthDate;
 
-            this.#sex = this.#calculateSex(data.Sex);
-            this.#age = this.#calculateAge(data.Birthdate);
+            this.#sex = this.#calculateSex(data.sex);
+            this.#age = this.#calculateAge(data.birthDate);
 
-            const splitedAddress = this.#splitAddress(data.Address);
+            const splitedAddress = this.#splitAddress(data.address);
             this.#city = splitedAddress.city;
             this.#address = splitedAddress.address;
         } else if (response.status !== 401) {
@@ -65,6 +67,10 @@ class ProfilePage{
      * @returns {number} 
      */
     #calculateAge(birthdate: string): number {
+        if (birthdate.slice(0,10) === '0001-01-01') {
+            return -1;
+        }
+
         const birthDate = new Date(birthdate);
         const today = new Date();
         
@@ -119,6 +125,11 @@ class ProfilePage{
      */
     async #renderProfileInfo(parent: HTMLElement) {
         await this.#getProfileData();
+        if (this.#age == -1) { 
+            this.#showAge = false;
+        } else {
+            this.#showAge = true;
+        }
         const profileData = {
             name: this.#name,
             username: this.#username,
@@ -134,7 +145,7 @@ class ProfilePage{
             avatar: this.#avatar,
         };
 
-        const profileInfo = new ProfileInfo(profileData);
+        const profileInfo = new ProfileInfo(profileData, this.#showAge);
         profileInfo.render(parent);
     }
 
@@ -154,6 +165,7 @@ class ProfilePage{
      * @param {HTMLElement} parent
      */
     async render(parent: HTMLElement) {
+        parent.replaceChildren();
         const profileContent = document.createElement('div');
         profileContent.id = 'profile-content';
 

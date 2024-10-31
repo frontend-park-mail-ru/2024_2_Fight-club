@@ -111,16 +111,16 @@ class ProfileData {
         if (response.ok) {
             const data = await response.json();
             this.#profileData.name = data.name;
-            this.#profileData.username = data.Username;
-            this.#profileData.email = data.Email;
-            this.#profileData.isHost = data.IsHost;
-            this.#profileData.avatar = data.Avatar;
-            this.#profileData.birthdate = data.Birthdate.slice(0, 10);
+            this.#profileData.username = data.username;
+            this.#profileData.email = data.email;
+            this.#profileData.isHost = data.isHost;
+            this.#profileData.avatar = data.avatar;
+            this.#profileData.birthdate = data.birthDate.slice(0, 10);
             if (this.#profileData.birthdate != '0001-01-01')
                 this.#showBirthdate = true;
-            this.#profileData.address = data.Address;
-            this.#profileData.sex = this.#calculateSex(data.Sex);
-            this.#rememberSexValue(data.Sex);
+            this.#profileData.address = data.address;
+            this.#profileData.sex = this.#calculateSex(data.sex);
+            this.#rememberSexValue(data.sex);
         } else if (response.status !== 401) {
             console.error('Wrong response from server', response);
         }

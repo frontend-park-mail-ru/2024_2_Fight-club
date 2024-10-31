@@ -2,6 +2,7 @@
 
 import Ajax from './Ajax';
 import { RegisterParams, AdsFilters, LoginParams, EditParams } from './Types';
+import { getCookie } from './Utils';
 
 class APIClient {
     BASE_URL = `http://${window.location.hostname}:8008/api`;
@@ -112,7 +113,8 @@ class APIClient {
     }
 
     async profile() {
-        const url = this.BASE_URL + '/getUserById';
+        const uuid = getCookie('session_id');
+        const url = this.BASE_URL + `/users/${uuid}`;
         return Ajax.get(url);
     }
 
@@ -127,7 +129,8 @@ class APIClient {
         password,
         avatar,
     }: EditParams) {
-        const url = this.BASE_URL + '/putUser';
+        const uuid = getCookie('session_id');
+        const url = this.BASE_URL + `/users/${uuid}`;
         const formData = new FormData();
 
         const metadata = {
