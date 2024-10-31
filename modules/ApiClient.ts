@@ -31,7 +31,9 @@ class APIClient {
     }
 
     async getAdsOfUser(user_id: string) {
-        const response = await Ajax.get(this.BASE_URL + `/ads/user/${user_id}`);
+        const response = await Ajax.get(
+            this.BASE_URL + `/users/${user_id}/ads`
+        );
         const data = await response.json();
         return data;
     }

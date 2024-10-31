@@ -121,12 +121,12 @@ const renderAdListPage = async () => {
     for (const d of data) {
         horizontalAdCardData.push({
             id: d.id,
-            city: d.city,
+            cityName: d.cityName,
             address: d.address,
-            image: d.images ? d.images[0] : undefined,
+            image: d.images[0],
         });
     }
-    const page = AdListPage(data);
+    const page = AdListPage(horizontalAdCardData);
     pageContainer.appendChild(page);
 };
 
