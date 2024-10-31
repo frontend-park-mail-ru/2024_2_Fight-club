@@ -19,25 +19,27 @@ function AdListPage(data: HorizontalAdCardData[]) {
     createAdvertElement.onclick = () =>
         router.navigateTo('/ads/?action=create');
 
-    const card = HorizontalAdCard(
-        '1',
-        {
-            city: 'Россия, Москва',
-            address: 'Малая Ботаническая ул., 10А',
-            image: 'https://images.cdn-cian.ru/images/kvartira-moskva-ulica-kazakova-2300717685-1.jpg',
-        },
-        {
-            onOpen: (uuid: string) => router.navigateTo(`ads/?id=${uuid}`),
-            onEdit: (uuid: string) =>
-                router.navigateTo(`ads/?id=${uuid}&action=edit`),
-            onDel: (uuid: string) => {
-                console.log(123);
-                router.navigateTo(location.href);
-                ApiClient.deleteAd(uuid);
+    for (const d of data) {
+        const card = HorizontalAdCard(
+            {
+                id: d.id,
+                cityName: d.cityName,
+                address: d.address,
+                image: d.image,
             },
-        }
-    );
-    advertListElement.appendChild(card);
+            {
+                onOpen: (uuid: string) => router.navigateTo(`/ads/?id=${uuid}`),
+                onEdit: (uuid: string) =>
+                    router.navigateTo(`/ads/?id=${uuid}&action=edit`),
+                onDel: async (uuid: string) => {
+                    console.log(123);
+                    await ApiClient.deleteAd(uuid);
+                    router.navigateTo(location.href);
+                },
+            }
+        );
+        advertListElement?.appendChild(card);
+    }
 
     return pageContainer;
 }
