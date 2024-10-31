@@ -30,6 +30,12 @@ class APIClient {
         return [];
     }
 
+    async getAdsOfUser(user_id: string) {
+        const response = await Ajax.get(this.BASE_URL + `/ads/user/${user_id}`);
+        const data = await response.json();
+        return data;
+    }
+
     async getAd(uuid: string) {
         const response = await Ajax.get(this.BASE_URL + `/ads/${uuid}`);
         const adInfo = await response.json();
@@ -64,6 +70,13 @@ class APIClient {
     async createAdvert(data: FormData) {
         return await Ajax.post({
             url: this.BASE_URL + '/ads',
+            body: data,
+        });
+    }
+
+    async updateAdvert(id: string, data: FormData) {
+        return await Ajax.put({
+            url: this.BASE_URL + `/ads/${id}`,
             body: data,
         });
     }
