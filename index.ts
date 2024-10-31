@@ -8,7 +8,6 @@ import MainPage from './components/MainPage/MainPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
 import CityPage from './components/CityPage/CityPage';
 
-import Ajax from './modules/Ajax';
 import { clearPage } from './modules/Clear';
 
 import './components/precompiled-templates';
@@ -22,6 +21,7 @@ const root = document.getElementById('root')!;
 const pageContainer = document.createElement('div');
 
 import router from './modules/Router';
+import { HorizontalAdCardData } from './components/HorizontalAdCard/HorizontalAdCard';
 
 /** Объект с коллбеками для header`а */
 const headerCallbacks = {
@@ -66,10 +66,10 @@ const renderAdvertPage = async (id: string) => {
 
     const page = new AdPage({
         images: info['images'],
-        city: info['city'],
+        city: info['cityName'],
         address: info['address'],
-        desc: 'Всем привет! Давайте жить ко мне!',
-        roomsCount: 3,
+        description: info['description'],
+        roomsNumber: info['roomsNumber'],
     });
     page.render(pageContainer);
 };
@@ -77,18 +77,19 @@ const renderAdvertPage = async (id: string) => {
 const renderEditAdvertPage = async (uuid: string) => {
     const info = (await ApiClient.getAd(uuid))['place'];
 
-    const page = new EditAdvertPage({
-        images: info['Images'],
-        city: info['location_main'],
-        address: info['location_street'],
-        desc: 'Всем привет! Давайте жить ко мне!',
-        roomsCount: 3,
+    const page = new EditAdvertPage('edit', {
+        id: uuid,
+        images: info['images'],
+        city: info['cityName'],
+        address: info['address'],
+        description: info['description'],
+        roomsNumber: info['roomsNumber'],
     });
     pageContainer.appendChild(page.getElement());
 };
 
 const renderCreateAdvertPage = async () => {
-    const page = new EditAdvertPage();
+    const page = new EditAdvertPage('create');
     pageContainer.appendChild(page.getElement());
 };
 
@@ -108,25 +109,48 @@ function renderProfilePage() {
     profilePage.render(pageContainer);
 }
 
-const renderAdListPage = () => {
-    const page = AdListPage([]);
+const renderAdListPage = async () => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        console.error('There is no userId in local storage!');
+        return;
+    }
+    const data = (await ApiClient.getAdsOfUser(userId))['places'];
+
+    const horizontalAdCardData: HorizontalAdCardData[] = [];
+    for (const d of data) {
+        horizontalAdCardData.push({
+            id: d.id,
+            city: d.city,
+            address: d.address,
+            image: d.images ? d.images[0] : undefined,
+        });
+    }
+    const page = AdListPage(data);
     pageContainer.appendChild(page);
 };
 
-/** Главная функция */
-const main = async () => {
-    const sessionData = await APIService.getSessionData();
-    const header = new Header(headerCallbacks, sessionData ? true : false);
-    root.appendChild(header.getMainContainer());
+const reloadMainPage = async () => {
+    root.replaceChildren();
 
+    await renderHeader();
     pageContainer.classList.add('page-container');
     root.appendChild(pageContainer);
 
     renderMainPage();
 };
 
+const renderHeader = async () => {
+    const sessionData = await APIService.getSessionData();
+    if (sessionData) {
+        localStorage.setItem('userId', sessionData['id']);
+    }
+    const header = new Header(headerCallbacks, sessionData ? true : false);
+    root.appendChild(header.getMainContainer());
+};
+
 router.addRoute('/', async () => {
-    renderMainPage();
+    reloadMainPage();
 });
 
 router.addRoute('/ads/', async (params: URLSearchParams) => {
@@ -145,4 +169,4 @@ router.addRoute('/ads/', async (params: URLSearchParams) => {
     }
 });
 
-main();
+reloadMainPage();
