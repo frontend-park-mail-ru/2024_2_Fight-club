@@ -28,7 +28,7 @@ export interface AdvertData {
     address: string;
     description: string;
     publicationDate: string;
-    roomsNumber: string;
+    roomsNumber: number;
 
     // author: AuthorData;
     authorAvatar: string;
@@ -38,13 +38,13 @@ export interface AdvertData {
 }
 
 export interface EditParams {
-    username: string
-    name: string
-    email: string
-    sex: number
-    address: string
-    birthdate: Date
-    isHost: boolean
-    password: string
-    avatar: File | null
+    username: string;
+    name: string;
+    email: string;
+    sex: number;
+    address: string;
+    birthdate: Date;
+    isHost: boolean;
+    password: string;
+    avatar: File | null;
 }
