@@ -127,20 +127,21 @@ class APIClient {
         return Ajax.get(url);
     }
 
+    async getCities() {
+        const response = await Ajax.get(this.BASE_URL + '/cities');
+        const data = await response.json();
+        return data['cities'];
+    }
+
     async profile(uuid: string) {
         const url = this.BASE_URL + `/users/${uuid}`;
         return Ajax.get(url);
     }
 
-    async editProfile(uuid: string, {
-        username,
-        name,
-        email,
-        sex,
-        birthdate,
-        isHost,
-        avatar,
-    }: EditParams) {
+    async editProfile(
+        uuid: string,
+        { username, name, email, sex, birthdate, isHost, avatar }: EditParams
+    ) {
         const url = this.BASE_URL + `/users/${uuid}`;
         const formData = new FormData();
 
