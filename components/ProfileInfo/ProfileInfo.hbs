@@ -4,38 +4,35 @@
             <img src="{{data.avatar}}" class="profile-container__photo__img1">
         </div>
         <p class="profile-container__p1">{{data.name}}</p>
-        <p class="profile-container__p2">{{data.city}}</p>
         <hr class="profile-container__hr">
     </div>
 
-    <div class="profile-container__div">
-        <div class="profile-container__p">Рейтинг:</div>
-        <div class="profile-container__info">
-            <span class="profile-container__score-container">
-                <img class="profile-container__img2" src="../../images/star.png" alt="star">
-                <span class="profile-container__score">{{data.score}}</span>
-            </span>
+    <div class="justify-profile-content">
+        <div class="profile-container__div">
+            <div class="profile-container__p">Рейтинг:</div>
+            <div class="profile-container__info">
+                <span class="profile-container__score-container">
+                    <img class="profile-container__img2" src="../../images/star.png" alt="star">
+                    <span class="profile-container__score">{{data.score}}</span>
+                </span>
+            </div>
         </div>
-    </div>
-    <div class="profile-container__div">
-        <div class="profile-container__p">Пол:</div>
-        <p class="profile-container__info">{{data.sex}}</p>
-    </div>
-    <div class="profile-container__div">
-        <div class="profile-container__p">Возраст:</div>
-        <p class="profile-container__info">{{#if isCorrectAge}} {{age}} {{else}}Не указано{{/if}}</p>
-    </div>
-    <div class="profile-container__div">
-        <div class="profile-container__p">Хост:</div>
-        <p class="profile-container__info">{{#if data.isHost}}Да{{else}}Нет{{/if}}</p>
-    </div>
-    <div class="profile-container__div">
-        <div class="profile-container__p">Адрес:</div>
-        <p class="profile-container__info">{{data.address}}</p>
-    </div>
-    <div class="profile-container__div">
-        <div class="profile-container__p">Серферы:</div>
-        <p class="profile-container__info">{{data.guestCount}}</p>
+        <div class="profile-container__div">
+            <div class="profile-container__p">Пол:</div>
+            <p class="profile-container__info">{{data.sex}}</p>
+        </div>
+        <div class="profile-container__div">
+            <div class="profile-container__p">Возраст:</div>
+            <p class="profile-container__info">{{#if isCorrectAge}} {{data.age}} {{else}}Не указано{{/if}}</p>
+        </div>
+        <div class="profile-container__div">
+            <div class="profile-container__p">Хост:</div>
+            <p class="profile-container__info">{{#if data.isHost}}Да{{else}}Нет{{/if}}</p>
+        </div>
+        <div class="profile-container__div">
+            <div class="profile-container__p">Серферы:</div>
+            <p class="profile-container__info">{{data.guestCount}}</p>
+        </div>
     </div>
 
     <div class="profile-container__edit-container">

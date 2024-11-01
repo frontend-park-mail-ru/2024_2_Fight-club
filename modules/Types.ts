@@ -41,10 +41,8 @@ export interface EditParams {
     username: string;
     name: string;
     email: string;
-    sex: number;
-    address: string;
+    sex: string | null;
     birthdate: Date;
     isHost: boolean;
-    password: string;
     avatar: File | null;
 }

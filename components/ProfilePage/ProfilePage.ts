@@ -37,7 +37,9 @@ class ProfilePage{
      * @description Получение данных с бэка и заполнение полей класса
      */
     async #getProfileData() {
-        const response = await APIClient.profile();
+        const userData = await APIClient.getSessionData();
+        const uuid = userData.id;
+        const response = await APIClient.profile(uuid);
         if (response.ok) {
             const data = await response.json();
 
@@ -47,18 +49,20 @@ class ProfilePage{
             this.#guestCount = data.guestCount;
             this.#score = data.score;
             this.#isHost = data.isHost;
-            this.#avatar = data.avatar;
             this.#birthdate = data.birthDate;
-
+            this.#avatar = this.#addPrefixPhoto(data.avatar);
             this.#sex = this.#calculateSex(data.sex);
             this.#age = this.#calculateAge(data.birthDate);
 
-            const splitedAddress = this.#splitAddress(data.address);
-            this.#city = splitedAddress.city;
-            this.#address = splitedAddress.address;
         } else if (response.status !== 401) {
             console.error('Wrong response from server', response);
         }
+    }
+
+    #addPrefixPhoto(photoUrl: string): string {
+        console.log(photoUrl);
+        const avatar = `http://localhost:9000/${photoUrl}`;
+        return avatar;  
     }
 
     /**
@@ -87,35 +91,10 @@ class ProfilePage{
      * @param {number} sex
      * @returns {string} 
      */
-    #calculateSex(sex: number): 'Не указано' | 'Муж.' | 'Жен.' {
-        if (sex === 1) return 'Муж.';
-        else if (sex === 2) return 'Жен.';
+    #calculateSex(sex: string): 'Не указано' | 'Муж.' | 'Жен.' {
+        if (sex === 'M') return 'Муж.';
+        else if (sex === 'F') return 'Жен.';
         else return 'Не указано';
-    }
-
-    /**
-     * @private
-     * @description Деление полного адреса на город и адрес
-     * @param {string} longAddress
-     * @returns {Object} 
-     */
-    #splitAddress(longAddress: string): {
-        city: string,
-        address: string
-    }{
-        let city, address;
-        if (longAddress) {
-            const parts = longAddress.split(',');
-            city = parts.slice(0, 2).join(', ').trim();
-            address = parts.slice(2).join(', ').trim();
-        } else {
-            city = 'Не указано';
-            address = 'Не указано';
-        }
-        return {
-            city: city,
-            address: address,
-        };
     }
 
     /**
@@ -133,8 +112,6 @@ class ProfilePage{
         const profileData = {
             name: this.#name,
             username: this.#username,
-            city: this.#city,
-            address: this.#address,
             birthdate: this.#birthdate,
             email: this.#email,
             guestCount: this.#guestCount,
@@ -144,7 +121,6 @@ class ProfilePage{
             age: this.#age,
             avatar: this.#avatar,
         };
-
         const profileInfo = new ProfileInfo(profileData, this.#showAge);
         profileInfo.render(parent);
     }

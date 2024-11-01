@@ -127,24 +127,20 @@ class APIClient {
         return Ajax.get(url);
     }
 
-    async profile() {
-        const uuid = getCookie('session_id');
+    async profile(uuid: string) {
         const url = this.BASE_URL + `/users/${uuid}`;
         return Ajax.get(url);
     }
 
-    async editProfile({
+    async editProfile(uuid: string, {
         username,
         name,
         email,
         sex,
-        address,
         birthdate,
         isHost,
-        password,
         avatar,
     }: EditParams) {
-        const uuid = getCookie('session_id');
         const url = this.BASE_URL + `/users/${uuid}`;
         const formData = new FormData();
 
@@ -153,10 +149,8 @@ class APIClient {
             name: name,
             email: email,
             sex: sex,
-            address: address,
-            birthdate: birthdate,
+            birthDate: birthdate,
             isHost: isHost,
-            password: password,
         };
 
         formData.append('metadata', JSON.stringify(metadata));
