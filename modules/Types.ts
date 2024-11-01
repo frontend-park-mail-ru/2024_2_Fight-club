@@ -46,3 +46,10 @@ export interface EditParams {
     isHost: boolean;
     avatar: File | null;
 }
+
+export interface City {
+    description: string;
+    enTitle: string;
+    id: number;
+    title: string;
+}

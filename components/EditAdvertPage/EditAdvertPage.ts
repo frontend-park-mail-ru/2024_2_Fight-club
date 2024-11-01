@@ -2,8 +2,9 @@
 
 import ApiClient from '../../modules/ApiClient';
 
-import { CITIES } from '../../modules/Consts';
 import router from '../../modules/Router';
+
+import { City } from '../../modules/Types';
 
 const MAIN_IMG_DIV_SELECTOR = '.js-main-img-div';
 const MAIN_IMG_SELECTOR = '.advert-images-carousel__main-img';
@@ -28,6 +29,12 @@ const FILE_INPUT_SELECTOR = '.js-file-input';
 //     score: number;
 // }
 
+interface SelectOption {
+    name: string;
+    value: string;
+    selected?: boolean;
+}
+
 interface AdPageData {
     id: string;
     images: string[];
@@ -44,7 +51,7 @@ interface InputConfig {
     type: string;
     isTextArea?: boolean;
     isSelect?: boolean;
-    options?: string[];
+    options?: SelectOption[];
     value?: string | number;
     minLen?: number;
     maxLen?: number;
@@ -76,70 +83,83 @@ class EditAdvertPage {
         const template = Handlebars.templates['EditAdvertPage.hbs'];
         this.#templateContainer = document.createElement('div');
 
-        const inputsConfig: InputConfig[] = [
-            {
-                label: 'Город',
-                name: 'city',
-                type: 'text',
-                isSelect: true,
-                options: CITIES,
-                value: data?.city,
-            },
-            {
-                label: 'Адрес',
-                name: 'address',
-                type: 'text',
-                value: data?.address,
-                minLen: 5,
-                maxLen: 100,
-            },
-            {
-                label: 'Число комнат',
-                name: 'roomsCount',
-                type: 'number',
-                value: data?.roomsNumber,
-                min: 1,
-                max: 20,
-            },
-            {
-                label: 'Описание',
-                name: 'desc',
-                type: 'textarea',
-                isTextArea: true,
-                value: data?.description,
-                minLen: 20,
-                maxLen: 1000,
-            },
-        ];
-        this.#templateContainer.innerHTML = template({
-            ...data,
-            inputs: inputsConfig,
-            actionButtonTitle:
-                this.#action === 'create' ? 'Создать' : 'Изменить',
+        ApiClient.getCities().then((cities: City[]) => {
+            const selectOptions: SelectOption[] = [];
+
+            for (const city of cities) {
+                selectOptions.push({
+                    name: city.title,
+                    value: city.title,
+                    selected: data?.city === city.title,
+                });
+            }
+            console.log(selectOptions);
+
+            const inputsConfig: InputConfig[] = [
+                {
+                    label: 'Город',
+                    name: 'city',
+                    type: 'text',
+                    isSelect: true,
+                    options: selectOptions,
+                    value: data?.city,
+                },
+                {
+                    label: 'Адрес',
+                    name: 'address',
+                    type: 'text',
+                    value: data?.address,
+                    minLen: 5,
+                    maxLen: 100,
+                },
+                {
+                    label: 'Число комнат',
+                    name: 'roomsCount',
+                    type: 'number',
+                    value: data?.roomsNumber,
+                    min: 1,
+                    max: 20,
+                },
+                {
+                    label: 'Описание',
+                    name: 'desc',
+                    type: 'textarea',
+                    isTextArea: true,
+                    value: data?.description,
+                    minLen: 20,
+                    maxLen: 1000,
+                },
+            ];
+            this.#templateContainer.innerHTML = template({
+                ...data,
+                inputs: inputsConfig,
+                actionButtonTitle:
+                    this.#action === 'create' ? 'Создать' : 'Изменить',
+            });
+
+            this.#mainImg = this.#templateContainer.querySelector(
+                MAIN_IMG_SELECTOR
+            ) as HTMLImageElement;
+            this.#backgroundImg = this.#templateContainer.querySelector(
+                BACKGROUND_IMG_SELECTOR
+            ) as HTMLImageElement;
+
+            this.#carouselImages = this.#templateContainer.querySelectorAll(
+                SECONDARY_IMG_SELECTOR
+            );
+
+            this.#fullscreenImage = this.#templateContainer.querySelector(
+                FULLSCREEN_IMG_SELECTOR
+            ) as HTMLImageElement;
+
+            this.#overlay = this.#templateContainer.querySelector(
+                FULLSCREEN_OVERLAY_SELECTOR
+            ) as HTMLDivElement;
+
+            this.#addEventListeners();
+
+            if (data) this.#showImage(this.#currentIndex);
         });
-
-        this.#mainImg = this.#templateContainer.querySelector(
-            MAIN_IMG_SELECTOR
-        ) as HTMLImageElement;
-        this.#backgroundImg = this.#templateContainer.querySelector(
-            BACKGROUND_IMG_SELECTOR
-        ) as HTMLImageElement;
-
-        this.#carouselImages = this.#templateContainer.querySelectorAll(
-            SECONDARY_IMG_SELECTOR
-        );
-
-        this.#fullscreenImage = this.#templateContainer.querySelector(
-            FULLSCREEN_IMG_SELECTOR
-        ) as HTMLImageElement;
-
-        this.#overlay = this.#templateContainer.querySelector(
-            FULLSCREEN_OVERLAY_SELECTOR
-        ) as HTMLDivElement;
-
-        this.#addEventListeners();
-
-        if (data) this.#showImage(this.#currentIndex);
     }
 
     #showImage(index: number) {

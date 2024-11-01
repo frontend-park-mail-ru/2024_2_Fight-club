@@ -56,7 +56,12 @@
                         class='js-cities ad-page__edit-form__select'
                     >
                         {{#each this.options}}
-                            <option value='{{this}}'>{{this}}</option>
+                            <option
+                                value='{{this.name}}'
+                                {{#if this.selected}}
+                                selected='selected'
+                                {{/if}}
+                            >{{this.value}}</option>
                         {{/each}}
                     </select>
 
