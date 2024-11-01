@@ -7,8 +7,6 @@ import APIClient from '../../modules/ApiClient';
 class ProfilePage{   
     #name: string | undefined;
     #username: string | undefined;
-    #city: string | undefined;
-    #address: string | undefined;
     #birthdate: Date | undefined;
     #email: string | undefined;
     #guestCount: number | undefined;
