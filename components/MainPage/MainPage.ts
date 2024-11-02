@@ -18,13 +18,7 @@ class MainPage {
         this.#root = root;
         this.#adsData = [];
 
-        this.#mainPhotoContainer = new MainPhoto(async (city: string) => {
-            const data = await APIClient.getAds({
-                city: city,
-            });
-            this.#adsData = data;
-            this.render();
-        });
+        this.#mainPhotoContainer = new MainPhoto();
 
         this.#pageContent = document.createElement('div');
         this.#pageContent.id = 'main-content';
@@ -39,7 +33,6 @@ class MainPage {
 
         APIClient.getAds().then((data) => {
             this.#adsData = data;
-            this.render();
         });
     }
 
@@ -55,10 +48,8 @@ class MainPage {
 
         this.#pageContent.appendChild(this.#adsContainer);
 
-        this.#root.replaceChildren(
-            this.#mainPhotoContainer.getMainPhoto(),
-            this.#pageContent
-        );
+        this.#mainPhotoContainer.render(this.#root);
+        this.#root.appendChild(this.#pageContent);
     }
 }
 

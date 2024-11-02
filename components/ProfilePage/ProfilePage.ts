@@ -58,7 +58,6 @@ class ProfilePage{
     }
 
     #addPrefixPhoto(photoUrl: string): string {
-        console.log(photoUrl);
         const avatar = `http://localhost:9000/${photoUrl}`;
         return avatar;  
     }
