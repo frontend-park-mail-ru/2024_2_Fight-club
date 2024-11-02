@@ -1,18 +1,25 @@
 <div class="search-popup__container js-search-popup">
-    <div class="search-container__column">
-        Москва
-        Казань
-        Нижний новгород
+    <div class="search-popup__main">
+        <a id="{{moscow.enTitle}}" class="search-popup__city">{{moscow.title}}</a>
+        <a id="{{spb.enTitle}}" class="search-popup__city">{{spb.title}}</a>
     </div>
-    <div class="search-container__column">
-        Москва
-        Казань
-        Нижний новгород
-    </div>
-    <div class="search-container__column">
-        Москва
-        Казань
-        Нижний новгород
+
+    <div class="search-popup__other">
+        <div class="search-popup__other__column">
+            {{#each firstGroup}}
+            <a id="{{this.enTitle}}" class="search-popup__city">{{this.title}}</a>
+            {{/each}}
+        </div>
+        <div class="search-popup__other__column">
+            {{#each secondGroup}}
+            <a id="{{this.enTitle}}" class="search-popup__city">{{this.title}}</a>
+            {{/each}}
+        </div>
+        <div class="search-popup__other__column">
+            {{#each thirdGroup}}
+            <a id="{{this.enTitle}}" class="search-popup__city">{{this.title}}</a>
+            {{/each}}
+        </div>
     </div>
 </div>
 

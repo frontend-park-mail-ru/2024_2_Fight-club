@@ -123,7 +123,7 @@ class APIClient {
     }
 
     async city(name: string) {
-        const url = this.BASE_URL + `/getPlacesPerCity/${name}`;
+        const url = this.BASE_URL + `/ads/cities/${name}`;
         return Ajax.get(url);
     }
 

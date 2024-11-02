@@ -41,6 +41,7 @@ class MainPhoto {
         search.placeholder = 'Поиск по городам';
 
         search.classList.add('js-find-city');
+        findButton.classList.add('js-find-city-button')
         searchButtonWrapper.classList.add('custom-search__row');
         searchButtonDiv.classList.add('custom-search');
         hostsHrefs.classList.add('hosts');
