@@ -21,4 +21,5 @@ services:
             - frontend
         extra_hosts:
             - 'host.docker.internal:host-gateway'
-        command: ['/etc/nginx/generate-certs.sh']
+        command: >
+            sh -c "chmod +x /etc/nginx/generate-certs.sh && /etc/nginx/generate-certs.sh"
