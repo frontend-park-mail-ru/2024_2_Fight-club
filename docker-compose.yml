@@ -20,5 +20,3 @@ services:
             - '443:443'
         depends_on:
             - frontend
-        environment:
-            - IMG_HOST=localhost
