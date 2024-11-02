@@ -1,13 +1,5 @@
 'use strict';
 
-import { logout } from '/modules/Auth';
-import headerIcon from '/images/icon.jpg';
-import headerName from '/images/name.png';
-import defaultUserIcon from '/images/default_user_icon.png';
-import messagesIcon from '/images/svg/messages.svg';
-import favoritesIcon from '/images/svg/favorites.svg';
-import notificationsIcon from '/images/svg/notifications.svg';
-
 interface HeaderCallbacks {
     mainPage: () => void;
     mapPage: () => void;
@@ -16,7 +8,7 @@ interface HeaderCallbacks {
     favoritesPage: () => void;
     notificationsPage: () => void;
     signInPage: () => void;
-    profileList: ()=> void;
+    profileList: () => void;
 }
 
 class Header {
@@ -54,17 +46,17 @@ class Header {
 
             signs: {
                 Messages: {
-                    src: messagesIcon,
+                    src: '/svg/messages.svg',
                     href: '/messages',
                     callback: headerCallbacks.messagesPage,
                 },
                 Favorites: {
-                    src: favoritesIcon,
+                    src: '/svg/favorites.svg',
                     href: '/favorites',
                     callback: headerCallbacks.favoritesPage,
                 },
                 Notifications: {
-                    src: notificationsIcon,
+                    src: '/svg/notifications.svg',
                     href: '/notifications',
                     callback: headerCallbacks.notificationsPage,
                 },
@@ -84,7 +76,7 @@ class Header {
      */
     #renderIcon() {
         const logoImg = document.createElement('img');
-        logoImg.src = headerIcon;
+        logoImg.src = '/icon.jpg';
         logoImg.classList.add('header__img1');
         this.#menuContainer.appendChild(logoImg);
     }
@@ -95,7 +87,7 @@ class Header {
     #renderMainText() {
         const nameImg = document.createElement('img');
         nameImg.classList.add('header__img2');
-        nameImg.src = headerName;
+        nameImg.src = '/name.png';
         this.#menuContainer.appendChild(nameImg);
     }
 
@@ -161,7 +153,7 @@ class Header {
             const avatarContainer = document.createElement('div');
             avatarContainer.classList.add('header__avatar-container');
             const avatar = document.createElement('img');
-            avatar.src = defaultUserIcon;
+            avatar.src = '/default_user_icon.png';
             avatar.width = 50;
             avatar.height = 50;
             avatar.classList.add('header__avatar-container__avatar');
@@ -169,13 +161,13 @@ class Header {
             const options = document.createElement('button');
             options.classList.add('header__avatar-container__options');
             const optionsImage = document.createElement('img');
-            optionsImage.src = '/images/svg/options.svg';
+            optionsImage.src = '/svg/options.svg';
             optionsImage.width = 30;
             optionsImage.height = 30;
             options.appendChild(optionsImage);
 
             options.addEventListener(
-                'click', 
+                'click',
                 this.#headerCallbacks.profileList
             );
 
