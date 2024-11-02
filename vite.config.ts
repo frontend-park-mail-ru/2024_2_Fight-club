@@ -5,11 +5,11 @@ import handlebarsCompilePlugin from './hbs-recompile.js';
 export default defineConfig({
     plugins: [handlebarsCompilePlugin()],
     server: {
-        host: 'localhost',
-        port: 80,
+        host: '0.0.0.0',
+        port: 5173,
     },
     preview: {
         host: '0.0.0.0',
-        port: 80,
+        port: 5173,
     },
 });

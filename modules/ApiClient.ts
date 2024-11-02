@@ -5,7 +5,7 @@ import { RegisterParams, AdsFilters, LoginParams, EditParams } from './Types';
 import { getCookie } from './Utils';
 
 class APIClient {
-    BASE_URL = `http://${window.location.hostname}:8008/api`;
+    BASE_URL = `${location.protocol}//${window.location.hostname}:8008/api`;
 
     /**
      * @public

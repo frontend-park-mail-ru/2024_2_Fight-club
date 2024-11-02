@@ -92,7 +92,7 @@ class ProfileData {
 
     #addPrefixPhoto(photoUrl: string): string {
         const avatar = `http://localhost:9000/${photoUrl}`;
-        return avatar;  
+        return avatar;
     }
 
     /**
@@ -432,7 +432,7 @@ class ProfileData {
 
         const map = document.createElement('img');
         map.classList.add('data-container__wrapper__img');
-        map.src = '/images/myMap.jpg';
+        map.src = '/myMap.jpg';
 
         wrapper.appendChild(map);
         this.#content.appendChild(wrapper);

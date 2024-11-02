@@ -29,9 +29,9 @@ class SearchPopup {
         moscow: City, 
         spb: City, 
         groups: [City[], City[], City[]]
-    } {
-        const moscow = Object.values(this.#cities).find(city => city.title === "Москва") as City;
-        const spb = Object.values(this.#cities).find(city => city.title === "Санкт-Петербург") as City;
+        } {
+        const moscow = Object.values(this.#cities).find(city => city.title === 'Москва') as City;
+        const spb = Object.values(this.#cities).find(city => city.title === 'Санкт-Петербург') as City;
 
         const filteredCities = Object.values(this.#cities)
             .filter(city => city.title !== 'Москва' && city.title !== 'Санкт-Петербург')
@@ -42,9 +42,9 @@ class SearchPopup {
             filteredCities.slice(0, groupSize), 
             filteredCities.slice(groupSize, groupSize*2),  
             filteredCities.slice(groupSize*2)
-        ]
+        ];
 
-        return { moscow, spb, groups}
+        return { moscow, spb, groups};
     }
 
     /**
@@ -77,8 +77,8 @@ class SearchPopup {
                 e.preventDefault();
                 const cityPage = new CityPage(href.id);
                 cityPage.render(document.querySelector('.page-container') as HTMLElement);
-            })
-        })
+            });
+        });
     }
 
     /**

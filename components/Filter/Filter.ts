@@ -85,7 +85,7 @@ class Filter {
 
                     filterTitle.textContent = title;
                     const img = document.createElement('img');
-                    img.src = '/images/svg/down-arrow.svg';
+                    img.src = '/svg/down-arrow.svg';
                     img.width = 24;
                     arrowDown.appendChild(img);
                     arrowDown.href = '#';
