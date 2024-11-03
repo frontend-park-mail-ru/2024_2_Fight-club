@@ -28,7 +28,7 @@ class Header {
         this.#config = {
             menu: {
                 Main: {
-                    href: '/dashboard',
+                    href: '/',
                     text: 'Главная',
                     callback: headerCallbacks.mainPage,
                 },
