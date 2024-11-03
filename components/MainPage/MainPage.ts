@@ -4,7 +4,6 @@ import Filter from '../Filter/Filter';
 import AdCard from '../AdCard/AdCard';
 import { AdvertData } from '../../modules/Types';
 import MainPhoto from '../MainPhoto/MainPhoto';
-import APIClient from '../../modules/ApiClient';
 
 /** Главная страница с витриной объявлений, поиском и фильтрами */
 class MainPage {
@@ -34,12 +33,8 @@ class MainPage {
         this.#adsData = data;
     }
 
-    /**
-     * @public
-     */
     async render() {
         this.#adsContainer.replaceChildren();
-        console.log('??', this.#adsData);
         for (const cardData of this.#adsData) {
             const card = new AdCard(cardData, this.#adsContainer);
             await card.render();

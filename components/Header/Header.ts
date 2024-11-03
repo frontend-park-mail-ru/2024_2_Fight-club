@@ -30,17 +30,14 @@ class Header {
                 Main: {
                     href: '/',
                     text: 'Главная',
-                    callback: headerCallbacks.mainPage,
                 },
                 Map: {
                     href: '/map',
                     text: 'Карта',
-                    callback: headerCallbacks.mapPage,
                 },
                 Articles: {
                     href: '/articles',
                     text: 'Статьи',
-                    callback: headerCallbacks.articlesPage,
                 },
             },
 
@@ -98,13 +95,12 @@ class Header {
         const hrefs = document.createElement('div');
         hrefs.classList.add('header__hrefs');
         Object.entries(this.#config.menu).forEach(
-            ([key, { href, text, callback }], index) => {
+            ([key, { href, text }], index) => {
                 const menuElement = document.createElement('a');
                 menuElement.href = href;
                 menuElement.text = text;
                 menuElement.addEventListener('click', (e) => {
                     e.preventDefault();
-                    callback();
                 });
                 menuElement.classList.add('header__hrefs__href');
 
