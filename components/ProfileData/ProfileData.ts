@@ -4,6 +4,8 @@ import Validation from '../../modules/Validation';
 import APIClient from '../../modules/ApiClient';
 import { clearPage } from '../../modules/Clear';
 
+import PopupAlert from '../PopupAlert/PopupAlert';
+
 interface userData {
     name: string | undefined;
     username: string | undefined;
@@ -157,7 +159,8 @@ class ProfileData {
             dataContainer?.appendChild(this.#content);
         } else {
             clearPage('profile');
-            console.error('Wrong response from server', response);
+            const errorMessage = PopupAlert('Неверный размер или разрешение фото');
+            document.querySelector('#profile-content')?.appendChild(errorMessage);
         }
     }
 
