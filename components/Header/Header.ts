@@ -193,11 +193,6 @@ class Header {
         }
     }
 
-    // #addPrefixPhoto(photoUrl: string): string {
-    //     const avatar = `http://localhost:9000${photoUrl}`;
-    //     return avatar;
-    // }
-
     /**
      * @private
      */
