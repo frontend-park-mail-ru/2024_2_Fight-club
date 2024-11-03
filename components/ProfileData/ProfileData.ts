@@ -7,7 +7,6 @@ import { clearPage } from '../../modules/Clear';
 interface userData {
     name: string | undefined;
     username: string | undefined;
-    address: string | undefined;
     birthdate: string | undefined;
     email: string | undefined;
     sex: string | undefined;
@@ -90,10 +89,10 @@ class ProfileData {
         }
     }
 
-    #addPrefixPhoto(photoUrl: string): string {
-        const avatar = `http://localhost:9000${photoUrl}`;
-        return avatar;
-    }
+    // #addPrefixPhoto(photoUrl: string): string {
+    //     const avatar = `http://localhost:9000${photoUrl}`;
+    //     return avatar;
+    // }
 
     /**
      * @private
@@ -120,7 +119,7 @@ class ProfileData {
             this.#profileData.username = data.username;
             this.#profileData.email = data.email;
             this.#profileData.isHost = data.isHost;
-            this.#profileData.avatar = this.#addPrefixPhoto(data.avatar);
+            this.#profileData.avatar = data.avatar;
             this.#profileData.birthdate = data.birthDate.slice(0, 10);
             if (this.#profileData.birthdate != '0001-01-01')
                 this.#showBirthdate = true;
@@ -343,6 +342,11 @@ class ProfileData {
                 await this.#putData();
                 await this.#renderProfileInfo();
                 this.#addButtonEventListener();
+
+                //Обновление аватарки в хэдере
+                const headerImg = document.querySelector('.js-header-avatar') as HTMLImageElement;
+                const profileInfoImg = document.querySelector('.js-profile-info-avatar') as HTMLImageElement;
+                headerImg.src = profileInfoImg.src;
             }
         });
     }

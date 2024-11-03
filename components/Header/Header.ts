@@ -1,5 +1,7 @@
 'use strict';
 
+import ApiClient from '../../modules/ApiClient';
+
 interface HeaderCallbacks {
     mainPage: () => void;
     mapPage: () => void;
@@ -148,15 +150,19 @@ class Header {
     /**
      * @private
      */
-    #renderButtonOrAvatar() {
+    async #renderButtonOrAvatar() {
         if (this.#isAuthorized) {
             const avatarContainer = document.createElement('div');
             avatarContainer.classList.add('header__avatar-container');
             const avatar = document.createElement('img');
-            avatar.src = '/default_user_icon.png';
+
+            const uuid = await ApiClient.getSessionData();
+            const data = await ApiClient.getUser(uuid.id);
+            avatar.src = data.avatar;
             avatar.width = 50;
             avatar.height = 50;
             avatar.classList.add('header__avatar-container__avatar');
+            avatar.classList.add('js-header-avatar');
 
             const options = document.createElement('button');
             options.classList.add('header__avatar-container__options');
@@ -187,15 +193,20 @@ class Header {
         }
     }
 
+    // #addPrefixPhoto(photoUrl: string): string {
+    //     const avatar = `http://localhost:9000${photoUrl}`;
+    //     return avatar;
+    // }
+
     /**
      * @private
      */
-    #render() {
+    async #render() {
         this.#renderIcon();
         this.#renderHrefs();
         this.#renderMainText();
         this.#renderSigns();
-        this.#renderButtonOrAvatar();
+        await this.#renderButtonOrAvatar();
     }
 
     /**

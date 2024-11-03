@@ -48,7 +48,7 @@ class ProfilePage{
             this.#score = data.score;
             this.#isHost = data.isHost;
             this.#birthdate = data.birthDate;
-            this.#avatar = this.#addPrefixPhoto(data.avatar);
+            this.#avatar = data.avatar;
             this.#sex = this.#calculateSex(data.sex);
             this.#age = this.#calculateAge(data.birthDate);
 
@@ -57,10 +57,10 @@ class ProfilePage{
         }
     }
 
-    #addPrefixPhoto(photoUrl: string): string {
-        const avatar = `http://localhost:9000${photoUrl}`;
-        return avatar;  
-    }
+    // #addPrefixPhoto(photoUrl: string): string {
+    //     const avatar = `http://localhost:9000${photoUrl}`;
+    //     return avatar;  
+    // }
 
     /**
      * @private

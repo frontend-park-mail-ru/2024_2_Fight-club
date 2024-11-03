@@ -1,6 +1,6 @@
 'use strict';
 
-import { FilterValues } from "../../modules/Types";
+import { FilterValues } from '../../modules/Types';
 
 export default class Filter {
     #config;
@@ -111,7 +111,7 @@ export default class Filter {
         button?.addEventListener('click', (e)=>{
             e.preventDefault();
             this.getFilterValues();
-        })
+        });
     }
 
     /**
@@ -136,7 +136,7 @@ export default class Filter {
         const visInputs = this.#filterContainer.querySelectorAll('input[name="vis"]')  as NodeListOf<HTMLInputElement>;
         values.vis = Array.from(visInputs).find(input => input.checked)?.value || '';
         console.log(values);
-        return values
+        return values;
     }
 
     /**

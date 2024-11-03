@@ -1,12 +1,12 @@
 .profile-container{
-    margin: 40px 0px 40px 250px;
+    margin: 40px 0px 0px 35%;
     border: solid;
     border-width: 1px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    max-height: 100%;
+    min-height: 660px;
+    height: 70vh;
     max-width: 280px;
     padding-inline-start: 40px;
     padding-inline-end: 40px;
