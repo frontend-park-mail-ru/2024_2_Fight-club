@@ -121,7 +121,12 @@ class APIClient {
         return Ajax.post({ url, body });
     }
 
-    async city(name: string) {
+    async getCity(name: string) {
+        const url = this.BASE_URL + `/cities/${name}`;
+        return Ajax.get(url);
+    }
+
+    async getCitiesAds(name: string) {
         const url = this.BASE_URL + `/ads/cities/${name}`;
         return Ajax.get(url);
     }

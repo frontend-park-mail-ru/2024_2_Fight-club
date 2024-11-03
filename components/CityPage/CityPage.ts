@@ -8,14 +8,14 @@ class CityPage {
     #queryName: string;
     #name: string;
     #description: string;
-    // #photo: string;
+    #photo: string;
     #places: object[];
 
     constructor(queryName: string) {
         this.#queryName = queryName;
         this.#name = '';
         this.#description = '';
-        // this.#photo = '';
+        this.#photo = '';
         this.#places = [];
     }
 
@@ -24,16 +24,32 @@ class CityPage {
      * @description Получение данных о городе
      */
     async #getCityData(name: string): Promise<void> {
-        const response = await APIClient.city(name);
-        if (response.ok) {
-            const data = await response.json();
-            this.#name = data['name'];
-            this.#description = data['description'];
-            // this.#photo = data['photo'];
+        const infoResponse = await APIClient.getCity(name);
+        if (infoResponse.ok) {
+            const data = await infoResponse.json();
+            this.#name = data.city['title'];
+            this.#description = data.city['description'];
+            this.#photo = this.#addPrefixImage(data.city['image']);
+        }  else {
+            console.log('error by getting info');
+        }
+
+        const placesResponse = await APIClient.getCitiesAds(name);
+        if (placesResponse.ok) {    
+            const data = await placesResponse.json();
             this.#places = data['places'];
         } else {
-            console.log('error');
+            console.log('error by getting ploaces');
         }
+
+        console.log(this.#name);
+        console.log(this.#description);
+        console.log(this.#photo);
+        console.log(this.#places);
+    }
+
+    #addPrefixImage(url: string): string{
+        return `http://localhost:9000${url}`;
     }
 
     /**
@@ -47,7 +63,7 @@ class CityPage {
             template({
                 name: this.#name,
                 description: this.#description,
-                // photo: this.#photo,
+                photo: this.#photo,
             })
         );
     }
