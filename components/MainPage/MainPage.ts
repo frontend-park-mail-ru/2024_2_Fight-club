@@ -14,7 +14,7 @@ class MainPage {
     #adsContainer;
     #adsData: AdvertData[];
 
-    constructor(root: HTMLDivElement) {
+    constructor(root: HTMLDivElement, data: AdvertData[]) {
         this.#root = root;
         this.#adsData = [];
 
@@ -31,9 +31,7 @@ class MainPage {
         this.#adsContainer = document.createElement('div');
         this.#adsContainer.classList.add('advert');
 
-        APIClient.getAds().then((data) => {
-            this.#adsData = data;
-        });
+        this.#adsData = data;
     }
 
     /**
@@ -41,9 +39,12 @@ class MainPage {
      */
     async render() {
         this.#adsContainer.replaceChildren();
+        console.log('??', this.#adsData);
         for (const cardData of this.#adsData) {
             const card = new AdCard(cardData, this.#adsContainer);
-            card.render();
+            console.log(card);
+            console.log(123);
+            await card.render();
         }
 
         this.#pageContent.appendChild(this.#adsContainer);

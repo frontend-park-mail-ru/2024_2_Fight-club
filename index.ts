@@ -43,8 +43,9 @@ const profilePopupCallbacks = {
     donatePage: null,
 };
 
-const renderMainPage = () => {
-    const mainPage = new MainPage(pageContainer);
+const renderMainPage = async () => {
+    const data = await ApiClient.getAds();
+    const mainPage = new MainPage(pageContainer, data);
     mainPage.render();
 };
 
