@@ -57,3 +57,11 @@ export interface City {
     id: number;
     title: string;
 }
+
+export interface FilterValues {
+    geo: string;
+    rating: boolean;
+    new: boolean;
+    sex: string;
+    vis: string;
+}

@@ -1,5 +1,7 @@
 'use strict';
 
+import { FilterValues } from "../../modules/Types";
+
 export default class Filter {
     #config;
     #filterContainer: HTMLFormElement;
@@ -104,6 +106,39 @@ export default class Filter {
         this.#render();
     }
 
+    addButtonEventListener(){
+        const button = this.#filterContainer.querySelector('.apply-button') as HTMLButtonElement;
+        button?.addEventListener('click', (e)=>{
+            e.preventDefault();
+            this.getFilterValues();
+        })
+    }
+
+    /**
+     * @description Возвращает данные фильтра
+     * @returns {FilterValues} JSON с данными фильтра
+     */
+    getFilterValues(): FilterValues {
+        const values = {} as FilterValues;
+
+        const geoInputs = this.#filterContainer.querySelectorAll('input[name="geo"]') as NodeListOf<HTMLInputElement>;
+        values.geo = Array.from(geoInputs).find(input => input.checked)?.value || '';
+    
+        const ratingInputs = this.#filterContainer.querySelectorAll('input[name="rating"]')  as NodeListOf<HTMLInputElement>;
+        values.rating = Array.from(ratingInputs).some(input => input.checked);
+    
+        const newInputs = this.#filterContainer.querySelectorAll('input[name="new"]')  as NodeListOf<HTMLInputElement>;
+        values.new = Array.from(newInputs).some(input => input.checked);
+    
+        const sexInputs = this.#filterContainer.querySelectorAll('input[name="sex"]')  as NodeListOf<HTMLInputElement>;
+        values.sex = Array.from(sexInputs).find(input => input.checked)?.value || '';
+    
+        const visInputs = this.#filterContainer.querySelectorAll('input[name="vis"]')  as NodeListOf<HTMLInputElement>;
+        values.vis = Array.from(visInputs).find(input => input.checked)?.value || '';
+        console.log(values);
+        return values
+    }
+
     /**
      * @private
      * @description Создание и рендер фильтра
@@ -111,6 +146,7 @@ export default class Filter {
     #render(): void {
         const template = Handlebars.templates['Filter.hbs'];
         this.#filterContainer.innerHTML = template(this.#config);
+        this.addButtonEventListener();
     }
 
     /**
