@@ -75,6 +75,7 @@ class SearchPopup {
         Object.values(hrefs).forEach((href)=>{
             href.addEventListener('click', (e)=>{
                 e.preventDefault();
+                document.body.classList.remove('no-scroll');
                 const cityPage = new CityPage(href.id);
                 cityPage.render(document.querySelector('.page-container') as HTMLElement);
             });
