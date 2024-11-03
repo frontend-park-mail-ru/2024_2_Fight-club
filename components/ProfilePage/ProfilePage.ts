@@ -48,18 +48,13 @@ class ProfilePage{
             this.#score = data.score;
             this.#isHost = data.isHost;
             this.#birthdate = data.birthDate;
-            this.#avatar = this.#addPrefixPhoto(data.avatar);
+            this.#avatar = data.avatar;
             this.#sex = this.#calculateSex(data.sex);
             this.#age = this.#calculateAge(data.birthDate);
 
         } else if (response.status !== 401) {
             console.error('Wrong response from server', response);
         }
-    }
-
-    #addPrefixPhoto(photoUrl: string): string {
-        const avatar = `http://localhost:9000/${photoUrl}`;
-        return avatar;  
     }
 
     /**
