@@ -3,7 +3,7 @@ services:
         image: node:20
         working_dir: /app
         volumes:
-            - .:/app
+            - ./:/app
             - /app/node_modules
         ports:
             - '5173:5173' # For local development!
@@ -22,4 +22,4 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         command: >
-            sh -c "chmod +x /etc/nginx/generate-certs.sh && /etc/nginx/generate-certs.sh"
+            sh -c "chmod +x /etc/nginx/generate-certs.sh && sh /etc/nginx/generate-certs.sh"
