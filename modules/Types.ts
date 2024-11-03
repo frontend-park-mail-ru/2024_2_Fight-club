@@ -11,7 +11,11 @@ export interface LoginParams {
 }
 
 export interface AdsFilters {
-    city?: string;
+    distance?: number;
+    rating?: number;
+    new?: boolean;
+    gender?: 'male' | 'female';
+    guests?: 5 | 10 | 20 | 50;
 }
 
 // interface AuthorData {

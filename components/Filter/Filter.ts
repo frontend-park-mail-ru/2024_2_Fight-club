@@ -1,6 +1,6 @@
 'use strict';
 
-class Filter {
+export default class Filter {
     #config;
     #filterContainer;
 
@@ -146,5 +146,3 @@ class Filter {
         return this.#filterContainer;
     }
 }
-
-export default Filter;
