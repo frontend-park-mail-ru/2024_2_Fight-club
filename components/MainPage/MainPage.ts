@@ -42,8 +42,6 @@ class MainPage {
         console.log('??', this.#adsData);
         for (const cardData of this.#adsData) {
             const card = new AdCard(cardData, this.#adsContainer);
-            console.log(card);
-            console.log(123);
             await card.render();
         }
 

@@ -64,9 +64,6 @@ class Filter {
         this.#render();
     }
 
-    /**
-     * @private
-     */
     #render() {
         Object.entries(this.#config).forEach(
             ([filterName, { name, title, variations, def }], index1) => {
@@ -118,6 +115,10 @@ class Filter {
                         radioLabel.setAttribute('for', '' + index1 + index2);
                         radioLabel.textContent = label;
 
+                        radio.onchange = (e) => {
+                            console.log(e, e.target);
+                        };
+
                         filterElement.appendChild(radio);
                         filterElement.appendChild(radioLabel);
                         filterGroup.appendChild(filterElement);
@@ -141,9 +142,6 @@ class Filter {
         this.#filterContainer.appendChild(resetButton);
     }
 
-    /**
-     * @public
-     */
     getFilter() {
         return this.#filterContainer;
     }

@@ -2,7 +2,6 @@
 
 import Ajax from './Ajax';
 import { RegisterParams, AdsFilters, LoginParams, EditParams } from './Types';
-import { getCookie } from './Utils';
 
 class APIClient {
     BASE_URL = `${location.protocol}//${window.location.hostname}:8008/api`;
