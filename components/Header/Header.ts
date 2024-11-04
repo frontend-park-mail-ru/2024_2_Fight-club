@@ -30,19 +30,16 @@ class Header {
         this.#config = {
             menu: {
                 Main: {
-                    href: '/dashboard',
+                    href: '/',
                     text: 'Главная',
-                    callback: headerCallbacks.mainPage,
                 },
                 Map: {
                     href: '/map',
                     text: 'Карта',
-                    callback: headerCallbacks.mapPage,
                 },
                 Articles: {
                     href: '/articles',
                     text: 'Статьи',
-                    callback: headerCallbacks.articlesPage,
                 },
             },
 
@@ -73,9 +70,6 @@ class Header {
         this.#render();
     }
 
-    /**
-     * @private
-     */
     #renderIcon() {
         const logoImg = document.createElement('img');
         logoImg.src = '/icon.jpg';
@@ -83,9 +77,6 @@ class Header {
         this.#menuContainer.appendChild(logoImg);
     }
 
-    /**
-     * @private
-     */
     #renderMainText() {
         const nameImg = document.createElement('img');
         nameImg.classList.add('header__img2');
@@ -93,20 +84,16 @@ class Header {
         this.#menuContainer.appendChild(nameImg);
     }
 
-    /**
-     * @private
-     */
     #renderHrefs() {
         const hrefs = document.createElement('div');
         hrefs.classList.add('header__hrefs');
         Object.entries(this.#config.menu).forEach(
-            ([key, { href, text, callback }], index) => {
+            ([key, { href, text }], index) => {
                 const menuElement = document.createElement('a');
                 menuElement.href = href;
                 menuElement.text = text;
                 menuElement.addEventListener('click', (e) => {
                     e.preventDefault();
-                    callback();
                 });
                 menuElement.classList.add('header__hrefs__href');
 
@@ -122,9 +109,6 @@ class Header {
         this.#menuContainer.appendChild(hrefs);
     }
 
-    /**
-     * @private
-     */
     #renderSigns() {
         const signsContainer = document.createElement('div');
         signsContainer.classList.add('header__signs');
@@ -147,9 +131,6 @@ class Header {
         this.#menuContainer.appendChild(signsContainer);
     }
 
-    /**
-     * @private
-     */
     async #renderButtonOrAvatar() {
         if (this.#isAuthorized) {
             const avatarContainer = document.createElement('div');
@@ -193,9 +174,6 @@ class Header {
         }
     }
 
-    /**
-     * @private
-     */
     async #render() {
         this.#renderIcon();
         this.#renderHrefs();
@@ -204,10 +182,7 @@ class Header {
         await this.#renderButtonOrAvatar();
     }
 
-    /**
-     * @public
-     */
-    getMainContainer() {
+    getElement() {
         return this.#menuContainer;
     }
 }
