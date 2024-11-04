@@ -25,7 +25,7 @@ class AdPage {
     #images: string[];
 
     constructor(data: AdvertData) {
-        this.#images = data.images;
+        this.#images = data.images.map((x) => x.path);
 
         this.#currentIndex = 0;
         const template = Handlebars.templates['AdPage.hbs'];

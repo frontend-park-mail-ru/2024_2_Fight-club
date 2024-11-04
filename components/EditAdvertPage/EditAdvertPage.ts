@@ -4,7 +4,7 @@ import ApiClient from '../../modules/ApiClient';
 
 import router from '../../modules/Router';
 
-import { City } from '../../modules/Types';
+import { City, AdvertData } from '../../modules/Types';
 
 const MAIN_IMG_DIV_SELECTOR = '.js-main-img-div';
 const MAIN_IMG_SELECTOR = '.advert-images-carousel__main-img';
@@ -20,29 +20,10 @@ const SECONDARY_IMG_SELECTED_CLASS_NAME =
 const ADD_IMG_BTN_SELECTOR = '.js-add-img-btn';
 const FILE_INPUT_SELECTOR = '.js-file-input';
 
-// interface AdPageAuthorData {
-//     uuid: string;
-//     name: string;
-//     avatar: string;
-//     sex: string;
-//     age: number;
-//     score: number;
-// }
-
 interface SelectOption {
     name: string;
     value: string;
     selected?: boolean;
-}
-
-interface AdPageData {
-    id: string;
-    images: string[];
-    // author: AdPageAuthorData;
-    address: string;
-    city: string;
-    description: string;
-    roomsNumber: number;
 }
 
 interface InputConfig {
@@ -59,7 +40,7 @@ interface InputConfig {
     max?: number;
 }
 
-class EditAdvertPage {
+export default class EditAdvertPage {
     #templateContainer: HTMLDivElement;
     #mainImg: HTMLImageElement;
     #carouselImages: NodeListOf<HTMLImageElement>;
@@ -67,18 +48,26 @@ class EditAdvertPage {
     #backgroundImg: HTMLImageElement;
     #fullscreenImage: HTMLImageElement;
     #overlay: HTMLDivElement;
-    #imageURLs: string[];
+    #images: {
+        id: number;
+        path: string;
+        name?: string;
+    }[];
     #uploadedImages: File[];
     #action: 'create' | 'edit';
     #id: string | undefined;
+    #secondaryImageTemplate: HandlebarsTemplateDelegate;
 
-    constructor(action: 'create' | 'edit', data?: AdPageData) {
+    constructor(action: 'create' | 'edit', data?: AdvertData) {
         this.#action = action;
         this.#id = data?.id;
-        this.#imageURLs = data ? data.images : [];
+        this.#images = data?.images ? data.images : [];
 
         this.#currentIndex = 0;
         this.#uploadedImages = [];
+
+        this.#secondaryImageTemplate =
+            Handlebars.templates['SecondaryImage.hbs'];
 
         const template = Handlebars.templates['EditAdvertPage.hbs'];
         this.#templateContainer = document.createElement('div');
@@ -143,10 +132,6 @@ class EditAdvertPage {
                 BACKGROUND_IMG_SELECTOR
             ) as HTMLImageElement;
 
-            this.#carouselImages = this.#templateContainer.querySelectorAll(
-                SECONDARY_IMG_SELECTOR
-            );
-
             this.#fullscreenImage = this.#templateContainer.querySelector(
                 FULLSCREEN_IMG_SELECTOR
             ) as HTMLImageElement;
@@ -155,16 +140,45 @@ class EditAdvertPage {
                 FULLSCREEN_OVERLAY_SELECTOR
             ) as HTMLDivElement;
 
-            this.#addEventListeners();
+            this.#renderSecondary();
+            this.#carouselImages = this.#templateContainer.querySelectorAll(
+                SECONDARY_IMG_SELECTOR
+            );
 
             if (data) this.#showImage(this.#currentIndex);
+
+            this.#addEventListeners();
         });
     }
 
-    #showImage(index: number) {
-        this.#mainImg.src = this.#backgroundImg.src = this.#imageURLs[index];
+    #renderSecondary() {
+        if (!this.#images) {
+            return;
+        }
 
-        this.#carouselImages[this.#currentIndex].classList.remove(
+        const addImgBtn =
+            this.#templateContainer.querySelector('.js-add-img-btn');
+
+        for (let i = 0; i < this.#images.length; i++) {
+            addImgBtn?.insertAdjacentHTML(
+                'beforebegin',
+                this.#secondaryImageTemplate(this.#images[i])
+            );
+        }
+    }
+
+    #showImage(index: number) {
+        if (!this.#images || !this.#images[index]) {
+            this.#mainImg.src = this.#backgroundImg.src =
+                '/placeholder-image.avif';
+            return;
+        }
+
+        this.#mainImg.src = this.#backgroundImg.src = this.#images[index].path;
+        this.#mainImg.src = this.#backgroundImg.src = this.#images[index].path;
+        console.log(this.#currentIndex, index);
+
+        this.#carouselImages[this.#currentIndex]?.classList.remove(
             SECONDARY_IMG_SELECTED_CLASS_NAME
         );
         this.#carouselImages[index].classList.add(
@@ -175,15 +189,11 @@ class EditAdvertPage {
     }
 
     #displayOverlay() {
-        if (!this.#imageURLs[this.#currentIndex]) {
+        if (!this.#images || !this.#images[this.#currentIndex]) {
             return;
         }
-        this.#fullscreenImage.src = this.#imageURLs[this.#currentIndex];
+        this.#fullscreenImage.src = this.#images[this.#currentIndex].path;
         this.#overlay.classList.remove(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
-    }
-
-    #hideOverlay() {
-        this.#overlay.classList.add(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
     }
 
     #onImageLoaded = (e: Event) => {
@@ -193,23 +203,30 @@ class EditAdvertPage {
         const image = files![0];
         this.#uploadedImages.push(image);
 
-        const newElement = document.createElement('img');
-        newElement.classList.add(
-            'advert-images-carousel__secondary_img',
-            'js-carousel-img'
-        );
+        const tempContainer = document.createElement('div');
         const imageUrl = URL.createObjectURL(image);
-        newElement.src = imageUrl;
+        tempContainer.innerHTML = this.#secondaryImageTemplate({
+            id: 0,
+            path: imageUrl,
+        });
 
         this.#templateContainer
             .querySelector('.js-add-img-btn')
-            ?.insertAdjacentElement('beforebegin', newElement);
+            ?.insertAdjacentElement(
+                'beforebegin',
+                tempContainer.firstChild as Element
+            );
 
-        this.#imageURLs.push(imageUrl);
+        this.#images.push({ id: 0, path: imageUrl, name: image.name });
+
+        this.#carouselImages = this.#templateContainer.querySelectorAll(
+            SECONDARY_IMG_SELECTOR
+        );
 
         this.#addSecondaryImagesEvents();
+
         // Show new uploaded image
-        this.#showImage(this.#imageURLs.length - 1);
+        this.#showImage(this.#images.length - 1);
     };
 
     #addSecondaryImagesEvents() {
@@ -222,12 +239,20 @@ class EditAdvertPage {
                 this.#showImage(index);
             });
         });
+
+        for (const button of document.querySelectorAll(
+            '.js-del-img-button'
+        ) as NodeListOf<HTMLSpanElement>) {
+            button.onclick = this.#onDeleteImage;
+        }
     }
 
     #addEventListeners() {
         this.#addSecondaryImagesEvents();
 
-        this.#overlay.addEventListener('click', () => this.#hideOverlay());
+        this.#overlay.addEventListener('click', () =>
+            this.#overlay.classList.add(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME)
+        );
 
         this.#templateContainer
             .querySelector(MAIN_IMG_DIV_SELECTOR)
@@ -249,6 +274,10 @@ class EditAdvertPage {
         this.#templateContainer
             .querySelector('.js-form')
             ?.addEventListener('submit', this.#submitData);
+
+        for (const button of document.querySelectorAll('.js-del-img-button')) {
+            button.onclick = this.#onDeleteImage;
+        }
     }
 
     #submitData = async (e: Event) => {
@@ -294,9 +323,38 @@ class EditAdvertPage {
         }
     };
 
+    #onDeleteImage = async (e: Event) => {
+        e.preventDefault();
+        const imageId = parseInt((e.target as HTMLElement).id);
+        if (imageId !== 0) ApiClient.deleteImageFromAdvert(this.#id, imageId);
+        (e.target as HTMLElement).parentElement?.remove();
+
+        // Update images
+        const imageToDelete = this.#images[imageId];
+        this.#uploadedImages = this.#uploadedImages.filter(
+            (img) => img.name !== imageToDelete.name
+        );
+        if (imageId !== 0)
+            this.#images = this.#images.filter((img) => img.id !== imageId);
+        else
+            this.#images = this.#images.filter(
+                (img) => img.name !== imageToDelete.name
+            );
+
+        this.#carouselImages = this.#templateContainer.querySelectorAll(
+            SECONDARY_IMG_SELECTOR
+        );
+
+        --this.#currentIndex;
+        this.#currentIndex = Math.max(
+            0,
+            Math.min(this.#images.length, this.#currentIndex)
+        );
+        this.#showImage(this.#currentIndex);
+        this.#addSecondaryImagesEvents();
+    };
+
     public getElement() {
         return this.#templateContainer as HTMLDivElement;
     }
 }
-
-export default EditAdvertPage;

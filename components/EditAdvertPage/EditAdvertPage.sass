@@ -58,6 +58,9 @@ $secondary-card-size: 77px
     background-repeat: no-repeat
     z-index: -1
 
+  &__seconday-img-container
+    position: relative
+
 
   &__secondary_img
     object-fit: cover
@@ -69,6 +72,25 @@ $secondary-card-size: 77px
     border-radius: 10px
     border: 1px solid black
     cursor: pointer
+
+  &__del-img-btn
+    content: 'x'
+    color: white
+    background-color: #000000b4
+    position: absolute
+    top: 5px
+    right: 5px
+    width: 20px
+    height: 20px
+    border-radius: 3px
+    cursor: pointer
+    transition: color 0.2s ease
+    display: flex
+    justify-content: center
+    align-items: center
+    user-select: none
+    &:hover
+      color: red
 
   &__secondary_img_current
     border: 2px solid #0059ff
