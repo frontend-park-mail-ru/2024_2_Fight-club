@@ -65,14 +65,15 @@ function renderNotificationsPage() {}
 const renderAdvertPage = async (id: string) => {
     const info = (await ApiClient.getAd(id))['place'];
 
-    const page = new AdPage({
-        images: info['images'],
-        city: info['cityName'],
-        address: info['address'],
-        description: info['description'],
-        roomsNumber: info['roomsNumber'],
-    });
-    page.render(pageContainer);
+    pageContainer.appendChild(
+        AdPage({
+            images: info['images'],
+            city: info['cityName'],
+            address: info['address'],
+            description: info['description'],
+            roomsNumber: info['roomsNumber'],
+        })
+    );
 };
 
 const renderEditAdvertPage = async (uuid: string) => {
