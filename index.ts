@@ -132,16 +132,18 @@ const renderAdListPage = async () => {
 };
 
 const renderHeader = async () => {
+    document.querySelector('.header')?.remove();
     const sessionData = await APIService.getSessionData();
     if (sessionData) {
         localStorage.setItem('userId', sessionData['id']);
     }
     const header = new Header(headerCallbacks, sessionData ? true : false);
-    root.appendChild(header.getElement());
+    root.prepend(header.getElement());
 };
 
 router.addRoute('/', async () => {
-    renderMainPage();
+    await renderHeader();
+    await renderMainPage();
 });
 
 router.addRoute('/ads/', async (params: URLSearchParams) => {

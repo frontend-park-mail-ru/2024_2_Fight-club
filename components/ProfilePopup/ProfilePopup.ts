@@ -43,7 +43,7 @@ class ProfilePopup {
             },
             logout: {
                 title: 'Выйти',
-                href: '#',
+                href: '',
                 event: this.#events.logoutEvent,
             },
         };
