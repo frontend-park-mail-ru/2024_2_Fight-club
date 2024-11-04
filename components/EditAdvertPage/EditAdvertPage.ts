@@ -93,7 +93,6 @@ class EditAdvertPage {
                     selected: data?.city === city.title,
                 });
             }
-            console.log(selectOptions);
 
             const inputsConfig: InputConfig[] = [
                 {
@@ -176,6 +175,9 @@ class EditAdvertPage {
     }
 
     #displayOverlay() {
+        if (!this.#imageURLs[this.#currentIndex]) {
+            return;
+        }
         this.#fullscreenImage.src = this.#imageURLs[this.#currentIndex];
         this.#overlay.classList.remove(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
     }
@@ -206,6 +208,8 @@ class EditAdvertPage {
         this.#imageURLs.push(imageUrl);
 
         this.#addSecondaryImagesEvents();
+        // Show new uploaded image
+        this.#showImage(this.#imageURLs.length - 1);
     };
 
     #addSecondaryImagesEvents() {
