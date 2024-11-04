@@ -332,7 +332,7 @@ export default class EditAdvertPage {
         // Update images
         const imageToDelete = this.#images[imageId];
         this.#uploadedImages = this.#uploadedImages.filter(
-            (img) => img.name !== imageToDelete.name
+            (img) => img?.name !== imageToDelete?.name
         );
         if (imageId !== 0)
             this.#images = this.#images.filter((img) => img.id !== imageId);

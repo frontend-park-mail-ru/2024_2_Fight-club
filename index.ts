@@ -65,28 +65,13 @@ function renderNotificationsPage() {}
 const renderAdvertPage = async (id: string) => {
     const info = (await ApiClient.getAd(id))['place'];
 
-    pageContainer.appendChild(
-        AdPage({
-            images: info['images'],
-            city: info['cityName'],
-            address: info['address'],
-            description: info['description'],
-            roomsNumber: info['roomsNumber'],
-        })
-    );
+    pageContainer.appendChild(AdPage(info));
 };
 
 const renderEditAdvertPage = async (uuid: string) => {
     const info = (await ApiClient.getAd(uuid))['place'];
 
-    const page = new EditAdvertPage('edit', {
-        id: uuid,
-        images: info['images'],
-        city: info['cityName'],
-        address: info['address'],
-        description: info['description'],
-        roomsNumber: info['roomsNumber'],
-    });
+    const page = new EditAdvertPage('edit', info);
     pageContainer.appendChild(page.getElement());
 };
 
