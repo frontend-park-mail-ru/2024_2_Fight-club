@@ -131,27 +131,17 @@ const renderAdListPage = async () => {
     pageContainer.appendChild(page);
 };
 
-const reloadMainPage = async () => {
-    root.replaceChildren();
-
-    await renderHeader();
-    pageContainer.classList.add('page-container');
-    root.appendChild(pageContainer);
-
-    renderMainPage();
-};
-
 const renderHeader = async () => {
     const sessionData = await APIService.getSessionData();
     if (sessionData) {
         localStorage.setItem('userId', sessionData['id']);
     }
     const header = new Header(headerCallbacks, sessionData ? true : false);
-    root.appendChild(header.getMainContainer());
+    root.appendChild(header.getElement());
 };
 
 router.addRoute('/', async () => {
-    reloadMainPage();
+    renderMainPage();
 });
 
 router.addRoute('/ads/', async (params: URLSearchParams) => {
@@ -170,4 +160,11 @@ router.addRoute('/ads/', async (params: URLSearchParams) => {
     }
 });
 
-reloadMainPage();
+const init = async () => {
+    await renderHeader();
+    pageContainer.classList.add('page-container');
+    root.appendChild(pageContainer);
+    router.navigateTo(location.href);
+};
+
+init();
