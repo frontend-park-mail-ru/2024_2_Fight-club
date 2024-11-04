@@ -208,6 +208,7 @@ export default class EditAdvertPage {
         tempContainer.innerHTML = this.#secondaryImageTemplate({
             id: 0,
             path: imageUrl,
+            name: image.name,
         });
 
         this.#templateContainer
@@ -227,6 +228,7 @@ export default class EditAdvertPage {
 
         // Show new uploaded image
         this.#showImage(this.#images.length - 1);
+        console.log(this.#uploadedImages);
     };
 
     #addSecondaryImagesEvents() {
@@ -325,20 +327,21 @@ export default class EditAdvertPage {
 
     #onDeleteImage = async (e: Event) => {
         e.preventDefault();
-        const imageId = parseInt((e.target as HTMLElement).id);
+        const target = e.target as HTMLElement;
+        const imageId = parseInt(target.id);
+        const imgNameToDelete = target.dataset.name;
         if (imageId !== 0) ApiClient.deleteImageFromAdvert(this.#id, imageId);
         (e.target as HTMLElement).parentElement?.remove();
 
-        // Update images
-        const imageToDelete = this.#images[imageId];
         this.#uploadedImages = this.#uploadedImages.filter(
-            (img) => img?.name !== imageToDelete?.name
+            (img) => img.name !== imgNameToDelete
         );
+        console.log(this.#uploadedImages, imgNameToDelete);
         if (imageId !== 0)
             this.#images = this.#images.filter((img) => img.id !== imageId);
         else
             this.#images = this.#images.filter(
-                (img) => img.name !== imageToDelete.name
+                (img) => img.name !== imgNameToDelete
             );
 
         this.#carouselImages = this.#templateContainer.querySelectorAll(
