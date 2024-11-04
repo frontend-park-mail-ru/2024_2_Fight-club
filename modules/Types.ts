@@ -18,26 +18,20 @@ export interface AdsFilters {
     guests?: 5 | 10 | 20 | 50;
 }
 
-// interface AuthorData {
-//     uuid: string;
-//     avatar: string;
-//     score: number;
-// }
-
 // Interface of a response from DB
 export interface AdvertData {
     id: string;
-    images: string[];
+    images: {
+        id: number;
+        path: string;
+    }[];
     city: string;
     address: string;
     description: string;
     publicationDate: string;
     roomsNumber: number;
 
-    // author: AuthorData;
-    authorAvatar: string;
-    authorName: string;
-    authorRating: string;
+    author: { avatar: string; name: string; rating: number };
     authorUUID: string;
 }
 
