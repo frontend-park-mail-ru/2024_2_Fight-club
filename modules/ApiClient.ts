@@ -82,6 +82,14 @@ class APIClient {
         });
     }
 
+    async deleteImageFromAdvert(advertId: string, imageId: number) {
+        const response = await Ajax.delete({
+            url: this.BASE_URL + `/ads/${advertId}/images/${imageId}`,
+            body: {},
+        });
+        return await response.json();
+    }
+
     /**
      * @public
      * @description Посылает запрос на вход пользователя в аккаунт
