@@ -37,3 +37,48 @@ export const calculateAge = (dateOfBirth: string) => {
 
     return age;
 };
+
+export const validateImage = async (file: File): Promise<string> => {
+    const maxWidth = 2000;
+    const maxHeight = 2000;
+    const maxSize = 4 * 1024 * 1024; // 4 MB в байтах
+
+    // Проверка размера файла в байтах
+    if (file.size > maxSize) {
+        throw new Error(
+            `Размер файла превышает допустимый лимит ${maxSize / (1024 * 1024)} MB.`
+        );
+    }
+
+    const reader = new FileReader();
+    const imgSrc = await new Promise<string>((resolve, reject) => {
+        reader.onload = (event) => {
+            resolve(event.target?.result as string);
+        };
+        reader.onerror = () => {
+            reject(new Error('Ошибка при чтении файла.'));
+        };
+        reader.readAsDataURL(file);
+    });
+
+    const img = new Image();
+    img.src = imgSrc;
+
+    return new Promise<string>((resolve, reject) => {
+        img.onload = () => {
+            // Проверка размеров изображения в пикселях
+            if (img.width > maxWidth || img.height > maxHeight) {
+                reject(
+                    new Error(
+                        `Размер изображения не должен превышать ${maxWidth}x${maxHeight} пикселей.`
+                    )
+                );
+            } else {
+                resolve('Изображение соответствует требованиям.');
+            }
+        };
+        img.onerror = () => {
+            reject(new Error('Ошибка при загрузке изображения.'));
+        };
+    });
+};
