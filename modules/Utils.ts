@@ -15,3 +15,25 @@ export function getCookie(name: string) {
     }
     return cookieValue;
 }
+
+export const calculateAge = (dateOfBirth: string) => {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+
+    if (isNaN(birthDate)) {
+        return 0;
+    }
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+
+    // Проверка, был ли день рождения уже в этом году
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (
+        monthDifference < 0 ||
+        (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+        age--;
+    }
+
+    return age;
+};
