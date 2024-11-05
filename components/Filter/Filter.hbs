@@ -6,7 +6,7 @@
     </span>
     {{#each geoposition.variations}}
       <div class="filter-element">
-        <input type="radio" id="geo-{{@index}}" name="geo" value="{{@key}}" {{#if this.isDefault}}checked{{/if}}/>
+        <input type="radio" id="geo-{{@index}}" name="geo" value="{{this.value}}" {{#if this.isDefault}}checked{{/if}}/>
         <label for="geo-{{@index}}">{{this.text}}</label>
       </div>
     {{/each}}
@@ -37,7 +37,7 @@
     </span>
     {{#each gender.variations}}
       <div class="filter-element">
-        <input type="radio" id="sex-{{@index}}" name="sex" value="{{@key}}" {{#if this.isDefault}}checked{{/if}}/>
+        <input type="radio" id="sex-{{@index}}" name="sex" value="{{this.value}}" {{#if this.isDefault}}checked{{/if}}/>
         <label for="sex-{{@index}}">{{this.text}}</label>
       </div>
     {{/each}}
@@ -50,7 +50,7 @@
     </span>
     {{#each visitors.variations}}
       <div class="filter-element">
-        <input type="radio" id="vis-{{@index}}" name="vis" value="{{@key}}" {{#if this.isDefault}}checked{{/if}}/>
+        <input type="radio" id="vis-{{@index}}" name="vis" value="{{this.value}}" {{#if this.isDefault}}checked{{/if}}/>
         <label for="vis-{{@index}}">{{this.text}}</label>
       </div>
     {{/each}}

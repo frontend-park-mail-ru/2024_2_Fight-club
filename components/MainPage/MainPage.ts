@@ -4,6 +4,7 @@ import Filter from '../Filter/Filter';
 import AdCard from '../AdCard/AdCard';
 import { AdvertData } from '../../modules/Types';
 import MainPhoto from '../MainPhoto/MainPhoto';
+import ApiClient from '../../modules/ApiClient';
 
 /** Главная страница с витриной объявлений, поиском и фильтрами */
 class MainPage {
@@ -23,7 +24,12 @@ class MainPage {
         this.#pageContent.id = 'main-content';
 
         // Фильтр
-        const filter = new Filter();
+        const filter = new Filter(async (filters) => {
+            const data = await ApiClient.getAds(filters);
+            console.log('Фильтры применены:', filters);
+            this.#adsData = data;
+            this.renderAds();
+        });
         this.#pageContent.appendChild(filter.getFilter());
 
         // Здесь будет витрина
@@ -35,15 +41,20 @@ class MainPage {
 
     async render() {
         this.#adsContainer.replaceChildren();
-        for (const cardData of this.#adsData) {
-            const card = new AdCard(cardData, this.#adsContainer);
-            await card.render();
-        }
 
+        await this.renderAds();
         this.#pageContent.appendChild(this.#adsContainer);
 
         this.#mainPhotoContainer.render(this.#root);
         this.#root.appendChild(this.#pageContent);
+    }
+
+    async renderAds() {
+        this.#adsContainer.replaceChildren();
+        for (const cardData of this.#adsData) {
+            const card = new AdCard(cardData, this.#adsContainer);
+            await card.render();
+        }
     }
 }
 

@@ -1,12 +1,15 @@
 'use strict';
 
-import { FilterValues } from '../../modules/Types';
+import { AdsFilters } from '../../modules/Types';
 
 export default class Filter {
     #config;
     #filterContainer: HTMLFormElement;
+    #onApply: (params: AdsFilters) => void;
 
-    constructor() {
+    constructor(onApply: (params: AdsFilters) => void) {
+        this.#onApply = onApply;
+
         this.#config = {
             geoposition: {
                 name: 'geo',
@@ -14,22 +17,27 @@ export default class Filter {
                 variations: {
                     city: {
                         text: 'В моём городе',
+                        value: undefined,
                         isDefault: true,
                     },
                     '10km': {
                         text: 'В радиусе 10 км',
+                        value: '10',
                         isDefault: false,
                     },
                     '5km': {
                         text: 'В радиусе 5 км',
+                        value: '5',
                         isDefault: false,
                     },
                     '3km': {
                         text: 'В радиусе 3 км',
+                        value: '3',
                         isDefault: false,
                     },
                     '1km': {
                         text: 'В радиусе 1 км',
+                        value: '1',
                         isDefault: false,
                     },
                 },
@@ -60,16 +68,19 @@ export default class Filter {
                 variations: {
                     nm: {
                         text: 'Не имеет значения',
+                        value: undefined,
                         isDefault: true,
                     },
                     male: {
                         text: 'Муж.',
+                        value: 'male',
                         isDefault: false,
                     },
                     female: {
                         text: 'Жен.',
+                        value: 'female',
                         isDefault: false,
-                    }
+                    },
                 },
             },
             visitors: {
@@ -78,22 +89,27 @@ export default class Filter {
                 variations: {
                     nm: {
                         text: 'Не имеет значения',
+                        value: undefined,
                         isDefault: true,
                     },
                     gte5: {
                         text: 'Больше 5 гостей',
+                        value: 5,
                         isDefault: false,
                     },
                     gte10: {
                         text: 'Больше 10 гостей',
+                        value: 10,
                         isDefault: false,
                     },
                     gte20: {
                         text: 'Больше 20 гостей',
+                        value: 20,
                         isDefault: false,
                     },
                     gte50: {
                         text: 'Больше 50 гостей',
+                        value: 50,
                         isDefault: false,
                     },
                 },
@@ -106,9 +122,11 @@ export default class Filter {
         this.#render();
     }
 
-    addButtonEventListener(){
-        const button = this.#filterContainer.querySelector('.apply-button') as HTMLButtonElement;
-        button?.addEventListener('click', (e)=>{
+    addButtonEventListener() {
+        const button = this.#filterContainer.querySelector(
+            '.apply-button'
+        ) as HTMLButtonElement;
+        button?.addEventListener('click', (e) => {
             e.preventDefault();
             this.getFilterValues();
         });
@@ -118,23 +136,40 @@ export default class Filter {
      * @description Возвращает данные фильтра
      * @returns {FilterValues} JSON с данными фильтра
      */
-    getFilterValues(): FilterValues {
-        const values = {} as FilterValues;
+    getFilterValues(): AdsFilters {
+        const values = {} as AdsFilters;
 
-        const geoInputs = this.#filterContainer.querySelectorAll('input[name="geo"]') as NodeListOf<HTMLInputElement>;
-        values.geo = Array.from(geoInputs).find(input => input.checked)?.value || '';
-    
-        const ratingInputs = this.#filterContainer.querySelectorAll('input[name="rating"]')  as NodeListOf<HTMLInputElement>;
-        values.rating = Array.from(ratingInputs).some(input => input.checked);
-    
-        const newInputs = this.#filterContainer.querySelectorAll('input[name="new"]')  as NodeListOf<HTMLInputElement>;
-        values.new = Array.from(newInputs).some(input => input.checked);
-    
-        const sexInputs = this.#filterContainer.querySelectorAll('input[name="sex"]')  as NodeListOf<HTMLInputElement>;
-        values.sex = Array.from(sexInputs).find(input => input.checked)?.value || '';
-    
-        const visInputs = this.#filterContainer.querySelectorAll('input[name="vis"]')  as NodeListOf<HTMLInputElement>;
-        values.vis = Array.from(visInputs).find(input => input.checked)?.value || '';
+        const geoInputs = this.#filterContainer.querySelectorAll(
+            'input[name="geo"]'
+        ) as NodeListOf<HTMLInputElement>;
+        values.distance = (parseInt(
+            Array.from(geoInputs).find((input) => input.checked)!.value
+        ) || undefined) as typeof values.distance;
+
+        const ratingInputs = this.#filterContainer.querySelectorAll(
+            'input[name="rating"]'
+        ) as NodeListOf<HTMLInputElement>;
+        values.rating = Array.from(ratingInputs).some((input) => input.checked)
+            ? 4
+            : undefined;
+
+        const newInputs = this.#filterContainer.querySelectorAll(
+            'input[name="new"]'
+        ) as NodeListOf<HTMLInputElement>;
+        values.new = Array.from(newInputs).some((input) => input.checked);
+
+        const sexInputs = this.#filterContainer.querySelectorAll(
+            'input[name="sex"]'
+        ) as NodeListOf<HTMLInputElement>;
+        values.gender = (Array.from(sexInputs).find((input) => input.checked)
+            ?.value || undefined) as typeof values.gender;
+
+        const visInputs = this.#filterContainer.querySelectorAll(
+            'input[name="vis"]'
+        ) as NodeListOf<HTMLInputElement>;
+        values.guests = (parseInt(
+            Array.from(visInputs).find((input) => input.checked)!.value
+        ) || undefined) as typeof values.guests;
         console.log(values);
         return values;
     }
