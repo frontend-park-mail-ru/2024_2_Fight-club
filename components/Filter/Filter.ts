@@ -128,7 +128,7 @@ export default class Filter {
         ) as HTMLButtonElement;
         button?.addEventListener('click', (e) => {
             e.preventDefault();
-            this.getFilterValues();
+            this.#onApply(this.getFilterValues());
         });
     }
 
