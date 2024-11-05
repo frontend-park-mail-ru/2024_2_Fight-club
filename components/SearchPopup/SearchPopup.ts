@@ -1,5 +1,6 @@
 'use strict';
 
+import router from '../../modules/Router';
 import { City } from '../../modules/Types';
 import CityPage from '../CityPage/CityPage';
 
@@ -75,14 +76,9 @@ class SearchPopup {
             .getElementsByTagName('a');
 
         Object.values(hrefs).forEach((href) => {
-            href.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.body.classList.remove('no-scroll');
-                const cityPage = new CityPage(href.id);
-                cityPage.render(
-                    document.querySelector('.page-container') as HTMLElement
-                );
-            });
+            this.#closeOverlay();
+            document.body.classList.remove('no-scroll');
+            href.href = `/ad-cities/?city=${href.id}`;
         });
     }
 
