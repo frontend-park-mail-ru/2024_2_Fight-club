@@ -167,7 +167,7 @@ class APIClient {
         uuid: string,
         { username, name, email, sex, birthdate, isHost, avatar }: EditParams
     ) {
-        const url = this.BASE_URL + `/users/${uuid}`;
+        const url = this.BASE_URL + '/users';
         const formData = new FormData();
 
         const metadata = {
