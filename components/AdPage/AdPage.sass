@@ -1,3 +1,5 @@
+@use '../../mixins'
+
 .ad-page
   max-width: 70%
   margin: 50px auto
@@ -101,93 +103,80 @@
     font-style: italic
 
 // PROFILE
-.profile-container 
-  border: solid 
+.ad-page-profile-container 
+  border: solid
   border-width: 1px 
   border-radius: 10px 
   display: flex 
   flex-direction: column 
   height: min-content 
   max-width: 280px 
-  padding-inline-start: 40px 
-  padding-inline-end: 40px 
+  padding: 10px 20px
   background-color: white 
-.profile-container__center 
-  display: flex 
-  flex-direction: column 
-  align-items: center 
-.profile-container__photo 
-  border: solid 
-  border-radius: 50% 
-  border-width: 1px 
-  width: 200px 
-  height: 200px 
-  margin-top: 10% 
-.profile-container__photo__img1 
-  border-radius: 50% 
-  width: 200px 
-  height: 200px 
-.profile-container__p1 
-  margin-top: 5% 
-  font-style: italic 
-  font-size: 28px 
-  font-weight: 500 
-.profile-container__p2 
-  margin-top: 5% 
-  font-style: italic 
-  font-size: 20px 
-.profile-container__hr 
-  margin-top: 5% 
-  width: 100% 
-.profile-container__raiting 
-  display: flex 
-  flex-direction: row 
-  justify-content: space-between 
-  align-items: center 
-  padding-left: 10px 
-  width: 100% 
-  margin-top: 5% 
-.profile-container__score-container 
-  display: flex 
-  align-items: center 
-.profile-container__img2 
-  padding-right: 10px 
-.profile-container__score 
-  font-size: 20px 
-  font-weight: 300 
-  font-style: italic 
-.profile-container__div 
-  display: flex 
-  flex-direction: row 
-  align-items: center 
-  margin-top: 5% 
-.profile-container__p 
-  font-style: italic 
-  font-size: 20px 
-  width: 45% 
-.profile-container__info 
-  font-style: italic 
-  font-size: 20px 
-  width: 55% 
+  gap: 10px
+  &__center 
+    text-align: center
+  &_photo 
+    border: solid 
+    border-radius: 50% 
+    border-width: 1px 
+    width: 200px 
+    height: 200px 
+    margin-top: 10% 
+  &__photo__img1 
+    border-radius: 50% 
+    width: 200px 
+    height: 200px 
+  &__p1 
+    margin-top: 5% 
+    font-style: italic 
+    font-size: 28px 
+    font-weight: 500 
+  &__p2 
+    margin-top: 5% 
+    font-style: italic 
+    font-size: 20px 
+  &__hr 
+    width: 100% 
+  &__raiting 
+    display: flex 
+    flex-direction: row 
+    justify-content: space-between 
+    align-items: center 
+    padding-left: 10px 
+    width: 100% 
+    margin-top: 5% 
+  &__score-container 
+    display: flex 
+    align-items: center 
+  &_img2 
+    width: fit-content
+    padding-right: 10px 
+  &__score 
+    font-size: 20px 
+    font-weight: 300 
+    font-style: italic 
+  &__div 
+    gap: 10px
+    display: flex 
+    width: 100%
+    flex-direction: row 
+    align-items: center 
+    margin-top: 5% 
+    justify-content: space-between
+    width: fit-content
+  &__p
+    font-style: italic 
+    font-size: 20px 
+  &__info 
+    font-style: italic 
+    font-size: 20px 
 
-.profile-container__write-msg-button
-  margin: 20px 0
-  background-color: #FFA552 
-  color: white 
-  padding: 0 20px
-  font-style: italic
-  min-width: fit-content
-  max-width: 150px 
-  border-radius: 10px 
-  border: none 
-  height: 35px 
-  font-size: 16px 
-  font-weight: 600 
-  cursor: pointer 
+  &__write-msg-button
+    @include mixins.button
 
-
-.profile-container__show-on-map-button
-  color: #808080
-  text-align: center
-  margin-bottom: 10px
-  cursor: pointer
+  &__show-on-map-button
+    color: #808080
+    text-align: center
+    margin-bottom: 10px
+    cursor: pointer
