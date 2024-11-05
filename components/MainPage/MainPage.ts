@@ -41,10 +41,6 @@ class MainPage {
 
     async render() {
         this.#adsContainer.replaceChildren();
-        for (const cardData of this.#adsData) {
-            const card = new AdCard(cardData, this.#adsContainer);
-            await card.render();
-        }
 
         await this.renderAds();
         this.#pageContent.appendChild(this.#adsContainer);
