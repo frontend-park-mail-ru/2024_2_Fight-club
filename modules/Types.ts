@@ -59,3 +59,17 @@ export interface FilterValues {
     sex: string;
     vis: string;
 }
+
+export interface ProfileInfo {
+    avatar: string;
+    birthDate: string;
+    email: string;
+    guestCount: number;
+    id: string;
+    isHost: boolean;
+    name: string;
+    password: string;
+    score: number;
+    sex: string;
+    username: string;
+}

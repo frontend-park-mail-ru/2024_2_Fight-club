@@ -1,6 +1,7 @@
 'use strict';
 
-import { AdvertData } from '../../modules/Types';
+import { AdvertData, ProfileInfo } from '../../modules/Types';
+import { calculateAge } from '../../modules/Utils';
 
 const MAIN_IMG_DIV_SELECTOR = '.js-main-img-div';
 const MAIN_IMG_SELECTOR = '.advert-images-carousel__main-img';
@@ -14,13 +15,17 @@ const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
 const SECONDARY_IMG_SELECTED_CLASS_NAME =
     'advert-images-carousel__secondary_img_current';
 
-export default function AdPage(data: AdvertData) {
+export default function AdPage(data: AdvertData, authorInfo: ProfileInfo) {
     const images = data.images.map((x) => x.path);
     let currentIndex = 0;
 
     const template = Handlebars.templates['AdPage.hbs'];
     const templateContainer = document.createElement('div');
-    templateContainer.innerHTML = template(data);
+    templateContainer.innerHTML = template({
+        ...data,
+        ...authorInfo,
+        age: calculateAge(authorInfo.birthDate),
+    });
 
     const mainImg = templateContainer.querySelector(
         MAIN_IMG_SELECTOR

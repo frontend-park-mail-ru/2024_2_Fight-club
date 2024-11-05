@@ -18,7 +18,7 @@
         <div class='advert-desc'>
             <div class='advert-desc__text-data'>
                 <span class='advert-desc__label'>Город:</span>
-                <span class='advert-desc__value'>{{city}}</span>
+                <span class='advert-desc__value'>{{cityName}}</span>
                 <span class='advert-desc__label'>Адрес:</span>
                 <span class='advert-desc__value'>{{address}}</span>
                 <span class='advert-desc__label'>Комнаты:</span>
@@ -37,47 +37,50 @@
         />
     </div>
 
-    <aside class='profile-container'>
-        <div class='profile-container__center'>
-            <div class='profile-container__photo'>
+    <aside class='ad-page-profile-container'>
+        <div class='ad-page-profile-container__center'>
+            <div class='ad-page-profile-container__photo'>
                 <img
                     src='/default_user_icon.png'
-                    class='profile-container__photo__img1'
+                    class='ad-page-profile-container__photo__img1'
                 />
             </div>
-            <p class='profile-container__p1'>{{author.name}}</p>
-            <p class='profile-container__p2'>{{author.locationMain}}</p>
-            <hr class='profile-container__hr' />
+            <p class='ad-page-profile-container__p1'>{{author.name}}</p>
+            <p class='ad-page-profile-container__p2'>{{author.locationMain}}</p>
+            <hr class='ad-page-profile-container__hr' />
         </div>
 
-        <div class='profile-container__div'>
-            <div class='profile-container__p'>Рейтинг:</div>
-            <div class='profile-container__info'>
-                <span class='profile-container__score-container'>
+        <div class='ad-page-profile-container__div'>
+            <div class='ad-page-profile-container__p'>Рейтинг:</div>
+            <div class='ad-page-profile-container__info'>
+                <span class='ad-page-profile-container__score-container'>
                     <img
-                        class='profile-container__img2'
+                        class='ad-page-profile-container__img2'
                         src='/star.png'
                         alt='star'
                     />
                     <span
-                        class='profile-container__score'
-                    >{{author.score}}</span>
+                        class='ad-page-profile-container__score'
+                    >{{author.rating}}</span>
                 </span>
             </div>
         </div>
-        <div class='profile-container__div'>
-            <div class='profile-container__p'>Пол:</div>
-            <p class='profile-container__info'>{{author.sex}}</p>
+        <div class='ad-page-profile-container__div'>
+            <div
+                class='ad-page-profile-container__p'
+            >Пол:{{author.rating}}</div>
+            <p class='ad-page-profile-container__info'>{{author.sex}}</p>
         </div>
-        <div class='profile-container__div'>
-            <div class='profile-container__p'>Возраст:</div>
-            <p class='profile-container__info'>{{author.age}}</p>
+        <div class='ad-page-profile-container__div'>
+            <div class='ad-page-profile-container__p'>Возраст:</div>
+            <p class='ad-page-profile-container__info'>{{age}}</p>
         </div>
 
-        <button class='profile-container__write-msg-button'>Напишите Leo прямо
-            сейчас
+        <button class='ad-page-profile-container__write-msg-button'>Напишите Leo
+            прямо сейчас
         </button>
 
-        <a class='profile-container__show-on-map-button'>Показать на карте</a>
+        <a class='ad-page-profile-container__show-on-map-button'>Показать на
+            карте</a>
     </aside>
 </div>
