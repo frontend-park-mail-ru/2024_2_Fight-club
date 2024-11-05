@@ -1,13 +1,11 @@
 'use strict';
 
-import router from '../../modules/Router';
 import { City } from '../../modules/Types';
-import CityPage from '../CityPage/CityPage';
 
 class SearchPopup {
     #cities: City[];
 
-    constructor(cities) {
+    constructor(cities: City[]) {
         document.body.classList.add('no-scroll');
         this.#cities = cities;
     }
@@ -16,11 +14,7 @@ class SearchPopup {
      * @private
      * @description Получение данных с сервера
      */
-    #splitByThreeGroups(): {
-        moscow: City;
-        spb: City;
-        groups: [City[], City[], City[]];
-    } {
+    #splitByThreeGroups() {
         const moscow = Object.values(this.#cities).find(
             (city) => city.title === 'Москва'
         ) as City;
