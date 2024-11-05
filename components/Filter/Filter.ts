@@ -58,7 +58,7 @@ export default class Filter {
                 variations: {
                     true: {
                         text: 'Новые за эту неделю',
-                        isDefault: true,
+                        isDefault: false,
                     },
                 },
             },
