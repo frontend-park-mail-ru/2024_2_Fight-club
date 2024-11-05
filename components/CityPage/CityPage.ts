@@ -29,13 +29,13 @@ class CityPage {
             const data = await infoResponse.json();
             this.#name = data.city['title'];
             this.#description = data.city['description'];
-            this.#photo = this.#addPrefixImage(data.city['image']);
-        }  else {
+            this.#photo = data.city['image'];
+        } else {
             console.log('error by getting info');
         }
 
         const placesResponse = await APIClient.getCitiesAds(name);
-        if (placesResponse.ok) {    
+        if (placesResponse.ok) {
             const data = await placesResponse.json();
             this.#places = data['places'];
         } else {
@@ -46,10 +46,6 @@ class CityPage {
         console.log(this.#description);
         console.log(this.#photo);
         console.log(this.#places);
-    }
-
-    #addPrefixImage(url: string): string{
-        return `http://localhost:9000${url}`;
     }
 
     /**
