@@ -5,6 +5,8 @@ import ApiClient from '../../modules/ApiClient';
 import router from '../../modules/Router';
 
 import { City, AdvertData } from '../../modules/Types';
+import { validateImage } from '../../modules/Utils';
+import PopupAlert from '../PopupAlert/PopupAlert';
 
 const MAIN_IMG_DIV_SELECTOR = '.js-main-img-div';
 const MAIN_IMG_SELECTOR = '.advert-images-carousel__main-img';
@@ -196,11 +198,19 @@ export default class EditAdvertPage {
         this.#overlay.classList.remove(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
     }
 
-    #onImageLoaded = (e: Event) => {
+    #onImageLoaded = async (e: Event) => {
         const elem = e.target as HTMLInputElement;
         const files = elem.files;
 
         const image = files![0];
+
+        try {
+            await validateImage(image);
+        } catch (error) {
+            this.#templateContainer.appendChild(PopupAlert('' + error));
+            return;
+        }
+
         this.#uploadedImages.push(image);
 
         const tempContainer = document.createElement('div');

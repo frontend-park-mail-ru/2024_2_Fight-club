@@ -12,7 +12,7 @@ fi
 CERT_DIR="/etc/nginx/ssl"
 
 # Проверка наличия сертификата и ключа
-if [[ ! -f "$CERT_DIR/pootnick.crt" || ! -f "$CERT_DIR/pootnick.key" ]]; then
+if [ ! -f "$CERT_DIR/pootnick.crt" ] || [ ! -f "$CERT_DIR/pootnick.key" ]; then
     echo "Сертификаты не найдены, создаются самоподписанные сертификаты..."
 
     # Создание самоподписанного сертификата

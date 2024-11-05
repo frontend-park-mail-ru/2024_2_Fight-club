@@ -6,6 +6,9 @@ const ALWAYS_CACHE = [
     '/journey.jpg',
     '/default_user_icon.png',
     '/style.css',
+    '/fonts/Dimkin-Light.ttf',
+    '/fonts/Dimkin-Regular.ttf',
+    '/fonts/MarckScript-Regular.ttf',
 ];
 
 const CACHE_BLACKLIST = [];
@@ -45,7 +48,7 @@ self.addEventListener('fetch', (event) => {
                 // }
                 return fetchResponse;
             } catch {
-                console.log("Oops! Network error. Let's get it from cache");
+                console.log('Oops! Network error. Let\'s get it from cache');
                 if (event.request.url in CACHE_BLACKLIST) {
                     // 404
                 }
