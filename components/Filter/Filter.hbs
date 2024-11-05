@@ -1,0 +1,61 @@
+<form class="filter">
+  <div class="filter-group geoposition-group">
+    <span>
+      <a href="#"><img src="/svg/down-arrow.svg" width="24" /></a>
+      <p>По геопозиции</p>
+    </span>
+    {{#each geoposition.variations}}
+      <div class="filter-element">
+        <input type="radio" id="geo-{{@index}}" name="geo" value="{{this.value}}" {{#if this.isDefault}}checked{{/if}}/>
+        <label for="geo-{{@index}}">{{this.text}}</label>
+      </div>
+    {{/each}}
+  </div>
+    <hr>
+  <div class="filter-group rating-group">
+    {{#each rating.variations}}
+      <div class="filter-element">
+        <input type="checkbox" id="rating-{{@index}}" name="rating" value="{{@key}}" {{#if this.isDefault}}checked{{/if}}/>
+        <label for="rating-{{@index}}">{{this.text}}</label>
+      </div>
+    {{/each}}
+  </div>
+    <hr>
+  <div class="filter-group new-group">
+    {{#each new.variations}}
+      <div class="filter-element">
+        <input type="checkbox" id="new-{{@index}}" name="new" value="{{@key}}" {{#if this.isDefault}}checked{{/if}}/>
+        <label for="new-{{@index}}">{{this.text}}</label>
+      </div>
+    {{/each}}
+  </div>
+    <hr>
+  <div class="filter-group gender-group">
+    <span>
+      <a href="#"><img src="/svg/down-arrow.svg" width="24" /></a>
+      <p>Пол хоста</p>
+    </span>
+    {{#each gender.variations}}
+      <div class="filter-element">
+        <input type="radio" id="sex-{{@index}}" name="sex" value="{{this.value}}" {{#if this.isDefault}}checked{{/if}}/>
+        <label for="sex-{{@index}}">{{this.text}}</label>
+      </div>
+    {{/each}}
+  </div>
+    <hr>
+  <div class="filter-group visitors-group">
+    <span>
+      <a href="#"><img src="/svg/down-arrow.svg" width="24" /></a>
+      <p>Количество гостей</p>
+    </span>
+    {{#each visitors.variations}}
+      <div class="filter-element">
+        <input type="radio" id="vis-{{@index}}" name="vis" value="{{this.value}}" {{#if this.isDefault}}checked{{/if}}/>
+        <label for="vis-{{@index}}">{{this.text}}</label>
+      </div>
+    {{/each}}
+  </div>
+  
+  <button type="submit" class="apply-button">Применить</button>
+  <button type="reset" class="reset-button">Сбросить</button>
+</form>

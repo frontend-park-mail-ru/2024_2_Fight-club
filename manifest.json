@@ -1,0 +1,17 @@
+{
+    "lang": "ru-ru",
+    "name": "Путник — сервис для каучсерфинга",
+    "short_name": "Путник",
+    "description": "Сервис для каучсерфинга",
+    "start_url": "/",
+    "background_color": "#2f3d58",
+    "theme_color": "#2f3d58",
+    "orientation": "portrait",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "favicon.png",
+            "sizes": "512x512"
+        }
+    ]
+}

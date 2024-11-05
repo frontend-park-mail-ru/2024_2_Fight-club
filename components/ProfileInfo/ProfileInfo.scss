@@ -1,12 +1,12 @@
 .profile-container{
-    margin: 40px 0px 40px 250px;
+    margin: 40px 0px 0px 35%;
     border: solid;
     border-width: 1px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    height: 90%;
-    max-height: 90%;
+    min-height: 660px;
+    height: 70vh;
     max-width: 280px;
     padding-inline-start: 40px;
     padding-inline-end: 40px;
@@ -32,6 +32,7 @@
     border-radius: 50%;
     width: 200px;
     height: 200px;
+    object-fit: cover;
 }
 
 .profile-container__p1 {
@@ -112,4 +113,11 @@
     font-weight: 600;
     cursor: pointer;
     margin-bottom: 5%;
+}
+
+.justify-profile-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 40%;
 }

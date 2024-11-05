@@ -4,10 +4,11 @@ import Validation from '../../modules/Validation';
 import APIClient from '../../modules/ApiClient';
 import { clearPage } from '../../modules/Clear';
 
+import PopupAlert from '../PopupAlert/PopupAlert';
+
 interface userData {
     name: string | undefined;
     username: string | undefined;
-    address: string | undefined;
     birthdate: string | undefined;
     email: string | undefined;
     sex: string | undefined;
@@ -27,7 +28,6 @@ class ProfileData {
     #profileData: userData = {
         name: undefined,
         username: undefined,
-        address: undefined,
         birthdate: undefined,
         email: undefined,
         sex: undefined,
@@ -75,12 +75,12 @@ class ProfileData {
      * @param {number} sexValue
      * @description Запоминаем значение для корректного дефолтного значения пола
      */
-    #rememberSexValue(sexValue: number): void {
-        if (sexValue == 1) {
+    #rememberSexValue(sexValue: string): void {
+        if (sexValue === 'M') {
             this.#sex.male = true;
             this.#sex.female = false;
             this.#sex.ns = false;
-        } else if (sexValue == 2) {
+        } else if (sexValue === 'F') {
             this.#sex.male = false;
             this.#sex.female = true;
             this.#sex.ns = false;
@@ -96,9 +96,9 @@ class ProfileData {
      * @param {number} sex
      * @returns {string}
      */
-    #calculateSex(sex: number): 'Не указано' | 'Муж.' | 'Жен.' {
-        if (sex === 1) return 'Муж.';
-        else if (sex === 2) return 'Жен.';
+    #calculateSex(sex: string): 'Не указано' | 'Муж.' | 'Жен.' {
+        if (sex === 'M') return 'Муж.';
+        else if (sex === 'F') return 'Жен.';
         else return 'Не указано';
     }
 
@@ -107,20 +107,21 @@ class ProfileData {
      * @description Получение данных
      */
     async #getProfileData(): Promise<void> {
-        const response = await APIClient.profile();
+        const userData = await APIClient.getSessionData();
+        const uuid = userData.id;
+        const response = await APIClient.profile(uuid);
         if (response.ok) {
             const data = await response.json();
             this.#profileData.name = data.name;
-            this.#profileData.username = data.Username;
-            this.#profileData.email = data.Email;
-            this.#profileData.isHost = data.IsHost;
-            this.#profileData.avatar = data.Avatar;
-            this.#profileData.birthdate = data.Birthdate.slice(0, 10);
+            this.#profileData.username = data.username;
+            this.#profileData.email = data.email;
+            this.#profileData.isHost = data.isHost;
+            this.#profileData.avatar = data.avatar;
+            this.#profileData.birthdate = data.birthDate.slice(0, 10);
             if (this.#profileData.birthdate != '0001-01-01')
                 this.#showBirthdate = true;
-            this.#profileData.address = data.Address;
-            this.#profileData.sex = this.#calculateSex(data.Sex);
-            this.#rememberSexValue(data.Sex);
+            this.#profileData.sex = this.#calculateSex(data.sex);
+            this.#rememberSexValue(data.sex);
         } else if (response.status !== 401) {
             console.error('Wrong response from server', response);
         }
@@ -136,15 +137,15 @@ class ProfileData {
             username: inputs[0].value,
             name: inputs[1].value,
             email: inputs[2].value,
-            sex: inputs[3].checked ? 3 : inputs[4].checked ? 1 : 2,
-            address: inputs[6].value,
-            birthdate: new Date(inputs[7].value + 'T00:00:00.000+00:00'),
-            isHost: inputs[8].checked,
-            password: inputs[9].value,
-            avatar: inputs[10]?.files?.[0] ?? null,
+            sex: inputs[3].checked ? null : inputs[4].checked ? 'M' : 'F',
+            birthdate: new Date(inputs[6].value + 'T00:00:00.000+00:00'),
+            isHost: inputs[7].checked,
+            avatar: inputs[8]?.files?.[0] ?? null,
         };
 
-        const response = await APIClient.editProfile(data);
+        const userData = await APIClient.getSessionData();
+        const uuid = userData.id;
+        const response = await APIClient.editProfile(uuid, data);
         if (response.ok) {
             clearPage('form', 'profile');
             const dataContainer = document.getElementById('container');
@@ -157,7 +158,9 @@ class ProfileData {
 
             dataContainer?.appendChild(this.#content);
         } else {
-            console.error('Wrong response from server', response);
+            clearPage('profile');
+            const errorMessage = PopupAlert('Неверный размер или разрешение фото');
+            document.querySelector('#profile-content')?.appendChild(errorMessage);
         }
     }
 
@@ -171,13 +174,11 @@ class ProfileData {
         const nameInput = form.elements.name;
         const usernameInput = form.elements.username;
         const emailInput = form.elements.email;
-        const addressInput = form.elements.address;
         const birthdateInput = form.elements.birthdate;
 
         const nameValidInfo = Validation.validateName(nameInput);
         const usernameValidInfo = Validation.validateUsername(usernameInput);
         const emailValidInfo = Validation.validateEmail(emailInput);
-        const addressValidInfo = Validation.validateAddress(addressInput);
         const birthdateValidInfo = Validation.validateBirthdate(birthdateInput);
 
         if (!nameValidInfo.ok) {
@@ -198,12 +199,6 @@ class ProfileData {
             this.#hideErrorMsg(emailInput);
         }
 
-        if (!addressValidInfo.ok) {
-            this.#showErrorMessage(addressInput, addressValidInfo.text);
-        } else {
-            this.#hideErrorMsg(addressInput);
-        }
-
         if (!birthdateValidInfo.ok) {
             this.#showErrorMessage(birthdateInput, birthdateValidInfo.text);
         } else {
@@ -214,7 +209,6 @@ class ProfileData {
             nameValidInfo.ok &&
             usernameValidInfo.ok &&
             emailValidInfo.ok &&
-            addressValidInfo.ok &&
             birthdateValidInfo.ok
         );
     }
@@ -346,6 +340,11 @@ class ProfileData {
                 await this.#putData();
                 await this.#renderProfileInfo();
                 this.#addButtonEventListener();
+
+                //Обновление аватарки в хэдере
+                const headerImg = document.querySelector('.js-header-avatar') as HTMLImageElement;
+                const profileInfoImg = document.querySelector('.js-profile-info-avatar') as HTMLImageElement;
+                headerImg.src = profileInfoImg.src;
             }
         });
     }
@@ -435,7 +434,7 @@ class ProfileData {
 
         const map = document.createElement('img');
         map.classList.add('data-container__wrapper__img');
-        map.src = '/images/myMap.jpg';
+        map.src = '/myMap.jpg';
 
         wrapper.appendChild(map);
         this.#content.appendChild(wrapper);

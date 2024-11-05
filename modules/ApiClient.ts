@@ -4,7 +4,7 @@ import Ajax from './Ajax';
 import { RegisterParams, AdsFilters, LoginParams, EditParams } from './Types';
 
 class APIClient {
-    BASE_URL = `http://${window.location.hostname}:8008/api`;
+    BASE_URL = `${location.protocol}//${window.location.hostname}:8008/api`;
 
     /**
      * @public
@@ -12,13 +12,26 @@ class APIClient {
      */
     async getAds(filters?: AdsFilters) {
         try {
-            let response;
-            if (filters && filters.city) {
-                console.log(123);
-                response = await fetch(this.BASE_URL + `/ads/${filters.city}`);
-            } else {
-                response = await fetch(this.BASE_URL + '/ads');
+            let url = '/ads?';
+
+            if (filters?.distance) {
+                url += `&distance=${filters.distance}`;
             }
+            if (filters?.rating) {
+                url += `&rating=${filters.rating}`;
+            }
+            if (filters?.new) {
+                url += '&new=true';
+            }
+            if (filters?.gender) {
+                url += `&gender=${filters.gender}`;
+            }
+            if (filters?.guests) {
+                url += `&guests=${filters.guests}`;
+            }
+
+            const response = await fetch(this.BASE_URL + url);
+
             let data = await response.json();
             data = data['places'];
             if (data === undefined) return [];
@@ -27,6 +40,14 @@ class APIClient {
             console.error(error);
         }
         return [];
+    }
+
+    async getAdsOfUser(user_id: string) {
+        const response = await Ajax.get(
+            this.BASE_URL + `/users/${user_id}/ads`
+        );
+        const data = await response.json();
+        return data;
     }
 
     async getAd(uuid: string) {
@@ -65,6 +86,21 @@ class APIClient {
             url: this.BASE_URL + '/ads',
             body: data,
         });
+    }
+
+    async updateAdvert(id: string, data: FormData) {
+        return await Ajax.put({
+            url: this.BASE_URL + `/ads/${id}`,
+            body: data,
+        });
+    }
+
+    async deleteImageFromAdvert(advertId: string, imageId: number) {
+        const response = await Ajax.delete({
+            url: this.BASE_URL + `/ads/${advertId}/images/${imageId}`,
+            body: {},
+        });
+        return await response.json();
     }
 
     /**
@@ -106,28 +142,32 @@ class APIClient {
         return Ajax.post({ url, body });
     }
 
-    async city(name: string) {
-        const url = this.BASE_URL + `/getPlacesPerCity/${name}`;
+    async getCity(name: string) {
+        const url = this.BASE_URL + `/cities/${name}`;
         return Ajax.get(url);
     }
 
-    async profile() {
-        const url = this.BASE_URL + '/getUserById';
+    async getCitiesAds(name: string) {
+        const url = this.BASE_URL + `/ads/cities/${name}`;
         return Ajax.get(url);
     }
 
-    async editProfile({
-        username,
-        name,
-        email,
-        sex,
-        address,
-        birthdate,
-        isHost,
-        password,
-        avatar,
-    }: EditParams) {
-        const url = this.BASE_URL + '/putUser';
+    async getCities() {
+        const response = await Ajax.get(this.BASE_URL + '/cities');
+        const data = await response.json();
+        return data['cities'];
+    }
+
+    async profile(uuid: string) {
+        const url = this.BASE_URL + `/users/${uuid}`;
+        return Ajax.get(url);
+    }
+
+    async editProfile(
+        uuid: string,
+        { username, name, email, sex, birthdate, isHost, avatar }: EditParams
+    ) {
+        const url = this.BASE_URL + '/users';
         const formData = new FormData();
 
         const metadata = {
@@ -135,10 +175,8 @@ class APIClient {
             name: name,
             email: email,
             sex: sex,
-            address: address,
-            birthdate: birthdate,
+            birthDate: birthdate,
             isHost: isHost,
-            password: password,
         };
 
         formData.append('metadata', JSON.stringify(metadata));

@@ -1,12 +1,6 @@
 'use strict';
 
-import { logout } from '/modules/Auth';
-import headerIcon from '/images/icon.jpg';
-import headerName from '/images/name.png';
-import defaultUserIcon from '/images/default_user_icon.png';
-import messagesIcon from '/images/svg/messages.svg';
-import favoritesIcon from '/images/svg/favorites.svg';
-import notificationsIcon from '/images/svg/notifications.svg';
+import ApiClient from '../../modules/ApiClient';
 
 interface HeaderCallbacks {
     mainPage: () => void;
@@ -16,7 +10,7 @@ interface HeaderCallbacks {
     favoritesPage: () => void;
     notificationsPage: () => void;
     signInPage: () => void;
-    profileList: ()=> void;
+    profileList: () => void;
 }
 
 class Header {
@@ -36,35 +30,32 @@ class Header {
         this.#config = {
             menu: {
                 Main: {
-                    href: '/dashboard',
+                    href: '/',
                     text: 'Главная',
-                    callback: headerCallbacks.mainPage,
                 },
                 Map: {
                     href: '/map',
                     text: 'Карта',
-                    callback: headerCallbacks.mapPage,
                 },
                 Articles: {
                     href: '/articles',
                     text: 'Статьи',
-                    callback: headerCallbacks.articlesPage,
                 },
             },
 
             signs: {
                 Messages: {
-                    src: messagesIcon,
+                    src: '/svg/messages.svg',
                     href: '/messages',
                     callback: headerCallbacks.messagesPage,
                 },
                 Favorites: {
-                    src: favoritesIcon,
+                    src: '/svg/favorites.svg',
                     href: '/favorites',
                     callback: headerCallbacks.favoritesPage,
                 },
                 Notifications: {
-                    src: notificationsIcon,
+                    src: '/svg/notifications.svg',
                     href: '/notifications',
                     callback: headerCallbacks.notificationsPage,
                 },
@@ -79,40 +70,30 @@ class Header {
         this.#render();
     }
 
-    /**
-     * @private
-     */
     #renderIcon() {
         const logoImg = document.createElement('img');
-        logoImg.src = headerIcon;
+        logoImg.src = '/icon.jpg';
         logoImg.classList.add('header__img1');
         this.#menuContainer.appendChild(logoImg);
     }
 
-    /**
-     * @private
-     */
     #renderMainText() {
         const nameImg = document.createElement('img');
         nameImg.classList.add('header__img2');
-        nameImg.src = headerName;
+        nameImg.src = '/name.png';
         this.#menuContainer.appendChild(nameImg);
     }
 
-    /**
-     * @private
-     */
     #renderHrefs() {
         const hrefs = document.createElement('div');
         hrefs.classList.add('header__hrefs');
         Object.entries(this.#config.menu).forEach(
-            ([key, { href, text, callback }], index) => {
+            ([key, { href, text }], index) => {
                 const menuElement = document.createElement('a');
                 menuElement.href = href;
                 menuElement.text = text;
                 menuElement.addEventListener('click', (e) => {
                     e.preventDefault();
-                    callback();
                 });
                 menuElement.classList.add('header__hrefs__href');
 
@@ -128,9 +109,6 @@ class Header {
         this.#menuContainer.appendChild(hrefs);
     }
 
-    /**
-     * @private
-     */
     #renderSigns() {
         const signsContainer = document.createElement('div');
         signsContainer.classList.add('header__signs');
@@ -153,29 +131,30 @@ class Header {
         this.#menuContainer.appendChild(signsContainer);
     }
 
-    /**
-     * @private
-     */
-    #renderButtonOrAvatar() {
+    async #renderButtonOrAvatar() {
         if (this.#isAuthorized) {
             const avatarContainer = document.createElement('div');
             avatarContainer.classList.add('header__avatar-container');
             const avatar = document.createElement('img');
-            avatar.src = defaultUserIcon;
+
+            const uuid = await ApiClient.getSessionData();
+            const data = await ApiClient.getUser(uuid.id);
+            avatar.src = data.avatar;
             avatar.width = 50;
             avatar.height = 50;
             avatar.classList.add('header__avatar-container__avatar');
+            avatar.classList.add('js-header-avatar');
 
             const options = document.createElement('button');
             options.classList.add('header__avatar-container__options');
             const optionsImage = document.createElement('img');
-            optionsImage.src = '/images/svg/options.svg';
+            optionsImage.src = '/svg/options.svg';
             optionsImage.width = 30;
             optionsImage.height = 30;
             options.appendChild(optionsImage);
 
             options.addEventListener(
-                'click', 
+                'click',
                 this.#headerCallbacks.profileList
             );
 
@@ -195,21 +174,15 @@ class Header {
         }
     }
 
-    /**
-     * @private
-     */
-    #render() {
+    async #render() {
         this.#renderIcon();
         this.#renderHrefs();
         this.#renderMainText();
         this.#renderSigns();
-        this.#renderButtonOrAvatar();
+        await this.#renderButtonOrAvatar();
     }
 
-    /**
-     * @public
-     */
-    getMainContainer() {
+    getElement() {
         return this.#menuContainer;
     }
 }

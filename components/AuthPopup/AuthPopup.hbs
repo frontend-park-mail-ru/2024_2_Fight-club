@@ -1,30 +1,37 @@
-<div class="overlay">
-    <form novalidate method="POST" class="popup" id="auth-form">
-        <div class="close-cross">
+<div class='overlay'>
+    <form novalidate method='POST' class='popup' id='auth-form'>
+        <div class='close-cross'>
             <a>
-                <img src="/images/svg/cross.svg" width="30">
+                <img src='/svg/cross.svg' width='30' />
             </a>
         </div>
-        <img class="auth-img" src="/images/name.png">
+        <img class='auth-img' src='/name.png' />
 
-        <div class="auth-message">{{ authMessage }}</div>
-        <div class="popup__failure-message none">Неправильный логин или пароль!</div>
-        <div class="popup__div">
+        <div class='auth-message'>{{authMessage}}</div>
+        <div class='popup__failure-message none'>Неправильный логин или пароль!</div>
+        <div class='popup__div'>
             {{#each inputs}}
-                <div class="popup__inputAndValidationMessage">
-                    <input name="{{@key}}" placeholder="{{this.placeholder}}" type="{{this.type}}"
-                           minlength="{{this.minLen}}" maxlength="{{this.maxLen}}"
-                           required="{{this.required}}">
+                <div class='popup__inputAndValidationMessage'>
+                    <input
+                        name='{{@key}}'
+                        placeholder='{{this.placeholder}}'
+                        type='{{this.type}}'
+                        minlength='{{this.minLen}}'
+                        maxlength='{{this.maxLen}}'
+                        required='{{this.required}}'
+                    />
 
-                    <a class="none popup__exclamation">
-                        <img src="/images/svg/exclamation.svg" width="20" alt="!">
+                    <a class='none popup__exclamation'>
+                        <img src='/svg/exclamation.svg' width='20' alt='!' />
                     </a>
-                    <div class="popup__validationMessage none"></div>
+                    <div class='popup__validationMessage none'></div>
                 </div>
             {{/each}}
 
         </div>
-        <button class="popup__button">{{buttonText}}</button>
-        <div class="have-account"><p>{{bottomText}}</p><a class="bold popup__a">{{bottomAText}}</a></div>
+        <button class='popup__button'>{{buttonText}}</button>
+        <div class='have-account'><p>{{bottomText}}</p><a
+                class='bold popup__a'
+            >{{bottomAText}}</a></div>
     </form>
 </div>

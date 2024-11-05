@@ -2,18 +2,12 @@
     <main>
         <div class='advert-images-carousel'>
             <div class='advert-images-carousel__main-img-div js-main-img-div'>
-                <img class='advert-images-carousel__img-background' />
-                <img class='advert-images-carousel__main-img' />
+                <img src="/placeholder-image.avif" class='advert-images-carousel__img-background' />
+                <img src="/placeholder-image.avif" class='advert-images-carousel__main-img' />
             </div>
             <div
                 class='advert-images-carousel__secondary_images js-secondary-images-container'
             >
-                {{#each images}}
-                    <img
-                        class='advert-images-carousel__secondary_img js-carousel-img'
-                        src='{{this}}'
-                    />
-                {{/each}}
                 <input type='file' hidden class='js-file-input' />
                 <svg
                     class='advert-images-carousel__secondary_img js-add-img-btn'
@@ -49,14 +43,19 @@
                         name='{{this.name}}'
                         required
                         minlength='{{this.minLen}}'
-                    ></textarea>
+                    >{{this.value}}</textarea>
                 {{else if this.isSelect}}
                     <select
                         name='{{this.name}}'
                         class='js-cities ad-page__edit-form__select'
                     >
                         {{#each this.options}}
-                            <option value='{{this}}'>{{this}}</option>
+                            <option
+                                value='{{this.name}}'
+                                {{#if this.selected}}
+                                selected='selected'
+                                {{/if}}
+                            >{{this.value}}</option>
                         {{/each}}
                     </select>
 
@@ -77,7 +76,7 @@
                     />
                 {{/if}}
             {{/each}}
-            <button class='ad-page__btn'>Добавить</button>
+            <button class='ad-page__btn'>{{actionButtonTitle}}</button>
         </form>
     </main>
 

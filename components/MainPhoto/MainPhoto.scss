@@ -1,5 +1,5 @@
 .photo-container {
-    background: url('../../images/journey.jpg') no-repeat center center / cover;
+    background: url('/journey.jpg') no-repeat center center / cover;
     height: 553px;
     width: 100%;
     position: relative;
@@ -15,14 +15,15 @@
 
 .hosts a {
     text-decoration: none;
-    color: #F1ECE3;
-    font-size: 30px;
-    -webkit-text-stroke: 1.5px #FFA552;
+    color: #fff;
+    font-size: 26px;
     font-family: Verdana, sans-serif;
-    font-weight: 900;
+    text-shadow: 0 2px 6px black;
+    font-weight: 500;
 }
 
 .search-container {
+    position: relative;
     width: 50%;
     height: 9%;
     padding-top: 1%;
@@ -31,11 +32,15 @@
 }
 
 .custom-search {
+    align-content: center;
+    height: 50px;
+    width: 100%;
+}
+
+.custom-search__row {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-content: center;
-    width: 100%;
+    height: 100%;
 }
 
 .custom-search input {
@@ -54,7 +59,6 @@
 
 .custom-search button {
     background-color: #ffffff;
-    background-image: url('/images/svg/search.svg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: 30px;
@@ -66,5 +70,4 @@
     margin: 0;
     padding-right: 5%;
     padding-top: 5px;
-    cursor: pointer;
 }

@@ -1,6 +1,7 @@
 'use strict';
 
 import APIClient from '../../modules/ApiClient';
+import router from '../../modules/Router';
 
 interface ProfilePopupCallbacks {
     profilePage: () => void;
@@ -13,7 +14,8 @@ class ProfilePopup {
         logoutEvent: async () => {
             const response = await APIClient.logout();
             if (response.ok) {
-                location.reload();
+                router.navigateTo('/');
+                return;
             }
             throw new Error('Failed to logout');
         },
@@ -41,7 +43,7 @@ class ProfilePopup {
             },
             logout: {
                 title: 'Выйти',
-                href: '#',
+                href: '',
                 event: this.#events.logoutEvent,
             },
         };

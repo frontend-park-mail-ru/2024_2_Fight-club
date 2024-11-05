@@ -98,7 +98,7 @@ class AdCard {
         setTimeout(() => {
             this.#makeCircleActive(toShowIndex);
             this.#currentImgIndex = toShowIndex;
-            imgElem.src = this.#data.images[toShowIndex];
+            imgElem.src = this.#data.images[toShowIndex].path;
         }, SCROLL_DELAY);
     }
 
@@ -110,7 +110,7 @@ class AdCard {
         setTimeout(() => {
             this.#makeCircleActive(0);
             this.#currentImgIndex = 0;
-            imgElem.src = this.#data.images[0];
+            imgElem.src = this.#data.images[0].path;
         }, SCROLL_DELAY);
     }
 

@@ -1,6 +1,6 @@
 <div class='ad-card' id='card-{{id}}'>
     <!-- ID is used for js not styles -->
-    <img class='ad_card__img1' src='{{images.[0]}}' alt='Ad card image' />
+    <img class='ad_card__img1' src='{{images.[0].path}}' alt='Ad card image' />
     <div class='ad-card__image-pagination-div'>
         <!-- Здесь будут кружочки -->
         <!--        <div class="circle-full"></div>-->
@@ -69,20 +69,20 @@
 
     <div class='ad-card__info'>
         <div class='ad-card__location'>
-            <p class='ad-card__p1'>{{city}}</p>
+            <p class='ad-card__p1'>{{cityName}}</p>
             <p class='ad-card__p2'>{{address}}</p>
             <a href='{{onMap}}' class='ad-card__href'>Показать на карте</a>
         </div>
         <div class='ad-card__author-info'>
             <img
                 class='ad-card__img2'
-                src='{{authorAvatar}}'
+                src='{{author.avatar}}'
                 alt='User avatar'
             />
-            <p>{{authorName}}</p>
+            <p>{{author.name}}</p>
             <div class='ad-card__score-container'>
-                <img class='ad-card__img3' src='images/star.png' alt='star' />
-                <span class='ad-card__score'>{{authorRating}}</span>
+                <img class='ad-card__img3' src='/star.png' alt='star' />
+                <span class='ad-card__score'>{{author.rating}}</span>
             </div>
         </div>
     </div>

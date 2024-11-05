@@ -8,7 +8,6 @@ import MainPage from './components/MainPage/MainPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
 import CityPage from './components/CityPage/CityPage';
 
-import Ajax from './modules/Ajax';
 import { clearPage } from './modules/Clear';
 
 import './components/precompiled-templates';
@@ -22,6 +21,7 @@ const root = document.getElementById('root')!;
 const pageContainer = document.createElement('div');
 
 import router from './modules/Router';
+import { HorizontalAdCardData } from './components/HorizontalAdCard/HorizontalAdCard';
 
 /** Объект с коллбеками для header`а */
 const headerCallbacks = {
@@ -43,8 +43,9 @@ const profilePopupCallbacks = {
     donatePage: null,
 };
 
-const renderMainPage = () => {
-    const mainPage = new MainPage(pageContainer);
+const renderMainPage = async () => {
+    const data = await ApiClient.getAds();
+    const mainPage = new MainPage(pageContainer, data);
     mainPage.render();
 };
 
@@ -63,32 +64,20 @@ function renderNotificationsPage() {}
 
 const renderAdvertPage = async (id: string) => {
     const info = (await ApiClient.getAd(id))['place'];
+    const authorInfo = await ApiClient.getUser(info.id);
 
-    const page = new AdPage({
-        images: info['images'],
-        city: info['city'],
-        address: info['address'],
-        desc: 'Всем привет! Давайте жить ко мне!',
-        roomsCount: 3,
-    });
-    page.render(pageContainer);
+    pageContainer.appendChild(AdPage(info, authorInfo));
 };
 
 const renderEditAdvertPage = async (uuid: string) => {
     const info = (await ApiClient.getAd(uuid))['place'];
 
-    const page = new EditAdvertPage({
-        images: info['Images'],
-        city: info['location_main'],
-        address: info['location_street'],
-        desc: 'Всем привет! Давайте жить ко мне!',
-        roomsCount: 3,
-    });
+    const page = new EditAdvertPage('edit', info);
     pageContainer.appendChild(page.getElement());
 };
 
 const renderCreateAdvertPage = async () => {
-    const page = new EditAdvertPage();
+    const page = new EditAdvertPage('create');
     pageContainer.appendChild(page.getElement());
 };
 
@@ -108,25 +97,40 @@ function renderProfilePage() {
     profilePage.render(pageContainer);
 }
 
-const renderAdListPage = () => {
-    const page = AdListPage([]);
+const renderAdListPage = async () => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+        console.error('There is no userId in local storage!');
+        return;
+    }
+    const data = (await ApiClient.getAdsOfUser(userId))['places'];
+
+    const horizontalAdCardData: HorizontalAdCardData[] = [];
+    for (const d of data) {
+        horizontalAdCardData.push({
+            id: d.id,
+            cityName: d.cityName,
+            address: d.address,
+            image: d.images[0],
+        });
+    }
+    const page = AdListPage(horizontalAdCardData);
     pageContainer.appendChild(page);
 };
 
-/** Главная функция */
-const main = async () => {
+const renderHeader = async () => {
+    document.querySelector('.header')?.remove();
     const sessionData = await APIService.getSessionData();
+    if (sessionData) {
+        localStorage.setItem('userId', sessionData['id']);
+    }
     const header = new Header(headerCallbacks, sessionData ? true : false);
-    root.appendChild(header.getMainContainer());
-
-    pageContainer.classList.add('page-container');
-    root.appendChild(pageContainer);
-
-    renderMainPage();
+    root.prepend(header.getElement());
 };
 
 router.addRoute('/', async () => {
-    renderMainPage();
+    await renderHeader();
+    await renderMainPage();
 });
 
 router.addRoute('/ads/', async (params: URLSearchParams) => {
@@ -145,4 +149,17 @@ router.addRoute('/ads/', async (params: URLSearchParams) => {
     }
 });
 
-main();
+router.addRoute('/ad-cities/', async (params: URLSearchParams) => {
+    const city = params.get('city');
+    const cityPage = new CityPage(city);
+    cityPage.render(document.querySelector('.page-container') as HTMLElement);
+});
+
+const init = async () => {
+    await renderHeader();
+    pageContainer.classList.add('page-container');
+    root.appendChild(pageContainer);
+    router.navigateTo(location.href);
+};
+
+init();

@@ -5,11 +5,11 @@
     "main": "index.ts",
     "type": "module",
     "scripts": {
-        "start": "vite --port 80",
+        "start": "npm run compile:templates && vite",
         "build": "npm run compile:templates && vite build",
         "preview": "vite preview",
         "prestart": "npm run eslint:fix && npm run compile:templates",
-        "compile:templates": "handlebars components/AdCard/AdCard.hbs components/AuthPopup/AuthPopup.hbs components/ProfilePopup/ProfilePopup.hbs components/ProfileInfo/ProfileInfo.hbs components/ProfileData/EditForm.hbs components/CityPage/CityPhoto.hbs -f components/precompiled-templates.js",
+        "compile:templates": "node hbs-recompile.js",
         "eslint:fix": "npx  eslint --fix "
     },
     "author": "",

@@ -1,6 +1,7 @@
 'use strict';
 
 const USERNAME_REGEXP = /^[A-Za-z0-9][A-Za-z0-9-_.]{3,19}[A-Za-z0-9]$/;
+const NAME_REGEXP = /^[A-Za-zА-Яа-яёЁ\s]+$/;
 const EMAIL_REGEXP = /.+@.+/;
 const PASSWORD_REGEXP = /^[a-zA-Z0-9!@#$%^&*()_+=-]{8,16}$/;
 const ADDRESS_REGEXP = /^[A-Za-zА-Яа-яёЁ]+,\s?(г\.?|пгт\.?|село|поселок)\s?[А-Яа-яA-Za-zёЁ]+,\s?ул\.\s?(\d+-[я-я]?\s)?[А-Яа-яA-Za-zёЁ]+,\s?д\.\s?\d+([/]\d+[А-Яа-я]?)?$/;
@@ -19,17 +20,10 @@ interface ValidationResult {
 
 class Validation {
     static validateName(nameInput: HTMLInputElement) {
-        const res: ValidationResult = {
-            ok: true,
-            text: '',
-        };
-
-        if (!this.#validateLen(nameInput)) {
-            res.ok = false;
-            res.text = 'Имя пользователя - от 6 до 50 символов';
-        }
-
-        return res;
+        return this.#validateAny(nameInput, NAME_REGEXP, {
+            WRONG_LENGTH: 'Имя должно быть от 6 до 50 символов',
+            REGEXP_MISMATCH: 'Имя может содержать только латинские и кириллические буквы и пробелы',
+        });
     }
 
     static validateUsername(usernameInput: HTMLInputElement) {

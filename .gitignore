@@ -1,4 +1,4 @@
 node_modules/
 .idea/
 /components/precompiled-templates.js
-/images/
+nginx/ssl/

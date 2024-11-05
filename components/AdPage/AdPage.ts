@@ -1,6 +1,7 @@
 'use strict';
 
-import { AdvertData } from '../../modules/Types';
+import { AdvertData, ProfileInfo } from '../../modules/Types';
+import { calculateAge } from '../../modules/Utils';
 
 const MAIN_IMG_DIV_SELECTOR = '.js-main-img-div';
 const MAIN_IMG_SELECTOR = '.advert-images-carousel__main-img';
@@ -14,83 +15,66 @@ const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
 const SECONDARY_IMG_SELECTED_CLASS_NAME =
     'advert-images-carousel__secondary_img_current';
 
-class AdPage {
-    #templateContainer: HTMLDivElement;
-    #mainImg: HTMLImageElement;
-    #carouselImages: NodeListOf<HTMLImageElement>;
-    #currentIndex: number;
-    #backgroundImg: HTMLImageElement;
-    #fullscreenImage: HTMLImageElement;
-    #overlay: HTMLDivElement;
-    #images: string[];
+export default function AdPage(data: AdvertData, authorInfo: ProfileInfo) {
+    const images = data.images.map((x) => x.path);
+    let currentIndex = 0;
 
-    constructor(data: AdvertData) {
-        this.#images = data.images;
+    const template = Handlebars.templates['AdPage.hbs'];
+    const templateContainer = document.createElement('div');
+    templateContainer.innerHTML = template({
+        ...data,
+        ...authorInfo,
+        age: calculateAge(authorInfo.birthDate),
+    });
 
-        this.#currentIndex = 0;
-        const template = Handlebars.templates['AdPage.hbs'];
-        this.#templateContainer = document.createElement('div');
-        this.#templateContainer.innerHTML = template(data);
+    const mainImg = templateContainer.querySelector(
+        MAIN_IMG_SELECTOR
+    ) as HTMLImageElement;
+    const backgroundImg = templateContainer.querySelector(
+        BACKGROUND_IMG_SELECTOR
+    ) as HTMLImageElement;
 
-        this.#mainImg = this.#templateContainer.querySelector(
-            MAIN_IMG_SELECTOR
-        ) as HTMLImageElement;
-        this.#backgroundImg = this.#templateContainer.querySelector(
-            BACKGROUND_IMG_SELECTOR
-        ) as HTMLImageElement;
+    const carouselImages = templateContainer.querySelectorAll(
+        SECONDARY_IMG_SELECTOR
+    );
 
-        this.#carouselImages = this.#templateContainer.querySelectorAll(
-            SECONDARY_IMG_SELECTOR
+    const fullscreenImage = templateContainer.querySelector(
+        FULLSCREEN_IMG_SELECTOR
+    ) as HTMLImageElement;
+
+    const overlay = templateContainer.querySelector(
+        FULLSCREEN_OVERLAY_SELECTOR
+    ) as HTMLDivElement;
+
+    const showImage = (index: number) => {
+        mainImg.src = backgroundImg.src = images[index];
+
+        carouselImages[currentIndex].classList.remove(
+            SECONDARY_IMG_SELECTED_CLASS_NAME
         );
+        carouselImages[index].classList.add(SECONDARY_IMG_SELECTED_CLASS_NAME);
 
-        this.#fullscreenImage = this.#templateContainer.querySelector(
-            FULLSCREEN_IMG_SELECTOR
-        ) as HTMLImageElement;
+        currentIndex = index;
+    };
 
-        this.#overlay = this.#templateContainer.querySelector(
-            FULLSCREEN_OVERLAY_SELECTOR
-        ) as HTMLDivElement;
+    overlay.addEventListener('click', () => {
+        overlay.classList.add(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
+    });
 
-        this.#overlay.addEventListener('click', () => this.#hideOverlay());
+    carouselImages.forEach((el, index) => {
+        el.addEventListener('click', () => {
+            showImage(index);
+        });
+    });
 
-        this.#carouselImages.forEach((el, index) => {
-            el.addEventListener('click', () => {
-                this.showImage(index);
-            });
+    showImage(currentIndex);
+
+    templateContainer
+        .querySelector(MAIN_IMG_DIV_SELECTOR)
+        ?.addEventListener('click', () => {
+            fullscreenImage.src = images[currentIndex];
+            overlay.classList.remove(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
         });
 
-        this.showImage(this.#currentIndex);
-
-        this.#templateContainer
-            .querySelector(MAIN_IMG_DIV_SELECTOR)
-            ?.addEventListener('click', () => this.#displayOverlay());
-    }
-
-    showImage(index: number) {
-        this.#mainImg.src = this.#backgroundImg.src = this.#images[index];
-
-        this.#carouselImages[this.#currentIndex].classList.remove(
-            SECONDARY_IMG_SELECTED_CLASS_NAME
-        );
-        this.#carouselImages[index].classList.add(
-            SECONDARY_IMG_SELECTED_CLASS_NAME
-        );
-
-        this.#currentIndex = index;
-    }
-
-    #displayOverlay() {
-        this.#fullscreenImage.src = this.#images[this.#currentIndex];
-        this.#overlay.classList.remove(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
-    }
-
-    #hideOverlay() {
-        this.#overlay.classList.add(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
-    }
-
-    render(parent: HTMLElement) {
-        parent.appendChild(this.#templateContainer);
-    }
+    return templateContainer;
 }
-
-export default AdPage;

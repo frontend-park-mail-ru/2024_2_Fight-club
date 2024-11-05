@@ -11,40 +11,57 @@ export interface LoginParams {
 }
 
 export interface AdsFilters {
-    city?: string;
+    distance?: 1 | 3 | 5 | 10;
+    rating?: number;
+    new?: boolean;
+    gender?: 'male' | 'female';
+    guests?: 5 | 10 | 20 | 50;
 }
-
-// interface AuthorData {
-//     uuid: string;
-//     avatar: string;
-//     score: number;
-// }
 
 // Interface of a response from DB
 export interface AdvertData {
     id: string;
-    images: string[];
+    images: {
+        id: number;
+        path: string;
+    }[];
     city: string;
     address: string;
     description: string;
     publicationDate: string;
-    roomsNumber: string;
+    roomsNumber: number;
 
-    // author: AuthorData;
-    authorAvatar: string;
-    authorName: string;
-    authorRating: string;
+    author: { avatar: string; name: string; rating: number };
     authorUUID: string;
 }
 
 export interface EditParams {
-    username: string
-    name: string
-    email: string
-    sex: number
-    address: string
-    birthdate: Date
-    isHost: boolean
-    password: string
-    avatar: File | null
+    username: string;
+    name: string;
+    email: string;
+    sex: string | null;
+    birthdate: Date;
+    isHost: boolean;
+    avatar: File | null;
+}
+
+export interface City {
+    description: string;
+    enTitle: string;
+    id: number;
+    title: string;
+}
+
+export interface ProfileInfo {
+    avatar: string;
+    birthDate: string;
+    email: string;
+    guestCount: number;
+    id: string;
+    isHost: boolean;
+    name: string;
+    password: string;
+    score: number;
+    sex: string;
+    username: string;
 }

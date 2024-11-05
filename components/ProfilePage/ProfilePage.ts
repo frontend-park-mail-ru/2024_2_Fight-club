@@ -7,8 +7,6 @@ import APIClient from '../../modules/ApiClient';
 class ProfilePage{   
     #name: string | undefined;
     #username: string | undefined;
-    #city: string | undefined;
-    #address: string | undefined;
     #birthdate: Date | undefined;
     #email: string | undefined;
     #guestCount: number | undefined;
@@ -17,6 +15,7 @@ class ProfilePage{
     #isHost: boolean | undefined;
     #age: number | undefined;
     #avatar: string | undefined;
+    #showAge: boolean;
 
     #renderProfileInfoCallback;
     
@@ -28,6 +27,7 @@ class ProfilePage{
                 await this.#renderProfileInfo(profileInfoContainer);
             }
         };
+        this.#showAge = true;
     }
 
     /**
@@ -35,25 +35,23 @@ class ProfilePage{
      * @description Получение данных с бэка и заполнение полей класса
      */
     async #getProfileData() {
-        const response = await APIClient.profile();
+        const userData = await APIClient.getSessionData();
+        const uuid = userData.id;
+        const response = await APIClient.profile(uuid);
         if (response.ok) {
             const data = await response.json();
 
             this.#name = data.name;
-            this.#username = data.Username;
-            this.#email = data.Email;
-            this.#guestCount = data.GuestCount;
-            this.#score = data.Score;
-            this.#isHost = data.IsHost;
-            this.#avatar = data.Avatar;
-            this.#birthdate = data.Birthdate;
+            this.#username = data.username;
+            this.#email = data.email;
+            this.#guestCount = data.guestCount;
+            this.#score = data.score;
+            this.#isHost = data.isHost;
+            this.#birthdate = data.birthDate;
+            this.#avatar = data.avatar;
+            this.#sex = this.#calculateSex(data.sex);
+            this.#age = this.#calculateAge(data.birthDate);
 
-            this.#sex = this.#calculateSex(data.Sex);
-            this.#age = this.#calculateAge(data.Birthdate);
-
-            const splitedAddress = this.#splitAddress(data.Address);
-            this.#city = splitedAddress.city;
-            this.#address = splitedAddress.address;
         } else if (response.status !== 401) {
             console.error('Wrong response from server', response);
         }
@@ -65,6 +63,10 @@ class ProfilePage{
      * @returns {number} 
      */
     #calculateAge(birthdate: string): number {
+        if (birthdate.slice(0,10) === '0001-01-01') {
+            return -1;
+        }
+
         const birthDate = new Date(birthdate);
         const today = new Date();
         
@@ -81,35 +83,10 @@ class ProfilePage{
      * @param {number} sex
      * @returns {string} 
      */
-    #calculateSex(sex: number): 'Не указано' | 'Муж.' | 'Жен.' {
-        if (sex === 1) return 'Муж.';
-        else if (sex === 2) return 'Жен.';
+    #calculateSex(sex: string): 'Не указано' | 'Муж.' | 'Жен.' {
+        if (sex === 'M') return 'Муж.';
+        else if (sex === 'F') return 'Жен.';
         else return 'Не указано';
-    }
-
-    /**
-     * @private
-     * @description Деление полного адреса на город и адрес
-     * @param {string} longAddress
-     * @returns {Object} 
-     */
-    #splitAddress(longAddress: string): {
-        city: string,
-        address: string
-    }{
-        let city, address;
-        if (longAddress) {
-            const parts = longAddress.split(',');
-            city = parts.slice(0, 2).join(', ').trim();
-            address = parts.slice(2).join(', ').trim();
-        } else {
-            city = 'Не указано';
-            address = 'Не указано';
-        }
-        return {
-            city: city,
-            address: address,
-        };
     }
 
     /**
@@ -119,11 +96,14 @@ class ProfilePage{
      */
     async #renderProfileInfo(parent: HTMLElement) {
         await this.#getProfileData();
+        if (this.#age == -1) { 
+            this.#showAge = false;
+        } else {
+            this.#showAge = true;
+        }
         const profileData = {
             name: this.#name,
             username: this.#username,
-            city: this.#city,
-            address: this.#address,
             birthdate: this.#birthdate,
             email: this.#email,
             guestCount: this.#guestCount,
@@ -133,8 +113,7 @@ class ProfilePage{
             age: this.#age,
             avatar: this.#avatar,
         };
-
-        const profileInfo = new ProfileInfo(profileData);
+        const profileInfo = new ProfileInfo(profileData, this.#showAge);
         profileInfo.render(parent);
     }
 
@@ -154,6 +133,7 @@ class ProfilePage{
      * @param {HTMLElement} parent
      */
     async render(parent: HTMLElement) {
+        parent.replaceChildren();
         const profileContent = document.createElement('div');
         profileContent.id = 'profile-content';
 

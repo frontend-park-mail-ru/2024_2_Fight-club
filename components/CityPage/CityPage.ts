@@ -4,14 +4,6 @@ import Filter from '../Filter/Filter';
 import AdCard from '../AdCard/AdCard';
 import APIClient from '../../modules/ApiClient';
 
-const isMockMode = true;
-const mockCity = {
-    name: 'Moscow',
-    description:
-        'Москва — удивительный город, где современность пересекается с историей. Прогуляйтесь по Красной площади и насладитесь архитектурой Кремля и собора Василия Блаженного. Не пропустите Московский метрополитен — музей под землёй с уникальными станциями. Посетите улицу Арбат с её уютными кафе и живыми исполнителями, а также современные арт-пространства района Грабли. Попробуйте традиционные блюда, такие как борщ и пельмени, на рынках, например, в Даниловском. Отдохните в красивых парках, таких как Зарядье и Горки, и насладитесь панорамными видами на реку Москва. Откройте для себя тайны города и получите незабываемые впечатления!',
-    photo: 'https://img3.akspic.ru/crops/6/4/8/0/90846/90846-moskva-gorodskoj_pejzazh-gorod-liniya_gorizonta-stolica-1920x1080.jpg',
-};
-
 class CityPage {
     #queryName: string;
     #name: string;
@@ -32,24 +24,28 @@ class CityPage {
      * @description Получение данных о городе
      */
     async #getCityData(name: string): Promise<void> {
-        //Устанавливает моки вместо данных с сервера
-        if (isMockMode) {
-            this.#name = mockCity.name;
-            this.#description = mockCity.description;
-            this.#photo = mockCity.photo;
-            return;
+        const infoResponse = await APIClient.getCity(name);
+        if (infoResponse.ok) {
+            const data = await infoResponse.json();
+            this.#name = data.city['title'];
+            this.#description = data.city['description'];
+            this.#photo = data.city['image'];
+        } else {
+            console.log('error by getting info');
         }
 
-        const response = await APIClient.city(name);
-        if (response.ok) {
-            const data = await response.json();
-            this.#name = data['name'];
-            this.#description = data['description'];
-            this.#photo = data['photo'];
+        const placesResponse = await APIClient.getCitiesAds(name);
+        if (placesResponse.ok) {
+            const data = await placesResponse.json();
             this.#places = data['places'];
         } else {
-            console.log('error');
+            console.log('error by getting ploaces');
         }
+
+        console.log(this.#name);
+        console.log(this.#description);
+        console.log(this.#photo);
+        console.log(this.#places);
     }
 
     /**

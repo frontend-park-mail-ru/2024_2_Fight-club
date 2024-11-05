@@ -5,13 +5,13 @@ interface HorizontalAdCardCallbacks {
 }
 
 export interface HorizontalAdCardData {
-    city: string;
+    id: string;
+    cityName: string;
     address: string;
     image: string;
 }
 
 export default function HorizontalAdCard(
-    uuid: string,
     cardData: HorizontalAdCardData,
     callbacks: HorizontalAdCardCallbacks
 ) {
@@ -22,18 +22,18 @@ export default function HorizontalAdCard(
 
     pageContainer
         .querySelector('.js-open-btn')
-        ?.addEventListener('click', () => callbacks.onOpen(uuid));
+        ?.addEventListener('click', () => callbacks.onOpen(cardData.id));
 
     pageContainer
         .querySelector('.js-edit-btn')
         ?.addEventListener('click', () => {
-            callbacks.onEdit(uuid);
+            callbacks.onEdit(cardData.id);
         });
 
     pageContainer
         .querySelector('.js-del-btn')
         ?.addEventListener('click', () => {
-            callbacks.onDel(uuid);
+            callbacks.onDel(cardData.id);
         });
 
     return pageContainer.firstChild as HTMLDivElement;

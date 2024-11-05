@@ -2,7 +2,11 @@
 
 import ApiClient from '../../modules/ApiClient';
 
-import { CITIES } from '../../modules/Consts';
+import router from '../../modules/Router';
+
+import { City, AdvertData } from '../../modules/Types';
+import { validateImage } from '../../modules/Utils';
+import PopupAlert from '../PopupAlert/PopupAlert';
 
 const MAIN_IMG_DIV_SELECTOR = '.js-main-img-div';
 const MAIN_IMG_SELECTOR = '.advert-images-carousel__main-img';
@@ -18,22 +22,10 @@ const SECONDARY_IMG_SELECTED_CLASS_NAME =
 const ADD_IMG_BTN_SELECTOR = '.js-add-img-btn';
 const FILE_INPUT_SELECTOR = '.js-file-input';
 
-// interface AdPageAuthorData {
-//     uuid: string;
-//     name: string;
-//     avatar: string;
-//     sex: string;
-//     age: number;
-//     score: number;
-// }
-
-interface AdPageData {
-    images: string[];
-    // author: AdPageAuthorData;
-    address: string;
-    city: string;
-    desc: string;
-    roomsCount: number;
+interface SelectOption {
+    name: string;
+    value: string;
+    selected?: boolean;
 }
 
 interface InputConfig {
@@ -42,7 +34,7 @@ interface InputConfig {
     type: string;
     isTextArea?: boolean;
     isSelect?: boolean;
-    options?: string[];
+    options?: SelectOption[];
     value?: string | number;
     minLen?: number;
     maxLen?: number;
@@ -50,23 +42,7 @@ interface InputConfig {
     max?: number;
 }
 
-// TODO: DELETE THIS USELESS FUNCTION. IT WAS CREATED FOR BRAINLESS BACKENDERS
-function makeid(length: number) {
-    let result = '';
-    const characters =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-        result += characters.charAt(
-            Math.floor(Math.random() * charactersLength)
-        );
-        counter += 1;
-    }
-    return result;
-}
-
-class EditAdvertPage {
+export default class EditAdvertPage {
     #templateContainer: HTMLDivElement;
     #mainImg: HTMLImageElement;
     #carouselImages: NodeListOf<HTMLImageElement>;
@@ -74,87 +50,137 @@ class EditAdvertPage {
     #backgroundImg: HTMLImageElement;
     #fullscreenImage: HTMLImageElement;
     #overlay: HTMLDivElement;
-    #imageURLs: string[];
+    #images: {
+        id: number;
+        path: string;
+        name?: string;
+    }[];
     #uploadedImages: File[];
+    #action: 'create' | 'edit';
+    #id: string | undefined;
+    #secondaryImageTemplate: HandlebarsTemplateDelegate;
 
-    constructor(data?: AdPageData) {
-        this.#imageURLs = data ? data.images : [];
+    constructor(action: 'create' | 'edit', data?: AdvertData) {
+        this.#action = action;
+        this.#id = data?.id;
+        this.#images = data?.images ? data.images : [];
 
         this.#currentIndex = 0;
         this.#uploadedImages = [];
 
+        this.#secondaryImageTemplate =
+            Handlebars.templates['SecondaryImage.hbs'];
+
         const template = Handlebars.templates['EditAdvertPage.hbs'];
         this.#templateContainer = document.createElement('div');
 
-        const inputsConfig: InputConfig[] = [
-            {
-                label: 'Город',
-                name: 'city',
-                type: 'text',
-                isSelect: true,
-                options: CITIES,
-                value: data?.city,
-            },
-            {
-                label: 'Адрес',
-                name: 'address',
-                type: 'text',
-                value: data?.address,
-                minLen: 5,
-                maxLen: 100,
-            },
-            {
-                label: 'Число комнат',
-                name: 'roomsCount',
-                type: 'number',
-                value: data?.roomsCount,
-                min: 1,
-                max: 20,
-            },
-            {
-                label: 'Описание',
-                name: 'desc',
-                type: 'textarea',
-                isTextArea: true,
-                value: data?.desc,
-                minLen: 20,
-                maxLen: 1000,
-            },
-        ];
-        this.#templateContainer.innerHTML = template({
-            ...data,
-            inputs: inputsConfig,
+        ApiClient.getCities().then((cities: City[]) => {
+            const selectOptions: SelectOption[] = [];
+
+            for (const city of cities) {
+                selectOptions.push({
+                    name: city.title,
+                    value: city.title,
+                    selected: data?.city === city.title,
+                });
+            }
+
+            const inputsConfig: InputConfig[] = [
+                {
+                    label: 'Город',
+                    name: 'city',
+                    type: 'text',
+                    isSelect: true,
+                    options: selectOptions,
+                    value: data?.city,
+                },
+                {
+                    label: 'Адрес',
+                    name: 'address',
+                    type: 'text',
+                    value: data?.address,
+                    minLen: 5,
+                    maxLen: 100,
+                },
+                {
+                    label: 'Число комнат',
+                    name: 'roomsCount',
+                    type: 'number',
+                    value: data?.roomsNumber,
+                    min: 1,
+                    max: 20,
+                },
+                {
+                    label: 'Описание',
+                    name: 'desc',
+                    type: 'textarea',
+                    isTextArea: true,
+                    value: data?.description,
+                    minLen: 20,
+                    maxLen: 1000,
+                },
+            ];
+            this.#templateContainer.innerHTML = template({
+                ...data,
+                inputs: inputsConfig,
+                actionButtonTitle:
+                    this.#action === 'create' ? 'Создать' : 'Изменить',
+            });
+
+            this.#mainImg = this.#templateContainer.querySelector(
+                MAIN_IMG_SELECTOR
+            ) as HTMLImageElement;
+            this.#backgroundImg = this.#templateContainer.querySelector(
+                BACKGROUND_IMG_SELECTOR
+            ) as HTMLImageElement;
+
+            this.#fullscreenImage = this.#templateContainer.querySelector(
+                FULLSCREEN_IMG_SELECTOR
+            ) as HTMLImageElement;
+
+            this.#overlay = this.#templateContainer.querySelector(
+                FULLSCREEN_OVERLAY_SELECTOR
+            ) as HTMLDivElement;
+
+            this.#renderSecondary();
+            this.#carouselImages = this.#templateContainer.querySelectorAll(
+                SECONDARY_IMG_SELECTOR
+            );
+
+            if (data) this.#showImage(this.#currentIndex);
+
+            this.#addEventListeners();
         });
+    }
 
-        this.#mainImg = this.#templateContainer.querySelector(
-            MAIN_IMG_SELECTOR
-        ) as HTMLImageElement;
-        this.#backgroundImg = this.#templateContainer.querySelector(
-            BACKGROUND_IMG_SELECTOR
-        ) as HTMLImageElement;
+    #renderSecondary() {
+        if (!this.#images) {
+            return;
+        }
 
-        this.#carouselImages = this.#templateContainer.querySelectorAll(
-            SECONDARY_IMG_SELECTOR
-        );
+        const addImgBtn =
+            this.#templateContainer.querySelector('.js-add-img-btn');
 
-        this.#fullscreenImage = this.#templateContainer.querySelector(
-            FULLSCREEN_IMG_SELECTOR
-        ) as HTMLImageElement;
-
-        this.#overlay = this.#templateContainer.querySelector(
-            FULLSCREEN_OVERLAY_SELECTOR
-        ) as HTMLDivElement;
-
-        this.#addEventListeners();
-
-        if (data) this.#showImage(this.#currentIndex);
+        for (let i = 0; i < this.#images.length; i++) {
+            addImgBtn?.insertAdjacentHTML(
+                'beforebegin',
+                this.#secondaryImageTemplate(this.#images[i])
+            );
+        }
     }
 
     #showImage(index: number) {
-        console.log(this.#imageURLs);
-        this.#mainImg.src = this.#backgroundImg.src = this.#imageURLs[index];
+        if (!this.#images || !this.#images[index]) {
+            this.#mainImg.src = this.#backgroundImg.src =
+                '/placeholder-image.avif';
+            return;
+        }
 
-        this.#carouselImages[this.#currentIndex].classList.remove(
+        this.#mainImg.src = this.#backgroundImg.src = this.#images[index].path;
+        this.#mainImg.src = this.#backgroundImg.src = this.#images[index].path;
+        console.log(this.#currentIndex, index);
+
+        this.#carouselImages[this.#currentIndex]?.classList.remove(
             SECONDARY_IMG_SELECTED_CLASS_NAME
         );
         this.#carouselImages[index].classList.add(
@@ -165,36 +191,54 @@ class EditAdvertPage {
     }
 
     #displayOverlay() {
-        this.#fullscreenImage.src = this.#imageURLs[this.#currentIndex];
+        if (!this.#images || !this.#images[this.#currentIndex]) {
+            return;
+        }
+        this.#fullscreenImage.src = this.#images[this.#currentIndex].path;
         this.#overlay.classList.remove(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
     }
 
-    #hideOverlay() {
-        this.#overlay.classList.add(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
-    }
-
-    #onImageLoaded = (e: Event) => {
+    #onImageLoaded = async (e: Event) => {
         const elem = e.target as HTMLInputElement;
         const files = elem.files;
 
         const image = files![0];
+
+        try {
+            await validateImage(image);
+        } catch (error) {
+            this.#templateContainer.appendChild(PopupAlert('' + error));
+            return;
+        }
+
         this.#uploadedImages.push(image);
 
-        const newElement = document.createElement('img');
-        newElement.classList.add(
-            'advert-images-carousel__secondary_img',
-            'js-carousel-img'
-        );
+        const tempContainer = document.createElement('div');
         const imageUrl = URL.createObjectURL(image);
-        newElement.src = imageUrl;
+        tempContainer.innerHTML = this.#secondaryImageTemplate({
+            id: 0,
+            path: imageUrl,
+            name: image.name,
+        });
 
         this.#templateContainer
             .querySelector('.js-add-img-btn')
-            ?.insertAdjacentElement('beforebegin', newElement);
+            ?.insertAdjacentElement(
+                'beforebegin',
+                tempContainer.firstChild as Element
+            );
 
-        this.#imageURLs.push(imageUrl);
+        this.#images.push({ id: 0, path: imageUrl, name: image.name });
+
+        this.#carouselImages = this.#templateContainer.querySelectorAll(
+            SECONDARY_IMG_SELECTOR
+        );
 
         this.#addSecondaryImagesEvents();
+
+        // Show new uploaded image
+        this.#showImage(this.#images.length - 1);
+        console.log(this.#uploadedImages);
     };
 
     #addSecondaryImagesEvents() {
@@ -207,12 +251,20 @@ class EditAdvertPage {
                 this.#showImage(index);
             });
         });
+
+        for (const button of document.querySelectorAll(
+            '.js-del-img-button'
+        ) as NodeListOf<HTMLSpanElement>) {
+            button.onclick = this.#onDeleteImage;
+        }
     }
 
     #addEventListeners() {
         this.#addSecondaryImagesEvents();
 
-        this.#overlay.addEventListener('click', () => this.#hideOverlay());
+        this.#overlay.addEventListener('click', () =>
+            this.#overlay.classList.add(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME)
+        );
 
         this.#templateContainer
             .querySelector(MAIN_IMG_DIV_SELECTOR)
@@ -234,6 +286,10 @@ class EditAdvertPage {
         this.#templateContainer
             .querySelector('.js-form')
             ?.addEventListener('submit', this.#submitData);
+
+        for (const button of document.querySelectorAll('.js-del-img-button')) {
+            button.onclick = this.#onDeleteImage;
+        }
     }
 
     #submitData = async (e: Event) => {
@@ -249,9 +305,8 @@ class EditAdvertPage {
                 address: formData.get('address') as string,
                 position: [0, 0],
                 distance: 0,
-                desc: formData.get('desc') as string,
+                description: formData.get('desc') as string,
                 roomsNumber: parseInt(formData.get('roomsCount') as string),
-                id: makeid(7),
             })
         );
 
@@ -260,15 +315,59 @@ class EditAdvertPage {
         });
 
         // Log the extracted data
-        const response = await ApiClient.createAdvert(formData2Send);
-        if (response.ok) {
-            // TODO: REDIRECT TO ADVERT LIST PAGE
+        let response;
+        if (this.#action == 'create') {
+            response = await ApiClient.createAdvert(formData2Send);
+
+            if (response?.ok) {
+                const data = await response.json();
+                const id = data['place']['id'];
+                router.navigateTo(`/ads/?id=${id}`);
+            }
+        } else if (this.#action == 'edit' && this.#id) {
+            response = await ApiClient.updateAdvert(this.#id, formData2Send);
+
+            if (response?.ok) {
+                router.navigateTo(`/ads/?id=${this.#id}`);
+            }
+        } else {
+            console.error('Wrong action type: ', this.#action);
         }
+    };
+
+    #onDeleteImage = async (e: Event) => {
+        e.preventDefault();
+        const target = e.target as HTMLElement;
+        const imageId = parseInt(target.id);
+        const imgNameToDelete = target.dataset.name;
+        if (imageId !== 0) ApiClient.deleteImageFromAdvert(this.#id, imageId);
+        (e.target as HTMLElement).parentElement?.remove();
+
+        this.#uploadedImages = this.#uploadedImages.filter(
+            (img) => img.name !== imgNameToDelete
+        );
+        console.log(this.#uploadedImages, imgNameToDelete);
+        if (imageId !== 0)
+            this.#images = this.#images.filter((img) => img.id !== imageId);
+        else
+            this.#images = this.#images.filter(
+                (img) => img.name !== imgNameToDelete
+            );
+
+        this.#carouselImages = this.#templateContainer.querySelectorAll(
+            SECONDARY_IMG_SELECTOR
+        );
+
+        --this.#currentIndex;
+        this.#currentIndex = Math.max(
+            0,
+            Math.min(this.#images.length, this.#currentIndex)
+        );
+        this.#showImage(this.#currentIndex);
+        this.#addSecondaryImagesEvents();
     };
 
     public getElement() {
         return this.#templateContainer as HTMLDivElement;
     }
 }
-
-export default EditAdvertPage;
