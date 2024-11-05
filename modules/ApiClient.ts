@@ -12,13 +12,26 @@ class APIClient {
      */
     async getAds(filters?: AdsFilters) {
         try {
-            let response;
-            if (filters && filters.city) {
-                console.log(123);
-                response = await fetch(this.BASE_URL + `/ads/${filters.city}`);
-            } else {
-                response = await fetch(this.BASE_URL + '/ads');
+            let url = '/ads?';
+
+            if (filters?.distance) {
+                url += `&distance=${filters.distance}`;
             }
+            if (filters?.rating) {
+                url += `&rating=${filters.rating}`;
+            }
+            if (filters?.new) {
+                url += '&new=true';
+            }
+            if (filters?.gender) {
+                url += `&gender=${filters.gender}`;
+            }
+            if (filters?.guests) {
+                url += `&guests=${filters.guests}`;
+            }
+
+            const response = await fetch(this.BASE_URL + url);
+
             let data = await response.json();
             data = data['places'];
             if (data === undefined) return [];
