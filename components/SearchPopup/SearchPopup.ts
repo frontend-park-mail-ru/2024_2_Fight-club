@@ -14,7 +14,6 @@ class SearchPopup {
 
     /**
      * @private
-     * @returns {City, City, [City[], City[], City[]]}
      * @description Получение данных с сервера
      */
     #splitByThreeGroups(): {
