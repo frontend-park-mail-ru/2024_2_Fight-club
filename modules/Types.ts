@@ -11,7 +11,7 @@ export interface LoginParams {
 }
 
 export interface AdsFilters {
-    distance?: number;
+    distance?: 1 | 3 | 5 | 10;
     rating?: number;
     new?: boolean;
     gender?: 'male' | 'female';
@@ -50,14 +50,6 @@ export interface City {
     enTitle: string;
     id: number;
     title: string;
-}
-
-export interface FilterValues {
-    geo: string;
-    rating: boolean;
-    new: boolean;
-    sex: string;
-    vis: string;
 }
 
 export interface ProfileInfo {
