@@ -56,7 +56,7 @@ class SearchPopup {
         if (overlay != null) {
             overlay.addEventListener('click', () => {
                 overlay.remove();
-                document.querySelector('.js-search-popup')!.remove();
+                document.querySelector('.js-search-popup')?.remove();
                 document.body.classList.remove('no-scroll');
 
                 //Скругление углов
