@@ -47,7 +47,7 @@ class MainPhoto {
         const hostsHrefs = document.createElement('div');
         const findHost = document.createElement('a');
         const beHost = document.createElement('a');
-        const searchCityForm = document.createElement('form');
+        const searchCityForm = document.createElement('div');
         const searchButtonDiv = document.createElement('div');
         const searchButtonWrapper = document.createElement('div');
         const search = document.createElement('input');
