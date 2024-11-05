@@ -6,6 +6,9 @@ const ALWAYS_CACHE = [
     '/journey.jpg',
     '/default_user_icon.png',
     '/style.css',
+    '/fonts/Dimkin-Light.ttf',
+    '/fonts/Dimkin-Regular.ttf',
+    '/fonts/MarckScript-Regular.ttf',
 ];
 
 const CACHE_BLACKLIST = [];
