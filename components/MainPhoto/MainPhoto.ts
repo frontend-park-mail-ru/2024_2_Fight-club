@@ -1,5 +1,6 @@
 'use strict';
 
+import ApiClient from '../../modules/ApiClient';
 import SearchPopup from '../SearchPopup/SearchPopup';
 
 class MainPhoto {
@@ -11,15 +12,35 @@ class MainPhoto {
         this.#mainPhotoContainer.classList.add('photo-container');
     }
 
-    #addEventListeners(){
-        document.querySelector('.js-find-city')!.addEventListener(
-            'click',
-            (e)=>{
-                e.preventDefault();
-                const searchPopup = new SearchPopup();
-                searchPopup.render(document.querySelector('.custom-search') as HTMLDivElement);
-            }
-        );
+    async #addEventListeners() {
+        const cities = await ApiClient.getCities();
+
+        const search = document.querySelector(
+            '.js-find-city'
+        ) as HTMLInputElement;
+        search.addEventListener('click', (e) => {
+            e.preventDefault();
+            const searchPopup = new SearchPopup(cities);
+            searchPopup.render(
+                document.querySelector('.custom-search') as HTMLDivElement
+            );
+        });
+        search.oninput = (e) => {
+            e.preventDefault();
+
+            document.querySelector('.js-search-popup')?.remove();
+            document.querySelector('.search-overlay')?.remove();
+
+            const inputElement = e.target as HTMLInputElement;
+            const value = inputElement.value as string;
+            const filteredCities = cities.filter((city) =>
+                city.title.toLowerCase().includes(value.toLowerCase())
+            );
+            const searchPopup = new SearchPopup(filteredCities);
+            searchPopup.render(
+                document.querySelector('.custom-search') as HTMLDivElement
+            );
+        };
     }
 
     render(parent: HTMLElement) {
