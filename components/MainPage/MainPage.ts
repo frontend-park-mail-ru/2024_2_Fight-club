@@ -34,7 +34,7 @@ class MainPage {
 
         // Здесь будет витрина
         this.#adsContainer = document.createElement('div');
-        this.#adsContainer.classList.add('advert');
+        this.#adsContainer.classList.add('main-page__advert');
 
         this.#adsData = data;
     }
