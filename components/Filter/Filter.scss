@@ -4,7 +4,7 @@
     display: grid;
     grid-template-areas: 'aside addvert';
 
-    grid-template-columns: 25% 1fr;
+    grid-template-columns: 500px 1fr;
 }
 
 .filter {
@@ -15,7 +15,7 @@
     background-color: #ffffff;
     margin-left: 50px;
     margin-right: auto;
-    border: 1px solid black;
+    border: 1px solid #a8a5a5;
     padding-top: 4%;
     height: fit-content;
 }
