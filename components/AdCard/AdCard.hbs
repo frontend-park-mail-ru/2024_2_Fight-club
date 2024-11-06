@@ -1,13 +1,19 @@
 <div class='ad-card' id='card-{{id}}'>
     <!-- ID is used for js not styles -->
-    <img class='ad_card__img1' src='{{images.[0].path}}' alt='Ad card image' />
-    <div class='ad-card__image-pagination-div'>
-        <!-- Здесь будут кружочки -->
-        <!--        <div class="circle-full"></div>-->
-        <!--        <div class="circle-empty"></div>-->
+    <div class='ad-card__main-img-container'>
+        <img
+            class='ad-card__main-img js-main-img'
+            src='{{images.[0].path}}'
+            alt='Ad card image'
+        />
+        <div class='ad-card__image-pagination-div js-pagination-div'>
+            <!-- Здесь будут кружочки -->
+            <!--        <div class="circle-full"></div>-->
+            <!--        <div class="circle-empty"></div>-->
+        </div>
     </div>
 
-    <button class='ad-card__button'>
+    <button class='ad-card__like-button js-like-button'>
         <svg
             width='43'
             height='43'
@@ -81,7 +87,7 @@
             />
             <p>{{author.name}}</p>
             <div class='ad-card__score-container'>
-                <img class='ad-card__img3' src='/star.png' alt='star' />
+                <img class='ad-card__star' src='/star.png' alt='star' />
                 <span class='ad-card__score'>{{author.rating}}</span>
             </div>
         </div>
