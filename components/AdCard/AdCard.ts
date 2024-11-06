@@ -37,7 +37,7 @@ class AdCard {
         };
 
         templateContainer
-            .querySelector('.ad-card__button')!
+            .querySelector('.js-like-button')!
             .addEventListener('click', this.#addToFavorite);
         this.parent!.appendChild(templateContainer);
 
@@ -53,11 +53,10 @@ class AdCard {
         const thisElement = this.parent!.querySelector(
             `#card-${this.#data.id}`
         )!;
-        const imagePaginationDiv = thisElement.querySelector(
-            '.ad-card__image-pagination-div'
-        )!;
+        const imagePaginationDiv =
+            thisElement.querySelector('.js-pagination-div')!;
         const imgElem: HTMLImageElement =
-            thisElement.querySelector('.ad_card__img1')!;
+            thisElement.querySelector('.js-main-img')!;
 
         const imagesAmount = Math.min(this.#data.images.length, 7); // We must only show max amount of 7!
         const areaFraction =
