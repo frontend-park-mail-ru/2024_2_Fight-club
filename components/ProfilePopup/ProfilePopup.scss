@@ -38,3 +38,10 @@
 .profile-list__underline {
     margin-bottom: 20px;
 }
+
+@media screen and (max-width: 900px) {
+    .profile-list {
+        left: 80%;
+        transform: translateX(-50%);
+    }
+}

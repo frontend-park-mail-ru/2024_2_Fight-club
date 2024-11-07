@@ -155,3 +155,16 @@
     color: #e10505;
     text-align: center;
 }
+
+@media screen and (max-width: 900px) {
+    .popup {
+        position: fixed;
+        width: 300px;
+        height: fit-content;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0 auto;
+        gap: 5px;
+        padding: 0;
+    }
+}

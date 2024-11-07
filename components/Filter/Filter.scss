@@ -113,3 +113,18 @@
 .advert {
     grid-area: addvert;
 }
+
+@media screen and (max-width: 900px) {
+    #main-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+    }
+
+    .filter {
+        margin: 20px auto;
+        width: 80%;
+        position: static;
+    }
+}
