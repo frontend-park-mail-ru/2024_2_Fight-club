@@ -28,7 +28,7 @@ class AdCard {
 
         templateContainer.innerHTML = template(this.#data);
 
-        templateContainer.onclick = () => {
+        (templateContainer.firstChild as HTMLDivElement).onclick = () => {
             router.navigateTo(`/ads/?id=${this.#data.id}`);
         };
 
