@@ -8,6 +8,8 @@
 }
 
 .filter {
+    position: sticky;
+    top: 5px;
     grid-area: aside;
     padding-inline-start: 5%;
     padding-inline-end: 5%;
