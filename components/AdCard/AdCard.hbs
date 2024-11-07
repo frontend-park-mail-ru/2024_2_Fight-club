@@ -75,20 +75,20 @@
 
     <div class='ad-card__info'>
         <div class='ad-card__location'>
-            <p class='ad-card__p1'>{{cityName}}</p>
-            <p class='ad-card__p2'>{{address}}</p>
+            <p class='ad-card__city'>{{cityName}}</p>
+            <p class='ad-card__address'>{{address}}</p>
             <a href='{{onMap}}' class='ad-card__href'>Показать на карте</a>
         </div>
         <div class='ad-card__author-info'>
             <img
-                class='ad-card__img2'
+                class='ad-card__avatar'
                 src='{{author.avatar}}'
                 alt='User avatar'
             />
-            <p>{{author.name}}</p>
-            <div class='ad-card__score-container'>
+            <p class='ad-card__author-name'>{{author.name}}</p>
+            <div class='ad-card__rating-container'>
                 <img class='ad-card__star' src='/star.png' alt='star' />
-                <span class='ad-card__score'>{{author.rating}}</span>
+                <span class='ad-card__rating'>{{author.rating}}</span>
             </div>
         </div>
     </div>

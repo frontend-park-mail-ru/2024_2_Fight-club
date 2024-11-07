@@ -9,5 +9,7 @@
 @media screen and (max-width: 900px) {
     .main-page__advert {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        width: 90%;
+        margin: 0 auto;
     }
 }
