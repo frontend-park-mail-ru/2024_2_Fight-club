@@ -1,3 +1,5 @@
+import PopupAlert from '../components/PopupAlert/PopupAlert';
+
 interface urlHandlerFunc {
     (...args: URLSearchParams[]): void;
 }
@@ -25,6 +27,9 @@ class Router {
             document.querySelector('.page-container')?.replaceChildren();
             handler(params);
         } else {
+            document.body.appendChild(
+                PopupAlert('404: Страница еще не создана')
+            );
             console.log('Page not found'); // Обработка 404
         }
     }
