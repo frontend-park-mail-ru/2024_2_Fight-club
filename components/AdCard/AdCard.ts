@@ -7,23 +7,19 @@ import { AdvertData } from '../../modules/Types';
 
 /** Карточка объявления на главной странице */
 class AdCard {
-    #data: AdvertData;
-    #currentImgIndex: number;
+    #data;
+    #currentImgIndex;
     #circles: HTMLDivElement[];
-    private parent: HTMLDivElement | null | undefined;
+    #parent;
 
     /** @param {object} data - информация о карточке
      @param {HTMLDivElement} parent - родитель, в чьем списке детей будет карточка */
-    constructor(data: AdvertData, parent: HTMLDivElement | null | undefined) {
+    constructor(data: AdvertData, parent: HTMLDivElement) {
         this.#data = data;
-        this.parent = parent!;
+        this.#parent = parent;
 
         this.#currentImgIndex = 0;
         this.#circles = [];
-
-        if (parent === undefined || parent === null) {
-            throw new Error('Parent is not set!');
-        }
     }
 
     render() {
@@ -39,7 +35,7 @@ class AdCard {
         templateContainer
             .querySelector('.js-like-button')!
             .addEventListener('click', this.#addToFavorite);
-        this.parent!.appendChild(templateContainer);
+        this.#parent.appendChild(templateContainer.firstChild!);
 
         setTimeout(() => {
             this.#addImageScrolling();
@@ -50,7 +46,7 @@ class AdCard {
      * Функция, которая добавляет возможность скроллинга изображений карточки как в Ozonе
      */
     #addImageScrolling() {
-        const thisElement = this.parent!.querySelector(
+        const thisElement = this.#parent.querySelector(
             `#card-${this.#data.id}`
         )!;
         const imagePaginationDiv =
