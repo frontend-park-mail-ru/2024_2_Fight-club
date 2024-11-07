@@ -1,3 +1,5 @@
+@use '../../mixins';
+
 #main-content {
     width: 93%;
     margin: 100px auto auto;
@@ -91,15 +93,16 @@
 }
 
 .apply-button {
-    color: #ffffff;
-    background-color: #ffa552;
+    @include mixins.button;
     margin-bottom: 10px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
+    min-width: 70%;
 }
 
 .reset-button {
+    @include mixins.button;
+    font-weight: normal;
+    border: 1px solid black;
+    min-width: 70%;
     color: #000000;
     background-color: #ffffff;
     border-width: 1px;
