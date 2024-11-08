@@ -14,8 +14,8 @@ class APIClient {
         try {
             let url = '/housing?';
 
-            if (filters?.distance) {
-                url += `&distance=${filters.distance}`;
+            if (filters?.location) {
+                url += `&location=${filters.location}`;
             }
             if (filters?.rating) {
                 url += `&rating=${filters.rating}`;

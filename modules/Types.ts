@@ -11,7 +11,7 @@ export interface LoginParams {
 }
 
 export interface AdsFilters {
-    distance?: 1 | 3 | 5 | 10;
+    location?: 1 | 3 | 5 | 10 | string;
     rating?: number;
     new?: boolean;
     gender?: 'male' | 'female';
