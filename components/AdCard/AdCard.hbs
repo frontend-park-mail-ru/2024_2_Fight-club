@@ -1,19 +1,19 @@
-<div class='ad-card' id='card-{{id}}'>
+<div class='housing-card' id='card-{{id}}'>
     <!-- ID is used for js not styles -->
-    <div class='ad-card__main-img-container'>
+    <div class='housing-card__main-img-container'>
         <img
-            class='ad-card__main-img js-main-img'
+            class='housing-card__main-img js-main-img'
             src='{{images.[0].path}}'
-            alt='Ad card image'
+            alt='Housing card image'
         />
-        <div class='ad-card__image-pagination-div js-pagination-div'>
+        <div class='housing-card__image-pagination-div js-pagination-div'>
             <!-- Здесь будут кружочки -->
             <!--        <div class="circle-full"></div>-->
             <!--        <div class="circle-empty"></div>-->
         </div>
     </div>
 
-    <button class='ad-card__like-button js-like-button'>
+    <button class='housing-card__like-button js-like-button'>
         <svg
             width='43'
             height='43'
@@ -73,22 +73,22 @@
         </svg>
     </button>
 
-    <div class='ad-card__info'>
-        <div class='ad-card__location'>
-            <p class='ad-card__city'>{{cityName}}</p>
-            <p class='ad-card__address'>{{address}}</p>
-            <a href='{{onMap}}' class='ad-card__href'>Показать на карте</a>
+    <div class='housing-card__info'>
+        <div class='housing-card__location'>
+            <p class='housing-card__city'>{{cityName}}</p>
+            <p class='housing-card__address'>{{address}}</p>
+            <a href='{{onMap}}' class='housing-card__href'>Показать на карте</a>
         </div>
-        <div class='ad-card__author-info'>
+        <div class='housing-card__author-info'>
             <img
-                class='ad-card__avatar'
+                class='housing-card__avatar'
                 src='{{author.avatar}}'
                 alt='User avatar'
             />
-            <p class='ad-card__author-name'>{{author.name}}</p>
-            <div class='ad-card__rating-container'>
-                <img class='ad-card__star' src='/star.png' alt='star' />
-                <span class='ad-card__rating'>{{author.rating}}</span>
+            <p class='housing-card__author-name'>{{author.name}}</p>
+            <div class='housing-card__rating-container'>
+                <img class='housing-card__star' src='/star.png' alt='star' />
+                <span class='housing-card__rating'>{{author.rating}}</span>
             </div>
         </div>
     </div>

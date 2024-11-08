@@ -1,4 +1,4 @@
-.ad-card {
+.housing-card {
     display: flex;
     flex-direction: column;
     max-width: 343px;
@@ -125,7 +125,7 @@
 }
 
 @media screen and (max-width: 900px) {
-    .ad-card {
+    .housing-card {
         &__city {
             font-size: 15px;
         }

@@ -60,7 +60,7 @@ class AdCard {
 
         for (let i = 0; i < imagesAmount; i++) {
             const circle = document.createElement('div');
-            circle.classList.add('ad-card__circle');
+            circle.classList.add('housing-card__circle');
             this.#circles.push(circle);
             imagePaginationDiv.appendChild(circle);
         }
@@ -116,9 +116,9 @@ class AdCard {
      */
     #makeCircleActive(index: number) {
         this.#circles[this.#currentImgIndex].classList.remove(
-            'ad-card__circle--fill'
+            'housing-card__circle--fill'
         );
-        this.#circles[index].classList.add('ad-card__circle--fill');
+        this.#circles[index].classList.add('housing-card__circle--fill');
     }
 
     /**
