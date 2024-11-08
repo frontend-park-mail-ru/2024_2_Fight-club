@@ -4,7 +4,7 @@ import ProfileInfo from '../ProfileInfo/ProfileInfo';
 import ProfileData from '../ProfileData/ProfileData';
 import APIClient from '../../modules/ApiClient';
 
-class ProfilePage{   
+class ProfilePage {
     #name: string | undefined;
     #username: string | undefined;
     #birthdate: Date | undefined;
@@ -18,12 +18,13 @@ class ProfilePage{
     #showAge: boolean;
 
     #renderProfileInfoCallback;
-    
+
     constructor() {
         //Колбэк для повторного рендера левого столбца после обновления формы
         this.#renderProfileInfoCallback = async () => {
-            const profileInfoContainer = document.getElementById('profile-container');
-            if (profileInfoContainer){
+            const profileInfoContainer =
+                document.getElementById('profile-container');
+            if (profileInfoContainer) {
                 await this.#renderProfileInfo(profileInfoContainer);
             }
         };
@@ -51,7 +52,6 @@ class ProfilePage{
             this.#avatar = data.avatar;
             this.#sex = this.#calculateSex(data.sex);
             this.#age = this.#calculateAge(data.birthDate);
-
         } else if (response.status !== 401) {
             console.error('Wrong response from server', response);
         }
@@ -60,19 +60,22 @@ class ProfilePage{
     /**
      * @private
      * @param {string} birthdate
-     * @returns {number} 
+     * @returns {number}
      */
     #calculateAge(birthdate: string): number {
-        if (birthdate.slice(0,10) === '0001-01-01') {
+        if (birthdate.slice(0, 10) === '0001-01-01') {
             return -1;
         }
 
         const birthDate = new Date(birthdate);
         const today = new Date();
-        
+
         let age = today.getFullYear() - birthDate.getFullYear();
         const monthDiff = today.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        if (
+            monthDiff < 0 ||
+            (monthDiff === 0 && today.getDate() < birthDate.getDate())
+        ) {
             age--;
         }
         return age;
@@ -81,7 +84,7 @@ class ProfilePage{
     /**
      * @private
      * @param {number} sex
-     * @returns {string} 
+     * @returns {string}
      */
     #calculateSex(sex: string): 'Не указано' | 'Муж.' | 'Жен.' {
         if (sex === 'M') return 'Муж.';
@@ -96,7 +99,7 @@ class ProfilePage{
      */
     async #renderProfileInfo(parent: HTMLElement) {
         await this.#getProfileData();
-        if (this.#age == -1) { 
+        if (this.#age == -1) {
             this.#showAge = false;
         } else {
             this.#showAge = true;
@@ -122,12 +125,11 @@ class ProfilePage{
      * @description Рендер правой колонки
      * @param {HTMLElement} parent
      */
-    #renderProfileData(parent: HTMLElement){
+    #renderProfileData(parent: HTMLElement) {
         const profileData = new ProfileData(this.#renderProfileInfoCallback);
         profileData.render(parent);
     }
-   
-    
+
     /**
      * @description Рендер всех элементов
      * @param {HTMLElement} parent
@@ -140,11 +142,11 @@ class ProfilePage{
         const profileContainer = document.createElement('div');
         profileContainer.id = 'profile-container';
         profileContainer.classList.add('profile__profile-container');
-        
+
         const dataContainer = document.createElement('div');
         dataContainer.id = 'data-container';
         dataContainer.classList.add('profile__data-container');
-        
+
         profileContent.appendChild(profileContainer);
         profileContent.appendChild(dataContainer);
         parent.appendChild(profileContent);

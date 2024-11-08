@@ -159,8 +159,12 @@ class ProfileData {
             dataContainer?.appendChild(this.#content);
         } else {
             clearPage('profile');
-            const errorMessage = PopupAlert('Неверный размер или разрешение фото');
-            document.querySelector('#profile-content')?.appendChild(errorMessage);
+            const errorMessage = PopupAlert(
+                'Неверный размер или разрешение фото'
+            );
+            document
+                .querySelector('#profile-content')
+                ?.appendChild(errorMessage);
         }
     }
 
@@ -342,9 +346,16 @@ class ProfileData {
                 this.#addButtonEventListener();
 
                 //Обновление аватарки в хэдере
-                const headerImg = document.querySelector('.js-header-avatar') as HTMLImageElement;
-                const profileInfoImg = document.querySelector('.js-profile-info-avatar') as HTMLImageElement;
+                const headerImg = document.querySelector(
+                    '.js-header-avatar'
+                ) as HTMLImageElement;
+                const profileInfoImg = document.querySelector(
+                    '.js-profile-info-avatar'
+                ) as HTMLImageElement;
                 headerImg.src = profileInfoImg.src;
+                document
+                    .getElementById('data-container')
+                    ?.classList.add('mobile-hidden');
             }
         });
     }
@@ -384,6 +395,10 @@ class ProfileData {
             this.#renderHeader(header);
 
             dataContainer?.appendChild(this.#content);
+
+            document
+                .getElementById('data-container')
+                .classList.add('mobile-hidden');
         });
     }
 
@@ -460,6 +475,11 @@ class ProfileData {
                 showBirthdate: this.#showBirthdate,
             })
         );
+
+        document
+            .getElementById('data-container')
+            .classList.remove('mobile-hidden');
+
         this.#addCheckedRadio();
         this.#addCheckedSlider();
         this.#addEventListeners();
@@ -502,6 +522,10 @@ class ProfileData {
 
         this.#renderMap();
         dataContainer.appendChild(this.#content);
+
+        document
+            .getElementById('data-container')
+            .classList.add('mobile-hidden');
 
         parent.appendChild(dataContainer);
     }
