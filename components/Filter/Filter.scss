@@ -3,25 +3,25 @@
 #main-content {
     width: 93%;
     margin: 100px auto auto;
-    display: grid;
-    grid-template-areas: 'aside addvert';
-
-    grid-template-columns: 500px 1fr;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 30px;
 }
 
 .filter {
+    flex-grow: 0;
     position: sticky;
     top: 5px;
     width: 220px;
     grid-area: aside;
-    padding-inline-start: 5%;
-    padding-inline-end: 5%;
+    padding: 5px 30px;
     border-radius: 20px;
     background-color: #ffffff;
     margin-left: 50px;
     margin-right: auto;
     border: 1px solid #a8a5a5;
-    padding-top: 4%;
+    padding-top: 20px;
     height: fit-content;
 }
 
