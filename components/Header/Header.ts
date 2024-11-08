@@ -81,7 +81,18 @@ class Header {
         const nameImg = document.createElement('img');
         nameImg.classList.add('header__img2');
         nameImg.src = '/name.png';
+
+        // for mobile
+        const imgMobile = document.createElement('a');
+        imgMobile.classList.add('header__logo-text-mobile');
+        imgMobile.href = '/';
+        const img = document.createElement('img');
+        img.src = '/name.png';
+
+        imgMobile.appendChild(img);
+
         this.#menuContainer.appendChild(nameImg);
+        this.#menuContainer.appendChild(imgMobile);
     }
 
     #renderHrefs() {
