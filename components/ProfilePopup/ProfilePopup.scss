@@ -1,10 +1,9 @@
 .no-scroll {
     overflow: hidden;
-    padding-right: 17px;
 }
 
 .profile-overlay {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;

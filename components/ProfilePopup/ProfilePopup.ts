@@ -45,8 +45,6 @@ class ProfilePopup {
                 event: this.#events.logoutEvent,
             },
         };
-
-        document.body.classList.add('no-scroll');
     }
 
     /**
@@ -72,7 +70,6 @@ class ProfilePopup {
         if (overlay != null) {
             overlay.addEventListener('click', () => {
                 overlay.remove();
-                document.body.classList.remove('no-scroll');
             });
         }
     }
