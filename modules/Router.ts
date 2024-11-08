@@ -12,7 +12,6 @@ class Router {
         window.addEventListener('popstate', () => this.handleRoute());
     }
 
-    // Метод для добавления маршрута
     addRoute(path: string, handler: urlHandlerFunc) {
         this.routes[path] = handler;
     }
@@ -33,7 +32,6 @@ class Router {
         }
     }
 
-    // Метод для навигации
     navigateTo(path: string) {
         window.history.pushState(null, '', path);
         this.handleRoute();
@@ -48,10 +46,6 @@ document.addEventListener('click', (event: Event) => {
         event.preventDefault();
         const href = target.getAttribute('href');
 
-        // Обновляем URL без перезагрузки страницы
-        window.history.pushState({}, '', href);
-
-        // Вызываем событие или логику для обработки маршрута
         if (href) router.navigateTo(href);
     }
 });
