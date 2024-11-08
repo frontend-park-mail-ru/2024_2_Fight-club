@@ -12,6 +12,7 @@
 .filter {
     position: sticky;
     top: 5px;
+    width: 220px;
     grid-area: aside;
     padding-inline-start: 5%;
     padding-inline-end: 5%;
@@ -86,7 +87,6 @@
 
 .filter button {
     margin-left: 10%;
-    width: 80%;
     height: 36px;
     border-radius: 10px;
     font-size: 20px;
@@ -124,7 +124,7 @@
 
     .filter {
         margin: 20px auto;
-        width: 80%;
+        width: 70%;
         position: static;
     }
 }
