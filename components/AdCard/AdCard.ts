@@ -125,7 +125,7 @@ class AdCard {
      * Вызывается при нажатии на кнопку добавить в избранное
      */
     #addToFavorite() {
-        console.log('fav btn was clicked!');
+        // console.log('fav btn was clicked!');
     }
 }
 

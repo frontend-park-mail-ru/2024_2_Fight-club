@@ -32,7 +32,6 @@ function AdListPage(data: HorizontalAdCardData[]) {
                 onEdit: (uuid: string) =>
                     router.navigateTo(`/ads/?id=${uuid}&action=edit`),
                 onDel: async (uuid: string) => {
-                    console.log(123);
                     await ApiClient.deleteAd(uuid);
                     router.navigateTo(location.href);
                 },

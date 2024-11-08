@@ -178,7 +178,6 @@ export default class EditAdvertPage {
 
         this.#mainImg.src = this.#backgroundImg.src = this.#images[index].path;
         this.#mainImg.src = this.#backgroundImg.src = this.#images[index].path;
-        console.log(this.#currentIndex, index);
 
         this.#carouselImages[this.#currentIndex]?.classList.remove(
             SECONDARY_IMG_SELECTED_CLASS_NAME
@@ -238,7 +237,6 @@ export default class EditAdvertPage {
 
         // Show new uploaded image
         this.#showImage(this.#images.length - 1);
-        console.log(this.#uploadedImages);
     };
 
     #addSecondaryImagesEvents() {
@@ -346,7 +344,6 @@ export default class EditAdvertPage {
         this.#uploadedImages = this.#uploadedImages.filter(
             (img) => img.name !== imgNameToDelete
         );
-        console.log(this.#uploadedImages, imgNameToDelete);
         if (imageId !== 0)
             this.#images = this.#images.filter((img) => img.id !== imageId);
         else

@@ -30,7 +30,6 @@ class Router {
             document.body.appendChild(
                 PopupAlert('404: Страница еще не создана')
             );
-            console.log('Page not found'); // Обработка 404
         }
     }
 

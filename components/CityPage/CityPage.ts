@@ -31,7 +31,7 @@ class CityPage {
             this.#description = data.city['description'];
             this.#photo = data.city['image'];
         } else {
-            console.log('error by getting info');
+            // console.log('error getting info');
         }
 
         const placesResponse = await APIClient.getCitiesAds(name);
@@ -39,13 +39,8 @@ class CityPage {
             const data = await placesResponse.json();
             this.#places = data['places'];
         } else {
-            console.log('error by getting ploaces');
+            // console.log('error getting places');
         }
-
-        console.log(this.#name);
-        console.log(this.#description);
-        console.log(this.#photo);
-        console.log(this.#places);
     }
 
     /**

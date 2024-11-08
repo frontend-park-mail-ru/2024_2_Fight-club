@@ -170,7 +170,6 @@ export default class Filter {
         values.guests = (parseInt(
             Array.from(visInputs).find((input) => input.checked)!.value
         ) || undefined) as typeof values.guests;
-        console.log(values);
         return values;
     }
 
