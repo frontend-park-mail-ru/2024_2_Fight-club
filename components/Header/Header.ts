@@ -82,17 +82,13 @@ class Header {
         nameImg.classList.add('header__img2');
         nameImg.src = '/name.png';
 
-        // for mobile
-        const imgMobile = document.createElement('a');
-        imgMobile.classList.add('header__logo-text-mobile');
-        imgMobile.href = '/';
-        const img = document.createElement('img');
-        img.src = '/name.png';
+        const link = document.createElement('a');
+        link.classList.add('header__logo-text-link');
+        link.href = '/';
 
-        imgMobile.appendChild(img);
+        link.appendChild(nameImg);
 
-        this.#menuContainer.appendChild(nameImg);
-        this.#menuContainer.appendChild(imgMobile);
+        this.#menuContainer.appendChild(link);
     }
 
     #renderHrefs() {

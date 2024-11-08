@@ -1,6 +1,6 @@
 .header {
     background-color: #ffffff;
-    height: 156px;
+    height: 110px;
     display: flex;
     align-items: center;
 }
@@ -43,14 +43,12 @@
     background-color: #635b5b;
 }
 
-.header__img2 {
-    margin-left: auto;
-    margin-right: auto;
-    height: 60px;
+.header__logo-text-link {
+    margin: 0 auto;
 }
 
-.header__logo-text-mobile {
-    display: none;
+.header__img2 {
+    height: 60px;
 }
 
 .header__signs {
@@ -140,13 +138,6 @@
 
     .header__img2 {
         display: none;
-    }
-    .header__logo-text-mobile {
-        display: inline;
-
-        img {
-            width: 130px;
-        }
     }
 
     .header__avatar-container {
