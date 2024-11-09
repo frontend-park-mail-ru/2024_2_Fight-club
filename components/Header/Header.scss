@@ -1,6 +1,6 @@
 .header {
     background-color: #ffffff;
-    height: 156px;
+    height: 110px;
     display: flex;
     align-items: center;
 }
@@ -13,7 +13,7 @@
 }
 
 .header__hrefs__href {
-    color: #635B5B;
+    color: #635b5b;
     text-decoration: none;
     font-size: 24px;
     font-style: italic;
@@ -32,7 +32,7 @@
 }
 
 .header__hrefs__href_active::after {
-    content: "";
+    content: '';
     display: block;
     height: 2px;
     width: 60px;
@@ -40,12 +40,14 @@
     bottom: -3px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #635B5B;
+    background-color: #635b5b;
+}
+
+.header__logo-text-link {
+    margin: 0 auto;
 }
 
 .header__img2 {
-    margin-left: auto;
-    margin-right: auto;
     height: 60px;
 }
 
@@ -61,7 +63,7 @@
     color: #ffffff;
     font-size: 20px;
     font-weight: bold;
-    background-color: #FFA552;
+    background-color: #ffa552;
     border: none;
     border-radius: 10px;
     width: 115px;
@@ -80,14 +82,14 @@
     align-items: center;
 }
 
-.header__avatar-container__avatar{
+.header__avatar-container__avatar {
     width: 50px;
     height: 50px;
     margin-left: 10px;
     border-radius: 50%;
 }
 
-.header__avatar-container__options{
+.header__avatar-container__options {
     border: none;
     background-color: #ffffff;
     cursor: pointer;
@@ -124,4 +126,44 @@
 
 .hide {
     display: none;
+}
+
+@media screen and (max-width: 900px) {
+    .header {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header__img2 {
+        width: 170px;
+        height: auto;
+    }
+
+    .header__avatar-container {
+        position: absolute;
+        right: 0;
+        margin: 0;
+        &__options img {
+            width: 20px;
+        }
+
+        &_avatar {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
+    .profile-list {
+        position: absolute;
+        left: 100%;
+        transform: translateX(-100%);
+    }
+
+    .header__img1,
+    .header__signs,
+    .header__hrefs {
+        display: none;
+    }
 }

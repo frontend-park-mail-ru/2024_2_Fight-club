@@ -80,4 +80,40 @@
         height: 38px
         
         
-    
+@media screen and (max-width: 900px)
+    $button-height: 20px
+    .ad-list-page
+        &__upper-container
+            display: flex
+            text-align: center
+            flex-direction: column
+            justify-content: center
+            align-items: center
+
+    .horizontal-ad-card
+        border: 1px solid black
+        border-radius: 10px
+        width: 100%
+        display: flex
+        flex-direction: column
+        gap: 40px
+        padding: 10px
+        transition: 0.3s all
+
+        &__buttons-container
+            flex-wrap: wrap
+
+        &__open-btn
+            @include mixins.button
+            width: fit-content
+            height: $button-height
+            background-color: #5289FF
+
+        &__edit-btn
+            @include mixins.button
+            height: $button-height
+
+        &__del-btn
+            @include mixins.button
+            background-color: #FF5900
+            height: $button-height

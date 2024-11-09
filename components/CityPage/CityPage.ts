@@ -2,14 +2,16 @@
 
 import Filter from '../Filter/Filter';
 import AdCard from '../AdCard/AdCard';
-import APIClient from '../../modules/ApiClient';
+import ApiClient from '../../modules/ApiClient';
+
+import { AdvertData } from '../../modules/Types';
 
 class CityPage {
     #queryName: string;
     #name: string;
     #description: string;
     #photo: string;
-    #places: object[];
+    #places: AdvertData[];
 
     constructor(queryName: string) {
         this.#queryName = queryName;
@@ -24,28 +26,24 @@ class CityPage {
      * @description Получение данных о городе
      */
     async #getCityData(name: string): Promise<void> {
-        const infoResponse = await APIClient.getCity(name);
+        const infoResponse = await ApiClient.getCity(name);
         if (infoResponse.ok) {
             const data = await infoResponse.json();
+            console.log(data);
             this.#name = data.city['title'];
             this.#description = data.city['description'];
             this.#photo = data.city['image'];
         } else {
-            console.log('error by getting info');
+            // console.log('error getting info');
         }
 
-        const placesResponse = await APIClient.getCitiesAds(name);
+        const placesResponse = await ApiClient.getCitiesAds(name);
         if (placesResponse.ok) {
             const data = await placesResponse.json();
             this.#places = data['places'];
         } else {
-            console.log('error by getting ploaces');
+            // console.log('error getting places');
         }
-
-        console.log(this.#name);
-        console.log(this.#description);
-        console.log(this.#photo);
-        console.log(this.#places);
     }
 
     /**
@@ -69,7 +67,15 @@ class CityPage {
      * @description Рендер фильтра
      */
     #renderFilter(pageContent: HTMLDivElement): void {
-        const filter = new Filter();
+        const filter = new Filter(async (filters) => {
+            filters.location = this.#queryName;
+            console.log(filters);
+            const data = await ApiClient.getAds(filters);
+            this.#places = data;
+            document.querySelector('.advert')!.remove();
+            const pageContent = document.getElementById('main-content') as HTMLDivElement;
+            this.#renderPlaces(pageContent);
+        });
         pageContent.appendChild(filter.getFilter());
     }
 

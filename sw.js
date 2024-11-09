@@ -15,7 +15,7 @@ const CACHE_BLACKLIST = [];
 
 // Use the install event to pre-cache all initial resources.
 self.addEventListener('install', (event) => {
-    console.log('Install event called...');
+    // console.log('Install event called...');
     event.waitUntil(
         (async () => {
             const cache = await caches.open(CACHE_NAME);
@@ -29,26 +29,25 @@ self.addEventListener('fetch', (event) => {
         (async () => {
             const cache = await caches.open(CACHE_NAME);
 
-            console.log(event.request);
             if (event.request.url in ALWAYS_CACHE) {
-                console.log('URL is in ALWAYS_CACHE');
+                // console.log('URL is in ALWAYS_CACHE');
                 return await cache.match(event.request);
             }
 
             try {
-                console.log('Fetching URL from network');
+                // console.log('Fetching URL from network');
 
                 // If the resource was not in the cache, try the network.
                 const fetchResponse = await fetch(event.request);
 
                 // Save the resource in the cache and return it.
                 // if (event.request.url in ALWAYS_CACHE) {
-                console.log('Saving the URL response to the cache storage');
+                // console.log('Saving the URL response to the cache storage');
                 cache.put(event.request, fetchResponse.clone());
                 // }
                 return fetchResponse;
             } catch {
-                console.log('Oops! Network error. Let\'s get it from cache');
+                // console.log("Oops! Network error. Let's get it from cache");
                 if (event.request.url in CACHE_BLACKLIST) {
                     // 404
                 }
@@ -57,7 +56,7 @@ self.addEventListener('fetch', (event) => {
                 if (cachedResponse) {
                     return cachedResponse;
                 } else {
-                    console.log('what should I do??');
+                    // console.log('what should I do??');
                 }
             }
         })()

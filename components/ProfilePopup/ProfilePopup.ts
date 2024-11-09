@@ -3,13 +3,7 @@
 import APIClient from '../../modules/ApiClient';
 import router from '../../modules/Router';
 
-interface ProfilePopupCallbacks {
-    profilePage: () => void;
-    donatePage: null;
-}
-
 class ProfilePopup {
-    #config;
     #events = {
         logoutEvent: async () => {
             const response = await APIClient.logout();
@@ -22,20 +16,24 @@ class ProfilePopup {
         profileEvent: null, //TODO
         donateEvent: null, //TODO or DELETE
     };
-    #profilePopupCallbacks;
+    #config: Record<
+        string,
+        {
+            title: string;
+            href: string;
+            event?: () => void;
+        }
+    >;
 
-    constructor(popupCallbacks: ProfilePopupCallbacks) {
-        this.#profilePopupCallbacks = popupCallbacks;
+    constructor() {
         this.#config = {
             profile: {
                 title: 'Профиль',
                 href: '/profile',
-                event: this.#profilePopupCallbacks.profilePage,
             },
             donate: {
                 title: 'Донаты',
                 href: '/donate',
-                event: this.#profilePopupCallbacks.donatePage,
             },
             myAdvertisements: {
                 title: 'Мои объявления',
@@ -47,8 +45,6 @@ class ProfilePopup {
                 event: this.#events.logoutEvent,
             },
         };
-
-        document.body.classList.add('no-scroll');
     }
 
     /**
@@ -66,7 +62,6 @@ class ProfilePopup {
     }
 
     /**
-     * @private
      * @description Добавляет событие для скрытия оверлея
      * @param {HTMLElement} parent
      */
@@ -75,22 +70,20 @@ class ProfilePopup {
         if (overlay != null) {
             overlay.addEventListener('click', () => {
                 overlay.remove();
-                document.body.classList.remove('no-scroll');
             });
         }
     }
 
     /**
-     * @private
      * @description Добавляет обработчики для меню попапа
      */
     #addEventListeners() {
         Object.entries(this.#config).forEach(([name, { event }]) => {
-            if (event !== null) {
+            if (event) {
                 //Временно пока нет других eventов
                 const listElement = document.getElementById(name);
                 if (listElement) {
-                    listElement.addEventListener('click', event);
+                    listElement.addEventListener('click', () => event());
                 }
             }
         });

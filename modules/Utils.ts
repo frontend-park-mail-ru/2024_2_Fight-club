@@ -82,3 +82,19 @@ export const validateImage = async (file: File): Promise<string> => {
         };
     });
 };
+
+export const waitForInnerHTML = (
+    element: HTMLElement,
+    callback: () => void
+) => {
+    const observer = new MutationObserver((mutations, obs) => {
+        // If the element has innerHTML content, stop observing and call the callback
+        if (element.innerHTML.trim() !== '') {
+            obs.disconnect();
+            callback();
+        }
+    });
+
+    // Start observing changes in child elements or content within the element
+    observer.observe(element, { childList: true, subtree: true });
+};

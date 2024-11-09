@@ -20,18 +20,33 @@
         font-family: 'MarckScript-Regular'
 
     &__description
-        margin: 10px 10px 10px 10px
-        padding: 10px 10px 10px 10px
+        color: rgba(0, 0, 0, 0.80)
+        line-height: 1.4
+        width: 95%
+        margin: 10px auto
+        padding: 30px
         background-color: #fff
         font-size: 20px
         text-align: justify
         border-radius: 10px
-        border: solid
         border-width: 1px
 
-.advert 
-    display: grid
-    grid-template-columns: repeat(3, 1fr)
+.advert
     row-gap: 30px
+    column-gap: 20px
+
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
+    flex-grow: 1
 
 
+@media screen and (max-width: 900px)
+    .advert
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr))
+        width: 90%
+        margin: 0 auto
+    .city-information
+        &__name
+            top: 160px
+        &__description
+            box-sizing: border-box

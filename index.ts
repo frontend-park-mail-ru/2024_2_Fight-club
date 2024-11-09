@@ -87,7 +87,7 @@ function renderSignInPage() {
 }
 
 function renderProfileList() {
-    const profileList = new ProfilePopup(profilePopupCallbacks);
+    const profileList = new ProfilePopup();
     profileList.render(root);
 }
 
@@ -131,6 +131,10 @@ const renderHeader = async () => {
 router.addRoute('/', async () => {
     await renderHeader();
     await renderMainPage();
+});
+
+router.addRoute('/profile', async () => {
+    await renderProfilePage();
 });
 
 router.addRoute('/ads/', async (params: URLSearchParams) => {

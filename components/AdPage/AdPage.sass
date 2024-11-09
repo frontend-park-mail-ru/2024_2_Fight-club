@@ -103,7 +103,7 @@
     font-style: italic
 
 // PROFILE
-.ad-page-profile-container 
+.ad-page-profile-container
   border: solid
   border-width: 1px 
   border-radius: 10px 
@@ -125,6 +125,7 @@
     margin-top: 10% 
   &__photo__img1 
     border-radius: 50% 
+    object-fit: cover
     width: 200px 
     height: 200px 
   &__p1 
@@ -180,3 +181,26 @@
     text-align: center
     margin-bottom: 10px
     cursor: pointer
+
+@media screen and (max-width: 900px)
+  .ad-page
+    display: flex
+    flex-direction: column
+
+    &-profile-container
+      margin-top: 10px
+
+
+    &__edit-form
+      display: flex
+      flex-direction: column
+
+    &__btn
+      width: 100%
+
+  .advert-images-carousel
+    &__main-img-div
+      height: fit-content
+
+    &__main-img
+      position: static

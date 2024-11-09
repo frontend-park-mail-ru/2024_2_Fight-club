@@ -81,7 +81,14 @@ class Header {
         const nameImg = document.createElement('img');
         nameImg.classList.add('header__img2');
         nameImg.src = '/name.png';
-        this.#menuContainer.appendChild(nameImg);
+
+        const link = document.createElement('a');
+        link.classList.add('header__logo-text-link');
+        link.href = '/';
+
+        link.appendChild(nameImg);
+
+        this.#menuContainer.appendChild(link);
     }
 
     #renderHrefs() {

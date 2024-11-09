@@ -12,10 +12,10 @@ class APIClient {
      */
     async getAds(filters?: AdsFilters) {
         try {
-            let url = '/ads?';
+            let url = '/housing?';
 
-            if (filters?.distance) {
-                url += `&distance=${filters.distance}`;
+            if (filters?.location) {
+                url += `&location=${filters.location}`;
             }
             if (filters?.rating) {
                 url += `&rating=${filters.rating}`;
@@ -44,21 +44,21 @@ class APIClient {
 
     async getAdsOfUser(user_id: string) {
         const response = await Ajax.get(
-            this.BASE_URL + `/users/${user_id}/ads`
+            this.BASE_URL + `/users/${user_id}/housing`
         );
         const data = await response.json();
         return data;
     }
 
     async getAd(uuid: string) {
-        const response = await Ajax.get(this.BASE_URL + `/ads/${uuid}`);
+        const response = await Ajax.get(this.BASE_URL + `/housing/${uuid}`);
         const adInfo = await response.json();
         return adInfo;
     }
 
     async deleteAd(uuid: string) {
         const response = await Ajax.delete({
-            url: this.BASE_URL + `/ads/${uuid}`,
+            url: this.BASE_URL + `/housing/${uuid}`,
             body: {},
         });
         return response;
@@ -83,21 +83,21 @@ class APIClient {
 
     async createAdvert(data: FormData) {
         return await Ajax.post({
-            url: this.BASE_URL + '/ads',
+            url: this.BASE_URL + '/housing',
             body: data,
         });
     }
 
     async updateAdvert(id: string, data: FormData) {
         return await Ajax.put({
-            url: this.BASE_URL + `/ads/${id}`,
+            url: this.BASE_URL + `/housing/${id}`,
             body: data,
         });
     }
 
     async deleteImageFromAdvert(advertId: string, imageId: number) {
         const response = await Ajax.delete({
-            url: this.BASE_URL + `/ads/${advertId}/images/${imageId}`,
+            url: this.BASE_URL + `/housing/${advertId}/images/${imageId}`,
             body: {},
         });
         return await response.json();
@@ -148,7 +148,7 @@ class APIClient {
     }
 
     async getCitiesAds(name: string) {
-        const url = this.BASE_URL + `/ads/cities/${name}`;
+        const url = this.BASE_URL + `/housing/cities/${name}`;
         return Ajax.get(url);
     }
 
