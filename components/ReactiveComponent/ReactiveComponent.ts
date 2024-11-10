@@ -71,10 +71,11 @@ export default abstract class ReactiveComponent {
                 return target[prop];
             },
             set: (target: { [key: string]: unknown }, prop: string, value) => {
+                if (target[prop] === value) return true; // Protect from setting the same value & useless rerendering
                 target[prop] = value;
                 this.#deps.get(prop).notify();
                 console.log('gonna rerender');
-                this.rerender();
+                this.update();
                 return true;
             },
         });
@@ -114,7 +115,7 @@ export default abstract class ReactiveComponent {
         });
     }
 
-    rerender() {
+    update() {
         this.thisElement = document.getElementById(
             this.#elementId
         ) as HTMLElement;

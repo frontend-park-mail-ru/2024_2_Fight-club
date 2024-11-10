@@ -13,7 +13,6 @@ interface AdCardState {
 /** Карточка объявления на главной странице */
 export default class AdCard extends ReactiveComponent {
     #data;
-    #circles: HTMLCollectionOf<Element>;
     currentImagePath: string;
 
     /** 
@@ -35,7 +34,6 @@ export default class AdCard extends ReactiveComponent {
         });
         this.currentImagePath = '';
         this.#data = data;
-        this.#circles = [];
     }
 
     addEventListeners() {
@@ -65,14 +63,14 @@ export default class AdCard extends ReactiveComponent {
         const areaFraction =
             imgElem.getBoundingClientRect().width / imagesAmount;
 
-        this.#circles = this.thisElement.getElementsByClassName(
+        const circles = this.thisElement.getElementsByClassName(
             'housing-card__circle'
         );
 
         imgElem.onmousemove = (e) => this.#onMouseMove(e, areaFraction);
         imgElem.onmouseout = () => this.#onMouseOut();
 
-        this.#circles[this.state.toShowIndex as number].classList.add(
+        circles[this.state.toShowIndex as number].classList.add(
             'housing-card__circle--fill'
         );
     }
@@ -89,12 +87,11 @@ export default class AdCard extends ReactiveComponent {
         if (toShowIndex === this.state.toShowIndex) {
             return;
         }
-        console.log('new to show index:', toShowIndex);
 
         // todo: fix this
-        // setTimeout(() => {
-        this.state.toShowIndex = toShowIndex;
-        // }, SCROLL_DELAY);
+        setTimeout(() => {
+            this.state.toShowIndex = toShowIndex;
+        }, SCROLL_DELAY);
     }
 
     /**
