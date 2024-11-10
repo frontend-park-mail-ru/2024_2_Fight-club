@@ -14,6 +14,7 @@ interface AdCardState {
 export default class AdCard extends BaseComponent {
     #data;
     #circles: HTMLDivElement[];
+    currentImagePath: string;
 
     /** 
      * @param {object} data - информация о карточке
@@ -26,11 +27,12 @@ export default class AdCard extends BaseComponent {
                 toShowIndex: 0,
             },
             computedValues: {
-                
-            }
+                currentImagePath: (state) => {
+                    return data.images[state.toShowIndex].path;
+                },
+            },
             templateData: data,
         });
-
         this.#data = data;
         this.#circles = [];
     }

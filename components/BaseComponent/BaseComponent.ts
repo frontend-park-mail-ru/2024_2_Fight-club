@@ -3,13 +3,15 @@
 import { updateDOM } from '../../modules/Utils';
 
 class Dep {
+    private subscribers: (() => void)[];
+
     constructor() {
         this.subscribers = [];
     }
-    depend() {
-        if (target && !this.subscribers.includes(target)) {
+    depend(func2Recompute: () => void) {
+        if (func2Recompute && !this.subscribers.includes(func2Recompute)) {
             // Only if there is a target & it's not already subscribed
-            this.subscribers.push(target);
+            this.subscribers.push(func2Recompute);
         }
     }
     notify() {
@@ -37,6 +39,8 @@ export default abstract class BaseComponent {
     #state;
     #deps;
 
+    #currentFunc2Recompute;
+
     constructor(data: BaseComponentData) {
         this.id = this.constructor.name + '-' + data.id;
 
@@ -49,24 +53,38 @@ export default abstract class BaseComponent {
         this.parent = data.parent;
         this.templateData = data.templateData;
 
+        this.#state = data.initialState;
+
         this.#deps = new Map();
-        Object.keys(this.computedValues).forEach((key) => {
+        Object.keys(this.#state).forEach((key) => {
             this.#deps.set(key, new Dep());
         });
 
-        this.#state = data.initialState;
         this.state = new Proxy(this.#state, {
             get: (target, prop) => {
+                this.#deps.get(prop).depend(this.#currentFunc2Recompute);
                 return target[prop];
             },
-            set: (target, property, value) => {
-                console.log('new value', value);
-                target[property] = value;
+            set: (target, prop, value) => {
+                target[prop] = value;
+                this.#deps.get(prop).notify();
                 console.log('gonna rerender');
                 this.rerender();
                 return true;
             },
         });
+
+        for (const propName in data.computedValues) {
+            const func = data.computedValues[propName];
+
+            this.#currentFunc2Recompute = () => {
+                this.templateData[propName] = func(this.state);
+                console.log('RECOMPUTING...');
+            };
+
+            this.templateData[propName] = func(this.state);
+            this.#currentFunc2Recompute = null;
+        }
     }
 
     abstract addEventListeners(): void;
