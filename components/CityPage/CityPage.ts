@@ -73,7 +73,9 @@ class CityPage {
             const data = await ApiClient.getAds(filters);
             this.#places = data;
             document.querySelector('.advert')!.remove();
-            const pageContent = document.getElementById('main-content') as HTMLDivElement;
+            const pageContent = document.getElementById(
+                'main-content'
+            ) as HTMLDivElement;
             this.#renderPlaces(pageContent);
         });
         pageContent.appendChild(filter.getFilter());
@@ -87,7 +89,7 @@ class CityPage {
         const adsContainer = document.createElement('div');
         adsContainer.classList.add('advert');
         for (const [_, d] of Object.entries(this.#places)) {
-            const card = new AdCard(d, adsContainer);
+            const card = new AdCard(adsContainer, d);
             card.render();
         }
         pageContent.appendChild(adsContainer);

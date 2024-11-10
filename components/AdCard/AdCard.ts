@@ -4,38 +4,48 @@ const SCROLL_DELAY = 200;
 
 import router from '../../modules/Router';
 import { AdvertData } from '../../modules/Types';
+import ReactiveComponent from '../ReactiveComponent/ReactiveComponent';
+
+interface AdCardState {
+    toShowIndex: number;
+}
 
 /** Карточка объявления на главной странице */
-class AdCard {
+export default class AdCard extends ReactiveComponent {
     #data;
-    #currentImgIndex;
-    #circles: HTMLDivElement[];
-    #parent;
+    currentImagePath: string;
 
-    /** @param {object} data - информация о карточке
+    /** 
+     * @param {object} data - информация о карточке
      @param {HTMLDivElement} parent - родитель, в чьем списке детей будет карточка */
-    constructor(data: AdvertData, parent: HTMLDivElement) {
+    constructor(parent: HTMLDivElement, data: AdvertData) {
+        super({
+            parent: parent,
+            id: '' + data.id,
+            initialState: {
+                toShowIndex: 0,
+            },
+            computedValues: {
+                currentImagePath: (state) => {
+                    return data.images[state.toShowIndex as number].path;
+                },
+            },
+            templateData: data,
+        });
+        this.currentImagePath = '';
         this.#data = data;
-        this.#parent = parent;
-
-        this.#currentImgIndex = 0;
-        this.#circles = [];
     }
 
-    render() {
-        const template = Handlebars.templates['AdCard.hbs'];
-        const templateContainer = document.createElement('div');
-
-        templateContainer.innerHTML = template(this.#data);
-
-        (templateContainer.firstChild as HTMLDivElement).onclick = () => {
+    addEventListeners() {
+        this.thisElement.onclick = () => {
             router.navigateTo(`/ads/?id=${this.#data.id}`);
         };
 
-        templateContainer
-            .querySelector('.js-like-button')!
-            .addEventListener('click', this.#addToFavorite);
-        this.#parent.appendChild(templateContainer.firstChild!);
+        (
+            this.thisElement.querySelector(
+                '.js-like-button'
+            ) as HTMLButtonElement
+        ).onclick = this.#addToFavorite;
 
         setTimeout(() => {
             this.#addImageScrolling();
@@ -46,87 +56,57 @@ class AdCard {
      * Функция, которая добавляет возможность скроллинга изображений карточки как в Ozonе
      */
     #addImageScrolling() {
-        const thisElement = this.#parent.querySelector(
-            `#card-${this.#data.id}`
-        )!;
-        const imagePaginationDiv =
-            thisElement.querySelector('.js-pagination-div')!;
         const imgElem: HTMLImageElement =
-            thisElement.querySelector('.js-main-img')!;
+            this.thisElement.querySelector('.js-main-img')!;
 
         const imagesAmount = Math.min(this.#data.images.length, 7); // We must only show max amount of 7!
         const areaFraction =
             imgElem.getBoundingClientRect().width / imagesAmount;
 
-        for (let i = 0; i < imagesAmount; i++) {
-            const circle = document.createElement('div');
-            circle.classList.add('housing-card__circle');
-            this.#circles.push(circle);
-            imagePaginationDiv.appendChild(circle);
-        }
-
-        imgElem.addEventListener('mousemove', (e) =>
-            this.#onMouseMove(e, areaFraction, imgElem)
+        const circles = this.thisElement.getElementsByClassName(
+            'housing-card__circle'
         );
-        imgElem.addEventListener('mouseout', () => this.#onMouseOut(imgElem));
 
-        this.#makeCircleActive(0);
+        imgElem.onmousemove = (e) => this.#onMouseMove(e, areaFraction);
+        imgElem.onmouseout = () => this.#onMouseOut();
+
+        circles[this.state.toShowIndex as number].classList.add(
+            'housing-card__circle--fill'
+        );
     }
 
     /**
      * Функция, которая показывает нужную фотографию в зависимости от позиции курсора
      */
-    #onMouseMove(
-        e: MouseEvent,
-        areaFraction: number,
-        imgElem: HTMLImageElement
-    ) {
+    #onMouseMove(e: MouseEvent, areaFraction: number) {
         const rect = (e.target as HTMLElement).getBoundingClientRect();
         const x = e.clientX - rect.left;
         if (x < 0) return;
 
         const toShowIndex = Math.floor(x / areaFraction);
-        if (toShowIndex === this.#currentImgIndex) {
+        if (toShowIndex === this.state.toShowIndex) {
             return;
         }
 
+        // todo: fix this
         setTimeout(() => {
-            this.#makeCircleActive(toShowIndex);
-            this.#currentImgIndex = toShowIndex;
-            imgElem.src = this.#data.images[toShowIndex].path;
+            this.state.toShowIndex = toShowIndex;
         }, SCROLL_DELAY);
     }
 
     /**
-     * @private
      * Функция, которая показывает первую фотографию, когда курсор вне карточки
      */
-    #onMouseOut(imgElem: HTMLImageElement) {
+    #onMouseOut() {
         setTimeout(() => {
-            this.#makeCircleActive(0);
-            this.#currentImgIndex = 0;
-            imgElem.src = this.#data.images[0].path;
+            if (this.state.toShowIndex !== 0) this.state.toShowIndex = 0;
         }, SCROLL_DELAY);
-    }
-
-    /**
-     * @private
-     * Делает кружок с индексом index выделенным. По сути пагинация для фото
-     * @param {int} index -- индекс текущего фото
-     */
-    #makeCircleActive(index: number) {
-        this.#circles[this.#currentImgIndex].classList.remove(
-            'housing-card__circle--fill'
-        );
-        this.#circles[index].classList.add('housing-card__circle--fill');
     }
 
     /**
      * Вызывается при нажатии на кнопку добавить в избранное
      */
     #addToFavorite() {
-        // console.log('fav btn was clicked!');
+        console.log('fav btn was clicked!');
     }
 }
-
-export default AdCard;

@@ -1,14 +1,16 @@
-<div class='housing-card' id='card-{{id}}'>
+<div class='housing-card' id='{{elementId}}'>
     <!-- ID is used for js not styles -->
     <div class='housing-card__main-img-container'>
         <img
             class='housing-card__main-img js-main-img'
-            src='{{images.[0].path}}'
+            src='{{currentImagePath}}'
             alt='Housing card image'
         />
         <div class='housing-card__image-pagination-div js-pagination-div'>
             <!-- Здесь будут кружочки -->
-            <!--        <div class="circle-full"></div>-->
+            {{#each images}}
+                <div class='housing-card__circle'></div>
+            {{/each}}
             <!--        <div class="circle-empty"></div>-->
         </div>
     </div>
