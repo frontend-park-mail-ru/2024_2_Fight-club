@@ -109,7 +109,6 @@ export default abstract class ReactiveComponent {
             this.thisElement = document.getElementById(
                 this.#elementId
             ) as HTMLElement;
-            console.log(this.thisElement);
 
             this.addEventListeners();
         });

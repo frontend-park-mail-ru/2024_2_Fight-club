@@ -27,7 +27,7 @@ export default class AdCard extends ReactiveComponent {
                 toShowIndex: 0,
             },
             computedValues: {
-                currentImagePath: (state: Record<string, unknown>) => {
+                currentImagePath: (state) => {
                     return data.images[state.toShowIndex as number].path;
                 },
             },
@@ -43,9 +43,11 @@ export default class AdCard extends ReactiveComponent {
             router.navigateTo(`/ads/?id=${this.#data.id}`);
         };
 
-        this.thisElement
-            .querySelector('.js-like-button')!
-            .addEventListener('click', this.#addToFavorite);
+        (
+            this.thisElement.querySelector(
+                '.js-like-button'
+            ) as HTMLButtonElement
+        ).onclick = this.#addToFavorite;
 
         setTimeout(() => {
             this.#addImageScrolling();
@@ -67,10 +69,8 @@ export default class AdCard extends ReactiveComponent {
             'housing-card__circle'
         );
 
-        imgElem.addEventListener('mousemove', (e) =>
-            this.#onMouseMove(e, areaFraction)
-        );
-        imgElem.addEventListener('mouseout', () => this.#onMouseOut());
+        imgElem.onmousemove = (e) => this.#onMouseMove(e, areaFraction);
+        imgElem.onmouseout = () => this.#onMouseOut();
 
         this.#circles[this.state.toShowIndex as number].classList.add(
             'housing-card__circle--fill'
@@ -91,6 +91,7 @@ export default class AdCard extends ReactiveComponent {
         }
         console.log('new to show index:', toShowIndex);
 
+        // todo: fix this
         // setTimeout(() => {
         this.state.toShowIndex = toShowIndex;
         // }, SCROLL_DELAY);

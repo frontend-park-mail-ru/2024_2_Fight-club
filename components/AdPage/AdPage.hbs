@@ -1,9 +1,15 @@
-<div class='ad-page'>
+<div class='ad-page' id='{{elementId}}'>
     <main>
         <div class='advert-images-carousel'>
             <div class='advert-images-carousel__main-img-div js-main-img-div'>
-                <img class='advert-images-carousel__img-background' />
-                <img class='advert-images-carousel__main-img' />
+                <img
+                    class='advert-images-carousel__img-background'
+                    src='{{currentImagePath}}'
+                />
+                <img
+                    class='advert-images-carousel__main-img'
+                    src='{{currentImagePath}}'
+                />
             </div>
             <div class='advert-images-carousel__secondary_images'>
                 {{#each images}}
@@ -33,6 +39,7 @@
         class='ad-page__fullscreen-overlay ad-page__fullscreen-overlay_hidden js-fullscreen-overlay'
     >
         <img
+            src='{{currentImagePath}}'
             class='ad-page__fullscreen-overlay__image js-main-image-fullscreen'
         />
     </div>

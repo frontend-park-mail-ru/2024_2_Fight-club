@@ -141,6 +141,7 @@ export const updateDOM = (oldElement: HTMLElement, newElement: HTMLElement) => {
             if (!areEqual) {
                 if (oldChild.tagName === newChild.tagName) {
                     updateAttributes(oldChild, newChild);
+                    oldChild.replaceChildren(...newChild.children);
                 } else toReplace.push([newChild, oldChild]);
             }
 

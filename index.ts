@@ -66,8 +66,8 @@ const renderAdvertPage = async (id: string) => {
     const info = (await ApiClient.getAd(id))['place'];
     const authorInfo = await ApiClient.getUser(info.id);
 
-    const page = new AdPage(info, authorInfo);
-    page.render(pageContainer);
+    const page = new AdPage(pageContainer, info, authorInfo);
+    page.render();
 };
 
 const renderEditAdvertPage = async (uuid: string) => {
