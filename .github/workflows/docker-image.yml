@@ -1,16 +1,15 @@
 name: Docker Image CI
 
-on:
-    push:
-        branches: ['main']
-    pull_request:
-        branches: ['*']
+on: [pull_request]
 
 jobs:
-    build-docker:
+    build:
         runs-on: ubuntu-latest
 
         steps:
             - uses: actions/checkout@v4
-            - name: Build the Docker image
-              run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+            - name: Run docker-compose
+              uses: hoverkraft-tech/compose-action@v2.0.1
+              with:
+                  compose-file: './docker-compose.yml'
