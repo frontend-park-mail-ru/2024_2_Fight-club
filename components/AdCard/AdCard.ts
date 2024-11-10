@@ -4,86 +4,42 @@ const SCROLL_DELAY = 200;
 
 import router from '../../modules/Router';
 import { AdvertData } from '../../modules/Types';
-import {
-    elementsAreEqual,
-    updateAttributes,
-    updateDOM,
-} from '../../modules/Utils';
+import BaseComponent from '../BaseComponent/BaseComponent';
 
 interface AdCardState {
     toShowIndex: number;
 }
 
 /** Карточка объявления на главной странице */
-class AdCard {
+export default class AdCard extends BaseComponent {
     #data;
     #circles: HTMLDivElement[];
-    #parent;
-    _state: AdCardState;
-    #state;
 
-    /** @param {object} data - информация о карточке
+    /** 
+     * @param {object} data - информация о карточке
      @param {HTMLDivElement} parent - родитель, в чьем списке детей будет карточка */
     constructor(parent: HTMLDivElement, data: AdvertData) {
-        this.#data = data;
-        this.#parent = parent;
-        this._state = {
-            toShowIndex: 0,
-        };
-
-        this.#state = new Proxy(this._state, {
-            get: (target: AdCardState, prop) => {
-                return target[prop];
+        super({
+            parent: parent,
+            id: '' + data.id,
+            initialState: {
+                toShowIndex: 0,
             },
-            set: (target: AdCardState, property, value) => {
-                console.log('new value', value);
-                target[property] = value;
-                console.log('gonna rerender');
-                this.rerender();
-                return true;
-            },
+            computedValues: {
+                
+            }
+            templateData: data,
         });
 
+        this.#data = data;
         this.#circles = [];
     }
 
-    render() {
-        const template = Handlebars.templates['AdCard.hbs'];
-
-        this.#parent.insertAdjacentHTML(
-            'beforeend',
-            template({
-                ...this.#data,
-                imageToShow: this.#data.images[this.#state.toShowIndex].path,
-            })
-        );
-
-        requestAnimationFrame(() => this.addEventListeners()); // Wait till browser renders the component
-    }
-
-    rerender() {
-        const template = Handlebars.templates['AdCard.hbs'];
-
-        const element = document.getElementById(
-            'card-' + this.#data.id
-        ) as HTMLElement;
-
-        const container = document.createElement('div');
-        container.innerHTML = template({
-            ...this.#data,
-            imageToShow: this.#data.images[this.#state.toShowIndex].path,
-        });
-        updateDOM(element, container.firstChild as HTMLElement);
-
-        requestAnimationFrame(() => this.addEventListeners()); // Wait till browser renders the component
-    }
-
     addEventListeners() {
-        const card = document.getElementById('card-' + this.#data.id);
+        const card = document.getElementById(this.id);
 
         if (!card) {
-            console.error('cant get card with id housing-card');
-            return;
+            throw new Error('cant get card with id: ' + this.id);
         }
 
         card.onclick = () => {
@@ -104,9 +60,7 @@ class AdCard {
      * Функция, которая добавляет возможность скроллинга изображений карточки как в Ozonе
      */
     #addImageScrolling() {
-        const thisElement = this.#parent.querySelector(
-            `#card-${this.#data.id}`
-        )!;
+        const thisElement = document.getElementById(this.id)!;
         const imagePaginationDiv =
             thisElement.querySelector('.js-pagination-div')!;
         const imgElem: HTMLImageElement =
@@ -130,9 +84,9 @@ class AdCard {
         imgElem.addEventListener('mousemove', (e) =>
             this.#onMouseMove(e, areaFraction)
         );
-        imgElem.addEventListener('mouseout', () => this.#onMouseOut(imgElem));
+        imgElem.addEventListener('mouseout', () => this.#onMouseOut());
 
-        this.#circles[this.#state.toShowIndex].classList.add(
+        this.#circles[this.state.toShowIndex].classList.add(
             'housing-card__circle--fill'
         );
     }
@@ -146,11 +100,11 @@ class AdCard {
         if (x < 0) return;
 
         const toShowIndex = Math.floor(x / areaFraction);
-        if (toShowIndex === this.#state.toShowIndex) {
+        if (toShowIndex === this.state.toShowIndex) {
             return;
         }
         console.log('new to show index:', toShowIndex);
-        this.#state.toShowIndex = toShowIndex;
+        this.state.toShowIndex = toShowIndex;
 
         // setTimeout(() => {
         //     this.#makeCircleActive(toShowIndex);
@@ -162,9 +116,9 @@ class AdCard {
     /**
      * Функция, которая показывает первую фотографию, когда курсор вне карточки
      */
-    #onMouseOut(imgElem: HTMLImageElement) {
+    #onMouseOut() {
         setTimeout(() => {
-            if (this.#state.toShowIndex !== 0) this.#state.toShowIndex = 0;
+            if (this.state.toShowIndex !== 0) this.state.toShowIndex = 0;
         }, SCROLL_DELAY);
     }
 
@@ -175,5 +129,3 @@ class AdCard {
         // console.log('fav btn was clicked!');
     }
 }
-
-export default AdCard;
