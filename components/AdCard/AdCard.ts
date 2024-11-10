@@ -4,14 +4,14 @@ const SCROLL_DELAY = 200;
 
 import router from '../../modules/Router';
 import { AdvertData } from '../../modules/Types';
-import BaseComponent from '../BaseComponent/BaseComponent';
+import ReactiveComponent from '../ReactiveComponent/ReactiveComponent';
 
 interface AdCardState {
     toShowIndex: number;
 }
 
 /** Карточка объявления на главной странице */
-export default class AdCard extends BaseComponent {
+export default class AdCard extends ReactiveComponent {
     #data;
     #circles: HTMLDivElement[];
     currentImagePath: string;
@@ -27,31 +27,25 @@ export default class AdCard extends BaseComponent {
                 toShowIndex: 0,
             },
             computedValues: {
-                currentImagePath: (state) => {
-                    return data.images[state.toShowIndex].path;
+                currentImagePath: (state: Record<string, unknown>) => {
+                    return data.images[state.toShowIndex as number].path;
                 },
             },
             templateData: data,
         });
+        this.currentImagePath = '';
         this.#data = data;
         this.#circles = [];
     }
 
     addEventListeners() {
-        const card = document.getElementById(this.id);
-
-        if (!card) {
-            throw new Error('cant get card with id: ' + this.id);
-        }
-
-        card.onclick = () => {
+        this.thisElement.onclick = () => {
             router.navigateTo(`/ads/?id=${this.#data.id}`);
         };
 
-        card.querySelector('.js-like-button')!.addEventListener(
-            'click',
-            this.#addToFavorite
-        );
+        this.thisElement
+            .querySelector('.js-like-button')!
+            .addEventListener('click', this.#addToFavorite);
 
         setTimeout(() => {
             this.#addImageScrolling();
@@ -62,11 +56,10 @@ export default class AdCard extends BaseComponent {
      * Функция, которая добавляет возможность скроллинга изображений карточки как в Ozonе
      */
     #addImageScrolling() {
-        const thisElement = document.getElementById(this.id)!;
         const imagePaginationDiv =
-            thisElement.querySelector('.js-pagination-div')!;
+            this.thisElement.querySelector('.js-pagination-div')!;
         const imgElem: HTMLImageElement =
-            thisElement.querySelector('.js-main-img')!;
+            this.thisElement.querySelector('.js-main-img')!;
 
         const imagesAmount = Math.min(this.#data.images.length, 7); // We must only show max amount of 7!
         const areaFraction =
@@ -88,7 +81,7 @@ export default class AdCard extends BaseComponent {
         );
         imgElem.addEventListener('mouseout', () => this.#onMouseOut());
 
-        this.#circles[this.state.toShowIndex].classList.add(
+        this.#circles[this.state.toShowIndex as number].classList.add(
             'housing-card__circle--fill'
         );
     }
@@ -106,12 +99,9 @@ export default class AdCard extends BaseComponent {
             return;
         }
         console.log('new to show index:', toShowIndex);
-        this.state.toShowIndex = toShowIndex;
 
         // setTimeout(() => {
-        //     this.#makeCircleActive(toShowIndex);
-        //     this.#currentImgIndex = toShowIndex;
-        //     imgElem.src = this.#data.images[toShowIndex].path;
+        this.state.toShowIndex = toShowIndex;
         // }, SCROLL_DELAY);
     }
 
@@ -128,6 +118,6 @@ export default class AdCard extends BaseComponent {
      * Вызывается при нажатии на кнопку добавить в избранное
      */
     #addToFavorite() {
-        // console.log('fav btn was clicked!');
+        console.log('fav btn was clicked!');
     }
 }

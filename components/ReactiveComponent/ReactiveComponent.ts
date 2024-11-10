@@ -19,30 +19,35 @@ class Dep {
     }
 }
 
-interface BaseComponentData {
+interface ReactiveComponentData {
     parent: HTMLElement;
     id: number | string;
     initialState: object;
-    templateData: object;
-    computedValues: object;
+    templateData: { [key: string]: unknown };
+    computedValues: {
+        [key: string]: (state: Record<string, unknown>) => unknown;
+    };
 }
 
-// todo: -> ReactiveComponent
-export default abstract class BaseComponent {
+export default abstract class ReactiveComponent {
     protected parent: HTMLElement;
-    protected state;
-    protected computedValues;
+    protected state: Record<string, unknown>;
     protected templateData;
-    protected id: string;
 
     #template: HandlebarsTemplateDelegate;
     #state;
     #deps;
+    #elementId: string;
 
-    #currentFunc2Recompute;
+    #currentFunc2Recompute: (() => unknown) | null;
 
-    constructor(data: BaseComponentData) {
-        this.id = this.constructor.name + '-' + data.id;
+    public thisElement: HTMLElement;
+
+    constructor(data: ReactiveComponentData) {
+        this.thisElement = null as unknown as HTMLElement; // fuck typescript =D
+
+        this.#elementId = this.constructor.name + '-' + data.id;
+        this.#currentFunc2Recompute = null;
 
         const templateName = `${this.constructor.name}.hbs`;
         this.#template = Handlebars.templates[templateName];
@@ -61,11 +66,11 @@ export default abstract class BaseComponent {
         });
 
         this.state = new Proxy(this.#state, {
-            get: (target, prop) => {
+            get: (target: { [key: string]: unknown }, prop: string) => {
                 this.#deps.get(prop).depend(this.#currentFunc2Recompute);
                 return target[prop];
             },
-            set: (target, prop, value) => {
+            set: (target: { [key: string]: unknown }, prop: string, value) => {
                 target[prop] = value;
                 this.#deps.get(prop).notify();
                 console.log('gonna rerender');
@@ -93,30 +98,42 @@ export default abstract class BaseComponent {
         this.parent.insertAdjacentHTML(
             'beforeend',
             this.#template({
-                elementId: this.id,
+                elementId: this.#elementId,
                 ...this.templateData,
                 ...this.#state,
             })
         );
 
-        requestAnimationFrame(() => this.addEventListeners()); // Wait till browser renders the component
+        // Wait till browser renders the component
+        requestAnimationFrame(() => {
+            this.thisElement = document.getElementById(
+                this.#elementId
+            ) as HTMLElement;
+            console.log(this.thisElement);
+
+            this.addEventListeners();
+        });
     }
 
     rerender() {
-        const thisElement = document.getElementById(this.id) as HTMLElement;
-        if (!thisElement) {
-            throw new Error('Can not get this element with id: ' + this.id);
+        this.thisElement = document.getElementById(
+            this.#elementId
+        ) as HTMLElement;
+        if (!this.thisElement) {
+            throw new Error(
+                'Can not get this element with id: ' + this.#elementId
+            );
         }
 
         // Create temporary element
         const container = document.createElement('div');
         container.innerHTML = this.#template({
-            elementId: this.id,
+            elementId: this.#elementId,
             ...this.templateData,
             ...this.#state,
         });
 
-        updateDOM(thisElement, container.firstChild as HTMLElement);
+        updateDOM(this.thisElement, container.firstChild as HTMLElement);
 
         requestAnimationFrame(() => this.addEventListeners());
     }
