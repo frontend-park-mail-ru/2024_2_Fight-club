@@ -15,66 +15,85 @@ const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
 const SECONDARY_IMG_SELECTED_CLASS_NAME =
     'advert-images-carousel__secondary_img_current';
 
-export default function AdPage(data: AdvertData, authorInfo: ProfileInfo) {
-    const images = data.images.map((x) => x.path);
-    let currentIndex = 0;
+export default class AdPage {
+    #templateContainer: HTMLDivElement;
+    #mainImg: HTMLImageElement;
+    #carouselImages: NodeListOf<HTMLImageElement>;
+    #currentIndex: number;
+    #backgroundImg: HTMLImageElement;
+    #fullscreenImage: HTMLImageElement;
+    #overlay: HTMLDivElement;
+    #images: string[];
 
-    const template = Handlebars.templates['AdPage.hbs'];
-    const templateContainer = document.createElement('div');
-    templateContainer.innerHTML = template({
-        ...data,
-        ...authorInfo,
-        age: calculateAge(authorInfo.birthDate),
-    });
+    constructor(data: AdvertData, authorInfo: ProfileInfo) {
+        this.#images = data.images.map((x) => x.path);
 
-    const mainImg = templateContainer.querySelector(
-        MAIN_IMG_SELECTOR
-    ) as HTMLImageElement;
-    const backgroundImg = templateContainer.querySelector(
-        BACKGROUND_IMG_SELECTOR
-    ) as HTMLImageElement;
+        this.#currentIndex = 0;
+        const template = Handlebars.templates['AdPage.hbs'];
+        this.#templateContainer = document.createElement('div');
+        this.#templateContainer.innerHTML = template({
+            ...data,
+            ...authorInfo,
+            age: calculateAge(authorInfo.birthDate),
+        });
 
-    const carouselImages = templateContainer.querySelectorAll(
-        SECONDARY_IMG_SELECTOR
-    );
+        this.#mainImg = this.#templateContainer.querySelector(
+            MAIN_IMG_SELECTOR
+        ) as HTMLImageElement;
+        this.#backgroundImg = this.#templateContainer.querySelector(
+            BACKGROUND_IMG_SELECTOR
+        ) as HTMLImageElement;
 
-    const fullscreenImage = templateContainer.querySelector(
-        FULLSCREEN_IMG_SELECTOR
-    ) as HTMLImageElement;
+        this.#carouselImages = this.#templateContainer.querySelectorAll(
+            SECONDARY_IMG_SELECTOR
+        );
 
-    const overlay = templateContainer.querySelector(
-        FULLSCREEN_OVERLAY_SELECTOR
-    ) as HTMLDivElement;
+        this.#fullscreenImage = this.#templateContainer.querySelector(
+            FULLSCREEN_IMG_SELECTOR
+        ) as HTMLImageElement;
 
-    const showImage = (index: number) => {
-        mainImg.src = backgroundImg.src = images[index];
+        this.#overlay = this.#templateContainer.querySelector(
+            FULLSCREEN_OVERLAY_SELECTOR
+        ) as HTMLDivElement;
 
-        carouselImages[currentIndex].classList.remove(
+        this.#overlay.addEventListener('click', () => this.#hideOverlay());
+
+        this.#carouselImages.forEach((el, index) => {
+            el.addEventListener('click', () => {
+                this.showImage(index);
+            });
+        });
+
+        this.showImage(this.#currentIndex);
+
+        this.#templateContainer
+            .querySelector(MAIN_IMG_DIV_SELECTOR)
+            ?.addEventListener('click', () => this.#displayOverlay());
+    }
+
+    showImage(index: number) {
+        this.#mainImg.src = this.#backgroundImg.src = this.#images[index];
+
+        this.#carouselImages[this.#currentIndex].classList.remove(
             SECONDARY_IMG_SELECTED_CLASS_NAME
         );
-        carouselImages[index].classList.add(SECONDARY_IMG_SELECTED_CLASS_NAME);
+        this.#carouselImages[index].classList.add(
+            SECONDARY_IMG_SELECTED_CLASS_NAME
+        );
 
-        currentIndex = index;
-    };
+        this.#currentIndex = index;
+    }
 
-    overlay.addEventListener('click', () => {
-        overlay.classList.add(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
-    });
+    #displayOverlay() {
+        this.#fullscreenImage.src = this.#images[this.#currentIndex];
+        this.#overlay.classList.remove(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
+    }
 
-    carouselImages.forEach((el, index) => {
-        el.addEventListener('click', () => {
-            showImage(index);
-        });
-    });
+    #hideOverlay() {
+        this.#overlay.classList.add(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
+    }
 
-    showImage(currentIndex);
-
-    templateContainer
-        .querySelector(MAIN_IMG_DIV_SELECTOR)
-        ?.addEventListener('click', () => {
-            fullscreenImage.src = images[currentIndex];
-            overlay.classList.remove(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME);
-        });
-
-    return templateContainer;
+    render(parent: HTMLElement) {
+        parent.appendChild(this.#templateContainer);
+    }
 }

@@ -9,7 +9,9 @@
         <p>{{toShowIndex}}</p>
         <div class='housing-card__image-pagination-div js-pagination-div'>
             <!-- Здесь будут кружочки -->
-            <!--        <div class="circle-full"></div>-->
+            {{#each images}}
+                <div class='housing-card__circle'></div>
+            {{/each}}
             <!--        <div class="circle-empty"></div>-->
         </div>
     </div>

@@ -13,7 +13,7 @@ interface AdCardState {
 /** Карточка объявления на главной странице */
 export default class AdCard extends ReactiveComponent {
     #data;
-    #circles: HTMLDivElement[];
+    #circles: HTMLCollectionOf<Element>;
     currentImagePath: string;
 
     /** 
@@ -56,8 +56,6 @@ export default class AdCard extends ReactiveComponent {
      * Функция, которая добавляет возможность скроллинга изображений карточки как в Ozonе
      */
     #addImageScrolling() {
-        const imagePaginationDiv =
-            this.thisElement.querySelector('.js-pagination-div')!;
         const imgElem: HTMLImageElement =
             this.thisElement.querySelector('.js-main-img')!;
 
@@ -65,16 +63,9 @@ export default class AdCard extends ReactiveComponent {
         const areaFraction =
             imgElem.getBoundingClientRect().width / imagesAmount;
 
-        for (const circle of this.#circles) {
-            circle.remove();
-        }
-        this.#circles = [];
-        for (let i = 0; i < imagesAmount; i++) {
-            const circle = document.createElement('div');
-            circle.classList.add('housing-card__circle');
-            this.#circles.push(circle);
-            imagePaginationDiv.appendChild(circle);
-        }
+        this.#circles = this.thisElement.getElementsByClassName(
+            'housing-card__circle'
+        );
 
         imgElem.addEventListener('mousemove', (e) =>
             this.#onMouseMove(e, areaFraction)
