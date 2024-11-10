@@ -4,6 +4,11 @@ const SCROLL_DELAY = 200;
 
 import router from '../../modules/Router';
 import { AdvertData } from '../../modules/Types';
+import {
+    elementsAreEqual,
+    updateAttributes,
+    updateDOM,
+} from '../../modules/Utils';
 
 interface AdCardState {
     toShowIndex: number;
@@ -27,10 +32,10 @@ class AdCard {
         };
 
         this.#state = new Proxy(this._state, {
-            get: (target: AdCardState, prop, receiver) => {
+            get: (target: AdCardState, prop) => {
                 return target[prop];
             },
-            set: (target: AdCardState, property, value, receiver) => {
+            set: (target: AdCardState, property, value) => {
                 console.log('new value', value);
                 target[property] = value;
                 console.log('gonna rerender');
@@ -45,7 +50,13 @@ class AdCard {
     render() {
         const template = Handlebars.templates['AdCard.hbs'];
 
-        this.#parent.insertAdjacentHTML('beforeend', template(this.#data));
+        this.#parent.insertAdjacentHTML(
+            'beforeend',
+            template({
+                ...this.#data,
+                imageToShow: this.#data.images[this.#state.toShowIndex].path,
+            })
+        );
 
         requestAnimationFrame(() => this.addEventListeners()); // Wait till browser renders the component
     }
@@ -58,8 +69,11 @@ class AdCard {
         ) as HTMLElement;
 
         const container = document.createElement('div');
-        container.innerHTML = template(this.#data);
-        this.updateDOM(element, container.firstChild, element);
+        container.innerHTML = template({
+            ...this.#data,
+            imageToShow: this.#data.images[this.#state.toShowIndex].path,
+        });
+        updateDOM(element, container.firstChild as HTMLElement);
 
         requestAnimationFrame(() => this.addEventListeners()); // Wait till browser renders the component
     }
@@ -102,6 +116,9 @@ class AdCard {
         const areaFraction =
             imgElem.getBoundingClientRect().width / imagesAmount;
 
+        for (const circle of this.#circles) {
+            circle.remove();
+        }
         this.#circles = [];
         for (let i = 0; i < imagesAmount; i++) {
             const circle = document.createElement('div');
@@ -111,54 +128,19 @@ class AdCard {
         }
 
         imgElem.addEventListener('mousemove', (e) =>
-            this.#onMouseMove(e, areaFraction, imgElem)
+            this.#onMouseMove(e, areaFraction)
         );
         imgElem.addEventListener('mouseout', () => this.#onMouseOut(imgElem));
-
-        console.log('nigger faggot', this.#state.toShowIndex, this.#circles);
 
         this.#circles[this.#state.toShowIndex].classList.add(
             'housing-card__circle--fill'
         );
     }
 
-    updateDOM(
-        oldElement: HTMLElement,
-        newElement: HTMLElement,
-        container: HTMLElement
-    ) {
-        const oldElements = oldElement.children;
-        const newElements = newElement.children;
-        const toReplace = [];
-
-        for (let i = 0; i < newElements.length; i++) {
-            const oldElement = oldElements[i];
-            const newElement = newElements[i];
-
-            if (
-                oldElement &&
-                newElement &&
-                oldElement.innerHTML !== newElement.innerHTML
-            ) {
-                // Обновить только тот элемент, который изменился
-                console.log('new:', newElement, 'old:', oldElement);
-                toReplace.push([newElement, oldElement]);
-            }
-        }
-
-        for (const [newEl, oldEl] of toReplace) {
-            container.replaceChild(newEl, oldEl);
-        }
-    }
-
     /**
      * Функция, которая показывает нужную фотографию в зависимости от позиции курсора
      */
-    #onMouseMove(
-        e: MouseEvent,
-        areaFraction: number,
-        imgElem: HTMLImageElement
-    ) {
+    #onMouseMove(e: MouseEvent, areaFraction: number) {
         const rect = (e.target as HTMLElement).getBoundingClientRect();
         const x = e.clientX - rect.left;
         if (x < 0) return;
@@ -178,12 +160,11 @@ class AdCard {
     }
 
     /**
-     * @private
      * Функция, которая показывает первую фотографию, когда курсор вне карточки
      */
     #onMouseOut(imgElem: HTMLImageElement) {
         setTimeout(() => {
-            this.#state.toShowIndex = 0;
+            if (this.#state.toShowIndex !== 0) this.#state.toShowIndex = 0;
         }, SCROLL_DELAY);
     }
 
