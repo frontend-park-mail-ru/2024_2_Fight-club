@@ -41,10 +41,14 @@ class Router {
 const router = new Router();
 
 document.addEventListener('click', (event: Event) => {
-    const target = event.target as HTMLElement;
-    if (target.tagName === 'A') {
+    const path = event.composedPath() as HTMLElement[];
+    const linkElement = path.find(
+        (el) => el.tagName === 'A'
+    ) as HTMLAnchorElement;
+
+    if (linkElement) {
         event.preventDefault();
-        const href = target.getAttribute('href');
+        const href = linkElement.getAttribute('href');
 
         if (href) router.navigateTo(href);
     }
