@@ -127,11 +127,9 @@
     }
     &__label {
         font-weight: 600;
-        font-style: italic;
     }
     &__value {
         font-weight: 500;
-        font-style: italic;
     }
     // PROFILE
 }
@@ -165,13 +163,11 @@
     }
     &__p1 {
         margin-top: 5%;
-        font-style: italic;
         font-size: 28px;
         font-weight: 500;
     }
     &__p2 {
         margin-top: 5%;
-        font-style: italic;
         font-size: 20px;
     }
     &__hr {
@@ -197,7 +193,6 @@
     &__score {
         font-size: 20px;
         font-weight: 300;
-        font-style: italic;
     }
     &__div {
         gap: 10px;
@@ -210,11 +205,9 @@
         width: fit-content;
     }
     &__p {
-        font-style: italic;
         font-size: 20px;
     }
     &__info {
-        font-style: italic;
         font-size: 20px;
     }
     &__write-msg-button {
