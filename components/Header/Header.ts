@@ -73,7 +73,7 @@ class Header {
     #renderIcon() {
         const logoImg = document.createElement('img');
         logoImg.src = '/icon.jpg';
-        logoImg.classList.add('header__img1');
+        logoImg.classList.add('header__img-logo');
         this.#menuContainer.appendChild(logoImg);
     }
 
