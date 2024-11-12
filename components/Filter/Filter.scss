@@ -1,5 +1,23 @@
 @use '../../mixins';
 
+:root {
+    --filter-background-color: #ffffff;
+    --filter-text-color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --filter-background-color: #181a1b;
+        --filter-text-color: #fff;
+    }
+    h1 {
+        color: var(--primary-text-color);
+    }
+    p {
+        color: var(--primary-text-color);
+    }
+}
+
 #main-content {
     width: 93%;
     margin: 100px auto auto;
@@ -17,16 +35,16 @@
     grid-area: aside;
     padding: 5px 30px;
     border-radius: 20px;
-    background-color: #ffffff;
+    background-color: var(--filter-background-color);
+    color: var(--filter-text-color);
     margin-left: 50px;
     margin-right: auto;
-    border: 1px solid #a8a5a5;
+    border: 1px solid var(--border-color);
     padding-top: 20px;
     height: fit-content;
 }
 
 .filter-group {
-    background-color: #ffffff;
     margin-bottom: 5%;
 }
 

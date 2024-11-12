@@ -1,3 +1,15 @@
+:root {
+    --ad-card-background-color: #ffffff;
+    --ad-card-text-color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ad-card-background-color: #181a1b;
+        --ad-card-text-color: #fff;
+    }
+}
+
 .housing-card {
     display: flex;
     flex-direction: column;
@@ -52,7 +64,8 @@
     }
 
     &__info {
-        background-color: white;
+        background-color: var(--ad-card-background-color);
+        color: var(--ad-card-text-color);
         min-height: 40px;
         height: 110px;
         display: flex;

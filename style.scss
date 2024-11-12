@@ -1,0 +1,53 @@
+@use './consts.scss';
+@use 'components/Header/Header';
+@use 'components/AdCard/AdCard';
+@use 'components/Filter/Filter';
+@use 'components/AuthPopup/AuthPopup';
+@use 'components/MainPhoto/MainPhoto';
+@use 'components/MainPage/MainPage';
+@use 'components/ProfilePopup/ProfilePopup';
+@use 'components/EditAdvertPage/EditAdvertPage';
+@use 'components/AdPage/AdPage';
+@use 'components/AdListPage/AdListPage';
+@use 'components/ProfilePage/ProfilePage';
+@use 'components/ProfileData/ProfileData';
+@use 'components/ProfileInfo/ProfileInfo';
+@use 'components/CityPage/CityPage';
+@use 'components/SearchPopup/SearchPopup';
+@use 'components/PopupAlert/PopupAlert';
+
+:root {
+    --header-color: #f6f6f6;
+    --background-color: #f6f6f6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--background-color);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #17191a;
+    }
+}
+
+@font-face {
+    font-family: MarckScript-Regular;
+    src: url('./fonts/MarckScript-Regular.ttf');
+}
+
+@font-face {
+    font-family: Dimkin-Light;
+    src: url('./fonts/Dimkin-Light.ttf');
+}
+
+@font-face {
+    font-family: Dimkin-Regular;
+    src: url('./fonts/Dimkin-Regular.ttf');
+}

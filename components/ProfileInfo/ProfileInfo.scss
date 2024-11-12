@@ -1,5 +1,17 @@
 @use '../../mixins';
 
+:root {
+    --profile-block-background-color: #fff;
+    --profile-block-text-color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --profile-block-background-color: #181a1b;
+        --profile-block-text-color: #eee;
+    }
+}
+
 .profile-container {
     margin: 40px 0px 0px 35%;
     box-shadow:
@@ -14,7 +26,8 @@
     max-width: 280px;
     padding-inline-start: 40px;
     padding-inline-end: 40px;
-    background-color: white;
+    background-color: var(--profile-block-background-color);
+    color: var(--profile-block-text-color);
 }
 
 .profile-container__center {

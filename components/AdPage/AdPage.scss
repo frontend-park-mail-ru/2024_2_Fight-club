@@ -89,6 +89,8 @@
     border-radius: 10px;
     border: 1px solid #000;
     padding: 30px;
+    background-color: var(--primary-background-color);
+    color: var(--primary-text-color);
 
     &__text-data {
         display: grid;
@@ -114,7 +116,8 @@
     height: min-content;
     max-width: 280px;
     padding: 10px 20px;
-    background-color: white;
+    background-color: var(--primary-background-color);
+    color: var(--primary-text-color);
     gap: 10px;
     &__center {
         text-align: center;
