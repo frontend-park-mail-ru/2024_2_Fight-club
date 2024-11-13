@@ -321,16 +321,15 @@ class AuthPopup {
     #addEventListeners(parent: HTMLInputElement): void {
         // Close overlay
         const form: HTMLFormElement = parent.querySelector('.popup')!;
-        form.onclick = (e) => e.stopPropagation();
+        form.onmousedown = (e) => e.stopPropagation();
         form.onsubmit = (e) => this.#onFormSubmit(parent, e);
 
         parent
             .querySelector('.close-cross')!
             .addEventListener('click', () => this.#closeOverlay(parent));
 
-        parent
-            .querySelector('.overlay')!
-            .addEventListener('click', () => this.#closeOverlay(parent));
+        (parent.querySelector('.overlay') as HTMLDivElement).onmousedown = () =>
+            this.#closeOverlay(parent);
 
         // Show auth/reg menu
         parent.querySelector('.popup__a')!.addEventListener('click', (e) => {
