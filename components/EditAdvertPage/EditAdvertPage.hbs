@@ -1,4 +1,4 @@
-<div class='ad-page'>
+<div class='edit-ad-page'>
     <main>
         <div class='advert-images-carousel'>
             <div class='advert-images-carousel__main-img-div js-main-img-div'>
@@ -33,12 +33,12 @@
             </div>
         </div>
 
-        <form class='ad-page__edit-form js-form'>
+        <form class='edit-ad-page__edit-form js-form'>
             {{#each inputs}}
                 <label for='{{this.name}}'>{{this.label}}</label>
                 {{#if this.isTextArea}}
                     <textarea
-                        class='ad-page__edit-form__text-area'
+                        class='edit-ad-page__edit-form__text-area'
                         rows='10'
                         name='{{this.name}}'
                         required
@@ -47,7 +47,7 @@
                 {{else if this.isSelect}}
                     <select
                         name='{{this.name}}'
-                        class='js-cities ad-page__edit-form__select'
+                        class='js-cities edit-ad-page__edit-form__select'
                     >
                         {{#each this.options}}
                             <option
@@ -61,7 +61,7 @@
 
                 {{else}}
                     <input
-                        class='ad-page__edit-form__input'
+                        class='edit-ad-page__edit-form__input'
                         name='{{this.name}}'
                         placeholder='{{this.placeholder}}'
                         type='{{this.type}}'
@@ -76,15 +76,15 @@
                     />
                 {{/if}}
             {{/each}}
-            <button class='ad-page__btn'>{{actionButtonTitle}}</button>
+            <button class='edit-ad-page__btn'>{{actionButtonTitle}}</button>
         </form>
     </main>
 
     <div
-        class='ad-page__fullscreen-overlay ad-page__fullscreen-overlay_hidden js-fullscreen-overlay'
+        class='edit-ad-page__fullscreen-overlay edit-ad-page__fullscreen-overlay_hidden js-fullscreen-overlay'
     >
         <img
-            class='ad-page__fullscreen-overlay__image js-main-image-fullscreen'
+            class='edit-ad-page__fullscreen-overlay__image js-main-image-fullscreen'
         />
     </div>
 
