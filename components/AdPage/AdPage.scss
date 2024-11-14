@@ -1,6 +1,6 @@
 @use '../../mixins';
 
-$secondary-card-size: 77px;
+$secondary-card-size: 64px;
 
 .ad-page {
     max-width: 70%;
@@ -94,10 +94,8 @@ $secondary-card-size: 77px;
         &__secondary-images {
             object-fit: cover;
             display: inline;
-            min-width: $secondary-card-size;
-            max-width: $secondary-card-size;
-            min-height: $secondary-card-size;
-            max-height: $secondary-card-size;
+            width: $secondary-card-size;
+            height: $secondary-card-size;
             border-radius: 10px;
             border: 1px solid black;
             cursor: pointer;
@@ -106,16 +104,14 @@ $secondary-card-size: 77px;
         &__secondary_img {
             object-fit: cover;
             display: inline;
-            min-width: 80px;
-            max-width: 80px;
-            min-height: 80px;
-            max-height: 80px;
-            border-radius: 10px;
+            width: $secondary-card-size;
+            height: $secondary-card-size;
+            border-radius: 5px;
             border: none;
             cursor: pointer;
             &--current {
-                border: 2px solid #0059ff;
-                box-sizing: content-box;
+                border: 2px solid #4c4c4c;
+                box-sizing: border-box;
             }
         }
     }
