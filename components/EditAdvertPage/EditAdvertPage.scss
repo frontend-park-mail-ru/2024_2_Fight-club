@@ -82,12 +82,12 @@ $secondary-card-size: 77px;
     }
 }
 
-.advert-images-carousel {
+.edit-advert-images-carousel {
     display: flex;
     flex-direction: column;
     gap: 10px;
 
-    &__secondary_images {
+    &__secondary-images {
         display: flex;
         gap: 5px;
         overflow: auto;

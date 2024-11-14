@@ -1,5 +1,7 @@
 @use '../../mixins';
 
+$secondary-card-size: 77px;
+
 .ad-page {
     max-width: 70%;
     margin: 50px auto;
@@ -87,6 +89,18 @@
                 background-repeat: no-repeat;
                 z-index: -1;
             }
+        }
+
+        &__secondary-images {
+            object-fit: cover;
+            display: inline;
+            min-width: $secondary-card-size;
+            max-width: $secondary-card-size;
+            min-height: $secondary-card-size;
+            max-height: $secondary-card-size;
+            border-radius: 10px;
+            border: 1px solid black;
+            cursor: pointer;
         }
 
         &__secondary_img {
