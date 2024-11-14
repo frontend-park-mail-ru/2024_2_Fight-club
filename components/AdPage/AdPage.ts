@@ -76,7 +76,11 @@ export default class AdPage extends ReactiveComponent {
             ) as HTMLButtonElement
         ).onclick = (e) => {
             e.stopPropagation();
-            carousel.scrollLeft -= this.#scrollWidth;
+            this.showImage(
+                carousel,
+                carouselImages,
+                this.state.currentIndex - 1
+            );
         };
         (
             this.thisElement.querySelector(
@@ -84,7 +88,11 @@ export default class AdPage extends ReactiveComponent {
             ) as HTMLButtonElement
         ).onclick = (e) => {
             e.stopPropagation();
-            carousel.scrollLeft += this.#scrollWidth;
+            this.showImage(
+                carousel,
+                carouselImages,
+                this.state.currentIndex + 1
+            );
         };
 
         carouselImages.forEach((el: HTMLImageElement, index) => {
@@ -105,6 +113,14 @@ export default class AdPage extends ReactiveComponent {
         carouselImages: NodeListOf<HTMLImageElement>,
         index: number
     ) {
+        const minIndex = 0;
+        const maxIndex = this.templateData.images.length - 1;
+        if (index < minIndex) {
+            index = this.templateData.images.length - 1;
+        } else if (index > maxIndex) {
+            index = 0;
+        }
+
         carouselImages[index].classList.add(
             'ad-page__gallery__secondary-img--current'
         );
