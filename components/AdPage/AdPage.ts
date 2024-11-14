@@ -61,7 +61,6 @@ export default class AdPage extends ReactiveComponent {
             if (this.#scrollWasAutomated) return;
 
             const newIndex = Math.ceil(carousel.scrollLeft / this.#scrollWidth);
-            console.log(carousel.scrollLeft, this.#scrollWidth);
 
             if (this.state.currentIndex !== newIndex) {
                 this.state.currentIndex = newIndex;
@@ -107,7 +106,7 @@ export default class AdPage extends ReactiveComponent {
         index: number
     ) {
         carouselImages[index].classList.add(
-            'ad-page__gallery__secondary_img--current'
+            'ad-page__gallery__secondary-img--current'
         );
 
         if (index === this.state.currentIndex) return;

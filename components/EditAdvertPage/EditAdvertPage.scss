@@ -1,6 +1,6 @@
 @use '../../mixins';
 
-$secondary-card-size: 77px;
+$secondary-card-size: 64px;
 
 .edit-ad-page {
     max-width: 70%;
@@ -127,15 +127,14 @@ $secondary-card-size: 77px;
         position: relative;
     }
 
-    &__secondary_img {
+    &__secondary-img {
         object-fit: cover;
         display: inline;
         min-width: $secondary-card-size;
         max-width: $secondary-card-size;
         min-height: $secondary-card-size;
         max-height: $secondary-card-size;
-        border-radius: 10px;
-        border: 1px solid black;
+        border-radius: 5px;
         cursor: pointer;
     }
     &__del-img-btn {
@@ -158,9 +157,9 @@ $secondary-card-size: 77px;
             color: red;
         }
     }
-    &__secondary_img_current {
-        border: 2px solid #0059ff;
-        box-sizing: content-box;
+    &__secondary-img_current {
+        border: 2px solid #4c4c4c;
+        box-sizing: border-box;
     }
 }
 

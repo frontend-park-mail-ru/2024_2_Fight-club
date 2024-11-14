@@ -18,7 +18,7 @@ const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
     'ad-page__fullscreen-overlay_hidden';
 
 const SECONDARY_IMG_SELECTED_CLASS_NAME =
-    'edit-advert-images-carousel__secondary_img_current';
+    'edit-advert-images-carousel__secondary-img_current';
 const ADD_IMG_BTN_SELECTOR = '.js-add-img-btn';
 const FILE_INPUT_SELECTOR = '.js-file-input';
 
