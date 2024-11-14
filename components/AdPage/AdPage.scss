@@ -110,7 +110,8 @@ $secondary-card-size: 64px;
             border: none;
             cursor: pointer;
             &--current {
-                border: 2px solid #4c4c4c;
+                border: 2px solid #b68e36;
+                filter: saturate(2);
                 box-sizing: border-box;
             }
         }
