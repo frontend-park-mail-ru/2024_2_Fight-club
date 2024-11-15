@@ -25,6 +25,7 @@
     height: fit-content;
 
     &__group-name {
+        margin: 5px 0 0px;
         font-size: 20px;
         font-weight: 500;
     }
@@ -33,12 +34,6 @@
 .filter-group {
     background-color: #ffffff;
     margin-bottom: 5%;
-}
-
-.filter-group span {
-    display: flex;
-    align-items: center;
-    height: 40px;
 }
 
 .filter-group a {
@@ -68,7 +63,7 @@
         outline: 1px solid #939598;
         position: absolute;
         top: 20%;
-        left: 0;
+        left: 1%;
         border-radius: 5px;
     }
 }
