@@ -1,9 +1,6 @@
 <form class="filter">
   <div class="filter-group geoposition-group">
-    <span>
-      <a href="#"><img src="/svg/down-arrow.svg" width="24" /></a>
-      <p>По геопозиции</p>
-    </span>
+    <span class="filter__group-name">По геопозиции</span>
     {{#each geoposition.variations}}
       <div class="filter-element">
         <input type="radio" id="geo-{{@index}}" name="geo" value="{{this.value}}" {{#if this.isDefault}}checked{{/if}}/>
@@ -31,10 +28,7 @@
   </div>
     <hr>
   <div class="filter-group gender-group">
-    <span>
-      <a href="#"><img src="/svg/down-arrow.svg" width="24" /></a>
-      <p>Пол хоста</p>
-    </span>
+    <span class="filter__group-name">Пол хоста</span>
     {{#each gender.variations}}
       <div class="filter-element">
         <input type="radio" id="sex-{{@index}}" name="sex" value="{{this.value}}" {{#if this.isDefault}}checked{{/if}}/>
@@ -44,10 +38,7 @@
   </div>
     <hr>
   <div class="filter-group visitors-group">
-    <span>
-      <a href="#"><img src="/svg/down-arrow.svg" width="24" /></a>
-      <p>Количество гостей</p>
-    </span>
+    <span class="filter__group-name">Количество гостей</span>
     {{#each visitors.variations}}
       <div class="filter-element">
         <input type="radio" id="vis-{{@index}}" name="vis" value="{{this.value}}" {{#if this.isDefault}}checked{{/if}}/>
