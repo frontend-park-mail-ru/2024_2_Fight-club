@@ -402,6 +402,18 @@ class ProfileData {
         });
     }
 
+    #addressAutoComplete(): void{
+        const addressInput = document.getElementById('address') as HTMLInputElement;
+        console.log(addressInput);
+        addressInput!.addEventListener('input', async (e)=>{
+            e.preventDefault();
+            console.log('there');
+            const response = await APIClient.getAddress(addressInput.value);
+            const data = await response.json();
+            console.log(data);
+        });
+    }
+
     /**
      * @private
      */
@@ -411,6 +423,7 @@ class ProfileData {
         this.#resetButtonEventLisener();
         this.#closeFormEventListener();
         this.#showErrorMessageEventListener();
+        this.#addressAutoComplete();
     }
 
     /**

@@ -5,6 +5,7 @@ import { RegisterParams, AdsFilters, LoginParams, EditParams } from './Types';
 
 class APIClient {
     BASE_URL = `${location.protocol}//${window.location.hostname}:8008/api`;
+    AUTOADDRESS_KEY = 'pVhps0CwtfR0';
 
     /**
      * @public
@@ -185,6 +186,11 @@ class APIClient {
         }
 
         return Ajax.put({ url, body: formData });
+    }
+
+    async getAddress(address: string){
+        const url = `https://api.geotree.ru/address.php?key=${this.AUTOADDRESS_KEY}&limit=3&term=${address}`;
+        return Ajax.get(url);
     }
 }
 
