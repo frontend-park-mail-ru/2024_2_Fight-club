@@ -7,6 +7,7 @@ import ProfilePopup from './components/ProfilePopup/ProfilePopup';
 import MainPage from './components/MainPage/MainPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
 import CityPage from './components/CityPage/CityPage';
+import MapPage from './components/MapPage/MapPage';
 
 import { clearPage } from './modules/Clear';
 
@@ -50,8 +51,8 @@ const renderMainPage = async () => {
 };
 
 function renderMapPage() {
-    const cityPage = new CityPage();
-    cityPage.render(pageContainer);
+    const mapPage = new MapPage();
+    mapPage.render(pageContainer);
 }
 
 function renderArticlesPage() {}
@@ -130,12 +131,15 @@ const renderHeader = async () => {
 };
 
 router.addRoute('/', async () => {
-    await renderHeader();
     await renderMainPage();
 });
 
 router.addRoute('/profile', async () => {
     await renderProfilePage();
+});
+
+router.addRoute('/map', async () => {
+    await renderMapPage();
 });
 
 router.addRoute('/ads/', async (params: URLSearchParams) => {
