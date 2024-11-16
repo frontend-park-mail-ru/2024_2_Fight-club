@@ -1,8 +1,8 @@
 'use strict';
 
-import ApiClient from "../../modules/ApiClient";
-import PopupAlert from "../PopupAlert/PopupAlert";
-import ShortHousing from "../ShortAdCard/ShortAdCard";
+import ApiClient from '../../modules/ApiClient';
+import PopupAlert from '../PopupAlert/PopupAlert';
+import ShortHousing from '../ShortAdCard/ShortAdCard';
 
 class MapPage {
     constructor(){}
@@ -25,7 +25,7 @@ class MapPage {
     }
 
     async #renderMap(mapContainer: HTMLDivElement){
-        let map = new ymaps.Map('map', {
+        const map = new ymaps.Map('map', {
             center: [55.636697426704885,37.6451089525478],
             zoom: 4 
         });
@@ -33,7 +33,7 @@ class MapPage {
 
     async #renderAds(adsContainer: HTMLDivElement){
         try{
-            const data = await ApiClient.getAds()
+            const data = await ApiClient.getAds();
             for (const [_, d] of Object.entries(data)){
                 console.log(d);
                 const housing = new ShortHousing(d);
@@ -63,7 +63,7 @@ class MapPage {
         parent.appendChild(mapPage);
 
         await this.#renderMap(map);
-        await this.#renderAds(peopleList)
+        await this.#renderAds(peopleList);
         this.#dynamicScroll();
     }
 }

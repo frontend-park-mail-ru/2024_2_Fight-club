@@ -1,12 +1,12 @@
 'use strict';
 
-import { AdvertData } from "../../modules/Types";
+import { AdvertData } from '../../modules/Types';
 
 class ShortHousing{
-    #data: AdvertData
+    #data: AdvertData;
 
     constructor(data: AdvertData) {
-        this.#data = data
+        this.#data = data;
     }
 
     render(parent: HTMLDivElement) {
