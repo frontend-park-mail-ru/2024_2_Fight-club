@@ -37,8 +37,10 @@ class MapPage {
         }
     }
 
-    goToPlace(city: string){
-        const placeOnMap = ymaps.geocode(city);
+    goToPlace(city: string, address: string){
+        const query = city + ', ' + address;
+        console.log(query);
+        const placeOnMap = ymaps.geocode(query);
         placeOnMap.then(
             (res)=>{
                 const place = res.geoObjects.get(0);
@@ -62,14 +64,14 @@ class MapPage {
 
     async #renderAds(adsContainer: HTMLDivElement){
         try{
-            let limit: Limit = {
+            const limit: Limit = {
                 limit: 10,
                 offset: 0,
-            }
+            };
             const data = await ApiClient.getAds({}, limit);
             for (const [_, d] of Object.entries(data)){
-                const housing = new ShortHousing(d, (city: string)=>{
-                    this.goToPlace(city);
+                const housing = new ShortHousing(d, (city: string, address: string)=>{
+                    this.goToPlace(city, address);
                 });
                 housing.render(adsContainer);
             }
