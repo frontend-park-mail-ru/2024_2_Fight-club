@@ -12,9 +12,8 @@ class ShortHousing{
     constructor(data: AdvertData, callback) {
         this.#data = data;
         this.#age = calculateAge(this.#data.author.birthDate);
-        this.#sex = this.#calculateSex(this.#data.author.sex)
+        this.#sex = this.#calculateSex(this.#data.author.sex);
         this.#clickCallback = callback;
-        console.log(this.#data);
     }
 
     /**
@@ -32,13 +31,13 @@ class ShortHousing{
         const template = Handlebars.templates['ShortAdCard.hbs'];
         const shortCardWrapper = document.createElement('div');
         shortCardWrapper.innerHTML = template({
-             data: this.#data,
-             sex: this.#sex, 
-             age: this.#age
+            data: this.#data,
+            sex: this.#sex, 
+            age: this.#age
         });
         parent.appendChild(shortCardWrapper);
         shortCardWrapper.addEventListener('click', ()=>{
-            this.#clickCallback(this.#data.cityName);
+            this.#clickCallback(this.#data.cityName, this.#data.address);
         });
     }
 }

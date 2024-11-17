@@ -1,6 +1,7 @@
 'use strict';
 
 import ApiClient from '../../modules/ApiClient';
+import { City } from '../../modules/Types';
 import PopupAlert from '../PopupAlert/PopupAlert';
 import ShortHousing from '../ShortAdCard/ShortAdCard';
 
@@ -13,10 +14,12 @@ class MapPage {
     #map;
     #TOTAL_ZOOM: number;
     #CITY_ZOOM: number;
+    #PLACE_ZOOM: number;
 
     constructor(){
         this.#TOTAL_ZOOM = 4;
         this.#CITY_ZOOM = 11;
+        this.#PLACE_ZOOM = 13
     }
 
     #getLocation(){
@@ -46,7 +49,7 @@ class MapPage {
                 const place = res.geoObjects.get(0);
                 this.#map.geoObjects.removeAll();
                 this.#map.geoObjects.add(place);
-                this.#map.setCenter(place.geometry._coordinates, this.#CITY_ZOOM);
+                this.#map.setCenter(place.geometry._coordinates, this.#PLACE_ZOOM);
             }, 
             (err)=>{
                 const errorPopup = PopupAlert('Место не найдено');
@@ -60,6 +63,44 @@ class MapPage {
             center: [55.755808716436846,37.61771300861586],
             zoom: this.#TOTAL_ZOOM 
         });
+
+        const cities = await ApiClient.getCities() as City[]
+        const myClasters = new Map()
+        for (const city of cities) {
+            myClasters.set(city.title, []);
+        }
+
+        const data = await ApiClient.getAds();
+        const geocodePromises = data.map((d) => {
+            const query = d.cityName + ', ' + d.address;
+            return ymaps.geocode(query).then(
+                (res) => {
+                    const coordinates = res.geoObjects.get(0).geometry.getCoordinates();
+                    myClasters.get(d.cityName).push(
+                        new ymaps.GeoObject({
+                            geometry: {
+                                type: 'Point',
+                                coordinates: coordinates,
+                            },
+                        })
+                    );
+                },
+                (err) => {
+                    const errorPopup = PopupAlert('Место не найдено');
+                    document.querySelector('.page-container')!.appendChild(errorPopup);
+                }
+            );
+        });
+
+        await Promise.all(geocodePromises);
+        
+        for (const adsInCity of myClasters.values()){
+            if (adsInCity.length != 0) {
+                let cluster = new ymaps.Clusterer();
+                cluster.add(adsInCity);
+                this.#map.geoObjects.add(cluster);
+            }
+        }
     }
 
     async #renderAds(adsContainer: HTMLDivElement){
