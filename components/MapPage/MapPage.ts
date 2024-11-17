@@ -11,7 +11,7 @@ class MapPage {
 
     constructor(){
         this.#TOTAL_ZOOM = 4;
-        this.#CITY_ZOOM = 10;
+        this.#CITY_ZOOM = 11;
     }
 
     #getLocation(){
@@ -37,6 +37,7 @@ class MapPage {
         placeOnMap.then(
             (res)=>{
                 const place = res.geoObjects.get(0);
+                this.#map.geoObjects.removeAll();
                 this.#map.geoObjects.add(place);
                 this.#map.setCenter(place.geometry._coordinates, this.#CITY_ZOOM);
             }, 
