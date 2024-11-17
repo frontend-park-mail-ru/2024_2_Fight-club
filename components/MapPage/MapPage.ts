@@ -5,29 +5,52 @@ import PopupAlert from '../PopupAlert/PopupAlert';
 import ShortHousing from '../ShortAdCard/ShortAdCard';
 
 class MapPage {
-    constructor(){}
+    #map
+    #TOTAL_ZOOM: number
+    #CITY_ZOOM: number
 
-    #dynamicScroll(){
-        document.querySelectorAll('.short-card__name-container__address').forEach(address => {
-            const parentWidth = address.offsetParent.offsetWidth;
-            const textWidth = address.scrollWidth;
-            const offset = textWidth > parentWidth ? textWidth - parentWidth : 0;
-        
-            address.addEventListener('mouseenter', () => {
-                address.style.transform = `translateX(-${offset}px)`;
+    constructor(){
+        this.#TOTAL_ZOOM = 4;
+        this.#CITY_ZOOM = 10;
+    }
+
+    #getLocation(){
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition((position)=>{
+                this.#map.setCenter(
+                    [position.coords.latitude, position.coords.longitude],
+                     this.#CITY_ZOOM,
+                     'MAP'
+                );
+                let myGeo = new ymaps.Placemark(
+                    [position.coords.latitude, position.coords.longitude],
+                    {},
+                    {preset: 'islands#redIcon'}
+                );
+                this.#map.geoObjects.add(myGeo);
             });
-        
-            address.addEventListener('mouseleave', () => {
-                address.style.transform = 'translateX(0)';
-            });
-        });       
-        
+        }
+    }
+
+    goToPlace(city: string){
+        let placeOnMap = ymaps.geocode(city);
+        placeOnMap.then(
+            (res)=>{
+                const place = res.geoObjects.get(0);
+                this.#map.geoObjects.add(place);
+                this.#map.setCenter(place.geometry._coordinates, this.#CITY_ZOOM);
+            }, 
+            (err)=>{
+                const errorPopup = PopupAlert('Место не найдено');
+                document.querySelector('.page-container')!.appendChild(errorPopup);
+            }
+        );
     }
 
     async #renderMap(mapContainer: HTMLDivElement){
-        const map = new ymaps.Map('map', {
-            center: [55.636697426704885,37.6451089525478],
-            zoom: 4 
+        this.#map = new ymaps.Map('map', {
+            center: [55.755808716436846,37.61771300861586],
+            zoom: this.#TOTAL_ZOOM 
         });
     }
 
@@ -35,8 +58,9 @@ class MapPage {
         try{
             const data = await ApiClient.getAds();
             for (const [_, d] of Object.entries(data)){
-                console.log(d);
-                const housing = new ShortHousing(d);
+                const housing = new ShortHousing(d, (city: string)=>{
+                    this.goToPlace(city);
+                });
                 housing.render(adsContainer);
             }
         } catch {
@@ -64,7 +88,7 @@ class MapPage {
 
         await this.#renderMap(map);
         await this.#renderAds(peopleList);
-        this.#dynamicScroll();
+        this.#getLocation();
     }
 }
 

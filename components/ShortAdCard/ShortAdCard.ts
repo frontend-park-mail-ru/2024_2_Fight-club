@@ -4,14 +4,21 @@ import { AdvertData } from '../../modules/Types';
 
 class ShortHousing{
     #data: AdvertData;
+    #clickCallback
 
-    constructor(data: AdvertData) {
+    constructor(data: AdvertData, callback: any) {
         this.#data = data;
+        this.#clickCallback = callback;
     }
 
     render(parent: HTMLDivElement) {
         const template = Handlebars.templates['ShortAdCard.hbs'];
-        parent.insertAdjacentHTML('afterbegin', template(this.#data));
+        const shortCardWrapper = document.createElement('div');
+        shortCardWrapper.innerHTML = template(this.#data)
+        parent.appendChild(shortCardWrapper);
+        shortCardWrapper.addEventListener('click', ()=>{
+            this.#clickCallback(this.#data.cityName);
+        })
     }
 }
 
