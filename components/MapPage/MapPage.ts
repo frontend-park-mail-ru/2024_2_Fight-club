@@ -4,10 +4,15 @@ import ApiClient from '../../modules/ApiClient';
 import PopupAlert from '../PopupAlert/PopupAlert';
 import ShortHousing from '../ShortAdCard/ShortAdCard';
 
+interface Limit {
+    limit: number;
+    offset: number;
+}
+
 class MapPage {
-    #map
-    #TOTAL_ZOOM: number
-    #CITY_ZOOM: number
+    #map;
+    #TOTAL_ZOOM: number;
+    #CITY_ZOOM: number;
 
     constructor(){
         this.#TOTAL_ZOOM = 4;
@@ -19,10 +24,10 @@ class MapPage {
             navigator.geolocation.getCurrentPosition((position)=>{
                 this.#map.setCenter(
                     [position.coords.latitude, position.coords.longitude],
-                     this.#CITY_ZOOM,
-                     'MAP'
+                    this.#CITY_ZOOM,
+                    'MAP'
                 );
-                let myGeo = new ymaps.Placemark(
+                const myGeo = new ymaps.Placemark(
                     [position.coords.latitude, position.coords.longitude],
                     {},
                     {preset: 'islands#redIcon'}
@@ -33,7 +38,7 @@ class MapPage {
     }
 
     goToPlace(city: string){
-        let placeOnMap = ymaps.geocode(city);
+        const placeOnMap = ymaps.geocode(city);
         placeOnMap.then(
             (res)=>{
                 const place = res.geoObjects.get(0);
@@ -57,7 +62,11 @@ class MapPage {
 
     async #renderAds(adsContainer: HTMLDivElement){
         try{
-            const data = await ApiClient.getAds();
+            let limit: Limit = {
+                limit: 10,
+                offset: 0,
+            }
+            const data = await ApiClient.getAds({}, limit);
             for (const [_, d] of Object.entries(data)){
                 const housing = new ShortHousing(d, (city: string)=>{
                     this.goToPlace(city);
