@@ -23,6 +23,7 @@
 }
 
 .search-container {
+    top: 30%;
     position: relative;
     width: 50%;
     height: 9%;
@@ -45,7 +46,7 @@
 
 .custom-search input {
     width: 100%;
-    border-radius: 10px 0 0 10px;
+    border-radius: 10px;
     outline: none;
     border: none;
     padding: 5px 10px 0 5%;
