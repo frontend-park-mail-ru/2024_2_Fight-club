@@ -56,9 +56,6 @@ class SearchPopup {
                 document
                     .querySelector('.js-find-city')!
                     .classList.remove('update-input-border');
-                document
-                    .querySelector('.js-find-city-button')!
-                    .classList.remove('update-button-border');
             });
         }
     }
@@ -88,9 +85,6 @@ class SearchPopup {
         document
             .querySelector('.js-find-city')!
             .classList.add('update-input-border');
-        document
-            .querySelector('.js-find-city-button')!
-            .classList.add('update-button-border');
 
         const { moscow, spb, groups } = this.#splitByThreeGroups();
         const template = Handlebars.templates['SearchPopup.hbs'];
