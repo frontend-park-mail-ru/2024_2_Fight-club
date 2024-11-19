@@ -155,11 +155,9 @@ $secondary-card-size: 64px;
     }
     &__label {
         font-weight: 600;
-        font-style: italic;
     }
     &__value {
         font-weight: 500;
-        font-style: italic;
     }
     // PROFILE
 }
@@ -193,13 +191,11 @@ $secondary-card-size: 64px;
     }
     &__p1 {
         margin-top: 5%;
-        font-style: italic;
         font-size: 28px;
         font-weight: 500;
     }
     &__p2 {
         margin-top: 5%;
-        font-style: italic;
         font-size: 20px;
     }
     &__hr {
@@ -225,7 +221,6 @@ $secondary-card-size: 64px;
     &__score {
         font-size: 20px;
         font-weight: 300;
-        font-style: italic;
     }
     &__div {
         gap: 10px;
@@ -238,11 +233,9 @@ $secondary-card-size: 64px;
         width: fit-content;
     }
     &__p {
-        font-style: italic;
         font-size: 20px;
     }
     &__info {
-        font-style: italic;
         font-size: 20px;
     }
     &__write-msg-button {

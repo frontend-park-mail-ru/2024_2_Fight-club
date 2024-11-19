@@ -33,6 +33,7 @@ export default class AdPage extends ReactiveComponent {
                 ...data,
                 ...authorInfo,
                 age: calculateAge(authorInfo.birthDate),
+                sex: authorInfo.sex === 'M' ? 'Мужской' : 'Женский',
             },
         });
     }
@@ -60,7 +61,9 @@ export default class AdPage extends ReactiveComponent {
         carousel.onscroll = () => {
             if (this.#scrollWasAutomated) return;
 
-            const newIndex = Math.ceil(carousel.scrollLeft / this.#scrollWidth);
+            const newIndex = Math.floor(
+                carousel.scrollLeft / this.#scrollWidth
+            );
 
             if (this.state.currentIndex !== newIndex) {
                 this.state.currentIndex = newIndex;
