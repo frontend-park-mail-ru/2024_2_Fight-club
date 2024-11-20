@@ -12,6 +12,7 @@ interface Limit {
 
 class MapPage {
     #map;
+    // #placemarks;
     #TOTAL_ZOOM: number;
     #CITY_ZOOM: number;
     #PLACE_ZOOM: number;
@@ -19,7 +20,9 @@ class MapPage {
     constructor(){
         this.#TOTAL_ZOOM = 4;
         this.#CITY_ZOOM = 11;
-        this.#PLACE_ZOOM = 13
+        this.#PLACE_ZOOM = 13;
+
+        // this.#placemarks = new Map();
     }
 
     #getLocation(){
@@ -42,13 +45,10 @@ class MapPage {
 
     goToPlace(city: string, address: string){
         const query = city + ', ' + address;
-        console.log(query);
         const placeOnMap = ymaps.geocode(query);
         placeOnMap.then(
             (res)=>{
                 const place = res.geoObjects.get(0);
-                this.#map.geoObjects.removeAll();
-                this.#map.geoObjects.add(place);
                 this.#map.setCenter(place.geometry._coordinates, this.#PLACE_ZOOM);
             }, 
             (err)=>{
@@ -64,8 +64,8 @@ class MapPage {
             zoom: this.#TOTAL_ZOOM 
         });
 
-        const cities = await ApiClient.getCities() as City[]
-        const myClasters = new Map()
+        const cities = await ApiClient.getCities() as City[];
+        const myClasters = new Map();
         for (const city of cities) {
             myClasters.set(city.title, []);
         }
@@ -76,14 +76,14 @@ class MapPage {
             return ymaps.geocode(query).then(
                 (res) => {
                     const coordinates = res.geoObjects.get(0).geometry.getCoordinates();
-                    myClasters.get(d.cityName).push(
-                        new ymaps.GeoObject({
-                            geometry: {
-                                type: 'Point',
-                                coordinates: coordinates,
-                            },
-                        })
-                    );
+                    const placemark = new ymaps.GeoObject({
+                        geometry: {
+                            type: 'Point',
+                            coordinates: coordinates,
+                        },
+                    });
+                    myClasters.get(d.cityName).push(placemark);
+                    // this.#placemarks.set(coordinates, placemark);
                 },
                 (err) => {
                     const errorPopup = PopupAlert('Место не найдено');
@@ -96,7 +96,7 @@ class MapPage {
         
         for (const adsInCity of myClasters.values()){
             if (adsInCity.length != 0) {
-                let cluster = new ymaps.Clusterer();
+                const cluster = new ymaps.Clusterer();
                 cluster.add(adsInCity);
                 this.#map.geoObjects.add(cluster);
             }
