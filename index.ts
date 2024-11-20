@@ -161,11 +161,10 @@ router.addRoute('/ad-cities/', async (params: URLSearchParams) => {
 });
 
 router.addRoute('/profiles', async (params: URLSearchParams) => {
-    const profileId = params.get('id')
-    console.log(profileId)
-    const page = new ProfilePage()
-    page.render(pageContainer)
-})
+    const profileId = params.get('id') as string;
+    const page = new ProfilePage(profileId);
+    page.render(pageContainer);
+});
 
 const init = async () => {
     await renderHeader();

@@ -23,6 +23,7 @@ interface sexTypes {
 }
 
 class ProfileData {
+    #isMyProfile: boolean;
     #headerConfig;
     #content;
     #profileData: userData = {
@@ -39,14 +40,15 @@ class ProfileData {
     #uploadAvatarImage?: File;
     #renderProfileInfo;
 
-    constructor(renderProfileInfoCallback: () => void) {
+    constructor(renderProfileInfoCallback: () => void, isMyProfile: boolean) {
+        this.#isMyProfile = isMyProfile;
         this.#headerConfig = {
             myMap: {
                 title: 'Карта путешествий',
                 action: this.#renderMap,
             },
             reviews: {
-                title: 'Отзывы обо мне',
+                title: 'Отзывы',
                 action: this.#renderReviews,
             },
             achievments: {
@@ -292,7 +294,9 @@ class ProfileData {
         const editButton = document.getElementById('edit-button');
         editButton?.addEventListener('click', (e) => {
             e.preventDefault();
-            this.#renderForm();
+            (this.#isMyProfile) ?
+                this.#renderForm() :
+                this.#renderReviewForm();
         });
     }
 
@@ -483,6 +487,10 @@ class ProfileData {
         this.#addCheckedRadio();
         this.#addCheckedSlider();
         this.#addEventListeners();
+    }
+
+    #renderReviewForm(): void{
+        clearPage('header', 'content', 'form');
     }
 
     /**
