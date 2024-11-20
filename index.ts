@@ -157,8 +157,15 @@ router.addRoute('/ads/', async (params: URLSearchParams) => {
 router.addRoute('/ad-cities/', async (params: URLSearchParams) => {
     const city = params.get('city');
     const cityPage = new CityPage(city);
-    cityPage.render(document.querySelector('.page-container') as HTMLElement);
+    cityPage.render(pageContainer);
 });
+
+router.addRoute('/profiles', async (params: URLSearchParams) => {
+    const profileId = params.get('id')
+    console.log(profileId)
+    const page = new ProfilePage()
+    page.render(pageContainer)
+})
 
 const init = async () => {
     await renderHeader();

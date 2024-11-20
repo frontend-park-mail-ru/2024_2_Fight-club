@@ -117,8 +117,19 @@
     background-color: white;
     gap: 10px;
     &__center {
+        color: #000;
         text-align: center;
+        text-decoration: none;
+
+        &:visited {
+            text-decoration: none;
+        }
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
+
     &_photo {
         border: solid;
         border-radius: 50%;
@@ -135,7 +146,6 @@
     }
     &__p1 {
         margin-top: 5%;
-        font-style: italic;
         font-size: 28px;
         font-weight: 500;
     }
