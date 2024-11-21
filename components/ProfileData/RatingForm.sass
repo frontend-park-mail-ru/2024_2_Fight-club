@@ -6,19 +6,26 @@ $new-rate-star-empty: url("/svg/star-empty.svg") // Путь к пустой з�
 $new-rate-star-filled: url("/svg/star-filled.svg") // Путь к заполненной звезде
 
 .new-rate
-    padding: 5% 5% 5% 5%
+    padding: 5%
+    height: calc( 100% - 150px )
+    display: flex
+    flex-direction: column
+    justify-content: space-between
 
-    &__title
-        font-size: 1.5rem
-        margin-bottom: 1rem
+    &__caption
+        font-size: 24px
+        font-weight: 100
+        font-family: Arial, Helvetica, sans-serif
+        padding-left: 10px
 
     &__form
         display: flex
-        flex-direction: column
+        flex-direction: row
+        align-items: center
 
     &__fieldset
         border: 0
-        width: 10em
+        width: 9em
         border-radius: 1px
         
 
@@ -29,13 +36,14 @@ $new-rate-star-filled: url("/svg/star-filled.svg") // Путь к заполне
         unicode-bidi: bidi-override
         direction: rtl
 
+
         input
             display: none
 
         label
             display: inline-block
-            width: 2rem
-            height: 2rem
+            width: 1.5rem
+            height: 1.5rem
             cursor: pointer
             background-image: $new-rate-star-empty
             background-repeat: no-repeat
@@ -49,3 +57,30 @@ $new-rate-star-filled: url("/svg/star-filled.svg") // Путь к заполне
         input:checked + label,
         input:checked + label ~ label
             background-image: $new-rate-star-filled
+
+    &__title-container
+        &__title
+            height: 40px
+            width: 100%
+            background-color: rgba(0, 0, 0, .05)
+            border: none
+            borde-color: rgba(0, 0, 0, .05)
+            border-radius: 10px
+            padding: 0 20px
+            box-sizing: border-box
+            font-size: 16px
+    
+    &__review-container
+        &__text
+            height: 300px
+            width: 100%
+            background-color: rgba(0, 0, 0, .05)
+            border: none
+            border-radius: 10px
+            padding: 15px 20px 0 20px
+            box-sizing: border-box
+            font-size: 16px
+            font-family: Arial, Helvetica, sans-serif
+            resize: none
+
+            
