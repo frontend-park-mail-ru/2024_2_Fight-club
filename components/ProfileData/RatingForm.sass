@@ -1,0 +1,51 @@
+$unchecked-color: #ffffff // Цвет для невыбранных звезд
+$checked-color: #FFA552   // Цвет для выбранных звезд
+$hover-color: #FFB570     // Цвет для звезд при наведении
+
+$new-rate-star-empty: url("/svg/star-empty.svg") // Путь к пустой звезде
+$new-rate-star-filled: url("/svg/star-filled.svg") // Путь к заполненной звезде
+
+.new-rate
+    padding: 5% 5% 5% 5%
+
+    &__title
+        font-size: 1.5rem
+        margin-bottom: 1rem
+
+    &__form
+        display: flex
+        flex-direction: column
+
+    &__fieldset
+        border: 0
+        width: 10em
+        border-radius: 1px
+        
+
+    &__stars
+        font-size: 0
+        display: flex
+        flex-direction: row
+        unicode-bidi: bidi-override
+        direction: rtl
+
+        input
+            display: none
+
+        label
+            display: inline-block
+            width: 2rem
+            height: 2rem
+            cursor: pointer
+            background-image: $new-rate-star-empty
+            background-repeat: no-repeat
+            background-position: center
+            background-size: contain
+
+        input:hover + label,
+        input:hover + label ~ label
+            background-image: $new-rate-star-filled
+
+        input:checked + label,
+        input:checked + label ~ label
+            background-image: $new-rate-star-filled

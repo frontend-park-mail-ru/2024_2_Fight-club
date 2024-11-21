@@ -289,15 +289,21 @@ class ProfileData {
     /**
      * @private
      * @description Кнопка "Изменить" в ProfileInfo рендерит форму изменения данных
+     * @description Кнопка "Оценить" в ProfileInfo рендерит форму для оценивания юзера
      */
     #addButtonEventListener(): void {
         const editButton = document.getElementById('edit-button');
-        editButton?.addEventListener('click', (e) => {
-            e.preventDefault();
-            (this.#isMyProfile) ?
-                this.#renderForm() :
+        if (this.#isMyProfile) {
+            editButton!.addEventListener('click', (e)=>{
+                e.preventDefault();
+                this.#renderForm();
+            });
+        } else {
+            editButton!.addEventListener('click', (e)=>{
+                e.preventDefault();
                 this.#renderReviewForm();
-        });
+            });
+        }
     }
 
     /**
@@ -489,8 +495,19 @@ class ProfileData {
         this.#addEventListeners();
     }
 
+    /**
+     * @private
+     * @description Рендер окна оценивния
+     */
     #renderReviewForm(): void{
-        clearPage('header', 'content', 'form');
+        clearPage('content', 'form');
+        const template = Handlebars.templates['RatingForm.hbs'];
+        document
+            .getElementById('container')!
+            .insertAdjacentHTML(
+                'beforeend',
+                template({})
+            );
     }
 
     /**
