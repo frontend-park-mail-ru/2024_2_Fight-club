@@ -130,7 +130,6 @@ class AuthPopup {
             ok = ok && info.ok;
         }
 
-        console.log(ok);
         return ok;
     }
 
