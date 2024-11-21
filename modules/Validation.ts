@@ -4,25 +4,49 @@ const USERNAME_REGEXP = /^[A-Za-z0-9][A-Za-z0-9-_.]{3,19}[A-Za-z0-9]$/;
 const NAME_REGEXP = /^[A-Za-zА-Яа-яёЁ\s]+$/;
 const EMAIL_REGEXP = /.+@.+/;
 const PASSWORD_REGEXP = /^[a-zA-Z0-9!@#$%^&*()_+=-]{8,16}$/;
-const ADDRESS_REGEXP = /^[A-Za-zА-Яа-яёЁ]+,\s?(г\.?|пгт\.?|село|поселок)\s?[А-Яа-яA-Za-zёЁ]+,\s?ул\.\s?(\d+-[я-я]?\s)?[А-Яа-яA-Za-zёЁ]+,\s?д\.\s?\d+([/]\d+[А-Яа-я]?)?$/;
-
-
+const ADDRESS_REGEXP =
+    /^[A-Za-zА-Яа-яёЁ]+,\s?(г\.?|пгт\.?|село|поселок)\s?[А-Яа-яA-Za-zёЁ]+,\s?ул\.\s?(\d+-[я-я]?\s)?[А-Яа-яA-Za-zёЁ]+,\s?д\.\s?\d+([/]\d+[А-Яа-я]?)?$/;
 
 interface ErrorMessage {
-    WRONG_LENGTH: string
-    REGEXP_MISMATCH: string
+    WRONG_LENGTH: string;
+    REGEXP_MISMATCH: string;
 }
 
 interface ValidationResult {
-    ok: boolean
-    text: string
+    ok: boolean;
+    text: string;
 }
 
+const validationTypeValues = ['name', 'username', 'password', 'email'];
+
 class Validation {
+    static validate(input: HTMLInputElement): ValidationResult {
+        const validationType = input.dataset.validationType;
+
+        if (!validationType || !validationTypeValues.includes(validationType)) {
+            return {
+                ok: true,
+                text: 'element has no validation type',
+            };
+        }
+
+        switch (validationType) {
+            case 'name':
+                return this.validateName(input);
+            case 'username':
+                return this.validateUsername(input);
+            case 'password':
+                return this.validatePassword(input);
+            case 'email':
+                return this.validateEmail(input);
+        }
+    }
+
     static validateName(nameInput: HTMLInputElement) {
         return this.#validateAny(nameInput, NAME_REGEXP, {
             WRONG_LENGTH: 'Имя должно быть от 6 до 50 символов',
-            REGEXP_MISMATCH: 'Имя может содержать только латинские и кириллические буквы и пробелы',
+            REGEXP_MISMATCH:
+                'Имя может содержать только латинские и кириллические буквы и пробелы',
         });
     }
 
@@ -69,7 +93,8 @@ class Validation {
     static validateAddress(addressInput: HTMLInputElement) {
         return this.#validateAny(addressInput, ADDRESS_REGEXP, {
             WRONG_LENGTH: 'Адрес должен быть длиной от 10 до 100 символов',
-            REGEXP_MISMATCH: 'Адрес должен быть в формате: <Страна>, г./пгт./село/поселок <Город>, ул. <Улица>, д. <Номер дома>',
+            REGEXP_MISMATCH:
+                'Адрес должен быть в формате: <Страна>, г./пгт./село/поселок <Город>, ул. <Улица>, д. <Номер дома>',
         });
     }
 
@@ -85,7 +110,7 @@ class Validation {
 
         if (birthdate < earliestDate || birthdate > today) {
             res.ok = false;
-            res.text = `Дата рождения должна быть в пределах от 01.01.1900 до ${today.getDate()}.${today.getMonth()+1}.${today.getFullYear()}`;
+            res.text = `Дата рождения должна быть в пределах от 01.01.1900 до ${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
         }
 
         return res;
