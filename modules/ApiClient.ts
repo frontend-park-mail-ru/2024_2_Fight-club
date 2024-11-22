@@ -198,6 +198,11 @@ class APIClient {
 
         return Ajax.post({url, body});
     }
+
+    async getReviewsByUser(uuid: string) {
+        const url = this.BASE_URL + `/reviews/${uuid}`;
+        return Ajax.get(url);
+    }
 }
 
 export default new APIClient();

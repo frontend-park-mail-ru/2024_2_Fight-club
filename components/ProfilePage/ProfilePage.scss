@@ -1,7 +1,7 @@
 #profile-content {
     display: grid;
     grid-template-areas: 'profile actions';
-    grid-template-columns: 35% 1fr;
+    grid-template-columns: 1fr 2fr;
     height: 83vh;
     gap: 3vh;
 }

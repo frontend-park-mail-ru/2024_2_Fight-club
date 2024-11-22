@@ -50,15 +50,15 @@ class ProfileData {
         this.#headerConfig = {
             myMap: {
                 title: 'Карта путешествий',
-                action: this.#renderMap,
+                action: this.#renderMap.bind(this),
             },
             reviews: {
                 title: 'Отзывы',
-                action: this.#renderReviews,
+                action: this.#renderReviews.bind(this),
             },
             achievments: {
                 title: 'Достижения',
-                action: this.#renderAchievments,
+                action: this.#renderAchievments.bind(this),
             },
         };
 
@@ -183,11 +183,11 @@ class ProfileData {
             rating: Number((document
                 .querySelector('input[name="rating"]:checked') as HTMLInputElement)!
                 .value)
-        }
+        };
 
         const response = await ApiClient.leaveReview(data);
         if (response.ok) {
-            clearPage('new-rate');
+            clearPage('new-rate', 'profile');
             const dataContainer = document.getElementById('container');
             dataContainer?.appendChild(this.#content);
         } else {
@@ -198,6 +198,30 @@ class ProfileData {
             document
                 .querySelector('#profile-content')
                 ?.appendChild(errorMessage);
+        }
+    }
+
+    async #getReviews(): Promise<ReviewData[]> {
+        let uuid;
+        if (this.#isMyProfile) {
+            const userData = await APIClient.getSessionData();
+            uuid = userData.id;
+        } else {
+            uuid = this.#otherUserId;
+        }
+        const response = await ApiClient.getReviewsByUser(uuid);
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            clearPage('profile');
+            const errorMessage = PopupAlert(
+                'Ошибка получения отзывов'
+            );
+            document
+                .querySelector('#profile-content')
+                ?.appendChild(errorMessage);
+            return [];
         }
     }
 
@@ -448,7 +472,8 @@ class ProfileData {
         leaveReviewButton!.addEventListener('click', async (e)=>{
             e.preventDefault();
             await this.#leaveReview();
-        })
+            this.#renderProfileInfo();
+        });
     }
 
     /**
@@ -504,7 +529,12 @@ class ProfileData {
         this.#content.appendChild(wrapper);
     }
 
-    #renderReviews() {}
+    async #renderReviews(): Promise<void> {
+        const reviews = await this.#getReviews();
+        console.log(reviews);
+    }
+
+
     #renderAchievments() {}
 
     /**
