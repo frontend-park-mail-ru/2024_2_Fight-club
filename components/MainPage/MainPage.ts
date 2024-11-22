@@ -26,14 +26,23 @@ class MainPage {
         // Фильтр
         const filter = new Filter(async (filters) => {
             const data = await ApiClient.getAds(filters);
-            this.#adsData = data;
-            this.renderAds();
+            this.#adsContainer.replaceChildren();
+
+            if (!data || data.length === 0) {
+                const noAdsText = document.createElement('p');
+                noAdsText.textContent =
+                    '🔍 Подходящих объявлений не найдено. Попробуйте изменить фильтры';
+                noAdsText.classList.add('main-page__no-ads-text');
+                this.#adsContainer.appendChild(noAdsText);
+            } else {
+                await this.renderAds(data);
+            }
         });
         this.#pageContent.appendChild(filter.getFilter());
 
         // Здесь будет витрина
         this.#adsContainer = document.createElement('div');
-        this.#adsContainer.classList.add('main-page__advert');
+        this.#adsContainer.classList.add('main-page__adverts');
 
         this.#adsData = data;
     }
@@ -41,16 +50,24 @@ class MainPage {
     async render() {
         this.#adsContainer.replaceChildren();
 
-        await this.renderAds();
+        if (!this.#adsData || this.#adsData.length === 0) {
+            const noAdsText = document.createElement('p');
+            noAdsText.textContent =
+                'Удивительно, но никто еще пока не создал объявление. Станьте первым! 🚀';
+            noAdsText.classList.add('main-page__no-ads-text');
+            this.#adsContainer.appendChild(noAdsText);
+        } else {
+            await this.renderAds(this.#adsData);
+        }
         this.#pageContent.appendChild(this.#adsContainer);
 
         this.#mainPhotoContainer.render(this.#root);
         this.#root.appendChild(this.#pageContent);
     }
 
-    async renderAds() {
+    async renderAds(adsData: AdvertData[]) {
         this.#adsContainer.replaceChildren();
-        for (const cardData of this.#adsData) {
+        for (const cardData of adsData) {
             const card = new AdCard(this.#adsContainer, cardData);
             await card.render();
         }
