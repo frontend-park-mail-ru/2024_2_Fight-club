@@ -40,6 +40,10 @@ class Validation {
             case 'email':
                 return this.validateEmail(input);
         }
+        return {
+            ok: false,
+            text: 'Wrong validation type',
+        };
     }
 
     static validateName(nameInput: HTMLInputElement) {
