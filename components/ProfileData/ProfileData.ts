@@ -6,6 +6,7 @@ import { clearPage } from '../../modules/Clear';
 import { ReviewData } from '../../modules/Types';
 import PopupAlert from '../PopupAlert/PopupAlert';
 import ApiClient from '../../modules/ApiClient';
+import ReviewCard from '../ReviewCard/ReviewCard';
 
 interface userData {
     name: string | undefined;
@@ -356,6 +357,8 @@ class ProfileData {
         } else {
             editButton!.addEventListener('click', (e)=>{
                 e.preventDefault();
+                clearPage('form');
+                this.#content.replaceChildren();
                 this.#renderReviewForm();
             });
         }
@@ -517,6 +520,7 @@ class ProfileData {
 
     //TODO Когда карты появятся
     #renderMap() {
+        this.#content.replaceChildren();
         const wrapper = document.createElement('div');
         wrapper.id = 'wrapper';
         wrapper.classList.add('data-container__wrapper');
@@ -530,8 +534,13 @@ class ProfileData {
     }
 
     async #renderReviews(): Promise<void> {
+        this.#content.replaceChildren();
         const reviews = await this.#getReviews();
-        console.log(reviews);
+        reviews.forEach((reviewData) => {
+            console.log(reviewData);
+            const review = new ReviewCard(reviewData);
+            review.render(this.#content);
+        });
     }
 
 
@@ -569,11 +578,9 @@ class ProfileData {
      * @description Рендер окна оценивния
      */
     #renderReviewForm(): void{
-        clearPage('content', 'form');
+        this.#content.replaceChildren();
         const template = Handlebars.templates['RatingForm.hbs'];
-        document
-            .getElementById('container')!
-            .insertAdjacentHTML(
+        this.#content.insertAdjacentHTML(
                 'beforeend',
                 template({})
             );
