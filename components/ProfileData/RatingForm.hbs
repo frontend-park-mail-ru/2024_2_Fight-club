@@ -1,6 +1,7 @@
 <div id="new-rate" class="new-rate">
+    <h1 class="new-rate__caption">Ваш отзыв</h1>
     <form class="new-rate__form">
-        <h1 class="new-rate__caption">Ваша оценка</h1>
+        <h3 class="new-rate__overall-rate">Общая оценка</h3>
         <fieldset class="new-rate__fieldset">
             <span class="new-rate__stars">
                 <input type="radio" id="new-rate-5" name="rating" value="5" />
@@ -18,10 +19,14 @@
     </form>
 
     <div class="new-rate__title-container">
-        <input type="text" placeholder="Заголовок" class="new-rate__title-container__title"/>
+        <input id="review-title" type="text" placeholder="Заголовок" class="new-rate__title-container__title"/>
     </div>
 
     <div class="new-rate__review-container">
-        <textarea type="text" placeholder="Текст" class="new-rate__review-container__text"></textarea>
+        <textarea id="review-text" type="text" placeholder="Текст" class="new-rate__review-container__text"></textarea>
+    </div>
+
+    <div class="new-rate__button-container">
+        <button type="submit" class="new-rate__leave-review js-leave-review">Оставить отзыв</button>
     </div>
 </div>

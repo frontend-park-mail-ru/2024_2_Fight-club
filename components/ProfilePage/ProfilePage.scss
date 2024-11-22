@@ -3,6 +3,7 @@
     grid-template-areas: 'profile actions';
     grid-template-columns: 35% 1fr;
     height: 83vh;
+    gap: 3vh;
 }
 
 .profile__profile-container {

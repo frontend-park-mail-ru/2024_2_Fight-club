@@ -65,3 +65,10 @@ export interface ProfileInfo {
     sex: string;
     username: string;
 }
+
+export interface ReviewData {
+    hostId: string;
+    title: string;
+    text: string;
+    rating: number;
+}

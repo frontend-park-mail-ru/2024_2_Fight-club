@@ -1,7 +1,7 @@
 'use strict';
 
 import Ajax from './Ajax';
-import { RegisterParams, AdsFilters, LoginParams, EditParams } from './Types';
+import { RegisterParams, AdsFilters, LoginParams, EditParams, ReviewData } from './Types';
 
 class APIClient {
     BASE_URL = `${location.protocol}//${window.location.hostname}:8008/api`;
@@ -185,6 +185,18 @@ class APIClient {
         }
 
         return Ajax.put({ url, body: formData });
+    }
+
+    async leaveReview({hostId, title, text, rating}: ReviewData) {
+        const url = this.BASE_URL + '/reviews';
+        const body = {
+            hostId: hostId,
+            title: title,
+            text: text,
+            rating: rating
+        };
+
+        return Ajax.post({url, body});
     }
 }
 

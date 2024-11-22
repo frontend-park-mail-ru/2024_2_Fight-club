@@ -142,7 +142,12 @@ class ProfilePage {
      * @param {HTMLElement} parent
      */
     #renderProfileData(parent: HTMLElement) {
-        const profileData = new ProfileData(this.#renderProfileInfoCallback, this.#isMyProfile);
+        let profileData;
+        if (this.#isMyProfile) {
+            profileData = new ProfileData(this.#renderProfileInfoCallback, this.#isMyProfile);
+        } else {
+            profileData = new ProfileData(this.#renderProfileInfoCallback, this.#isMyProfile, this.#otherUserId);
+        }
         profileData.render(parent);
     }
 

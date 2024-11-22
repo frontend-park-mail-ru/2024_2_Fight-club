@@ -3,8 +3,9 @@
 import Validation from '../../modules/Validation';
 import APIClient from '../../modules/ApiClient';
 import { clearPage } from '../../modules/Clear';
-
+import { ReviewData } from '../../modules/Types';
 import PopupAlert from '../PopupAlert/PopupAlert';
+import ApiClient from '../../modules/ApiClient';
 
 interface userData {
     name: string | undefined;
@@ -24,6 +25,7 @@ interface sexTypes {
 
 class ProfileData {
     #isMyProfile: boolean;
+    #otherUserId?: string;
     #headerConfig;
     #content;
     #profileData: userData = {
@@ -40,8 +42,11 @@ class ProfileData {
     #uploadAvatarImage?: File;
     #renderProfileInfo;
 
-    constructor(renderProfileInfoCallback: () => void, isMyProfile: boolean) {
+    constructor(renderProfileInfoCallback: () => void, isMyProfile: boolean, otherUserId?: string) {
         this.#isMyProfile = isMyProfile;
+        if (otherUserId) {
+            this.#otherUserId = otherUserId;
+        }
         this.#headerConfig = {
             myMap: {
                 title: 'Карта путешествий',
@@ -163,6 +168,32 @@ class ProfileData {
             clearPage('profile');
             const errorMessage = PopupAlert(
                 'Неверный размер или разрешение фото'
+            );
+            document
+                .querySelector('#profile-content')
+                ?.appendChild(errorMessage);
+        }
+    }
+
+    async #leaveReview(): Promise<void> {
+        const data: ReviewData = {
+            hostId: this.#otherUserId as string,
+            title: (document.querySelector('#review-title') as HTMLInputElement).value,
+            text: (document.querySelector('#review-text') as HTMLTextAreaElement).value,
+            rating: Number((document
+                .querySelector('input[name="rating"]:checked') as HTMLInputElement)!
+                .value)
+        }
+
+        const response = await ApiClient.leaveReview(data);
+        if (response.ok) {
+            clearPage('new-rate');
+            const dataContainer = document.getElementById('container');
+            dataContainer?.appendChild(this.#content);
+        } else {
+            clearPage('profile');
+            const errorMessage = PopupAlert(
+                'Неверный формат отзыва'
             );
             document
                 .querySelector('#profile-content')
@@ -412,6 +443,14 @@ class ProfileData {
         });
     }
 
+    #submitReviewEventListener(){
+        const leaveReviewButton = document.querySelector('.js-leave-review');
+        leaveReviewButton!.addEventListener('click', async (e)=>{
+            e.preventDefault();
+            await this.#leaveReview();
+        })
+    }
+
     /**
      * @private
      */
@@ -508,6 +547,8 @@ class ProfileData {
                 'beforeend',
                 template({})
             );
+        
+        this.#submitReviewEventListener();
     }
 
     /**
