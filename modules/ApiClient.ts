@@ -192,6 +192,11 @@ class APIClient {
         const response = await Ajax.get(url);
         return await response.json();
     }
+
+    async getStatistics() {
+        const url = this.BASE_URL + `/statistics`;
+        return Ajax.get(url);
+    }
 }
 
 export default new APIClient();

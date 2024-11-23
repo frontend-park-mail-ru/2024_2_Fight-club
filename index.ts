@@ -23,6 +23,7 @@ const pageContainer = document.createElement('div');
 import router from './modules/Router';
 import { HorizontalAdCardData } from './components/HorizontalAdCard/HorizontalAdCard';
 import { getCookie } from './modules/Utils';
+import Statistics from './surveys/Statistics/Statistics';
 
 const renderMainPage = async () => {
     const data = await ApiClient.getAds();
@@ -161,6 +162,12 @@ router.addRoute('/ad-cities/', async (params: URLSearchParams) => {
     await cityPage.render(
         document.querySelector('.page-container') as HTMLElement
     );
+});
+
+router.addRoute('/statistics/', async (params: URLSearchParams) => {
+    const state = new Statistics();
+    pageContainer.replaceChildren();
+    state.render(pageContainer);
 });
 
 const init = async () => {
