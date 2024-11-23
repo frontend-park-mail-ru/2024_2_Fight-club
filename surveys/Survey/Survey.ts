@@ -37,7 +37,7 @@ export default class Survey {
         const value = Number((
             document
                 .querySelector('input[name="rating"]:checked') as HTMLInputElement)
-                ?.value);
+            ?.value);
         
         if (!isNaN(value) && value !== 0) {
             const data: PostSurveyReview = {
@@ -47,12 +47,13 @@ export default class Survey {
             console.log(data);
             return true;
         } else {
-            const errorMessage = PopupAlert(
-                'Поставьте оценку'
-            );
+            const errorMsg = document.createElement('h4');
+            errorMsg.textContent = 'Пожалуйста, выберите оценку';
+            errorMsg.classList.add('error-message');
+
             document
-                .querySelector('#root')
-                ?.appendChild(errorMessage);
+                .querySelector('.survey__stars')
+                ?.insertAdjacentElement('afterend', errorMsg);
             return false;
         }
     }
@@ -90,7 +91,12 @@ export default class Survey {
     }
 
     async displayNextQuestion() {
+        document
+            .querySelector('.error-message')
+            ?.remove();
+
         if (await this.#leaveReview()) {
+
             this.#currentIndex++;
 
             if (this.#currentIndex >= this.#questions.length) {
