@@ -76,6 +76,7 @@ class ProfileData {
 
         this.#renderProfileInfo = renderProfileInfoCallback;
         this.#addButtonEventListener();
+        this.#renderGraphicEventListener();
     }
 
     /**
@@ -433,6 +434,7 @@ class ProfileData {
                 await this.#putData();
                 await this.#renderProfileInfo();
                 this.#addButtonEventListener();
+                this.#renderGraphicEventListener();
 
                 //Обновление аватарки в хэдере
                 const headerImg = document.querySelector(
@@ -499,7 +501,18 @@ class ProfileData {
             await this.#renderProfileInfo();
             this.#renderReviews();
             this.#addButtonEventListener();
+            this.#renderGraphicEventListener();
         });
+    }
+
+    #renderGraphicEventListener(): void {
+        document
+            .querySelector('.js-graphic-href')
+            ?.addEventListener('click', (e)=>{
+                e.preventDefault();
+                console.log('there');
+                this.#renderGraphic();
+            });
     }
 
     /**
@@ -571,8 +584,13 @@ class ProfileData {
         });
     }
 
-
     #renderAchievments() {}
+
+    #renderGraphic(){
+        this.#content.replaceChildren();
+        this.#content.classList.remove('y-scroll');
+        this.#content.parentElement?.classList.remove('fix-bottom-right-border');
+    }
 
     /**
      * @private
