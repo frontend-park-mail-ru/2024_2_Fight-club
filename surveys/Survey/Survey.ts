@@ -73,9 +73,10 @@ export default class Survey {
 
         buttons.forEach((clickedButton) => {
             clickedButton.onclick = () => {
-                buttons.forEach((btn) =>
-                    btn.classList.remove('survey__nps__rating-button-selected')
-                );
+                buttons.forEach((btn) => {
+                    btn.classList.remove('survey__nps__rating-button-selected');
+                    btn.classList.remove('survey__nps__rating-button-focused');
+                });
                 for (const button of buttons) {
                     button.classList.add('survey__nps__rating-button-selected');
                     if (button === clickedButton) {
@@ -86,6 +87,21 @@ export default class Survey {
                 // this.#currentValue = parseInt(
                 //     clickedButton.dataset.value as string
                 // );
+            };
+
+            clickedButton.onmouseenter = () => {
+                for (const button of buttons) {
+                    button.classList.add('survey__nps__rating-button-focused');
+                    if (button === clickedButton) {
+                        break;
+                    }
+                }
+            };
+
+            clickedButton.onmouseleave = () => {
+                buttons.forEach((btn) =>
+                    btn.classList.remove('survey__nps__rating-button-focused')
+                );
             };
         });
     }
@@ -101,6 +117,7 @@ export default class Survey {
 
         this.#nextButtonElement.onclick = () => this.displayNextQuestion();
 
+        // todo: add check if current === NPS
         this.handleNPSButtons();
     }
 
