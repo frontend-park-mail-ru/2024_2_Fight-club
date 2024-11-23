@@ -192,6 +192,12 @@ class APIClient {
         const response = await Ajax.get(url);
         return await response.json();
     }
+
+    async sendQuestions(body) {
+        const url = this.BASE_URL + `/csat`;
+        const response = await Ajax.post({ url, body });
+        return await response.json();
+    }
 }
 
 export default new APIClient();

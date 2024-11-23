@@ -1,5 +1,6 @@
 'use strict';
 
+import ApiClient from '../../modules/ApiClient';
 import { PostSurveyReview } from '../../modules/Types';
 
 /** Карточка объявления на главной странице */
@@ -7,7 +8,7 @@ export default class Survey {
     #template;
     #parent;
     #questions;
-    // #answers;
+    #answers;
     #currentIndex;
     #currentValue: number;
 
@@ -17,7 +18,7 @@ export default class Survey {
     constructor(parent: HTMLElement, data) {
         this.#parent = parent;
         this.#template = Handlebars.templates['Survey.hbs'];
-        // this.#answers = new Map<number, number>();
+        this.#answers = new Map<number, number>();
         this.#currentIndex = 0;
         this.#questions = data.Survey.ques;
         this.#currentValue = 0;
@@ -43,11 +44,7 @@ export default class Survey {
         }
 
         if (!isNaN(value) && value !== 0) {
-            const data: PostSurveyReview = {
-                questionId: 1,
-                value: value,
-            };
-            console.log(data);
+            this.#answers.set(this.#questions[this.#currentIndex].id, value);
             return true;
         } else {
             const errorMsg = document.createElement('h4');
@@ -188,13 +185,21 @@ export default class Survey {
 
     async displayNextQuestion() {
         document.querySelector('.error-message')?.remove();
-        console.log('PIZDEC');
 
         if (this.#leaveReview()) {
             this.#currentIndex++;
 
             console.log(this.#currentIndex);
             if (this.#currentIndex == this.#questions.length) {
+                const dataToSend = [];
+                for (const [key, value] of this.#answers) {
+                    const object = {
+                        questionId: key,
+                        values: value,
+                    };
+                    dataToSend.push(object);
+                }
+                ApiClient.sendQuestions(dataToSend);
                 this.detectTypeAndHideOthers('THANKS');
                 this.#currentIndex++;
                 return;
