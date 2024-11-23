@@ -186,6 +186,12 @@ class APIClient {
 
         return Ajax.put({ url, body: formData });
     }
+
+    async getQuestions(id: number) {
+        const url = this.BASE_URL + `/csat/${id}`;
+        const response = await Ajax.get(url);
+        return await response.json();
+    }
 }
 
 export default new APIClient();

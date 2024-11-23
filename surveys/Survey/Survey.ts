@@ -13,6 +13,7 @@ const QUESTIONS = [
 
 import { PostSurveyReview } from '../../modules/Types';
 import PopupAlert from '../../components/PopupAlert/PopupAlert';
+import ApiClient from '../../modules/ApiClient';
 
 /** Карточка объявления на главной странице */
 export default class Survey {
@@ -21,19 +22,21 @@ export default class Survey {
     #questions;
     // #answers;
     #currentIndex;
-    #currentValue: number;
+    // #currentValue: number;
 
     #surveyTitleElement: HTMLParagraphElement;
     #nextButtonElement: HTMLButtonElement;
 
     constructor(parent: HTMLElement, data) {
-        this.#questions = QUESTIONS;
         this.#parent = parent;
         this.#template = Handlebars.templates['Survey.hbs'];
         // this.#answers = new Map<number, number>();
         this.#currentIndex = 0;
-        this.#currentValue = 0;
+        this.#questions = data.Survey.ques
+        // this.#currentValue = 0;
     }
+
+
 
     async #leaveReview(): Promise<boolean> {
         const value = Number(
@@ -80,9 +83,9 @@ export default class Survey {
                     }
                 }
 
-                this.#currentValue = parseInt(
-                    clickedButton.dataset.value as string
-                );
+                // this.#currentValue = parseInt(
+                //     clickedButton.dataset.value as string
+                // );
             };
         });
     }
@@ -102,6 +105,8 @@ export default class Survey {
     }
 
     render() {
+        console.log(this.#questions[0]);
+
         this.#parent.insertAdjacentHTML(
             'beforeend',
             this.#template({
