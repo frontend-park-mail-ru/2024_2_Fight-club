@@ -12,10 +12,24 @@ export default class Survey {
         this.#template = Handlebars.templates['Survey.hbs'];
     }
 
+    addEventListeners() {
+        const xBtn = this.#parent.querySelector(
+            '.survey__close-cross'
+        ) as HTMLButtonElement;
+
+        xBtn.onclick = () => {
+            console.log('I was clicked');
+        };
+    }
+
     render() {
         this.#parent.insertAdjacentHTML(
             'beforeend',
             this.#template(this.#data)
         );
+
+        requestAnimationFrame(() => {
+            this.addEventListeners();
+        });
     }
 }
