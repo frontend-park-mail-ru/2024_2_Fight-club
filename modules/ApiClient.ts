@@ -194,7 +194,7 @@ class APIClient {
     }
 
     async getStatistics() {
-        const url = this.BASE_URL + `/statistics`;
+        const url = this.BASE_URL + '/statistics';
         return Ajax.get(url);
     }
 }
