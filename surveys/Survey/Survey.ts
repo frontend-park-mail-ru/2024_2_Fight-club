@@ -32,13 +32,8 @@ export default class Survey {
         this.#template = Handlebars.templates['Survey.hbs'];
         // this.#answers = new Map<number, number>();
         this.#currentIndex = 0;
-        this.#questions = QUESTIONS;
-        // this.#currentValue = 0;
-    }
-
-    async #getQuestions() {
-        const data = await ApiClient.getQuestions(1);
         this.#questions = data.Survey.ques;
+        // this.#currentValue = 0;
     }
 
     async #leaveReview(): Promise<boolean> {
@@ -125,12 +120,13 @@ export default class Survey {
     }
 
     async render() {
-        await this.#getQuestions();
+        console.log(this.#questions[0]);
 
         this.#parent.insertAdjacentHTML(
             'beforeend',
             this.#template({
                 title: this.#questions[0].title,
+                type: this.#questions[0].type,
             })
         );
 
@@ -163,7 +159,9 @@ export default class Survey {
                 this.#nextButtonElement.textContent = 'Завершить';
             }
 
-            (document.querySelector('.js-star-form') as HTMLFormElement).reset();
+            (
+                document.querySelector('.js-star-form') as HTMLFormElement
+            ).reset();
         }
     }
 }
