@@ -27,7 +27,7 @@ export default class AdCard extends ReactiveComponent {
             },
             computedValues: {
                 currentImagePath: (state) => {
-                    return data.images[state.toShowIndex as number].path;
+                    return data.images[state.toShowIndex as number].imagePath;
                 },
             },
             templateData: data,
