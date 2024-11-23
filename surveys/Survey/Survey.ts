@@ -11,6 +11,8 @@ const QUESTIONS = [
     },
 ];
 
+import { PostSurveyReview } from '../../modules/Types';
+
 /** Карточка объявления на главной странице */
 export default class Survey {
     #template;
@@ -28,6 +30,19 @@ export default class Survey {
         this.#template = Handlebars.templates['Survey.hbs'];
         this.#answers = new Map<number, number>();
         this.#currentIndex = 0;
+    }
+
+    async #leaveReview(): Promise<void> {
+        const data: PostSurveyReview = {
+            questionId: 1,
+            value: Number(
+                (document.querySelector(
+                    'input[name="rating"]:checked'
+                ) as HTMLInputElement)!.value
+            ),
+        };
+
+        console.log(data);
     }
 
     addEventListeners() {
@@ -63,6 +78,8 @@ export default class Survey {
     }
 
     displayNextQuestion() {
+        this.#leaveReview();
+
         this.#currentIndex++;
 
         if (this.#currentIndex >= this.#questions.length) {

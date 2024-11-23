@@ -1,5 +1,49 @@
 <div class='survey'>
     <button class='survey__close-cross'>x</button>
+    <p class='survey__title'>Насколько вы удовлетворены вашей жизнью?</p>
+    <div class='survey__stars'>
+        <form class='survey__form'>
+            <fieldset class='survey__fieldset'>
+                <span class='survey__stars'>
+                    <input
+                        type='radio'
+                        id='survey-rate-5'
+                        name='rating'
+                        value='5'
+                    />
+                    <label for='survey-rate-5'>5</label>
+                    <input
+                        type='radio'
+                        id='survey-rate-4'
+                        name='rating'
+                        value='4'
+                    />
+                    <label for='survey-rate-4'>4</label>
+                    <input
+                        type='radio'
+                        id='survey-rate-3'
+                        name='rating'
+                        value='3'
+                    />
+                    <label for='survey-rate-3'>3</label>
+                    <input
+                        type='radio'
+                        id='survey-rate-2'
+                        name='rating'
+                        value='2'
+                    />
+                    <label for='survey-rate-2'>2</label>
+                    <input
+                        type='radio'
+                        id='survey-rate-1'
+                        name='rating'
+                        value='1'
+                    />
+                    <label for='survey-rate-1'>1</label>
+                </span>
+            </fieldset>
+        </form>
+    </div>
     <p class='survey__title'>{{title}}</p>
     <div class='survey__stars'>⭐⭐⭐⭐⭐</div>
     <button class='survey__next-button'>Далее</button>
