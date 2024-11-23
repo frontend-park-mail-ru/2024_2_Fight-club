@@ -26,7 +26,7 @@ export default class AdPage extends ReactiveComponent {
             },
             computedValues: {
                 currentImagePath: (state) => {
-                    return data.images[state.currentIndex as number].imagePath;
+                    return data.images[state.currentIndex as number].path;
                 },
             },
             templateData: {
