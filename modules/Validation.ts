@@ -31,14 +31,14 @@ class Validation {
         }
 
         switch (validationType) {
-            case 'name':
-                return this.validateName(input);
-            case 'username':
-                return this.validateUsername(input);
-            case 'password':
-                return this.validatePassword(input);
-            case 'email':
-                return this.validateEmail(input);
+        case 'name':
+            return this.validateName(input);
+        case 'username':
+            return this.validateUsername(input);
+        case 'password':
+            return this.validatePassword(input);
+        case 'email':
+            return this.validateEmail(input);
         }
         return {
             ok: false,
