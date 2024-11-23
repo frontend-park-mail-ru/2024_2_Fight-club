@@ -1,8 +1,8 @@
 {{#*inline "stars"}}
-<div class='survey__stars'>
+<div class='survey__rating'>
         <form class='survey__form js-star-form'>
             <fieldset class='survey__fieldset'>
-                <span class='survey__stars'>
+                <span class='survey__stars survay-span'>
                     <input
                         type='radio'
                         id='survey-rate-5'
@@ -44,13 +44,55 @@
     </div>
 {{/inline}}
 
-{{#*inline "stars"}}
-
+{{#*inline "emojis"}}
+<div class='survey__emojis'>
+    <form class='survey__form js-star-form'>
+        <fieldset class='survey__fieldset'>
+            <span class='survey__emojis survay-span'>
+                <input
+                    type='radio'
+                    id='survey-emoji-5'
+                    name='rating'
+                    value='5'
+                />
+                <label for='survey-emoji-5'>😍</label>
+                <input
+                    type='radio'
+                    id='survey-emoji-4'
+                    name='rating'
+                    value='4'
+                />
+                <label for='survey-emoji-4'>🙂</label>
+                <input
+                    type='radio'
+                    id='survey-emoji-3'
+                    name='rating'
+                    value='3'
+                />
+                <label for='survey-emoji-3'>😐</label>
+                <input
+                    type='radio'
+                    id='survey-emoji-2'
+                    name='rating'
+                    value='2'
+                />
+                <label for='survey-emoji-2'>😕</label>
+                <input
+                    type='radio'
+                    id='survey-emoji-1'
+                    name='rating'
+                    value='1'
+                />
+                <label for='survey-emoji-1'>😡</label>
+            </span>
+        </fieldset>
+    </form>
+</div>
 {{/inline}}
 
 <div class='survey'>
     <button class='survey__close-cross'>x</button>
     <p class='survey__title'>{{title}}</p>
-    {{> stars}}
+    {{> emojis}}
     <button class='survey__next-button'>Далее</button>
 </div>
