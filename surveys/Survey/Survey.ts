@@ -1,19 +1,6 @@
 'use strict';
 
-const QUESTIONS = [
-    {
-        id: 0,
-        title: 'Как вам ваша жизнь?',
-    },
-    {
-        id: 1,
-        title: 'Как вам наш сервис?',
-    },
-];
-
 import { PostSurveyReview } from '../../modules/Types';
-import PopupAlert from '../../components/PopupAlert/PopupAlert';
-import ApiClient from '../../modules/ApiClient';
 
 /** Карточка объявления на главной странице */
 export default class Survey {
@@ -105,28 +92,66 @@ export default class Survey {
     }
 
     addEventListeners() {
-        const xBtn = this.#parent.querySelector(
-            '.survey__close-cross'
-        ) as HTMLButtonElement;
-
-        xBtn.onclick = () => {
-            console.log('I was clicked');
-        };
-
         this.#nextButtonElement.onclick = () => this.displayNextQuestion();
 
         // todo: add check if current === NPS
         this.handleNPSButtons();
     }
 
-    async render() {
-        console.log(this.#questions[0]);
+    detectTypeAndHideOthers(type: string) {
+        const nps = document.getElementById('nps') as HTMLElement;
+        const stars = document.getElementById('stars') as HTMLElement;
+        const emoji = document.getElementById('emojis') as HTMLElement;
+        const thanksMessage = document.getElementById(
+            'thanks-message'
+        ) as HTMLElement;
 
+        (document.querySelector('.js-star-form') as HTMLFormElement).reset();
+        (document.querySelector('.js-emoji-form') as HTMLFormElement).reset();
+
+        const buttons = [...this.#parent.querySelectorAll('.js-nps-button')];
+        buttons.forEach((btn) => {
+            btn.classList.remove('survey__nps__rating-button-selected');
+            btn.classList.remove('survey__nps__rating-button-focused');
+        });
+
+        switch (type) {
+            case 'STARS': {
+                nps.style.display = 'none';
+                emoji.style.display = 'none';
+                stars.style.display = 'block';
+                thanksMessage.style.display = 'none';
+                break;
+            }
+            case 'SMILE': {
+                nps.style.display = 'none';
+                emoji.style.display = 'block';
+                stars.style.display = 'none';
+                thanksMessage.style.display = 'none';
+                break;
+            }
+            case 'RATE': {
+                nps.style.display = 'block';
+                emoji.style.display = 'none';
+                stars.style.display = 'none';
+                thanksMessage.style.display = 'none';
+                break;
+            }
+            case 'THANKS': {
+                nps.style.display = 'none';
+                emoji.style.display = 'none';
+                stars.style.display = 'none';
+                thanksMessage.style.display = 'block';
+                break;
+            }
+        }
+    }
+
+    async render() {
         this.#parent.insertAdjacentHTML(
             'beforeend',
             this.#template({
                 title: this.#questions[0].title,
-                type: this.#questions[0].type,
             })
         );
 
@@ -139,6 +164,8 @@ export default class Survey {
                 '.survey__next-button'
             ) as HTMLButtonElement;
             this.addEventListeners();
+
+            this.detectTypeAndHideOthers(this.#questions[0].type);
         });
     }
 
@@ -148,9 +175,18 @@ export default class Survey {
         if (await this.#leaveReview()) {
             this.#currentIndex++;
 
-            if (this.#currentIndex >= this.#questions.length) {
+            if (this.#currentIndex == this.#questions.length) {
+                this.#currentIndex++;
                 return;
             }
+
+            if (this.#currentIndex > this.#questions.length) {
+                return;
+            }
+
+            this.detectTypeAndHideOthers(
+                this.#questions[this.#currentIndex].type
+            );
 
             this.#surveyTitleElement.textContent =
                 this.#questions[this.#currentIndex].title;
@@ -158,10 +194,6 @@ export default class Survey {
             if (this.#currentIndex === this.#questions.length - 1) {
                 this.#nextButtonElement.textContent = 'Завершить';
             }
-
-            (
-                document.querySelector('.js-star-form') as HTMLFormElement
-            ).reset();
         }
     }
 }

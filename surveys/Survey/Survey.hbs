@@ -1,5 +1,5 @@
 {{#*inline "stars"}}
-<div class='survey__rating'>
+<div class='survey__rating' id="stars">
         <form class='survey__form js-star-form'>
             <fieldset class='survey__fieldset'>
                 <span class='survey__stars survay-span'>
@@ -45,8 +45,8 @@
 {{/inline}}
 
 {{#*inline "emojis"}}
-<div class='survey__emojis'>
-    <form class='survey__form js-star-form'>
+<div class='survey__emojis' id="emojis">
+    <form class='survey__form js-emoji-form'>
         <fieldset class='survey__fieldset'>
             <span class='survey__emojis survay-span'>
                 <input
@@ -91,7 +91,7 @@
 {{/inline}}
 
 {{#*inline "nps"}}
-<div class="survey__nps">
+<div class="survey__nps" id="nps">
   <div class="survey__nps__rating-scale">
     <button class="survey__nps__rating-button js-nps-button" data-value="0">0</button>
     <button class="survey__nps__rating-button js-nps-button" data-value="1">1</button>
@@ -114,8 +114,10 @@
 {{/inline}}
 
 <div class='survey'>
-    <button class='survey__close-cross'>x</button>
     <p class='survey__title'>{{title}}</p>
+    <span id="" style="display: none;">Спасибо большое за ваш фидбек!</span>
+    {{> stars}}
+    {{> nps}}
     {{> emojis}}
     <button class='survey__next-button'>Далее</button>
-</div>
+</span>
