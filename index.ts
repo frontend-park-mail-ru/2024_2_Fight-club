@@ -163,6 +163,22 @@ const init = async () => {
     pageContainer.classList.add('page-container');
     root.appendChild(pageContainer);
     router.navigateTo(location.href);
+
+    displaySurvey();
+};
+
+const displaySurvey = () => {
+    const iframe = document.createElement('iframe') as HTMLIFrameElement;
+    iframe.classList.add('survey__iframe');
+    iframe.onload = () => {
+        iframe.style.width =
+            iframe.contentWindow?.document.body.scrollWidth + 'px';
+        iframe.style.height =
+            iframe.contentWindow?.document.body.scrollHeight + 'px';
+    };
+    iframe.src = '/surveys/';
+
+    document.body.appendChild(iframe);
 };
 
 init();

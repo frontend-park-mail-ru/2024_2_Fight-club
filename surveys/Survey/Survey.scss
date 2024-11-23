@@ -32,23 +32,27 @@
 }
 
 $unchecked-color: #ffffff; // Цвет для невыбранных звезд
-$checked-color: #FFA552;   // Цвет для выбранных звезд
-$hover-color: #FFB570;     // Цвет для звезд при наведении
+$checked-color: #ffa552; // Цвет для выбранных звезд
+$hover-color: #ffb570; // Цвет для звезд при наведении
 
-$new-rate-star-empty: url("/svg/star-empty.svg"); // Путь к пустой звезде
-$new-rate-star-filled: url("/svg/star-filled.svg"); // Путь к заполненной звезде
+$new-rate-star-empty: url('/svg/star-empty.svg'); // Путь к пустой звезде
+$new-rate-star-filled: url('/svg/star-filled.svg'); // Путь к заполненной звезде
 
 body {
     background-color: #616161;
+    overflow: hidden;
+    width: 300px;
+    height: 200px;
+    margin: 0;
 }
 
 .survey {
     padding: 10px 30px;
     font-family: Inter, Arial, 'sans-serif';
     background-color: #fff;
-    border: 1px solid black;
-    width: 300px;
-    height: 200px;
+    border: none;
+    width: 100%;
+    height: 100%;
     position: relative;
 
     &__close-cross {
@@ -89,7 +93,6 @@ body {
         unicode-bidi: bidi-override;
         direction: rtl;
         width: 100%;
-
 
         input {
             display: none;
