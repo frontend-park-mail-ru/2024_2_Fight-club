@@ -103,6 +103,10 @@ export default class Survey {
             if (this.#currentIndex === this.#questions.length - 1) {
                 this.#nextButtonElement.textContent = 'Завершить';
             }
+
+            (document
+                .querySelector('.js-star-form') as HTMLFormElement)
+                .reset();                
         }
     }
 }
