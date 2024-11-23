@@ -57,7 +57,7 @@ export default class Survey {
             errorMsg.classList.add('error-message');
 
             document
-                .querySelector('.survey__stars')
+                .querySelector('.survay-span')
                 ?.insertAdjacentElement('afterend', errorMsg);
             return false;
         }

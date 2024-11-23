@@ -83,6 +83,8 @@ body {
 
     &__fieldset {
         border: 0;
+        margin-left: 0;
+        padding-left: 0;
         width: 9em;
         border-radius: 1px;
     }
@@ -182,6 +184,38 @@ body {
                 text-align: right;
             }
         }
+
+        &__emojis {
+        font-size: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        unicode-bidi: bidi-override;
+        direction: rtl;
+        width: 100%;
+
+        input {
+            display: none;
+        }
+
+        label {
+            display: inline-block;
+            font-size: 1.5rem;
+            width: 2rem;
+            height: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, color 0.2s;
+
+            &:hover {
+                transform: scale(1.2);
+            }
+        }
+
+        input:checked + label {
+            transform: scale(1.3);
+        }
+    }
 
         .error-message {
             margin: 0px;
