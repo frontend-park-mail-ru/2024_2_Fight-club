@@ -126,7 +126,7 @@ body {
 
     &__next-button {
         @include button;
-        margin-top: 30px;
+        margin-top: 20px;
     }
 
     /* Net Promoter Score */
@@ -226,5 +226,6 @@ body {
         font-weight: 600;
         font-size: 16px;
         color: #e52a2a;
+        width: 246px;
     }
 }

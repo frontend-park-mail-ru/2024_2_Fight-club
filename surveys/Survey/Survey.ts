@@ -38,9 +38,7 @@ export default class Survey {
 
     async #getQuestions() {
         const data = await ApiClient.getQuestions(1);
-        console.log('there')
         this.#questions = data.Survey.ques;
-        console.log(data.Survey.ques);
     }
 
     async #leaveReview(): Promise<boolean> {
@@ -128,7 +126,6 @@ export default class Survey {
 
     async render() {
         await this.#getQuestions();
-        console.log(this.#questions[0]);
 
         this.#parent.insertAdjacentHTML(
             'beforeend',
@@ -152,20 +149,21 @@ export default class Survey {
     async displayNextQuestion() {
         document.querySelector('.error-message')?.remove();
 
-        this.#leaveReview();
-        this.#currentIndex++;
+        if (await this.#leaveReview()) {
+            this.#currentIndex++;
 
-        if (this.#currentIndex >= this.#questions.length) {
-            return;
+            if (this.#currentIndex >= this.#questions.length) {
+                return;
+            }
+
+            this.#surveyTitleElement.textContent =
+                this.#questions[this.#currentIndex].title;
+
+            if (this.#currentIndex === this.#questions.length - 1) {
+                this.#nextButtonElement.textContent = 'Завершить';
+            }
+
+            (document.querySelector('.js-star-form') as HTMLFormElement).reset();
         }
-
-        this.#surveyTitleElement.textContent =
-            this.#questions[this.#currentIndex].title;
-
-        if (this.#currentIndex === this.#questions.length - 1) {
-            this.#nextButtonElement.textContent = 'Завершить';
-        }
-
-        (document.querySelector('.js-star-form') as HTMLFormElement).reset();
     }
 }
