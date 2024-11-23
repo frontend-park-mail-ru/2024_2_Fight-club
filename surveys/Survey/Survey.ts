@@ -123,41 +123,42 @@ export default class Survey {
             btn.classList.remove('survey__nps__rating-button-focused');
         });
 
+        console.log(type);
         switch (type) {
-            case 'STARS': {
-                nps.style.display = 'none';
-                emoji.style.display = 'none';
-                stars.style.display = 'block';
-                thanksMessage.style.display = 'none';
-                break;
-            }
-            case 'SMILE': {
-                nps.style.display = 'none';
-                emoji.style.display = 'block';
-                stars.style.display = 'none';
-                thanksMessage.style.display = 'none';
-                break;
-            }
-            case 'RATE': {
-                nps.style.display = 'block';
-                emoji.style.display = 'none';
-                stars.style.display = 'none';
-                thanksMessage.style.display = 'none';
-                break;
-            }
-            case 'THANKS': {
-                nps.style.display = 'none';
-                emoji.style.display = 'none';
-                stars.style.display = 'none';
-                thanksMessage.style.display = 'block';
-                title.style.display = 'none';
-                (
+        case 'STARS': {
+            nps.style.display = 'none';
+            emoji.style.display = 'none';
+            stars.style.display = 'block';
+            thanksMessage.style.display = 'none';
+            break;
+        }
+        case 'SMILE': {
+            nps.style.display = 'none';
+            emoji.style.display = 'block';
+            stars.style.display = 'none';
+            thanksMessage.style.display = 'none';
+            break;
+        }
+        case 'RATE': {
+            nps.style.display = 'block';
+            emoji.style.display = 'none';
+            stars.style.display = 'none';
+            thanksMessage.style.display = 'none';
+            break;
+        }
+        case 'THANKS': {
+            nps.style.display = 'none';
+            emoji.style.display = 'none';
+            stars.style.display = 'none';
+            thanksMessage.style.display = 'block';
+            title.style.display = 'none';
+            (
                     document.querySelector(
                         '.survey__next-button'
                     ) as HTMLButtonElement
-                ).style.visibility = 'hidden';
-                break;
-            }
+            ).style.visibility = 'hidden';
+            break;
+        }
         }
     }
 
