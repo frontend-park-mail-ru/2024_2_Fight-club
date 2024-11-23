@@ -9,7 +9,7 @@ export default class Survey {
     #questions;
     // #answers;
     #currentIndex;
-    // #currentValue: number;
+    #currentValue: number;
 
     #surveyTitleElement: HTMLParagraphElement;
     #nextButtonElement: HTMLButtonElement;
@@ -20,17 +20,27 @@ export default class Survey {
         // this.#answers = new Map<number, number>();
         this.#currentIndex = 0;
         this.#questions = data.Survey.ques;
-        // this.#currentValue = 0;
+        this.#currentValue = 0;
     }
 
-    async #leaveReview(): Promise<boolean> {
-        const value = Number(
+    #leaveReview() {
+        let value = Number(
             (
                 document.querySelector(
                     'input[name="rating"]:checked'
                 ) as HTMLInputElement
             )?.value
         );
+
+        if (
+            !(
+                document.querySelector(
+                    'input[name="rating"]:checked'
+                ) as HTMLInputElement
+            )?.value
+        ) {
+            value = this.#currentValue;
+        }
 
         if (!isNaN(value) && value !== 0) {
             const data: PostSurveyReview = {
@@ -69,9 +79,9 @@ export default class Survey {
                     }
                 }
 
-                // this.#currentValue = parseInt(
-                //     clickedButton.dataset.value as string
-                // );
+                this.#currentValue = parseInt(
+                    clickedButton.dataset.value as string
+                );
             };
 
             clickedButton.onmouseenter = () => {
@@ -105,6 +115,7 @@ export default class Survey {
         const thanksMessage = document.getElementById(
             'thanks-message'
         ) as HTMLElement;
+        const title = document.querySelector('.survey__title') as HTMLElement;
 
         (document.querySelector('.js-star-form') as HTMLFormElement).reset();
         (document.querySelector('.js-emoji-form') as HTMLFormElement).reset();
@@ -142,6 +153,7 @@ export default class Survey {
                 emoji.style.display = 'none';
                 stars.style.display = 'none';
                 thanksMessage.style.display = 'block';
+                title.style.display = 'none';
                 break;
             }
         }
@@ -171,11 +183,14 @@ export default class Survey {
 
     async displayNextQuestion() {
         document.querySelector('.error-message')?.remove();
+        console.log('PIZDEC');
 
-        if (await this.#leaveReview()) {
+        if (this.#leaveReview()) {
             this.#currentIndex++;
 
+            console.log(this.#currentIndex);
             if (this.#currentIndex == this.#questions.length) {
+                this.detectTypeAndHideOthers('THANKS');
                 this.#currentIndex++;
                 return;
             }
