@@ -176,10 +176,13 @@ const displaySurvey = () => {
     const iframe = document.createElement('iframe') as HTMLIFrameElement;
     iframe.classList.add('survey__iframe');
     iframe.onload = () => {
-        iframe.style.width =
-            iframe.contentWindow?.document.body.scrollWidth + 'px';
-        iframe.style.height =
-            iframe.contentWindow?.document.body.scrollHeight + 'px';
+        setTimeout(() => {
+            const iframeDocument = iframe.contentWindow?.document;
+            if (iframeDocument) {
+                iframe.style.width = iframeDocument.body.scrollWidth + 'px';
+                iframe.style.height = iframeDocument.body.scrollHeight + 'px';
+            }
+        }, 50);
     };
     iframe.src = '/surveys/';
 

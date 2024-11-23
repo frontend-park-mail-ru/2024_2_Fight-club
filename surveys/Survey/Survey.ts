@@ -32,11 +32,16 @@ export default class Survey {
         this.#template = Handlebars.templates['Survey.hbs'];
         // this.#answers = new Map<number, number>();
         this.#currentIndex = 0;
-        this.#questions = data.Survey.ques
+        this.#questions = QUESTIONS;
         // this.#currentValue = 0;
     }
 
-
+    async #getQuestions() {
+        const data = await ApiClient.getQuestions(1);
+        console.log('there')
+        this.#questions = data.Survey.ques;
+        console.log(data.Survey.ques);
+    }
 
     async #leaveReview(): Promise<boolean> {
         const value = Number(
@@ -121,7 +126,8 @@ export default class Survey {
         this.handleNPSButtons();
     }
 
-    render() {
+    async render() {
+        await this.#getQuestions();
         console.log(this.#questions[0]);
 
         this.#parent.insertAdjacentHTML(
