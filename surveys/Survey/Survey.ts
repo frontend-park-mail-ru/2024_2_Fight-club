@@ -21,6 +21,7 @@ export default class Survey {
     #questions;
     // #answers;
     #currentIndex;
+    #currentValue: number;
 
     #surveyTitleElement: HTMLParagraphElement;
     #nextButtonElement: HTMLButtonElement;
@@ -31,14 +32,18 @@ export default class Survey {
         this.#template = Handlebars.templates['Survey.hbs'];
         // this.#answers = new Map<number, number>();
         this.#currentIndex = 0;
+        this.#currentValue = 0;
     }
 
     async #leaveReview(): Promise<boolean> {
-        const value = Number((
-            document
-                .querySelector('input[name="rating"]:checked') as HTMLInputElement)
-            ?.value);
-        
+        const value = Number(
+            (
+                document.querySelector(
+                    'input[name="rating"]:checked'
+                ) as HTMLInputElement
+            )?.value
+        );
+
         if (!isNaN(value) && value !== 0) {
             const data: PostSurveyReview = {
                 questionId: 1,
@@ -58,6 +63,30 @@ export default class Survey {
         }
     }
 
+    handleNPSButtons() {
+        const buttons = [
+            ...this.#parent.getElementsByClassName('js-nps-button'),
+        ] as HTMLButtonElement[];
+
+        buttons.forEach((clickedButton) => {
+            clickedButton.onclick = () => {
+                buttons.forEach((btn) =>
+                    btn.classList.remove('survey__nps__rating-button-selected')
+                );
+                for (const button of buttons) {
+                    button.classList.add('survey__nps__rating-button-selected');
+                    if (button === clickedButton) {
+                        break;
+                    }
+                }
+
+                this.#currentValue = parseInt(
+                    clickedButton.dataset.value as string
+                );
+            };
+        });
+    }
+
     addEventListeners() {
         const xBtn = this.#parent.querySelector(
             '.survey__close-cross'
@@ -68,6 +97,8 @@ export default class Survey {
         };
 
         this.#nextButtonElement.onclick = () => this.displayNextQuestion();
+
+        this.handleNPSButtons();
     }
 
     render() {
@@ -91,28 +122,22 @@ export default class Survey {
     }
 
     async displayNextQuestion() {
-        document
-            .querySelector('.error-message')
-            ?.remove();
+        document.querySelector('.error-message')?.remove();
 
-        if (await this.#leaveReview()) {
+        this.#leaveReview();
+        this.#currentIndex++;
 
-            this.#currentIndex++;
-
-            if (this.#currentIndex >= this.#questions.length) {
-                return;
-            }
-
-            this.#surveyTitleElement.textContent =
-                this.#questions[this.#currentIndex].title;
-
-            if (this.#currentIndex === this.#questions.length - 1) {
-                this.#nextButtonElement.textContent = 'Завершить';
-            }
-
-            (document
-                .querySelector('.js-star-form') as HTMLFormElement)
-                .reset();                
+        if (this.#currentIndex >= this.#questions.length) {
+            return;
         }
+
+        this.#surveyTitleElement.textContent =
+            this.#questions[this.#currentIndex].title;
+
+        if (this.#currentIndex === this.#questions.length - 1) {
+            this.#nextButtonElement.textContent = 'Завершить';
+        }
+
+        (document.querySelector('.js-star-form') as HTMLFormElement).reset();
     }
 }

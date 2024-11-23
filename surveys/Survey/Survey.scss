@@ -1,6 +1,6 @@
 @font-face {
     font-family: Inter;
-    src: url('../fonts/Inter.ttf');
+    src: url('../../fonts/Inter.ttf');
 }
 
 @mixin button {
@@ -41,19 +41,21 @@ $new-rate-star-filled: url('/svg/star-filled.svg'); // Путь к заполн�
 body {
     background-color: #616161;
     overflow: hidden;
-    width: 300px;
-    height: 200px;
+    width: fit-content;
+    max-width: 400px;
+    height: fit-content;
     margin: 0;
 }
 
 .survey {
     padding: 10px 30px;
-    font-family: Inter, Arial, 'sans-serif';
+    font-family: Inter, 'sans-serif';
     background-color: #fff;
     border: none;
     width: 100%;
     height: 100%;
     position: relative;
+    box-sizing: border-box;
 
     &__close-cross {
         border: none;
@@ -124,11 +126,68 @@ body {
         @include button;
         margin-top: 30px;
     }
-}
 
-.error-message {
-    margin: 0px;
-    font-weight: 600;
-    font-size: 16px;
-    color: #e52a2a;
+    /* Net Promoter Score */
+    &__nps {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+
+        &__rating-scale {
+            display: flex;
+            width: 100%;
+            gap: 6px;
+        }
+
+        &__rating-button {
+            margin: 0;
+            background-color: #eff0f2;
+            border-radius: 8px;
+            padding: 10px 8px;
+            border: none;
+            color: #757575;
+            font-weight: 600;
+            cursor: pointer;
+            transition:
+                background-color 0.3s,
+                color 0.3s;
+            :hover {
+                background-color: #007aff;
+                color: white;
+            }
+
+            &-selected {
+                background-color: #007aff;
+                color: white;
+            }
+        }
+
+        &__hints {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        &__hint-text {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #666;
+            flex: 0 1 auto;
+
+            &-left {
+                text-align: left;
+            }
+
+            &-right {
+                text-align: right;
+            }
+        }
+
+        .error-message {
+            margin: 0px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #e52a2a;
+        }
+    }
 }

@@ -44,13 +44,32 @@
     </div>
 {{/inline}}
 
-{{#*inline "stars"}}
+{{#*inline "nps"}}
+<div class="survey__nps">
+  <div class="survey__nps__rating-scale">
+    <button class="survey__nps__rating-button js-nps-button" data-value="0">0</button>
+    <button class="survey__nps__rating-button js-nps-button" data-value="1">1</button>
+    <button class="survey__nps__rating-button js-nps-button" data-value="2">2</button>
+    <button class="survey__nps__rating-button js-nps-button" data-value="3">3</button>
+    <button class="survey__nps__rating-button js-nps-button" data-value="4">4</button>
+    <button class="survey__nps__rating-button js-nps-button" data-value="5">5</button>
+    <button class="survey__nps__rating-button js-nps-button" data-value="6">6</button>
+    <button class="survey__nps__rating-button js-nps-button" data-value="7">7</button>
+    <button class="survey__nps__rating-button js-nps-button" data-value="8">8</button>
+    <button class="survey__nps__rating-button js-nps-button" data-value="9">9</button>
+    <button class="survey__nps__rating-button js-nps-button" data-value="10">10</button>
+  </div>
+  <div class="survey__nps__hints">
+    <span id="result" class="survey__nps__hint-text survey__nps__hint-text-left">точно<br/> не буду рекомендовать</span>
+    <soan id="result" class="survey__nps__hint-text survey__nps__hint-text-right">точно <br/> порекомендую</soan>
+  </div>
+</div>
 
 {{/inline}}
 
 <div class='survey'>
     <button class='survey__close-cross'>x</button>
     <p class='survey__title'>{{title}}</p>
-    {{> stars}}
+    {{> nps}}
     <button class='survey__next-button'>Далее</button>
 </div>
