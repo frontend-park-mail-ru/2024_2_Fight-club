@@ -1,7 +1,5 @@
-<div class='survey'>
-    <button class='survey__close-cross'>x</button>
-    <p class='survey__title'>{{title}}</p>
-    <div class='survey__stars'>
+{{#*inline "stars"}}
+<div class='survey__stars'>
         <form class='survey__form js-star-form'>
             <fieldset class='survey__fieldset'>
                 <span class='survey__stars'>
@@ -44,5 +42,15 @@
             </fieldset>
         </form>
     </div>
+{{/inline}}
+
+{{#*inline "stars"}}
+
+{{/inline}}
+
+<div class='survey'>
+    <button class='survey__close-cross'>x</button>
+    <p class='survey__title'>{{title}}</p>
+    {{> stars}}
     <button class='survey__next-button'>Далее</button>
 </div>
