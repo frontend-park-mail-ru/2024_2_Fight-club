@@ -112,6 +112,27 @@ class ProfileData {
 
     /**
      * @private
+     * @param {string} data
+     * @returns {string}
+     * @description Превращает строку из БД в формат 01 января 2024г.
+     */
+    #dataToString(data: string): string {
+        const monthNames = [
+            'января', 'февраля', 'марта', 'апреля', 
+            'мая', 'июня', 'июля', 'августа', 
+            'сентября', 'октября', 'ноября', 'декабря'
+        ];
+        
+        const date = new Date(data);
+        const day = date.getDate();
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
+    
+        return `${day} ${month} ${year}г.`;
+    }
+
+    /**
+     * @private
      * @description Получение данных
      */
     async #getProfileData(): Promise<void> {
@@ -535,9 +556,12 @@ class ProfileData {
 
     async #renderReviews(): Promise<void> {
         this.#content.replaceChildren();
+        this.#content.classList.add('y-scroll');
+        this.#content.parentElement?.classList.add('fix-bottom-right-border');
         const reviews = await this.#getReviews();
         reviews.forEach((reviewData) => {
             console.log(reviewData);
+            reviewData.createdAt     = this.#dataToString(reviewData.createdAt);
             const review = new ReviewCard(reviewData);
             review.render(this.#content);
         });
