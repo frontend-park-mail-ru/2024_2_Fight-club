@@ -1,10 +1,10 @@
-<div class="review">
+<div class="review" style="{{reviewBackground this.rating}}">
     <div class="review__main-container">
         <div class="review__profile">
             <div class="review__profile__img-container">
-                <img src="/default.png" class="review__profile__img">
+                <img src="{{this.userAvatar}}" class="review__profile__img">
             </div>
-            <h4 class="review__profile__name">Cосун Пердун</h4>
+            <h4 class="review__profile__name">{{this.userName}}</h4>
         </div>
 
         <div class="review__value">
@@ -16,11 +16,8 @@
     </div>
 
     <div class="review__add-info">
-        <div class="review__add-info__rating-container">
-            <p>Оценка:</p>
-            <div class="review__add-info__stars">
-                {{renderStars this.rating}}
-            </div>
+        <div class="review__add-info__stars">
+            {{renderStars this.rating}}
         </div>
         <div class="review__add-info__data">
             {{this.createdAt}}

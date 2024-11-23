@@ -72,4 +72,6 @@ export interface ReviewData {
     text: string;
     rating: number;
     createdAt: string;
+    userAvatar: string;
+    userName: string;
 }

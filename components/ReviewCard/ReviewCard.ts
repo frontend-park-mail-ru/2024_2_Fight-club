@@ -7,13 +7,13 @@ class ReviewCard {
 
     constructor(data: ReviewData) {
         this.#data = data;
-        this.#registerHandlebarsStarHelper();
+        this.#registerHandlebarsHelpers();
     }
 
     /**
-     * @description Регистрируем хэлпер для рендера от 1 до 5 звезд
+     * @description Регистрируем хелпер для рендера от 1 до 5 звезд и определения фона
      */
-    #registerHandlebarsStarHelper() {
+    #registerHandlebarsHelpers() {
         Handlebars.registerHelper('renderStars', function (rating: number) {
             let stars = '';
             for (let i = 0; i < 5; i++) {
@@ -21,6 +21,16 @@ class ReviewCard {
                 stars += `<img src="${starPath}" alt="star" class="review__star">`;
             }
             return new Handlebars.SafeString(stars);
+        });
+
+        Handlebars.registerHelper('reviewBackground', function (rating: number) {
+            if (rating >= 4) {
+                return 'background-color: rgba(59, 179, 59, 0.1);';
+            } else if (rating <= 2) {
+                return 'background-color: rgba(255, 0, 0, 0.08);';
+            } else {
+                return 'background-color: rgba(0, 0, 0, 0.05);';
+            }
         });
     }
 

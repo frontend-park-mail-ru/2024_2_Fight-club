@@ -7,8 +7,9 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
     min-height: 660px;
-    height: 70vh;
+    height: 100%;
     max-width: 280px;
     padding-inline-start: 40px;
     padding-inline-end: 40px;
@@ -100,7 +101,7 @@
 }
 
 .profile-container__edit-container {
-    margin-top: 10%;
+    margin: 8% 0 5% 0;
     width: 100%;
 }
 

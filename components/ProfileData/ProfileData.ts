@@ -496,7 +496,9 @@ class ProfileData {
         leaveReviewButton!.addEventListener('click', async (e)=>{
             e.preventDefault();
             await this.#leaveReview();
-            this.#renderProfileInfo();
+            await this.#renderProfileInfo();
+            this.#renderReviews();
+            this.#addButtonEventListener();
         });
     }
 
@@ -542,6 +544,8 @@ class ProfileData {
     //TODO Когда карты появятся
     #renderMap() {
         this.#content.replaceChildren();
+        this.#content.classList.remove('y-scroll');
+        this.#content.parentElement?.classList.remove('fix-bottom-right-border');
         const wrapper = document.createElement('div');
         wrapper.id = 'wrapper';
         wrapper.classList.add('data-container__wrapper');
@@ -605,9 +609,9 @@ class ProfileData {
         this.#content.replaceChildren();
         const template = Handlebars.templates['RatingForm.hbs'];
         this.#content.insertAdjacentHTML(
-                'beforeend',
-                template({})
-            );
+            'beforeend',
+            template({})
+        );
         
         this.#submitReviewEventListener();
     }
