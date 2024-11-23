@@ -65,3 +65,8 @@ export interface ProfileInfo {
     sex: string;
     username: string;
 }
+
+export interface PostSurveyReview {
+    questionId: number;
+    value: number;
+}

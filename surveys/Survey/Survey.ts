@@ -1,5 +1,7 @@
 'use strict';
 
+import { PostSurveyReview } from "../../modules/Types";
+
 /** Карточка объявления на главной странице */
 export default class Survey {
     #template;
@@ -10,6 +12,17 @@ export default class Survey {
         this.#data = data;
         this.#parent = parent;
         this.#template = Handlebars.templates['Survey.hbs'];
+    }
+
+    async #leaveReview(): Promise<void> {
+        const data: PostSurveyReview = {
+            questionId: 1,
+            value: Number((document
+                .querySelector('input[name="rating"]:checked') as HTMLInputElement)!
+                .value)
+        }
+
+        console.log(data);
     }
 
     addEventListeners() {
