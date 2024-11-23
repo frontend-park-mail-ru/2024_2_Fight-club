@@ -154,6 +154,11 @@ export default class Survey {
                 stars.style.display = 'none';
                 thanksMessage.style.display = 'block';
                 title.style.display = 'none';
+                (
+                    document.querySelector(
+                        '.survey__next-button'
+                    ) as HTMLButtonElement
+                ).style.visibility = 'hidden';
                 break;
             }
         }
