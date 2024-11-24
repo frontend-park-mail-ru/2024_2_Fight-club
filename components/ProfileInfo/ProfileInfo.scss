@@ -129,6 +129,37 @@
     height: 40%;
 }
 
+.js-graphic-href {
+    position: relative;
+    
+    &:hover {
+      &::after {
+        content: "Следить за изменением рейтинга";
+        font-size: 14px;
+        font-style: normal;
+        position: absolute;
+        bottom: calc(100% + 5px);
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        white-space: nowrap;
+        z-index: 10;
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.2s ease-in-out;
+      }
+    }
+
+    &::after {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+    }
+  }
+
 @media screen and (max-width: 900px) {
     #profile-content {
         margin-top: 30px;
