@@ -319,7 +319,7 @@ export default class EditAdvertPage {
 
             if (response?.ok) {
                 const data = await response.json();
-                const id = data['place']['id'];
+                const id = data['place']['uuid'];
                 router.navigateTo(`/ads/?id=${id}`);
             }
         } else if (this.#action == 'edit' && this.#id) {
