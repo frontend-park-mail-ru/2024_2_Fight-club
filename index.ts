@@ -86,10 +86,10 @@ const renderAdListPage = async () => {
         console.error('There is no userId in local storage!');
         return;
     }
-    const data = (await ApiClient.getAdsOfUser(userId))['places'];
+    const data = (await ApiClient.getAdsOfUser(userId))['places']['housing'];
 
     const horizontalAdCardData: HorizontalAdCardData[] = [];
-    if (horizontalAdCardData.length !== 0) {
+    if (data.length !== 0) {
         for (const d of data) {
             horizontalAdCardData.push({
                 id: d.id,

@@ -25,17 +25,19 @@ class Router {
         const path = window.location.pathname;
         const handler = this.routes[path];
 
-        if (handler) {
-            const params = new URLSearchParams(window.location.search);
-            document.querySelector('.page-container')?.replaceChildren();
-            await handler(params);
-        } else {
-            document.body.appendChild(
-                PopupAlert('404: Страница еще не создана')
-            );
+        try {
+            if (handler) {
+                const params = new URLSearchParams(window.location.search);
+                document.querySelector('.page-container')?.replaceChildren();
+                await handler(params);
+            } else {
+                document.body.appendChild(
+                    PopupAlert('404: Страница еще не создана')
+                );
+            }
+        } finally {
+            spinner.destroy();
         }
-
-        spinner.destroy();
     }
 
     navigateTo(path: string) {
