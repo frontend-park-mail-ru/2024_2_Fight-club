@@ -9,6 +9,7 @@ import ApiClient from '../../modules/ApiClient';
 import ReviewCard from '../ReviewCard/ReviewCard';
 import { GraphicPoint } from '../../modules/Types';
 import ReviewsGraphic from '../ReviewsGraphic/ReviewsGraphic';
+import NoReviews from './NoReviews/NoReviews';
 
 interface userData {
     name: string | undefined;
@@ -512,7 +513,6 @@ class ProfileData {
             .querySelector('.js-graphic-href')
             ?.addEventListener('click', (e)=>{
                 e.preventDefault();
-                console.log('there');
                 this.#renderGraphic();
             });
     }
@@ -575,26 +575,37 @@ class ProfileData {
 
     async #renderReviews(): Promise<void> {
         this.#content.replaceChildren();
-        this.#content.classList.add('y-scroll');
-        this.#content.parentElement?.classList.add('fix-bottom-right-border');
         const reviews = await this.#getReviews();
-        reviews.forEach((reviewData) => {
-            console.log(reviewData);
-            reviewData.createdAt     = this.#dataToString(reviewData.createdAt);
-            const review = new ReviewCard(reviewData);
-            review.render(this.#content);
-        });
+        if (reviews.length != 0) {
+            this.#content.classList.add('y-scroll');
+            this.#content.parentElement?.classList.add('fix-bottom-right-border');
+
+            reviews.forEach((reviewData) => {
+                console.log(reviewData);
+                reviewData.createdAt     = this.#dataToString(reviewData.createdAt);
+                const review = new ReviewCard(reviewData);
+                review.render(this.#content);
+            });
+        } else {
+            const noReviews = new NoReviews(this.#isMyProfile, ()=>{
+                console.log('there')
+                clearPage('form');
+                this.#content.replaceChildren();
+                this.#renderReviewForm();
+            });
+            noReviews.render(this.#content);
+        }
     }
 
     #renderAchievments() {}
 
     async #renderGraphic(){
         this.#content.replaceChildren();
-        this.#content.classList.remove('y-scroll');
-        this.#content.parentElement?.classList.remove('fix-bottom-right-border');
-
         const reviews = await this.#getReviews();
         if (reviews.length != 0) {
+            this.#content.classList.remove('y-scroll');
+            this.#content.parentElement?.classList.remove('fix-bottom-right-border');
+
             let graphicData = new Array<GraphicPoint>();
             for (const {createdAt, rating} of reviews){
                 const point: GraphicPoint = {
@@ -607,7 +618,13 @@ class ProfileData {
             const reviewsGraphic = new ReviewsGraphic(graphicData);
             reviewsGraphic.render(this.#content);
         } else {
-            console.log('no reviews');
+            const noReviews = new NoReviews(this.#isMyProfile, ()=>{
+                console.log('there')
+                clearPage('form');
+                this.#content.replaceChildren();
+                this.#renderReviewForm();
+            });
+            noReviews.render(this.#content);
         }
     }
 

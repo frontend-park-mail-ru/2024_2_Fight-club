@@ -1,0 +1,18 @@
+<div class="no-reviews">
+    <div class="no-reviews__img-container">
+        <img src="/walking.webp">
+    </div>
+
+    <div class="no-reviews__content">
+        {{#if isMyProfile}}
+        <p>Отзывов пока нет.</p>
+        {{else}}
+        <p>Отзывов пока нет. Станьте первым!</p>
+        <div class="no-reviews__button-container">
+            <button class="no-reviews__button">
+                Оценить
+            </button>
+        </div>
+        {{/if}}
+    </div>
+</div>
