@@ -26,21 +26,21 @@
     height: 100px;
 }
 
-.header__hrefs__href_active {
+.header__hrefs__href-active {
     font-weight: bold;
     position: relative;
-}
 
-.header__hrefs__href_active::after {
-    content: '';
-    display: block;
-    height: 2px;
-    width: 60px;
-    position: absolute;
-    bottom: -3px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #635b5b;
+    &::after {
+        content: '';
+        display: block;
+        height: 2px;
+        width: 60px;
+        position: absolute;
+        bottom: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #635b5b;
+    }
 }
 
 .header__logo-text-link {

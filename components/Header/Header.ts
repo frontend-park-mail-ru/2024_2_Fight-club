@@ -96,12 +96,21 @@ class Header {
                 menuElement.text = text;
                 menuElement.addEventListener('click', (e) => {
                     e.preventDefault();
+
+                    const elements = document.getElementsByClassName(
+                        'header__hrefs__href'
+                    );
+                    [...elements].forEach((elem) =>
+                        elem.classList.remove('header__hrefs__href-active')
+                    );
+
+                    menuElement.classList.add('header__hrefs__href-active');
                     callback();
                 });
                 menuElement.classList.add('header__hrefs__href');
 
                 if (index === 0) {
-                    menuElement.classList.add('header__hrefs__href_active');
+                    menuElement.classList.add('header__hrefs__href-active');
                     this.#headerState.activePageLink = menuElement;
                 }
 
