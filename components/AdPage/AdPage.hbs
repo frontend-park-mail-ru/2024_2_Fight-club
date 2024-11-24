@@ -127,12 +127,14 @@
         >
             <div class='ad-page-profile-container__photo'>
                 <img
-                    src='{{author.avatar}}'
+                    src='{{adAuthor.avatar}}'
                     class='ad-page-profile-container__photo__img1'
                 />
             </div>
-            <p class='ad-page-profile-container__p1'>{{author.name}}</p>
-            <p class='ad-page-profile-container__p2'>{{author.locationMain}}</p>
+            <p class='ad-page-profile-container__p1'>{{adAuthor.name}}</p>
+            <p
+                class='ad-page-profile-container__p2'
+            >{{adAuthor.locationMain}}</p>
             <hr class='ad-page-profile-container__hr' />
         </a>
 
@@ -147,7 +149,7 @@
                     />
                     <span
                         class='ad-page-profile-container__score'
-                    >{{author.rating}}</span>
+                    >{{adAuthor.rating}}</span>
                 </span>
             </div>
         </div>
@@ -161,7 +163,7 @@
         </div>
 
         <button class='ad-page-profile-container__write-msg-button'>Напишите
-            {{author.name}}
+            {{adAuthor.name}}
             прямо сейчас
         </button>
 

@@ -79,24 +79,28 @@
         <div class='housing-card__location'>
             <p class='housing-card__city'>{{cityName}}</p>
             <p class='housing-card__address'>{{address}}</p>
-            <div class="housing-card__view-row">
+            <div class='housing-card__view-row'>
                 <a href='{{onMap}}' class='housing-card__href'>Показать на карте</a>
-                <span class="housing-card__view">
-                    <img src="../../public/svg/eye.svg" height="15" width="15">
-                    <p class="housing-card__view__p">{{viewsCount}}</p>
+                <span class='housing-card__view'>
+                    <img
+                        src='../../public/svg/eye.svg'
+                        height='15'
+                        width='15'
+                    />
+                    <p class='housing-card__view__p'>{{viewsCount}}</p>
                 </span>
             </div>
         </div>
         <div class='housing-card__author-info'>
             <img
                 class='housing-card__avatar'
-                src='{{author.avatar}}'
+                src='{{adAuthor.avatar}}'
                 alt='User avatar'
             />
-            <p class='housing-card__author-name'>{{author.name}}</p>
+            <p class='housing-card__author-name'>{{adAuthor.name}}</p>
             <div class='housing-card__rating-container'>
                 <img class='housing-card__star' src='/star.png' alt='star' />
-                <span class='housing-card__rating'>{{author.rating}}</span>
+                <span class='housing-card__rating'>{{adAuthor.rating}}</span>
             </div>
         </div>
     </div>
