@@ -94,5 +94,20 @@
     &__button-container
         display: flex
         justify-content: center
-        button
-            @include mixins.button
+        gap: 20px
+        
+    &__more-button
+        @include mixins.button
+
+        border: 1px solid
+        color: #000 !important
+        background-color: #fff !important
+        font-weight: 600
+        width: 20% !important
+    
+    &__chat-button
+        @include mixins.button
+
+        width: 20% !important
+    
+

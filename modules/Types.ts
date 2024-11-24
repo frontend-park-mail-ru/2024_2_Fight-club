@@ -31,7 +31,7 @@ export interface AdvertData {
     publicationDate: string;
     roomsNumber: number;
 
-    author: { avatar: string; name: string; rating: number };
+    adAuthor: { avatar: string; name: string; rating: number };
     authorUUID: string;
 }
 

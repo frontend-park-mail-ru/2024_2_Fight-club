@@ -2,17 +2,20 @@
 
 import { AdvertData } from '../../modules/Types';
 import { calculateAge } from '../../modules/Utils';
+import router from '../../modules/Router';
 
 class ShortHousing{
     #data: AdvertData;
+    #index: number;
     #age: number;
     #sex: string;
-    #clickCallback;
+    #clickCallback: (arg0: string, arg1: string)=> void;
 
-    constructor(data: AdvertData, callback) {
+    constructor(data: AdvertData, index: number, callback: any) {
         this.#data = data;
-        this.#age = calculateAge(this.#data.author.birthDate);
-        this.#sex = this.#calculateSex(this.#data.author.sex);
+        this.#index = index;
+        this.#age = calculateAge(this.#data.adAuthor.birthDate);
+        this.#sex = this.#calculateSex(this.#data.adAuthor.sex);
         this.#clickCallback = callback;
     }
 
@@ -27,18 +30,38 @@ class ShortHousing{
         else return 'Не указано';
     }
 
-    render(parent: HTMLDivElement) {
+    async #addEventListeners(wrapper: HTMLDivElement): Promise<void> {
+        //При клике на карточку меняется центр карты на это объявление
+        wrapper.addEventListener('click', ()=>{
+            this.#clickCallback(this.#data.cityName, this.#data.address);
+        });
+
+        //При клике на кнопку "Подробнее" переход на страницу объявления
+        document
+            .querySelector('.js-more-ads[data-index="'+ this.#index +'"]')
+            ?.addEventListener('click', ()=>{
+                router.navigateTo(`/ads/?id=${this.#data.id}`);
+            })
+
+        //При клике на кнопку "Напиши мне" БУДЕТ переход на страницу чата
+        document
+            .querySelector('.js-new-chat[data-index="'+ this.#index +'"]')
+            ?.addEventListener('click', ()=>{
+                console.log(this.#index);
+            })
+    }
+
+    async render(parent: HTMLDivElement) {
         const template = Handlebars.templates['ShortAdCard.hbs'];
         const shortCardWrapper = document.createElement('div');
         shortCardWrapper.innerHTML = template({
             data: this.#data,
             sex: this.#sex, 
-            age: this.#age
+            age: this.#age,
+            index: this.#index
         });
         parent.appendChild(shortCardWrapper);
-        shortCardWrapper.addEventListener('click', ()=>{
-            this.#clickCallback(this.#data.cityName, this.#data.address);
-        });
+        await this.#addEventListeners(shortCardWrapper);
     }
 }
 

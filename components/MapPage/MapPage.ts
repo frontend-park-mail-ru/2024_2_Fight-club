@@ -110,8 +110,8 @@ class MapPage {
                 offset: 0,
             };
             const data = await ApiClient.getAds({}, limit);
-            for (const [_, d] of Object.entries(data)){
-                const housing = new ShortHousing(d, (city: string, address: string)=>{
+            for (const [ind, d] of data.entries()){
+                const housing = new ShortHousing(d, ind, (city: string, address: string)=>{
                     this.goToPlace(city, address);
                 });
                 housing.render(adsContainer);

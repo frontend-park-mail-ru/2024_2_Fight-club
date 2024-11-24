@@ -1,13 +1,13 @@
 <div class="short-card">
     <div class="short-card__main-info">
         <div class="short-card__img-container">
-            <img src="{{data.author.avatar}}" height="80" width="80">
+            <img src="{{data.adAuthor.avatar}}" height="80" width="80">
         </div>
         <div class="short-card__name-container">
-            <p class="short-card__name-container__name">{{data.author.name}}</p>
+            <p class="short-card__name-container__name">{{data.adAuthor.name}}</p>
             <span class="short-card__rating-container">
                 <img src="/star.png" height="16" width="16">
-                <p class="short-card__rating-container__rating">{{data.author.rating}}</p>
+                <p class="short-card__rating-container__rating">{{data.adAuthor.rating}}</p>
             </span>
             <span class="short-card__location-container">
                 <img src="/svg/location.svg" width="18" height="18">
@@ -36,11 +36,12 @@
         </div>
         <div class="short-card__row">
             <span class="short-card__row__title">Всего гостей:</span>
-            <span class="short-card__row__value">{{data.author.guestCount}}</span>
+            <span class="short-card__row__value">{{data.adAuthor.guestCount}}</span>
         </div>
     </div>
 
     <div class="short-card__button-container">
-        <button>Напиши мне!</button>
+        <button class="short-card__more-button js-more-ads" data-index="{{index}}">Подробнее</button>
+        <button class="short-card__chat-button js-new-chat" data-index="{{index}}">Напиши мне!</button>
     </div>
 </div>
