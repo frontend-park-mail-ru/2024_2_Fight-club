@@ -21,6 +21,36 @@
             </div>
         </div>
 
+        <div class="advert-apps">
+            <div class="advert-apps__element">
+                <div class="advert-apps__photo-container">
+                    <img src="/svg/eye-greybg.svg" width="40" height="40">
+                </div>
+                <div class="advert-apps__info">
+                    <p class="advert-apps__info__p1">Просмотрено</p>
+                    <p class="advert-apps__info__p2">{{viewsCount}} раз</p>
+                </div>
+            </div>
+            <div class="advert-apps__element">
+                <div class="advert-apps__photo-container">
+                    <img src="/svg/favorites-grey.svg" width="40" height="40">
+                </div>
+                <div class="advert-apps__info">
+                    <p class="advert-apps__info__p1">Понравилось</p>
+                    <p class="advert-apps__info__p2">5 раз</p>
+                </div>
+            </div>
+            <div class="advert-apps__element">
+                <div class="advert-apps__photo-container">
+                    <img src="/svg/person-walking.svg" alt="Количество просмотров объявления" width="40" height="40">
+                </div>
+                <div class="advert-apps__info">
+                    <p class="advert-apps__info__p1">Посещено</p>
+                    <p class="advert-apps__info__p2">3 раз</p>
+                </div>
+            </div>
+        </div>
+
         <div class='advert-desc'>
             <div class='advert-desc__text-data'>
                 <span class='advert-desc__label'>Город:</span>
@@ -75,15 +105,15 @@
         <div class='ad-page-profile-container__div'>
             <div
                 class='ad-page-profile-container__p'
-            >Пол:{{author.rating}}</div>
-            <p class='ad-page-profile-container__info'>{{author.sex}}</p>
+            >Пол:</div>
+            <p class='ad-page-profile-container__info'>{{author.gender}}</p>
         </div>
         <div class='ad-page-profile-container__div'>
             <div class='ad-page-profile-container__p'>Возраст:</div>
             <p class='ad-page-profile-container__info'>{{age}}</p>
         </div>
 
-        <button class='ad-page-profile-container__write-msg-button'>Напишите Leo
+        <button class='ad-page-profile-container__write-msg-button'>Напишите {{author.name}}
             прямо сейчас
         </button>
 

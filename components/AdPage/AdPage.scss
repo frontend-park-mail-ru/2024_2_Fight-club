@@ -84,6 +84,36 @@
         display: none;
     }
 }
+.advert-apps{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    max-width: 500px;
+
+    &__element{
+        width: min-content;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        &__p1{
+            color: #808080;
+            font-size: 14px;
+        }
+        &__p2{
+            color: #000;
+            font-weight: bold;
+        }
+    }
+}
 .advert-desc {
     margin-top: 20px;
     border-radius: 10px;
@@ -97,11 +127,9 @@
     }
     &__label {
         font-weight: 600;
-        font-style: italic;
     }
     &__value {
         font-weight: 500;
-        font-style: italic;
     }
     // PROFILE
 }
@@ -151,7 +179,6 @@
     }
     &__p2 {
         margin-top: 5%;
-        font-style: italic;
         font-size: 20px;
     }
     &__hr {
@@ -177,7 +204,6 @@
     &__score {
         font-size: 20px;
         font-weight: 300;
-        font-style: italic;
     }
     &__div {
         gap: 10px;
@@ -190,11 +216,9 @@
         width: fit-content;
     }
     &__p {
-        font-style: italic;
         font-size: 20px;
     }
     &__info {
-        font-style: italic;
         font-size: 20px;
     }
     &__write-msg-button {
@@ -231,5 +255,10 @@
         &__main-img {
             position: static;
         }
+    }
+    .advert-apps{
+        display: flex;
+        flex-direction: column;
+        align-items: start;
     }
 }
