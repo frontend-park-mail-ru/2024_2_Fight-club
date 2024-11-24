@@ -8,6 +8,20 @@
     "theme_color": "#2f3d58",
     "orientation": "portrait",
     "display": "standalone",
+    "screenshots": [
+        {
+            "src": "/screenshots/wide-1.png",
+            "type": "image/png",
+            "sizes": "1900x900",
+            "form_factor": "wide"
+        },
+        {
+            "src": "/screenshots/wide-2.png",
+            "type": "image/png",
+            "sizes": "1900x900",
+            "form_factor": "wide"
+        }
+    ],
     "icons": [
         {
             "src": "maskable_icon.png",
@@ -17,7 +31,7 @@
         },
         {
             "src": "favicon.png",
-            "sizes": "512x512"
+            "sizes": "786x786"
         }
     ]
 }
