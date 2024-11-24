@@ -3,14 +3,20 @@
 import Ajax from './Ajax';
 import { RegisterParams, AdsFilters, LoginParams, EditParams, ReviewData } from './Types';
 
+interface Limit {
+    limit: number;
+    offset: number;
+}
+
 class APIClient {
     BASE_URL = `${location.protocol}//${window.location.hostname}:8008/api`;
+    AUTOADDRESS_KEY = 'pVhps0CwtfR0';
 
     /**
      * @public
      * @description Получает список объявлений
      */
-    async getAds(filters?: AdsFilters) {
+    async getAds(filters?: AdsFilters, limit?:Limit) {
         try {
             let url = '/housing?';
 
@@ -28,6 +34,13 @@ class APIClient {
             }
             if (filters?.guests) {
                 url += `&guests=${filters.guests}`;
+            }
+
+            if (limit?.limit) {
+                url += `&limit=${limit.limit}`;
+            }
+            if (limit?.offset) {
+                url += `&offset=${limit.offset}`;
             }
 
             const response = await fetch(this.BASE_URL + url);
