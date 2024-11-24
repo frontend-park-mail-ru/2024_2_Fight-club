@@ -44,6 +44,11 @@
         }
     }
 
+    &__failure-message {
+        color: red;
+        text-align: center;
+    }
+
     &__error {
         color: #ff8630;
         font-size: 14px;

@@ -121,8 +121,12 @@ const renderHeader = async () => {
     document.querySelector('.header')?.remove();
 
     let sessionData;
-    if (getCookie('session_id')) {
-        sessionData = await APIService.getSessionData();
+    if (localStorage.getItem('userId')) {
+        try {
+            sessionData = await APIService.getSessionData();
+        } catch {
+            localStorage.removeItem('userId');
+        }
     }
 
     if (sessionData) {
@@ -133,6 +137,7 @@ const renderHeader = async () => {
 };
 
 router.addRoute('/', async () => {
+    await renderHeader();
     await renderMainPage();
 });
 

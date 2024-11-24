@@ -198,8 +198,8 @@ class AuthPopup {
 
             if (response.ok) {
                 this.#closeOverlay(parent);
-                router.navigateTo('/');
                 localStorage.setItem('userId', responseAsJson['userId']);
+                router.navigateTo('/');
             } else {
                 this.#setFailureMessage('Неверный логин или пароль!');
             }
@@ -215,6 +215,7 @@ class AuthPopup {
     }
 
     #setFailureMessage(message: string): void {
+        console.log('???');
         const failureMessageElem = document.querySelector(
             '.auth-modal__failure-message'
         );
