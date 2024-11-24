@@ -17,12 +17,12 @@
     text-decoration: none;
     color: #fff;
     font-size: 26px;
-    font-family: Verdana, sans-serif;
     text-shadow: 0 2px 6px black;
     font-weight: 500;
 }
 
 .search-container {
+    top: 30%;
     position: relative;
     width: 50%;
     height: 9%;
@@ -45,7 +45,7 @@
 
 .custom-search input {
     width: 100%;
-    border-radius: 10px 0 0 10px;
+    border-radius: 10px;
     outline: none;
     border: none;
     padding: 5px 10px 0 5%;
@@ -93,7 +93,6 @@
     .hosts a {
         text-decoration: none;
         font-size: 22px;
-        font-family: Verdana, sans-serif;
         text-shadow: 0 2px 6px black;
         font-weight: 500;
     }

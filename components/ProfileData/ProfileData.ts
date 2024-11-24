@@ -1,6 +1,6 @@
 'use strict';
 
-import Validation from '../../modules/Validation';
+import Validation from 'ultra-simple-validation';
 import APIClient from '../../modules/ApiClient';
 import { clearPage } from '../../modules/Clear';
 import { ReviewData } from '../../modules/Types';

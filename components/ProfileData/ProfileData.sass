@@ -13,6 +13,7 @@
     border: solid
     border-width: 1px 
     border-radius: 10px
+    box-shadow: 2px 5px 8px 1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)
 
 .data-container__wrapper
     position: relative
@@ -195,13 +196,13 @@
     &__buttons
         height: min-content
         display: flex
-        flex-direction: column
+        flex-direction: row
+        gap: 10px
         justify-content: space-around
-        height: 100px
 
         &__submit-button
             height: 35px
-            width: 200px
+            width: 150px
             border: none
             border-radius: 10px
             background-color: #4daf7c
@@ -212,7 +213,7 @@
 
         &__reset-button
             height: 35px
-            width: 200px
+            width: 150px
             border: none
             border-radius: 10px
             background-color: #e64229

@@ -44,36 +44,22 @@ class MainPhoto {
     }
 
     render(parent: HTMLElement) {
-        const hostsHrefs = document.createElement('div');
-        const findHost = document.createElement('a');
-        const beHost = document.createElement('a');
         const searchCityForm = document.createElement('div');
         const searchButtonDiv = document.createElement('div');
         const searchButtonWrapper = document.createElement('div');
         const search = document.createElement('input');
-        const findButton = document.createElement('button');
         searchButtonWrapper.appendChild(search);
-        searchButtonWrapper.appendChild(findButton);
 
-        findHost.text = 'Найти хоста';
-        beHost.text = 'Стать хостом';
-        findHost.href = '#';
-        beHost.href = '#';
         search.placeholder = 'Поиск по городам';
 
         search.classList.add('js-find-city');
-        findButton.classList.add('js-find-city-button');
         searchButtonWrapper.classList.add('custom-search__row');
         searchButtonDiv.classList.add('custom-search');
-        hostsHrefs.classList.add('hosts');
         searchCityForm.classList.add('search-container');
-
-        hostsHrefs.appendChild(findHost);
-        hostsHrefs.appendChild(beHost);
-        this.#mainPhotoContainer.appendChild(hostsHrefs);
 
         searchButtonDiv.appendChild(searchButtonWrapper);
         searchCityForm.appendChild(searchButtonDiv);
+
         this.#mainPhotoContainer.appendChild(searchCityForm);
 
         parent.appendChild(this.#mainPhotoContainer);

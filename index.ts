@@ -23,26 +23,7 @@ const pageContainer = document.createElement('div');
 
 import router from './modules/Router';
 import { HorizontalAdCardData } from './components/HorizontalAdCard/HorizontalAdCard';
-
-/** Объект с коллбеками для header`а */
-const headerCallbacks = {
-    mainPage: () => {
-        router.navigateTo('/');
-    },
-    mapPage: renderMapPage,
-    articlesPage: renderArticlesPage,
-    messagesPage: renderMessagesPage,
-    favoritesPage: renderFavoritesPage,
-    notificationsPage: renderNotificationsPage,
-    signInPage: renderSignInPage,
-    profileList: renderProfileList,
-};
-
-/** Объект с коллбеками для попапа профиля */
-const profilePopupCallbacks = {
-    profilePage: renderProfilePage,
-    donatePage: null,
-};
+import { getCookie } from './modules/Utils';
 
 const renderMainPage = async () => {
     const data = await ApiClient.getAds();
@@ -55,16 +36,17 @@ function renderMapPage() {
     mapPage.render(pageContainer);
 }
 
-function renderArticlesPage() {}
+const renderArticlesPage = () => {};
 
-function renderMessagesPage() {}
+const renderMessagesPage = () => {};
 
-function renderFavoritesPage() {}
+const renderFavoritesPage = () => {};
 
-function renderNotificationsPage() {}
+const renderNotificationsPage = () => {};
 
 const renderAdvertPage = async (id: string) => {
     const info = (await ApiClient.getAd(id))['place'];
+    const authorInfo = await ApiClient.getUser(info.authorUUID);
     const authorInfo = await ApiClient.getUser(info.authorUUID);
 
     const page = new AdPage(pageContainer, info, authorInfo);
@@ -83,21 +65,21 @@ const renderCreateAdvertPage = async () => {
     pageContainer.appendChild(page.getElement());
 };
 
-function renderSignInPage() {
+const renderSignInPage = () => {
     const auth = new AuthPopup();
     auth.render(root);
-}
+};
 
-function renderProfileList() {
+const renderProfileList = () => {
     const profileList = new ProfilePopup();
     profileList.render(root);
-}
+};
 
-function renderProfilePage() {
+const renderProfilePage = async () => {
     clearPage('main-photo', 'main-content');
     const profilePage = new ProfilePage();
-    profilePage.render(pageContainer);
-}
+    await profilePage.render(pageContainer);
+};
 
 const renderAdListPage = async () => {
     const userId = localStorage.getItem('userId');
@@ -108,21 +90,42 @@ const renderAdListPage = async () => {
     const data = (await ApiClient.getAdsOfUser(userId))['places'];
 
     const horizontalAdCardData: HorizontalAdCardData[] = [];
-    for (const d of data) {
-        horizontalAdCardData.push({
-            id: d.id,
-            cityName: d.cityName,
-            address: d.address,
-            image: d.images[0],
-        });
+    if (horizontalAdCardData.length !== 0) {
+        for (const d of data) {
+            horizontalAdCardData.push({
+                id: d.id,
+                cityName: d.cityName,
+                address: d.address,
+                image: d.images[0],
+            });
+        }
     }
     const page = AdListPage(horizontalAdCardData);
     pageContainer.appendChild(page);
 };
 
+/** Объект с коллбеками для header`а */
+const headerCallbacks = {
+    mainPage: () => {
+        router.navigateTo('/');
+    },
+    mapPage: renderMapPage,
+    articlesPage: renderArticlesPage,
+    messagesPage: renderMessagesPage,
+    favoritesPage: renderFavoritesPage,
+    notificationsPage: renderNotificationsPage,
+    signInPage: renderSignInPage,
+    profileList: renderProfileList,
+};
+
 const renderHeader = async () => {
     document.querySelector('.header')?.remove();
-    const sessionData = await APIService.getSessionData();
+
+    let sessionData;
+    if (getCookie('session_id')) {
+        sessionData = await APIService.getSessionData();
+    }
+
     if (sessionData) {
         localStorage.setItem('userId', sessionData['id']);
     }
@@ -148,13 +151,13 @@ router.addRoute('/ads/', async (params: URLSearchParams) => {
     const author = params.get('author');
 
     if (author === 'me') {
-        renderAdListPage();
+        await renderAdListPage();
     } else if (!action && adId) {
-        renderAdvertPage(adId);
+        await renderAdvertPage(adId);
     } else if (action === 'edit' && adId) {
-        renderEditAdvertPage(adId);
+        await renderEditAdvertPage(adId);
     } else if (action === 'create') {
-        renderCreateAdvertPage();
+        await renderCreateAdvertPage();
     }
 });
 

@@ -74,7 +74,6 @@ export default abstract class ReactiveComponent {
                 if (target[prop] === value) return true; // Protect from setting the same value & useless rerendering
                 target[prop] = value;
                 this.#deps.get(prop).notify();
-                console.log('gonna rerender');
                 this.update();
                 return true;
             },
@@ -85,7 +84,6 @@ export default abstract class ReactiveComponent {
 
             this.#currentFunc2Recompute = () => {
                 this.templateData[propName] = func(this.state);
-                console.log('RECOMPUTING...');
             };
 
             this.templateData[propName] = func(this.state);
@@ -93,8 +91,14 @@ export default abstract class ReactiveComponent {
         }
     }
 
+    /**
+     * Func that attaches event listeners.
+     */
     abstract addEventListeners(): void;
 
+    /**
+     * Called only one time
+     */
     render() {
         this.parent.insertAdjacentHTML(
             'beforeend',
@@ -115,6 +119,9 @@ export default abstract class ReactiveComponent {
         });
     }
 
+    /**
+     * Called each time on state change.
+     */
     update() {
         this.thisElement = document.getElementById(
             this.#elementId
@@ -135,6 +142,8 @@ export default abstract class ReactiveComponent {
 
         updateDOM(this.thisElement, container.firstChild as HTMLElement);
 
-        requestAnimationFrame(() => this.addEventListeners());
+        requestAnimationFrame(() => {
+            this.addEventListeners();
+        });
     }
 }

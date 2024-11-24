@@ -72,13 +72,6 @@ class Header {
         this.#render();
     }
 
-    #renderIcon() {
-        const logoImg = document.createElement('img');
-        logoImg.src = '/icon.jpg';
-        logoImg.classList.add('header__img1');
-        this.#menuContainer.appendChild(logoImg);
-    }
-
     #renderMainText() {
         const nameImg = document.createElement('img');
         nameImg.classList.add('header__img2');
@@ -185,7 +178,6 @@ class Header {
     }
 
     async #render() {
-        this.#renderIcon();
         this.#renderHrefs();
         this.#renderMainText();
         this.#renderSigns();

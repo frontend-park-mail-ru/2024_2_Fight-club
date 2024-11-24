@@ -4,5 +4,8 @@
         <button class='ad-list-page__add-button js-add-btn'>Добавить объявление</button>
     </div>
     <div class='ad-list-page__adverts-container js-advert-list'>
+        {{#if empty}}
+            <p class='ad-list-page__no-adverts-text'>Здесь пока пусто... 🕳️</p>
+        {{/if}}
     </div>
 </div>

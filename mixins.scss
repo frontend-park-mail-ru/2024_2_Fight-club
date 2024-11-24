@@ -25,3 +25,22 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 }
+
+@mixin prev-next-image-button-mixin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #00000066;
+    border: none;
+    text-decoration: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    position: absolute;
+    bottom: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    cursor: pointer;
+    pointer-events: auto;
+}

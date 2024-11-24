@@ -11,7 +11,10 @@ function AdListPage(data: HorizontalAdCardData[]) {
 
     const template = Handlebars.templates['AdListPage.hbs'];
 
-    pageContainer.innerHTML = template(data);
+    pageContainer.innerHTML = template({
+        ...data,
+        empty: data.length === 0,
+    });
     const advertListElement = pageContainer.querySelector('.js-advert-list');
     const createAdvertElement = pageContainer.querySelector(
         '.js-add-btn'
