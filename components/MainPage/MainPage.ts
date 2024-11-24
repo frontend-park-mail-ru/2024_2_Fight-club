@@ -53,7 +53,7 @@ class MainPage {
         if (!this.#adsData || this.#adsData.length === 0) {
             const noAdsText = document.createElement('p');
             noAdsText.textContent =
-                'Удивительно, но никто еще пока не создал объявление. Станьте первым! 🚀';
+                'Удивительно, но пока никто не создал объявление. Станьте первым! 🚀';
             noAdsText.classList.add('main-page__no-ads-text');
             this.#adsContainer.appendChild(noAdsText);
         } else {
