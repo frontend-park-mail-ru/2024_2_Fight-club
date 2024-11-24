@@ -2,7 +2,7 @@
 
 import APIClient from '../../modules/ApiClient';
 import router from '../../modules/Router';
-import Validation from '../../modules/Validation';
+import Validation from 'ultra-simple-validation';
 
 class AuthPopup {
     #config;
