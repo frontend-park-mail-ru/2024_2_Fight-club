@@ -22,6 +22,7 @@ const pageContainer = document.createElement('div');
 
 import router from './modules/Router';
 import { HorizontalAdCardData } from './components/HorizontalAdCard/HorizontalAdCard';
+import { getCookie } from './modules/Utils';
 
 const renderMainPage = async () => {
     const data = await ApiClient.getAds();
@@ -117,7 +118,12 @@ const headerCallbacks = {
 
 const renderHeader = async () => {
     document.querySelector('.header')?.remove();
-    const sessionData = await APIService.getSessionData();
+
+    let sessionData;
+    if (getCookie('session_id')) {
+        sessionData = await APIService.getSessionData();
+    }
+
     if (sessionData) {
         localStorage.setItem('userId', sessionData['id']);
     }
