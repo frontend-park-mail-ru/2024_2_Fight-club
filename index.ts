@@ -47,7 +47,6 @@ const renderNotificationsPage = () => {};
 const renderAdvertPage = async (id: string) => {
     const info = (await ApiClient.getAd(id))['place'];
     const authorInfo = await ApiClient.getUser(info.authorUUID);
-    const authorInfo = await ApiClient.getUser(info.authorUUID);
 
     const page = new AdPage(pageContainer, info, authorInfo);
     page.render();

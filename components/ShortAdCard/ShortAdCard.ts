@@ -11,7 +11,11 @@ class ShortHousing{
     #sex: string;
     #clickCallback: (arg0: string, arg1: string)=> void;
 
-    constructor(data: AdvertData, index: number, callback: any) {
+    constructor(
+        data: AdvertData,
+        index: number,
+        callback: (arg0: string, arg1: string) => void
+    ) {
         this.#data = data;
         this.#index = index;
         this.#age = calculateAge(this.#data.adAuthor.birthDate);
