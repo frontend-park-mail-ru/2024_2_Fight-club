@@ -83,6 +83,7 @@ const renderProfilePage = async () => {
 const renderAdListPage = async () => {
     const sessionData = await APIService.getSessionData();
     const userId = sessionData['id'];
+    const isHost = (await ApiClient.getUser(userId))['isHost'];
     if (!userId) {
         console.error('There is no userId in local storage!');
         return;
@@ -106,7 +107,7 @@ const renderAdListPage = async () => {
             });
         }
     }
-    const page = AdListPage(horizontalAdCardData);
+    const page = AdListPage(horizontalAdCardData, isHost);
     pageContainer.appendChild(page);
 };
 

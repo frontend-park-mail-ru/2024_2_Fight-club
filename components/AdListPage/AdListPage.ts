@@ -6,7 +6,7 @@ import HorizontalAdCard from '../HorizontalAdCard/HorizontalAdCard';
 
 import { HorizontalAdCardData } from '../HorizontalAdCard/HorizontalAdCard';
 
-function AdListPage(data: HorizontalAdCardData[]) {
+function AdListPage(data: HorizontalAdCardData[], isHost: boolean) {
     const pageContainer = document.createElement('div');
 
     const template = Handlebars.templates['AdListPage.hbs'];
@@ -14,7 +14,12 @@ function AdListPage(data: HorizontalAdCardData[]) {
     pageContainer.innerHTML = template({
         ...data,
         empty: data.length === 0,
+        isHost: isHost,
     });
+    if (!isHost) {
+        return pageContainer;
+    }
+
     const advertListElement = pageContainer.querySelector('.js-advert-list');
     const createAdvertElement = pageContainer.querySelector(
         '.js-add-btn'
