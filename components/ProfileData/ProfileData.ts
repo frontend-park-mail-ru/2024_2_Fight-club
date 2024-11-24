@@ -588,7 +588,7 @@ class ProfileData {
             });
         } else {
             const noReviews = new NoReviews(this.#isMyProfile, ()=>{
-                console.log('there')
+                console.log('there');
                 clearPage('form');
                 this.#content.replaceChildren();
                 this.#renderReviewForm();
@@ -606,20 +606,20 @@ class ProfileData {
             this.#content.classList.remove('y-scroll');
             this.#content.parentElement?.classList.remove('fix-bottom-right-border');
 
-            let graphicData = new Array<GraphicPoint>();
+            const graphicData = new Array<GraphicPoint>();
             for (const {createdAt, rating} of reviews){
                 const point: GraphicPoint = {
-                    date: (new Date(createdAt)).toLocaleDateString("ru-RU"),
+                    date: (new Date(createdAt)).toLocaleDateString('ru-RU'),
                     rating: rating
-                }
-                graphicData.push(point)
+                };
+                graphicData.push(point);
             }
 
             const reviewsGraphic = new ReviewsGraphic(graphicData);
             reviewsGraphic.render(this.#content);
         } else {
             const noReviews = new NoReviews(this.#isMyProfile, ()=>{
-                console.log('there')
+                console.log('there');
                 clearPage('form');
                 this.#content.replaceChildren();
                 this.#renderReviewForm();

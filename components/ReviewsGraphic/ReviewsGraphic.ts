@@ -1,6 +1,6 @@
 'use strict';
 
-import { GraphicPoint } from "../../modules/Types";
+import { GraphicPoint } from '../../modules/Types';
 
 interface AdditionalInfo {
     totalRatings: number;
@@ -11,7 +11,7 @@ interface AdditionalInfo {
 }
 
 class ReviewsGraphic {
-    #data: Array<GraphicPoint>
+    #data: Array<GraphicPoint>;
 
     constructor(data: Array<GraphicPoint>){
         this.#data = data;
@@ -24,8 +24,8 @@ class ReviewsGraphic {
         Handlebars.registerHelper('renderStars', function (rating: number) {
             const stars = Array.from({ length: 5 }, (_, i) =>
                 i < rating
-                    ? `<img src="/star.png" alt="star" style="width:16px;height:16px;">`
-                    : `<img src="/star-empty.png" alt="empty star" style="width:16px;height:16px;">`
+                    ? '<img src="/star.png" alt="star" style="width:16px;height:16px;">'
+                    : '<img src="/star-empty.png" alt="empty star" style="width:16px;height:16px;">'
             ).join('');
             return new Handlebars.SafeString(stars);
         });
@@ -47,7 +47,7 @@ class ReviewsGraphic {
 
     async #renderGraphic() {
         const canvas = document.getElementById('graphic') as HTMLCanvasElement;
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext('2d');
         if (!ctx) {
             console.error('Canvas context not available');
             return;

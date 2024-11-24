@@ -1,8 +1,8 @@
 'use strict';
 
 class NoReviews {
-    #isMyProfile: boolean
-    #renderFormCallback
+    #isMyProfile: boolean;
+    #renderFormCallback;
 
     constructor(isMyProfile: boolean, callback: () => void) {
         this.#isMyProfile = isMyProfile;
