@@ -1,5 +1,13 @@
 <div>
-    {{#each data}}
-        {{this.title}} - {{this.avg}} <br/>
-    {{/each}}
+    <div style='display: flex flex-direction: column; gap: 20px;'>
+        {{#each data}}
+            <span
+                style='display: inline-block; width: 500px;'
+            >{{this.title}}</span>
+            <span style=''>{{this.avg}}</span>
+            <br />
+
+        {{/each}}
+    </div>
+
 </div>

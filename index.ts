@@ -182,15 +182,6 @@ const init = async () => {
 const displaySurvey = () => {
     const iframe = document.createElement('iframe') as HTMLIFrameElement;
     iframe.classList.add('survey__iframe');
-    iframe.onload = () => {
-        setTimeout(() => {
-            const iframeDocument = iframe.contentWindow?.document;
-            if (iframeDocument) {
-                iframe.style.width = iframeDocument.body.scrollWidth + 'px';
-                iframe.style.height = iframeDocument.body.scrollHeight + 'px';
-            }
-        }, 50);
-    };
     iframe.src = '/surveys/';
 
     document.body.appendChild(iframe);

@@ -194,9 +194,14 @@ class APIClient {
     }
 
     async sendQuestions(body) {
-        const url = this.BASE_URL + `/csat`;
+        const url = this.BASE_URL + '/csat';
         const response = await Ajax.post({ url, body });
         return await response.json();
+    }
+
+    async getStatistics() {
+        const url = this.BASE_URL + '/statistics';
+        return Ajax.get(url);
     }
 }
 
