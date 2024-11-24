@@ -8,7 +8,6 @@ class ProfilePopup {
         logoutEvent: async () => {
             const response = await APIClient.logout();
             if (response.ok) {
-                localStorage.removeItem('userId');
                 router.navigateTo('/');
                 return;
             }

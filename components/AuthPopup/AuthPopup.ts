@@ -179,7 +179,6 @@ class AuthPopup {
                 if (res.ok) {
                     this.#closeOverlay(parent);
                     router.navigateTo('/');
-                    localStorage.setItem('userId', res['user']['id']);
                 } else if (res.status === 409)
                     this.#setFailureMessage('Такой аккаунт уже создан!');
                 else this.#setFailureMessage('Неизвестная ошибка на сервере');
@@ -198,7 +197,6 @@ class AuthPopup {
 
             if (response.ok) {
                 this.#closeOverlay(parent);
-                localStorage.setItem('userId', responseAsJson['userId']);
                 router.navigateTo('/');
             } else {
                 this.#setFailureMessage('Неверный логин или пароль!');

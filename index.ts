@@ -81,7 +81,8 @@ const renderProfilePage = async () => {
 };
 
 const renderAdListPage = async () => {
-    const userId = localStorage.getItem('userId');
+    const sessionData = await APIService.getSessionData();
+    const userId = sessionData['id'];
     if (!userId) {
         console.error('There is no userId in local storage!');
         return;
@@ -127,17 +128,14 @@ const renderHeader = async () => {
     document.querySelector('.header')?.remove();
 
     let sessionData;
-    if (localStorage.getItem('userId')) {
+    if (getCookie('session_id')) {
         try {
             sessionData = await APIService.getSessionData();
         } catch {
-            localStorage.removeItem('userId');
+            //
         }
     }
 
-    if (sessionData) {
-        localStorage.setItem('userId', sessionData['id']);
-    }
     const header = new Header(headerCallbacks, sessionData ? true : false);
     root.prepend(header.getElement());
 };
