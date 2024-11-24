@@ -75,3 +75,8 @@ export interface ReviewData {
     userAvatar: string;
     userName: string;
 }
+
+export interface GraphicPoint {
+    date: string;
+    rating: number;
+}

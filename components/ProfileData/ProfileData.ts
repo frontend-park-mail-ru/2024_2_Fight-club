@@ -7,6 +7,8 @@ import { ReviewData } from '../../modules/Types';
 import PopupAlert from '../PopupAlert/PopupAlert';
 import ApiClient from '../../modules/ApiClient';
 import ReviewCard from '../ReviewCard/ReviewCard';
+import { GraphicPoint } from '../../modules/Types';
+import ReviewsGraphic from '../ReviewsGraphic/ReviewsGraphic';
 
 interface userData {
     name: string | undefined;
@@ -586,10 +588,27 @@ class ProfileData {
 
     #renderAchievments() {}
 
-    #renderGraphic(){
+    async #renderGraphic(){
         this.#content.replaceChildren();
         this.#content.classList.remove('y-scroll');
         this.#content.parentElement?.classList.remove('fix-bottom-right-border');
+
+        const reviews = await this.#getReviews();
+        if (reviews.length != 0) {
+            let graphicData = new Array<GraphicPoint>();
+            for (const {createdAt, rating} of reviews){
+                const point: GraphicPoint = {
+                    date: (new Date(createdAt)).toLocaleDateString("ru-RU"),
+                    rating: rating
+                }
+                graphicData.push(point)
+            }
+
+            const reviewsGraphic = new ReviewsGraphic(graphicData);
+            reviewsGraphic.render(this.#content);
+        } else {
+            console.log('no reviews');
+        }
     }
 
     /**

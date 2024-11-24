@@ -33,7 +33,7 @@ class APIClient {
             const response = await fetch(this.BASE_URL + url);
 
             let data = await response.json();
-            data = data['places'];
+            data = data['housing'];
             if (data === undefined) return [];
             return data;
         } catch (error) {
