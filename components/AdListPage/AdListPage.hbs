@@ -1,8 +1,19 @@
 <div class='ad-list-page'>
-    <div class='ad-list-page__upper-container'>
-        <h1 class='ad-list-page__title'>Список объявлений</h1>
-        <button class='ad-list-page__add-button js-add-btn'>Добавить объявление</button>
-    </div>
-    <div class='ad-list-page__adverts-container js-advert-list'>
-    </div>
+    {{#if isHost}}
+        <div class='ad-list-page__upper-container'>
+            <h1 class='ad-list-page__title'>Список объявлений</h1>
+            <button class='ad-list-page__add-button js-add-btn'>Добавить
+                объявление</button>
+        </div>
+        <div class='ad-list-page__adverts-container js-advert-list'>
+            {{#if empty}}
+                <p class='ad-list-page__no-adverts-text'>Здесь пока пусто... 🕳️</p>
+            {{/if}}
+        </div>
+    {{else}}
+        <p class='ad-list-page__not-host-message'>🚫Вы не являетесь хостом,
+            поэтому не можете создавать объявления.</p>
+        <p class='ad-list-page__not-host-message'>Если вы хотите стать хостом,
+            пожалуйста, измените свой статус в настройках</p>
+    {{/if}}
 </div>

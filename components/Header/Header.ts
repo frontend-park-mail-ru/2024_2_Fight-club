@@ -36,10 +36,12 @@ class Header {
                 Map: {
                     href: '/map',
                     text: 'Карта',
+                    callback: headerCallbacks.mapPage,
                 },
                 Articles: {
                     href: '/articles',
                     text: 'Статьи',
+                    callback: headerCallbacks.articlesPage,
                 },
             },
 
@@ -70,13 +72,6 @@ class Header {
         this.#render();
     }
 
-    #renderIcon() {
-        const logoImg = document.createElement('img');
-        logoImg.src = '/icon.jpg';
-        logoImg.classList.add('header__img1');
-        this.#menuContainer.appendChild(logoImg);
-    }
-
     #renderMainText() {
         const nameImg = document.createElement('img');
         nameImg.classList.add('header__img2');
@@ -95,17 +90,27 @@ class Header {
         const hrefs = document.createElement('div');
         hrefs.classList.add('header__hrefs');
         Object.entries(this.#config.menu).forEach(
-            ([key, { href, text }], index) => {
+            ([key, { href, text, callback }], index) => {
                 const menuElement = document.createElement('a');
                 menuElement.href = href;
                 menuElement.text = text;
                 menuElement.addEventListener('click', (e) => {
                     e.preventDefault();
+
+                    const elements = document.getElementsByClassName(
+                        'header__hrefs__href'
+                    );
+                    [...elements].forEach((elem) =>
+                        elem.classList.remove('header__hrefs__href-active')
+                    );
+
+                    menuElement.classList.add('header__hrefs__href-active');
+                    callback();
                 });
                 menuElement.classList.add('header__hrefs__href');
 
                 if (index === 0) {
-                    menuElement.classList.add('header__hrefs__href_active');
+                    menuElement.classList.add('header__hrefs__href-active');
                     this.#headerState.activePageLink = menuElement;
                 }
 
@@ -182,7 +187,6 @@ class Header {
     }
 
     async #render() {
-        this.#renderIcon();
         this.#renderHrefs();
         this.#renderMainText();
         this.#renderSigns();

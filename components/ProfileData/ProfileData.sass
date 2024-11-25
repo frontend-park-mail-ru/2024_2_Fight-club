@@ -1,13 +1,18 @@
+.y-scroll
+    overflow-y: scroll
+
+.fix-bottom-right-border
+    border-bottom-right-radius: 0px !important
+
 .data-container
     background-color: white
     margin: 40px 200px 0px 0px
     width: 80%
     min-height: 660px
-    height: 70vh
-    border: solid
+    height: calc(100vh - 200px)
     border-width: 1px 
     border-radius: 10px
-
+    box-shadow: 2px 5px 8px 1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)
 .data-container__wrapper
     position: relative
     width: 100%
@@ -31,17 +36,16 @@
     &__action
         text-decoration: none
         font-size: 22px
-        font-style: italic
         cursor: pointer
         color: #635B5B
 
 .data-container__content
-    height: 100%
+    height: calc( 100% - 81px )
     width: 100%
 
 .edit-form
-    padding: 30px 50px 40px 80px
     height: 90%
+    padding: 30px 30px 40px 60px
 
     &__close
         display: flex
@@ -72,7 +76,6 @@
         &__title
             width: 120px
             font-size: 22px
-            font-style: italic
     
         &__input
             height: 30px
@@ -106,7 +109,6 @@
 
             padding: 2px 10px
             font-size: 20px
-            font-style: italic
             z-index: 100
     
     &__avatar
@@ -192,13 +194,13 @@
     &__buttons
         height: min-content
         display: flex
-        flex-direction: column
+        flex-direction: row
+        gap: 10px
         justify-content: space-around
-        height: 100px
 
         &__submit-button
             height: 35px
-            width: 200px
+            width: 150px
             border: none
             border-radius: 10px
             background-color: #4daf7c
@@ -209,7 +211,7 @@
 
         &__reset-button
             height: 35px
-            width: 200px
+            width: 150px
             border: none
             border-radius: 10px
             background-color: #e64229

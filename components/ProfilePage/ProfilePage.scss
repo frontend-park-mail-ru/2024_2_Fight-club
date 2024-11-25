@@ -1,13 +1,14 @@
 #profile-content {
     display: grid;
     grid-template-areas: 'profile actions';
-    grid-template-columns: 35% 1fr;
-    height: 83vh;
+    grid-template-columns: 1fr 2fr;
+    gap: 3vh;
+    margin-bottom: 5vh;
 }
 
 .profile__profile-container {
     grid-area: profile;
-    height: 100%;
+    height: calc(100vh - 200px);
 }
 
 .profile__data-container {

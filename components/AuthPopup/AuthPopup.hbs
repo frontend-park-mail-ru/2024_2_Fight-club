@@ -1,37 +1,42 @@
 <div class='overlay'>
-    <form novalidate method='POST' class='popup' id='auth-form'>
+    <form novalidate method='POST' class='auth-modal' id='auth-form'>
         <div class='close-cross'>
             <a>
                 <img src='/svg/cross.svg' width='30' />
             </a>
         </div>
-        <img class='auth-img' src='/name.png' />
+        <img class='auth-logo' src='/name.png' />
 
         <div class='auth-message'>{{authMessage}}</div>
-        <div class='popup__failure-message none'>Неправильный логин или пароль!</div>
-        <div class='popup__div'>
+        <div class='auth-modal__failure-message none'>Неправильный логин или
+            пароль!</div>
+        <div class='auth-modal__fields-container'>
             {{#each inputs}}
-                <div class='popup__inputAndValidationMessage'>
+                <div class='auth-modal__field-container'>
                     <input
+                        class='auth-modal__input'
                         name='{{@key}}'
                         placeholder='{{this.placeholder}}'
                         type='{{this.type}}'
                         minlength='{{this.minLen}}'
                         maxlength='{{this.maxLen}}'
                         required='{{this.required}}'
+                        data-validation-type='{{this.validationType}}'
                     />
 
-                    <a class='none popup__exclamation'>
-                        <img src='/svg/exclamation.svg' width='20' alt='!' />
-                    </a>
-                    <div class='popup__validationMessage none'></div>
+                    <p
+                        class='js-error-text auth-modal__error'
+                        aria-live='polite'
+                    >
+                        <!-- error text here -->
+                    </p>
                 </div>
             {{/each}}
 
         </div>
-        <button class='popup__button'>{{buttonText}}</button>
-        <div class='have-account'><p>{{bottomText}}</p><a
-                class='bold popup__a'
-            >{{bottomAText}}</a></div>
+        <button class='auth-modal__sign-in-button'>{{buttonText}}</button>
+        <div class='have-account'><p>{{bottomText}}</p>
+            <a class='bold auth-modal__a'>{{bottomAText}}</a>
+        </div>
     </form>
 </div>

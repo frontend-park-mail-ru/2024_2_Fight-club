@@ -1,0 +1,114 @@
+@use '../../mixins' as mixins
+    
+.short-card
+    border: solid
+    border-width: 1px
+    border-color: #FFA552
+    border-radius: 10px
+    min-height: 320px
+    height: min-content
+    max-height: 400px
+    width: 70%
+    margin: 0 0 20px 10%
+    background-color: #fff
+    padding: 5%
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+
+    &__main-info
+        display: flex
+        flex-direction: row
+        gap: 20px
+
+    &__img-container
+        width: 80px
+        height: 80px
+        img 
+            border-radius: 50%
+    
+    &__name-container
+        display: flex
+        flex-direction: column
+        justify-content: space-between
+        width: 90%
+
+        &__name
+            font-size: 24px
+            font-weight: bold
+
+    &__location-container
+        display: flex
+        flex-direction: row
+        align-items: center
+        gap: 3px
+
+        &__address
+            font-size: 18px
+
+    
+    &__rating-container
+        display: flex
+        flex-direction: row
+        align-items: center
+        gap: 3px
+
+        &__rating
+            font-size: 16px
+    
+    &__address-container
+        display: flex
+        flex-direction: row
+        gap: 3px
+
+        &__address
+            font-size: 18px
+    
+    &__description
+        font-size: 18px
+        text-align: justify
+        display: -webkit-box
+        -webkit-line-clamp: 4
+        -webkit-box-orient: vertical
+        overflow: hidden 
+
+    
+    &__additional-info
+        display: flex
+        flex-direction: column
+        justify-content: space-evenly
+        height: 100px
+
+    &__row
+        display: flex
+        flex-direction: row
+
+        &__title
+            width: 40%
+            font-size: 18px
+            font-weight: bold
+        
+        &__value
+            width: 60%
+            font-size: 18px
+    
+    &__button-container
+        display: flex
+        justify-content: center
+        gap: 20px
+        
+    &__more-button
+        @include mixins.button
+
+        border: 1px solid
+        color: #000 !important
+        background-color: #fff !important
+        font-weight: 600
+        width: 20% !important
+    
+    &__chat-button
+        @include mixins.button
+
+        width: 20% !important
+    
+

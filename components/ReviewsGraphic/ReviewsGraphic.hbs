@@ -1,0 +1,18 @@
+<div class="graphic-page">
+    <canvas id="graphic" class="graphic-page__graphic">
+        Извините, ваш браузер не поддерживает &lt;canvas&gt; элемент.
+    </canvas>
+
+    <div class="graphic-page__info">
+        <span class="graphic-page__info__rating">Изменение рейтинга</span>
+        <span class="graphic-page__info__avg-rating">Изменение среднего рейтинга</span>
+    </div>
+
+    <div class="graphic-page__additional-info">
+        <p>Всего оценок: {{this.totalRatings}}</p>
+        <p>Дата первой оценки: {{this.firstDate}}</p>
+        <p>Дата последней оценки: {{this.lastDate}}</p>
+        <p>Наибольшая оценка: {{renderStars this.highestRating}}</p>
+        <p>Наименьшая оценка: {{renderStars this.lowestRating}}</p>
+    </div>
+</div>

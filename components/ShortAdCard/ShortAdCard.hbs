@@ -1,0 +1,47 @@
+<div class="short-card">
+    <div class="short-card__main-info">
+        <div class="short-card__img-container">
+            <img src="{{data.adAuthor.avatar}}" height="80" width="80">
+        </div>
+        <div class="short-card__name-container">
+            <p class="short-card__name-container__name">{{data.adAuthor.name}}</p>
+            <span class="short-card__rating-container">
+                <img src="/star.png" height="16" width="16">
+                <p class="short-card__rating-container__rating">{{data.adAuthor.rating}}</p>
+            </span>
+            <span class="short-card__location-container">
+                <img src="/svg/location.svg" width="18" height="18">
+                <p class="short-card__location-container__address">{{data.cityName}}</p>
+            </span>
+        </div>
+    </div>
+
+    <span class="short-card__address-container">
+        <img src="../../public/svg/house.svg" height="20" width="20">
+        <p class="short-card__address-container__address">{{data.address}}</p>
+    </span>
+
+    <div class="short-card__description">
+        {{data.description}}
+    </div>
+
+    <div class="short-card__additional-info">
+        <div class="short-card__row">
+            <span class="short-card__row__title">Пол:</span>
+            <span class="short-card__row__value">{{sex}}</span>
+        </div>
+        <div class="short-card__row">
+            <span class="short-card__row__title">Возраст:</span>
+            <span class="short-card__row__value">{{age}}</span>
+        </div>
+        <div class="short-card__row">
+            <span class="short-card__row__title">Всего гостей:</span>
+            <span class="short-card__row__value">{{data.adAuthor.guestCount}}</span>
+        </div>
+    </div>
+
+    <div class="short-card__button-container">
+        <button class="short-card__more-button js-more-ads" data-index="{{index}}">Подробнее</button>
+        <button class="short-card__chat-button js-new-chat" data-index="{{index}}">Напиши мне!</button>
+    </div>
+</div>

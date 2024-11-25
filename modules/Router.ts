@@ -1,7 +1,8 @@
 import PopupAlert from '../components/PopupAlert/PopupAlert';
+import Spinner from '../components/Spinner/Spinner';
 
 interface urlHandlerFunc {
-    (...args: URLSearchParams[]): void;
+    (args: URLSearchParams): Promise<void>;
 }
 
 class Router {
@@ -17,18 +18,25 @@ class Router {
     }
 
     // Метод для обработки текущего маршрута
-    handleRoute() {
+    async handleRoute() {
+        const spinner = new Spinner();
+        spinner.render();
+
         const path = window.location.pathname;
         const handler = this.routes[path];
 
-        if (handler) {
-            const params = new URLSearchParams(window.location.search);
-            document.querySelector('.page-container')?.replaceChildren();
-            handler(params);
-        } else {
-            document.body.appendChild(
-                PopupAlert('404: Страница еще не создана')
-            );
+        try {
+            if (handler) {
+                const params = new URLSearchParams(window.location.search);
+                document.querySelector('.page-container')?.replaceChildren();
+                await handler(params);
+            } else {
+                document.body.appendChild(
+                    PopupAlert('404: Страница еще не создана')
+                );
+            }
+        } finally {
+            spinner.destroy();
         }
     }
 
@@ -41,10 +49,14 @@ class Router {
 const router = new Router();
 
 document.addEventListener('click', (event: Event) => {
-    const target = event.target as HTMLElement;
-    if (target.tagName === 'A') {
+    const path = event.composedPath() as HTMLElement[];
+    const linkElement = path.find(
+        (el) => el.tagName === 'A'
+    ) as HTMLAnchorElement;
+
+    if (linkElement) {
         event.preventDefault();
-        const href = target.getAttribute('href');
+        const href = linkElement.getAttribute('href');
 
         if (href) router.navigateTo(href);
     }

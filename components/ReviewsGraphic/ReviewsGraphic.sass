@@ -1,0 +1,44 @@
+.graphic-page
+    width: 100%
+    height: 100%
+    padding-top: 5%
+    box-sizing: border-box
+    overflow: auto
+
+    &__graphic
+        display: block
+        margin: 0 auto
+        border: 1px solid #ccc
+
+    &__info
+        display: flex
+        justify-content: space-around
+        margin-top: 20px
+
+        span
+            font-size: 14px
+            display: flex
+            align-items: center
+
+            &::before
+                content: ''
+                display: inline-block
+                width: 20px
+                height: 2px
+                margin-right: 8px
+                vertical-align: middle
+
+        &__rating::before
+            background-color: #ffa552
+
+        &__avg-rating::before
+            background-color: #00a652
+            border-top: 2px dashed #00a652
+
+    &__additional-info
+        margin-top: 30px
+        padding: 0 5% 15px 5%
+
+        p
+            font-size: 18px
+            margin: 5px 0

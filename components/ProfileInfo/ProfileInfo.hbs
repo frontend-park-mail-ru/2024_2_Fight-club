@@ -19,6 +19,9 @@
                     />
                     <span class='profile-container__score'>{{data.score}}</span>
                 </span>
+                <a class="js-graphic-href">
+                    <img src="/svg/href-icon.svg">
+                </a>
             </div>
         </div>
         <div class='profile-container__div'>
@@ -48,7 +51,7 @@
             <button
                 id='edit-button'
                 class='profile-container__edit-button'
-            >Изменить</button>
+            >{{#if isMyProfile}}Изменить{{else}}Оценить{{/if}}</button>
         </div>
     </div>
 </div>

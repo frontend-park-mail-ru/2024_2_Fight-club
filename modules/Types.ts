@@ -31,7 +31,7 @@ export interface AdvertData {
     publicationDate: string;
     roomsNumber: number;
 
-    author: { avatar: string; name: string; rating: number };
+    adAuthor: { avatar: string; name: string; rating: number };
     authorUUID: string;
 }
 
@@ -64,4 +64,19 @@ export interface ProfileInfo {
     score: number;
     sex: string;
     username: string;
+}
+
+export interface ReviewData {
+    hostId: string;
+    title: string;
+    text: string;
+    rating: number;
+    createdAt: string;
+    userAvatar: string;
+    userName: string;
+}
+
+export interface GraphicPoint {
+    date: string;
+    rating: number;
 }

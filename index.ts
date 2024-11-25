@@ -7,6 +7,7 @@ import ProfilePopup from './components/ProfilePopup/ProfilePopup';
 import MainPage from './components/MainPage/MainPage';
 import ProfilePage from './components/ProfilePage/ProfilePage';
 import CityPage from './components/CityPage/CityPage';
+import MapPage from './components/MapPage/MapPage';
 
 import { clearPage } from './modules/Clear';
 
@@ -22,26 +23,7 @@ const pageContainer = document.createElement('div');
 
 import router from './modules/Router';
 import { HorizontalAdCardData } from './components/HorizontalAdCard/HorizontalAdCard';
-
-/** Объект с коллбеками для header`а */
-const headerCallbacks = {
-    mainPage: () => {
-        router.navigateTo('/');
-    },
-    mapPage: renderMapPage,
-    articlesPage: renderArticlesPage,
-    messagesPage: renderMessagesPage,
-    favoritesPage: renderFavoritesPage,
-    notificationsPage: renderNotificationsPage,
-    signInPage: renderSignInPage,
-    profileList: renderProfileList,
-};
-
-/** Объект с коллбеками для попапа профиля */
-const profilePopupCallbacks = {
-    profilePage: renderProfilePage,
-    donatePage: null,
-};
+import { getCookie } from './modules/Utils';
 
 const renderMainPage = async () => {
     const data = await ApiClient.getAds();
@@ -50,21 +32,21 @@ const renderMainPage = async () => {
 };
 
 function renderMapPage() {
-    const cityPage = new CityPage();
-    cityPage.render(pageContainer);
+    const mapPage = new MapPage();
+    mapPage.render(pageContainer);
 }
 
-function renderArticlesPage() {}
+const renderArticlesPage = () => {};
 
-function renderMessagesPage() {}
+const renderMessagesPage = () => {};
 
-function renderFavoritesPage() {}
+const renderFavoritesPage = () => {};
 
-function renderNotificationsPage() {}
+const renderNotificationsPage = () => {};
 
 const renderAdvertPage = async (id: string) => {
     const info = (await ApiClient.getAd(id))['place'];
-    const authorInfo = await ApiClient.getUser(info.id);
+    const authorInfo = await ApiClient.getUser(info.authorUUID);
 
     const page = new AdPage(pageContainer, info, authorInfo);
     page.render();
@@ -82,49 +64,79 @@ const renderCreateAdvertPage = async () => {
     pageContainer.appendChild(page.getElement());
 };
 
-function renderSignInPage() {
+const renderSignInPage = () => {
     const auth = new AuthPopup();
     auth.render(root);
-}
+};
 
-function renderProfileList() {
+const renderProfileList = () => {
     const profileList = new ProfilePopup();
     profileList.render(root);
-}
+};
 
-function renderProfilePage() {
+const renderProfilePage = async () => {
     clearPage('main-photo', 'main-content');
     const profilePage = new ProfilePage();
-    profilePage.render(pageContainer);
-}
+    await profilePage.render(pageContainer);
+};
 
 const renderAdListPage = async () => {
-    const userId = localStorage.getItem('userId');
+    const sessionData = await APIService.getSessionData();
+    const userId = sessionData['id'];
+    const isHost = (await ApiClient.getUser(userId))['isHost'];
     if (!userId) {
         console.error('There is no userId in local storage!');
         return;
     }
-    const data = (await ApiClient.getAdsOfUser(userId))['places'];
+
+    let data = await ApiClient.getAdsOfUser(userId);
+    if (!('housing' in data)) {
+        data = [];
+    } else {
+        data = data['housing'];
+    }
 
     const horizontalAdCardData: HorizontalAdCardData[] = [];
-    for (const d of data) {
-        horizontalAdCardData.push({
-            id: d.id,
-            cityName: d.cityName,
-            address: d.address,
-            image: d.images[0],
-        });
+    if (data.length !== 0) {
+        for (const d of data) {
+            horizontalAdCardData.push({
+                id: d.id,
+                cityName: d.cityName,
+                address: d.address,
+                image: d.images[0],
+            });
+        }
     }
-    const page = AdListPage(horizontalAdCardData);
+    const page = AdListPage(horizontalAdCardData, isHost);
     pageContainer.appendChild(page);
+};
+
+/** Объект с коллбеками для header`а */
+const headerCallbacks = {
+    mainPage: () => {
+        router.navigateTo('/');
+    },
+    mapPage: renderMapPage,
+    articlesPage: renderArticlesPage,
+    messagesPage: renderMessagesPage,
+    favoritesPage: renderFavoritesPage,
+    notificationsPage: renderNotificationsPage,
+    signInPage: renderSignInPage,
+    profileList: renderProfileList,
 };
 
 const renderHeader = async () => {
     document.querySelector('.header')?.remove();
-    const sessionData = await APIService.getSessionData();
-    if (sessionData) {
-        localStorage.setItem('userId', sessionData['id']);
+
+    let sessionData;
+    if (getCookie('session_id')) {
+        try {
+            sessionData = await APIService.getSessionData();
+        } catch {
+            //
+        }
     }
+
     const header = new Header(headerCallbacks, sessionData ? true : false);
     root.prepend(header.getElement());
 };
@@ -138,26 +150,36 @@ router.addRoute('/profile', async () => {
     await renderProfilePage();
 });
 
+router.addRoute('/map', async () => {
+    await renderMapPage();
+});
+
 router.addRoute('/ads/', async (params: URLSearchParams) => {
     const adId = params.get('id');
     const action = params.get('action');
     const author = params.get('author');
 
     if (author === 'me') {
-        renderAdListPage();
+        await renderAdListPage();
     } else if (!action && adId) {
-        renderAdvertPage(adId);
+        await renderAdvertPage(adId);
     } else if (action === 'edit' && adId) {
-        renderEditAdvertPage(adId);
+        await renderEditAdvertPage(adId);
     } else if (action === 'create') {
-        renderCreateAdvertPage();
+        await renderCreateAdvertPage();
     }
 });
 
 router.addRoute('/ad-cities/', async (params: URLSearchParams) => {
     const city = params.get('city');
     const cityPage = new CityPage(city);
-    cityPage.render(document.querySelector('.page-container') as HTMLElement);
+    cityPage.render(pageContainer);
+});
+
+router.addRoute('/profiles', async (params: URLSearchParams) => {
+    const profileId = params.get('id') as string;
+    const page = new ProfilePage(profileId);
+    page.render(pageContainer);
 });
 
 const init = async () => {

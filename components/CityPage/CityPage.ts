@@ -40,7 +40,7 @@ class CityPage {
         const placesResponse = await ApiClient.getCitiesAds(name);
         if (placesResponse.ok) {
             const data = await placesResponse.json();
-            this.#places = data['places'];
+            this.#places = data['places']['housing'];
         } else {
             // console.log('error getting places');
         }

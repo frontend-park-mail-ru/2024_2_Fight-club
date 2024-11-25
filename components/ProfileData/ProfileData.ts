@@ -1,10 +1,15 @@
 'use strict';
 
-import Validation from '../../modules/Validation';
+import Validation from 'ultra-simple-validation';
 import APIClient from '../../modules/ApiClient';
 import { clearPage } from '../../modules/Clear';
-
+import { ReviewData } from '../../modules/Types';
 import PopupAlert from '../PopupAlert/PopupAlert';
+import ApiClient from '../../modules/ApiClient';
+import ReviewCard from '../ReviewCard/ReviewCard';
+import { GraphicPoint } from '../../modules/Types';
+import ReviewsGraphic from '../ReviewsGraphic/ReviewsGraphic';
+import NoReviews from './NoReviews/NoReviews';
 
 interface userData {
     name: string | undefined;
@@ -23,6 +28,8 @@ interface sexTypes {
 }
 
 class ProfileData {
+    #isMyProfile: boolean;
+    #otherUserId?: string;
     #headerConfig;
     #content;
     #profileData: userData = {
@@ -39,19 +46,23 @@ class ProfileData {
     #uploadAvatarImage?: File;
     #renderProfileInfo;
 
-    constructor(renderProfileInfoCallback: () => void) {
+    constructor(renderProfileInfoCallback: () => void, isMyProfile: boolean, otherUserId?: string) {
+        this.#isMyProfile = isMyProfile;
+        if (otherUserId) {
+            this.#otherUserId = otherUserId;
+        }
         this.#headerConfig = {
             myMap: {
                 title: 'Карта путешествий',
-                action: this.#renderMap,
+                action: this.#renderMap.bind(this),
             },
             reviews: {
-                title: 'Отзывы обо мне',
-                action: this.#renderReviews,
+                title: 'Отзывы',
+                action: this.#renderReviews.bind(this),
             },
             achievments: {
                 title: 'Достижения',
-                action: this.#renderAchievments,
+                action: this.#renderAchievments.bind(this),
             },
         };
 
@@ -68,6 +79,7 @@ class ProfileData {
 
         this.#renderProfileInfo = renderProfileInfoCallback;
         this.#addButtonEventListener();
+        this.#renderGraphicEventListener();
     }
 
     /**
@@ -100,6 +112,27 @@ class ProfileData {
         if (sex === 'M') return 'Муж.';
         else if (sex === 'F') return 'Жен.';
         else return 'Не указано';
+    }
+
+    /**
+     * @private
+     * @param {string} data
+     * @returns {string}
+     * @description Превращает строку из БД в формат 01 января 2024г.
+     */
+    #dataToString(data: string): string {
+        const monthNames = [
+            'января', 'февраля', 'марта', 'апреля', 
+            'мая', 'июня', 'июля', 'августа', 
+            'сентября', 'октября', 'ноября', 'декабря'
+        ];
+        
+        const date = new Date(data);
+        const day = date.getDate();
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
+    
+        return `${day} ${month} ${year}г.`;
     }
 
     /**
@@ -165,6 +198,56 @@ class ProfileData {
             document
                 .querySelector('#profile-content')
                 ?.appendChild(errorMessage);
+        }
+    }
+
+    async #leaveReview(): Promise<void> {
+        const data: ReviewData = {
+            hostId: this.#otherUserId as string,
+            title: (document.querySelector('#review-title') as HTMLInputElement).value,
+            text: (document.querySelector('#review-text') as HTMLTextAreaElement).value,
+            rating: Number((document
+                .querySelector('input[name="rating"]:checked') as HTMLInputElement)!
+                .value)
+        };
+
+        const response = await ApiClient.leaveReview(data);
+        if (response.ok) {
+            clearPage('new-rate', 'profile');
+            const dataContainer = document.getElementById('container');
+            dataContainer?.appendChild(this.#content);
+        } else {
+            clearPage('profile');
+            const errorMessage = PopupAlert(
+                'Неверный формат отзыва'
+            );
+            document
+                .querySelector('#profile-content')
+                ?.appendChild(errorMessage);
+        }
+    }
+
+    async #getReviews(): Promise<ReviewData[]> {
+        let uuid;
+        if (this.#isMyProfile) {
+            const userData = await APIClient.getSessionData();
+            uuid = userData.id;
+        } else {
+            uuid = this.#otherUserId;
+        }
+        const response = await ApiClient.getReviewsByUser(uuid);
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            clearPage('profile');
+            const errorMessage = PopupAlert(
+                'Ошибка получения отзывов'
+            );
+            document
+                .querySelector('#profile-content')
+                ?.appendChild(errorMessage);
+            return [];
         }
     }
 
@@ -287,13 +370,23 @@ class ProfileData {
     /**
      * @private
      * @description Кнопка "Изменить" в ProfileInfo рендерит форму изменения данных
+     * @description Кнопка "Оценить" в ProfileInfo рендерит форму для оценивания юзера
      */
     #addButtonEventListener(): void {
         const editButton = document.getElementById('edit-button');
-        editButton?.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.#renderForm();
-        });
+        if (this.#isMyProfile) {
+            editButton!.addEventListener('click', (e)=>{
+                e.preventDefault();
+                this.#renderForm();
+            });
+        } else {
+            editButton!.addEventListener('click', (e)=>{
+                e.preventDefault();
+                clearPage('form');
+                this.#content.replaceChildren();
+                this.#renderReviewForm();
+            });
+        }
     }
 
     /**
@@ -344,6 +437,7 @@ class ProfileData {
                 await this.#putData();
                 await this.#renderProfileInfo();
                 this.#addButtonEventListener();
+                this.#renderGraphicEventListener();
 
                 //Обновление аватарки в хэдере
                 const headerImg = document.querySelector(
@@ -402,6 +496,27 @@ class ProfileData {
         });
     }
 
+    #submitReviewEventListener(){
+        const leaveReviewButton = document.querySelector('.js-leave-review');
+        leaveReviewButton!.addEventListener('click', async (e)=>{
+            e.preventDefault();
+            await this.#leaveReview();
+            await this.#renderProfileInfo();
+            this.#renderReviews();
+            this.#addButtonEventListener();
+            this.#renderGraphicEventListener();
+        });
+    }
+
+    #renderGraphicEventListener(): void {
+        document
+            .querySelector('.js-graphic-href')
+            ?.addEventListener('click', (e)=>{
+                e.preventDefault();
+                this.#renderGraphic();
+            });
+    }
+
     /**
      * @private
      */
@@ -443,6 +558,9 @@ class ProfileData {
 
     //TODO Когда карты появятся
     #renderMap() {
+        this.#content.replaceChildren();
+        this.#content.classList.remove('y-scroll');
+        this.#content.parentElement?.classList.remove('fix-bottom-right-border');
         const wrapper = document.createElement('div');
         wrapper.id = 'wrapper';
         wrapper.classList.add('data-container__wrapper');
@@ -455,8 +573,60 @@ class ProfileData {
         this.#content.appendChild(wrapper);
     }
 
-    #renderReviews() {}
+    async #renderReviews(): Promise<void> {
+        this.#content.replaceChildren();
+        const reviews = await this.#getReviews();
+        if (reviews.length != 0) {
+            this.#content.classList.add('y-scroll');
+            this.#content.parentElement?.classList.add('fix-bottom-right-border');
+
+            reviews.forEach((reviewData) => {
+                console.log(reviewData);
+                reviewData.createdAt     = this.#dataToString(reviewData.createdAt);
+                const review = new ReviewCard(reviewData);
+                review.render(this.#content);
+            });
+        } else {
+            const noReviews = new NoReviews(this.#isMyProfile, ()=>{
+                console.log('there');
+                clearPage('form');
+                this.#content.replaceChildren();
+                this.#renderReviewForm();
+            });
+            noReviews.render(this.#content);
+        }
+    }
+
     #renderAchievments() {}
+
+    async #renderGraphic(){
+        this.#content.replaceChildren();
+        const reviews = await this.#getReviews();
+        if (reviews.length != 0) {
+            this.#content.classList.remove('y-scroll');
+            this.#content.parentElement?.classList.remove('fix-bottom-right-border');
+
+            const graphicData = new Array<GraphicPoint>();
+            for (const {createdAt, rating} of reviews){
+                const point: GraphicPoint = {
+                    date: (new Date(createdAt)).toLocaleDateString('ru-RU'),
+                    rating: rating
+                };
+                graphicData.push(point);
+            }
+
+            const reviewsGraphic = new ReviewsGraphic(graphicData);
+            reviewsGraphic.render(this.#content);
+        } else {
+            const noReviews = new NoReviews(this.#isMyProfile, ()=>{
+                console.log('there');
+                clearPage('form');
+                this.#content.replaceChildren();
+                this.#renderReviewForm();
+            });
+            noReviews.render(this.#content);
+        }
+    }
 
     /**
      * @private
@@ -483,6 +653,21 @@ class ProfileData {
         this.#addCheckedRadio();
         this.#addCheckedSlider();
         this.#addEventListeners();
+    }
+
+    /**
+     * @private
+     * @description Рендер окна оценивния
+     */
+    #renderReviewForm(): void{
+        this.#content.replaceChildren();
+        const template = Handlebars.templates['RatingForm.hbs'];
+        this.#content.insertAdjacentHTML(
+            'beforeend',
+            template({})
+        );
+        
+        this.#submitReviewEventListener();
     }
 
     /**

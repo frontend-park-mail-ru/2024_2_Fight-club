@@ -2,7 +2,7 @@
 
 import APIClient from '../../modules/ApiClient';
 import router from '../../modules/Router';
-import Validation from '../../modules/Validation';
+import Validation from 'ultra-simple-validation';
 
 class AuthPopup {
     #config;
@@ -21,12 +21,14 @@ class AuthPopup {
                         type: 'text',
                         minLen: 5,
                         maxLen: 20,
+                        validationType: 'username',
                     },
                     password: {
                         placeholder: 'Пароль',
                         type: 'password',
                         minLen: 8,
                         maxLen: 16,
+                        validationType: 'password',
                     },
                 },
                 buttonText: 'Войти',
@@ -42,24 +44,28 @@ class AuthPopup {
                         type: 'text',
                         minLen: 5,
                         maxLen: 50,
+                        validationType: 'name',
                     },
                     username: {
                         placeholder: 'Логин',
                         type: 'text',
                         minLen: 6,
                         maxLen: 20,
+                        validationType: 'username',
                     },
                     email: {
                         placeholder: 'Почта',
                         type: 'email',
                         minLen: 3,
                         maxLen: 40,
+                        validationType: 'email',
                     },
                     password: {
                         placeholder: 'Пароль',
                         type: 'password',
                         minLen: 8,
                         maxLen: 16,
+                        validationType: 'password',
                     },
                     passwordRepeat: {
                         placeholder: 'Повторите пароль',
@@ -81,141 +87,72 @@ class AuthPopup {
      * @returns {boolean} прошла ли валидацию форма
      */
     #validateData(): boolean {
-        if (this.#currentState === 'auth') {
-            return this.#validateAuthData();
-        }
-        return this.#validateRegistrationData();
-    }
+        const formFields = document.getElementsByClassName(
+            'auth-modal__input'
+        ) as HTMLCollectionOf<HTMLInputElement>;
 
-    /**
-     * @returns {boolean} прошла ли валидацию форма
-     */
-    #validateAuthData(): boolean {
-        const form = document.forms['auth-form'];
+        let ok = true;
+        for (const field of formFields) {
+            const info = Validation.validate(field);
+            if (!info) {
+                return;
+            }
 
-        const usernameInput = form.elements.username;
-        const passwordInput = form.elements.password;
+            if (!info.ok) {
+                this.showErrorMessage(field, info.text);
+            } else {
+                this.hideErrorMsg(field);
+            }
 
-        const usernameValidationInfo =
-            Validation.validateUsername(usernameInput);
-
-        if (!usernameValidationInfo.ok) {
-            this.showErrorMessage(usernameInput, usernameValidationInfo.text);
-        } else {
-            this.hideErrorMsg(usernameInput);
+            ok = ok && info.ok;
         }
 
-        const passwordValidationInfo =
-            Validation.validatePassword(passwordInput);
-        if (!passwordValidationInfo.ok) {
-            this.showErrorMessage(passwordInput, passwordValidationInfo.text);
-        } else {
-            this.hideErrorMsg(passwordInput);
-        }
+        // Don't forget to check whether 2 password fields match
+        if (this.#currentState === 'signup') {
+            const form = document.forms['auth-form'];
 
-        return usernameValidationInfo.ok && passwordValidationInfo.ok;
-    }
+            const passwordInput = form['password'];
+            const passwordRepeatInput = form[
+                'passwordRepeat'
+            ] as HTMLInputElement;
 
-    /**
-     * @returns {boolean} прошла ли валидацию форма
-     */
-    #validateRegistrationData(): boolean {
-        const form = document.forms['auth-form'];
-
-        const nameInput = form.elements.name;
-        const usernameInput = form.elements.username;
-        const emailInput = form.elements.email;
-        const passwordInput = form.elements.password;
-        const passwordRepeatInput = form.elements.passwordRepeat;
-
-        const nameValidInfo = Validation.validateName(nameInput);
-        const usernameValidInfo = Validation.validateUsername(usernameInput);
-        const emailValidInfo = Validation.validateEmail(emailInput);
-        const passwordValidInfo = Validation.validatePassword(passwordInput);
-        const passwordRepeatValidInfo =
-            Validation.validatePassword(passwordRepeatInput);
-        const passwordsValidInfo = Validation.validatePasswords(
-            passwordInput,
-            passwordRepeatInput
-        );
-
-        if (!nameValidInfo.ok) {
-            this.showErrorMessage(nameInput, nameValidInfo.text);
-        } else {
-            this.hideErrorMsg(nameInput);
-        }
-
-        if (!usernameValidInfo.ok) {
-            this.showErrorMessage(usernameInput, usernameValidInfo.text);
-        } else {
-            this.hideErrorMsg(usernameInput);
-        }
-
-        if (!emailValidInfo.ok) {
-            this.showErrorMessage(emailInput, emailValidInfo.text);
-        } else {
-            this.hideErrorMsg(emailInput);
-        }
-
-        if (!passwordValidInfo.ok) {
-            this.showErrorMessage(passwordInput, passwordValidInfo.text);
-        } else {
-            this.hideErrorMsg(passwordInput);
-        }
-
-        if (!passwordRepeatValidInfo.ok) {
-            this.showErrorMessage(
-                passwordRepeatInput,
-                passwordRepeatValidInfo.text
+            const info = Validation.validatePasswords(
+                passwordInput,
+                passwordRepeatInput
             );
-        } else {
-            if (!passwordsValidInfo.ok) {
-                this.showErrorMessage(
-                    passwordRepeatInput,
-                    passwordsValidInfo.text
-                );
+
+            if (!info.ok) {
+                this.showErrorMessage(passwordRepeatInput, info.text);
             } else {
                 this.hideErrorMsg(passwordRepeatInput);
             }
+
+            ok = ok && info.ok;
         }
 
-        return (
-            nameValidInfo.ok &&
-            usernameValidInfo.ok &&
-            emailValidInfo.ok &&
-            passwordValidInfo.ok &&
-            passwordRepeatValidInfo.ok &&
-            passwordsValidInfo.ok
-        );
+        return ok;
     }
 
     showErrorMessage(inputElem: HTMLInputElement, errorMsg: string) {
-        inputElem.classList.add('popup__input__error');
-        const exclamation = inputElem.parentElement!.querySelector(
-            '.popup__exclamation'
-        )!;
-        exclamation.classList.remove('none');
+        inputElem.classList.add('auth-modal__input-error');
 
-        const validationMessageContainer =
-            inputElem.parentElement!.querySelector(
-                '.popup__validationMessage'
-            )!;
-
-        validationMessageContainer.textContent = errorMsg;
+        const errorSpan = inputElem.parentElement!.getElementsByClassName(
+            'js-error-text'
+        )[0]! as HTMLParagraphElement;
+        errorSpan.classList.add('auth-modal__error-active');
+        errorSpan.textContent = errorMsg;
     }
 
     hideErrorMsg(inputElem: HTMLInputElement) {
-        const parentElem = inputElem.parentElement!;
-        inputElem.classList.remove('popup__input__error');
-        parentElem
-            .querySelector('.popup__validationMessage')!
-            .classList.add('none');
-        parentElem.querySelector('.popup__exclamation')!.classList.add('none');
+        inputElem.classList.remove('auth-modal__input-error');
+
+        const errorSpan = inputElem.parentElement!.getElementsByClassName(
+            'js-error-text'
+        )[0]! as HTMLParagraphElement;
+        errorSpan.classList.remove('auth-modal__error-active');
+        errorSpan.textContent = '';
     }
 
-    /**
-     * @private
-     */
     async #onFormSubmit(parent: HTMLElement, e: Event) {
         e.preventDefault();
 
@@ -242,7 +179,6 @@ class AuthPopup {
                 if (res.ok) {
                     this.#closeOverlay(parent);
                     router.navigateTo('/');
-                    localStorage.setItem('userId', res['user']['id']);
                 } else if (res.status === 409)
                     this.#setFailureMessage('Такой аккаунт уже создан!');
                 else this.#setFailureMessage('Неизвестная ошибка на сервере');
@@ -262,7 +198,6 @@ class AuthPopup {
             if (response.ok) {
                 this.#closeOverlay(parent);
                 router.navigateTo('/');
-                localStorage.setItem('userId', responseAsJson['userId']);
             } else {
                 this.#setFailureMessage('Неверный логин или пароль!');
             }
@@ -277,13 +212,10 @@ class AuthPopup {
         }
     }
 
-    /**
-     * @private
-     * @param {string} message
-     */
     #setFailureMessage(message: string): void {
+        console.log('???');
         const failureMessageElem = document.querySelector(
-            '.popup__failure-message'
+            '.auth-modal__failure-message'
         );
         if (!failureMessageElem) {
             return;
@@ -301,11 +233,6 @@ class AuthPopup {
         document.body.classList.remove('no-scroll');
     }
 
-    /**
-     *
-     * @param {HTMLElement} parent
-     *
-     */
     render(parent: HTMLElement): void {
         const template = Handlebars.templates['AuthPopup.hbs'];
         const templateContainer = document.createElement('div');
@@ -318,53 +245,88 @@ class AuthPopup {
         setTimeout(() => this.#addEventListeners(parent), 0);
     }
 
+    #addInputEventListeners() {
+        const formFields = document.getElementsByClassName(
+            'auth-modal__input'
+        ) as HTMLCollectionOf<HTMLInputElement>;
+
+        for (const field of formFields) {
+            field.onblur = () => {
+                const info = Validation.validate(field);
+                if (!info) {
+                    return;
+                }
+
+                if (!info.ok) {
+                    this.showErrorMessage(field, info.text);
+                } else {
+                    this.hideErrorMsg(field);
+                }
+            };
+        }
+
+        if (!('auth-form' in document.forms)) {
+            throw new Error('No auth form on the page!');
+        }
+
+        const form = document.forms['auth-form'] as HTMLFormElement;
+
+        if (form['passwordRepeat']) {
+            const passwordInput = form['password'];
+            const passwordRepeatInput = form[
+                'passwordRepeat'
+            ] as HTMLInputElement;
+
+            // If the 'password' field changes we need to check
+            // the 'repeat-password' field too.
+            // That's why I added the same callback for 2 elements
+            passwordInput.addEventListener(
+                'blur',
+                (passwordRepeatInput.onblur = () => {
+                    const passwordsValidInfo = Validation.validatePasswords(
+                        passwordInput,
+                        passwordRepeatInput
+                    );
+                    if (!passwordsValidInfo.ok) {
+                        this.showErrorMessage(
+                            passwordRepeatInput,
+                            passwordsValidInfo.text
+                        );
+                    } else {
+                        this.hideErrorMsg(passwordRepeatInput);
+                    }
+                })
+            );
+        }
+    }
+
     #addEventListeners(parent: HTMLInputElement): void {
         // Close overlay
-        const form: HTMLFormElement = parent.querySelector('.popup')!;
-        form.onclick = (e) => e.stopPropagation();
+        const form: HTMLFormElement = parent.querySelector('.auth-modal')!;
+        form.onmousedown = (e) => e.stopPropagation();
         form.onsubmit = (e) => this.#onFormSubmit(parent, e);
 
         parent
             .querySelector('.close-cross')!
             .addEventListener('click', () => this.#closeOverlay(parent));
 
-        parent
-            .querySelector('.overlay')!
-            .addEventListener('click', () => this.#closeOverlay(parent));
+        (parent.querySelector('.overlay') as HTMLDivElement).onmousedown = () =>
+            this.#closeOverlay(parent);
+
+        this.#addInputEventListeners();
 
         // Show auth/reg menu
-        parent.querySelector('.popup__a')!.addEventListener('click', (e) => {
-            e.preventDefault();
+        parent
+            .querySelector('.auth-modal__a')!
+            .addEventListener('click', (e) => {
+                e.preventDefault();
 
-            const newPopupWindow = new AuthPopup(
-                this.#currentState === 'auth' ? 'signup' : 'auth'
-            );
-            parent.querySelector('.overlay')!.remove();
-            newPopupWindow.render(parent);
-        });
-
-        // Adding mouse over and out inputs for exclamation marks
-        Array.prototype.forEach.call(
-            parent.querySelector('#auth-form')!.elements,
-            (element) => {
-                const exclamation = element.parentElement.querySelector(
-                    '.popup__exclamation'
+                const newPopupWindow = new AuthPopup(
+                    this.#currentState === 'auth' ? 'signup' : 'auth'
                 );
-
-                if (exclamation === undefined) return; // If element === button or smth else
-
-                const validationMessageContainer =
-                    element.parentElement.querySelector(
-                        '.popup__validationMessage'
-                    );
-
-                exclamation.onmouseover = () =>
-                    validationMessageContainer.classList.remove('none');
-
-                exclamation.onmouseout = () =>
-                    validationMessageContainer.classList.add('none');
-            }
-        );
+                parent.querySelector('.overlay')!.remove();
+                newPopupWindow.render(parent);
+            });
     }
 }
 

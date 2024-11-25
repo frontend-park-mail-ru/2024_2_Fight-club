@@ -1,16 +1,22 @@
 'use strict';
 
 import Ajax from './Ajax';
-import { RegisterParams, AdsFilters, LoginParams, EditParams } from './Types';
+import { RegisterParams, AdsFilters, LoginParams, EditParams, ReviewData } from './Types';
+
+interface Limit {
+    limit: number;
+    offset: number;
+}
 
 class APIClient {
-    BASE_URL = `${location.protocol}//${window.location.hostname}:8008/api`;
+    BASE_URL = `${location.protocol}//${window.location.hostname}/api/`;
+    AUTOADDRESS_KEY = 'pVhps0CwtfR0';
 
     /**
      * @public
      * @description Получает список объявлений
      */
-    async getAds(filters?: AdsFilters) {
+    async getAds(filters?: AdsFilters, limit?:Limit) {
         try {
             let url = '/housing?';
 
@@ -30,10 +36,17 @@ class APIClient {
                 url += `&guests=${filters.guests}`;
             }
 
+            if (limit?.limit) {
+                url += `&limit=${limit.limit}`;
+            }
+            if (limit?.offset) {
+                url += `&offset=${limit.offset}`;
+            }
+
             const response = await fetch(this.BASE_URL + url);
 
             let data = await response.json();
-            data = data['places'];
+            data = data['housing'];
             if (data === undefined) return [];
             return data;
         } catch (error) {
@@ -185,6 +198,23 @@ class APIClient {
         }
 
         return Ajax.put({ url, body: formData });
+    }
+
+    async leaveReview({hostId, title, text, rating}: ReviewData) {
+        const url = this.BASE_URL + '/reviews';
+        const body = {
+            hostId: hostId,
+            title: title,
+            text: text,
+            rating: rating
+        };
+
+        return Ajax.post({url, body});
+    }
+
+    async getReviewsByUser(uuid: string) {
+        const url = this.BASE_URL + `/reviews/${uuid}`;
+        return Ajax.get(url);
     }
 }
 

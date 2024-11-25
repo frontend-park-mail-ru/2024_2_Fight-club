@@ -100,6 +100,21 @@
                     <span class="edit-form__toggle__slider round"></span>
                 </label>
             </div>
+            <div class="edit-form__input-line">
+                <p class="edit-form__input-line__title">Адрес:</p>
+                <input 
+                    id="address"
+                    name="address"
+                    class="edit-form__input-line__input"
+                    type="text"
+                    minlength="6"
+                    maxlength="20"
+                />
+                <a class="none edit-form__input-line__exclamation">
+                    <img src="/svg/exclamation.svg" width="20" alt="!">
+                </a>
+                <div class="edit-form__input-line__validationMessage none"></div>
+            </div>
             {{!-- <div class="edit-form__input-line">
                 <p class="edit-form__input-line__title">Пароль:</p>
                 <input id="password" name="password" class="edit-form__input-line__input" type="password">

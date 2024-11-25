@@ -5,6 +5,8 @@ import ProfileData from '../ProfileData/ProfileData';
 import APIClient from '../../modules/ApiClient';
 
 class ProfilePage {
+    #isMyProfile: boolean;
+    #otherUserId?: string;
     #name: string | undefined;
     #username: string | undefined;
     #birthdate: Date | undefined;
@@ -19,7 +21,14 @@ class ProfilePage {
 
     #renderProfileInfoCallback;
 
-    constructor() {
+    constructor(userId?: string) {
+        if (userId){
+            this.#isMyProfile = false;
+            this.#otherUserId = userId;
+        } else {
+            this.#isMyProfile = true;
+        }
+        
         //Колбэк для повторного рендера левого столбца после обновления формы
         this.#renderProfileInfoCallback = async () => {
             const profileInfoContainer =
@@ -36,8 +45,15 @@ class ProfilePage {
      * @description Получение данных с бэка и заполнение полей класса
      */
     async #getProfileData() {
-        const userData = await APIClient.getSessionData();
-        const uuid = userData.id;
+        //Проверяем, наш профиль, или чужой
+        let uuid;
+        if (this.#isMyProfile) {
+            const userData = await APIClient.getSessionData();
+            uuid = userData.id;
+        } else {
+            uuid = this.#otherUserId;
+        }
+
         const response = await APIClient.profile(uuid);
         if (response.ok) {
             const data = await response.json();
@@ -116,7 +132,7 @@ class ProfilePage {
             age: this.#age,
             avatar: this.#avatar,
         };
-        const profileInfo = new ProfileInfo(profileData, this.#showAge);
+        const profileInfo = new ProfileInfo(profileData, this.#showAge, this.#isMyProfile);
         profileInfo.render(parent);
     }
 
@@ -126,7 +142,12 @@ class ProfilePage {
      * @param {HTMLElement} parent
      */
     #renderProfileData(parent: HTMLElement) {
-        const profileData = new ProfileData(this.#renderProfileInfoCallback);
+        let profileData;
+        if (this.#isMyProfile) {
+            profileData = new ProfileData(this.#renderProfileInfoCallback, this.#isMyProfile);
+        } else {
+            profileData = new ProfileData(this.#renderProfileInfoCallback, this.#isMyProfile, this.#otherUserId);
+        }
         profileData.render(parent);
     }
 

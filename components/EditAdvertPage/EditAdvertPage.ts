@@ -9,8 +9,8 @@ import { validateImage } from '../../modules/Utils';
 import PopupAlert from '../PopupAlert/PopupAlert';
 
 const MAIN_IMG_DIV_SELECTOR = '.js-main-img-div';
-const MAIN_IMG_SELECTOR = '.advert-images-carousel__main-img';
-const BACKGROUND_IMG_SELECTOR = '.advert-images-carousel__img-background';
+const MAIN_IMG_SELECTOR = '.edit-advert-images-carousel__main-img';
+const BACKGROUND_IMG_SELECTOR = '.edit-advert-images-carousel__img-background';
 const SECONDARY_IMG_SELECTOR = '.js-carousel-img';
 const FULLSCREEN_IMG_SELECTOR = '.js-main-image-fullscreen';
 const FULLSCREEN_OVERLAY_SELECTOR = '.js-fullscreen-overlay';
@@ -18,7 +18,7 @@ const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
     'ad-page__fullscreen-overlay_hidden';
 
 const SECONDARY_IMG_SELECTED_CLASS_NAME =
-    'advert-images-carousel__secondary_img_current';
+    'edit-advert-images-carousel__secondary-img_current';
 const ADD_IMG_BTN_SELECTOR = '.js-add-img-btn';
 const FILE_INPUT_SELECTOR = '.js-file-input';
 
@@ -319,7 +319,7 @@ export default class EditAdvertPage {
 
             if (response?.ok) {
                 const data = await response.json();
-                const id = data['place']['id'];
+                const id = data['place']['uuid'];
                 router.navigateTo(`/ads/?id=${id}`);
             }
         } else if (this.#action == 'edit' && this.#id) {

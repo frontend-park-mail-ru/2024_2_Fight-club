@@ -1,10 +1,11 @@
-.popup {
+.auth-modal {
     position: fixed;
     width: 400px;
     min-height: 520px;
     height: fit-content;
-    top: 25%;
-    left: 37%;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
     background-color: #ffffff;
     border-radius: 10px;
     display: flex;
@@ -12,56 +13,88 @@
     justify-content: space-around;
     gap: 10px;
     padding: 30px 10px 0;
+
+    &__field-container {
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    &__input {
+        display: block;
+        height: 40px;
+        padding-left: 8%;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid black;
+        border-radius: 5px;
+
+        &::placeholder {
+            color: #635b5b;
+            font-size: 16px;
+        }
+
+        &-error {
+            border: 1px solid #ff8630;
+            background-color: rgb(255 134 48 / 0.1);
+        }
+
+        &-active {
+            border-color: #db7f3d;
+        }
+    }
+
+    &__failure-message {
+        color: red;
+        text-align: center;
+    }
+
+    &__error {
+        color: #ff8630;
+        font-size: 14px;
+        display: none;
+
+        &-active {
+            display: block;
+        }
+    }
+
+    &__fields-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    &__sign-in-button {
+        background-color: #ffa552;
+        color: #ffffff;
+        cursor: pointer;
+        margin: 0 20% 5%;
+        border: none;
+        border-radius: 10px;
+        height: 40px;
+        min-height: 40px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    &__a {
+        cursor: pointer;
+        font-weight: 600;
+    }
 }
 
-.popup input {
-    height: 50%;
-    min-height: 40px;
-    padding-left: 8%;
-    font-size: 16px;
-    margin-left: 10%;
-    width: 80%;
-    max-width: 280px;
-    border: 1px solid black;
-    border-radius: 5px;
-}
-
-.popup input::placeholder {
-    color: #635b5b;
-    font-size: 16px;
-}
-
-.popup__div {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.auth-img {
-    padding-left: 20%;
-    padding-right: 20%;
+.auth-logo {
+    width: 250px;
+    margin: 0 auto;
 }
 
 .auth-message {
     padding-top: 5px;
     padding-bottom: 5px;
     font-size: 20px;
-    font-style: italic;
     font-weight: bold;
     text-align: center;
-}
-
-.popup__button {
-    background-color: #ffa552;
-    color: #ffffff;
-    cursor: pointer;
-    margin: 0 20% 5%;
-    border: none;
-    border-radius: 10px;
-    height: 40px;
-    min-height: 40px;
-    font-size: 20px;
-    font-weight: bold;
 }
 
 .have-account {
@@ -99,61 +132,6 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.25);
     z-index: 2;
-}
-
-.bold {
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.popup__input__error {
-    border-width: 2px !important;
-    border-color: #e10505 !important;
-}
-
-.popup__inputAndValidationMessage {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-right: 5%;
-}
-
-.popup__exclamation {
-    padding-left: 10px;
-    cursor: pointer;
-}
-
-.popup__validationMessage {
-    position: absolute;
-    background-color: #ffffff;
-    border: 1px solid #e10505;
-    border-radius: 10px;
-    margin: 0;
-    left: 450px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /*white-space: nowrap;*/
-
-    min-width: 300px;
-    max-width: fit-content;
-
-    min-height: 40px;
-    max-height: fit-content;
-
-    padding: 2px 10px;
-    font-size: 20px;
-    font-style: italic;
-}
-
-.none {
-    display: none;
-}
-
-.popup__failure-message {
-    color: #e10505;
-    text-align: center;
 }
 
 @media screen and (max-width: 900px) {
