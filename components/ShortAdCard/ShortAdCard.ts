@@ -42,17 +42,16 @@ class ShortHousing{
 
         //При клике на кнопку "Подробнее" переход на страницу объявления
         document
-            .querySelector('.js-more-ads[data-index="'+ this.#index +'"]')
-            ?.addEventListener('click', ()=>{
+            .querySelector('.js-more-ads[data-index="'+ this.#index +'"]')!.onclick = ()=>{
                 router.navigateTo(`/ads/?id=${this.#data.id}`);
-            })
+            };
 
         //При клике на кнопку "Напиши мне" БУДЕТ переход на страницу чата
         document
             .querySelector('.js-new-chat[data-index="'+ this.#index +'"]')
             ?.addEventListener('click', ()=>{
                 console.log(this.#index);
-            })
+            });
     }
 
     async render(parent: HTMLDivElement) {
