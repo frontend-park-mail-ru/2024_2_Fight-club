@@ -9,7 +9,7 @@ interface Limit {
 }
 
 class APIClient {
-    BASE_URL = `${location.protocol}//${window.location.hostname}:8008/api`;
+    BASE_URL = `${location.protocol}//${window.location.hostname}/api/`;
     AUTOADDRESS_KEY = 'pVhps0CwtfR0';
 
     /**
