@@ -187,6 +187,30 @@ class Header {
     }
 
     async #render() {
+        // TODO: REWRITE TO HBS. IT IS TOO HARD TO MAINTAIN JS ONLY COMPONENT LIKE THIS
+
+        const menu = document.createElement('ul');
+        menu.classList.add('menu');
+        for (const menuSection in this.#config.menu) {
+            const data = this.#config.menu[menuSection];
+            const elem = document.createElement('a');
+            elem.classList.add('menu__element');
+            elem.textContent = data['text'];
+            elem.href = data['href'];
+            menu.appendChild(elem);
+        }
+        this.#menuContainer.appendChild(menu);
+
+        const burgerWrapper = document.createElement('button');
+        burgerWrapper.innerHTML =
+            '<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="_25d45facb5--container--izJBY _25d45facb5--display_block--ERcB0 _25d45facb5--color_current_color--KRvSV _25d45facb5--color_current_color--MqB6f"><path d="M2 5h20v2H2V5Zm0 6h20v2H2v-2Zm20 6H2v2h20v-2Z" fill="currentColor"></path></svg>';
+        burgerWrapper.classList.add('burger-button');
+        burgerWrapper.onclick = () => {
+            menu.classList.toggle('menu-active');
+        };
+
+        this.#menuContainer.appendChild(burgerWrapper);
+
         this.#renderHrefs();
         this.#renderMainText();
         this.#renderSigns();

@@ -12,7 +12,7 @@
 
 .profile-list {
     position: relative;
-    top: 120px;
+    top: 70px;
     left: 88%;
     min-width: min-content;
     max-width: 120px;
@@ -39,7 +39,7 @@
 
 @media screen and (max-width: 900px) {
     .profile-list {
-        left: 80%;
-        transform: translateX(-50%);
+        left: 100%;
+        transform: translateX(-100%);
     }
 }
