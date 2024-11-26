@@ -1,0 +1,125 @@
+@use '../../styles/mixins';
+
+#main-content {
+    width: 93%;
+    margin: 100px auto auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 30px;
+}
+
+.filter {
+    flex-grow: 0;
+    position: sticky;
+    top: 5px;
+    width: 220px;
+    grid-area: aside;
+    padding: 5px 30px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    margin-left: 50px;
+    margin-right: auto;
+    border: 1px solid #a8a5a5;
+    padding-top: 20px;
+    height: fit-content;
+
+    &__group-name {
+        margin: 5px 0 0px;
+        font-size: 20px;
+        font-weight: 500;
+    }
+}
+
+.filter-group {
+    background-color: #ffffff;
+    margin-bottom: 5%;
+}
+
+.filter-group a {
+    font-size: 20px;
+    margin-left: -5px;
+}
+
+.filter-element {
+    position: relative;
+    padding-left: 25px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.filter-element input {
+    display: none;
+}
+
+.filter-element label {
+    font-size: 20px;
+
+    &:after {
+        content: '';
+        display: block;
+        height: 14px;
+        width: 14px;
+        outline: 1px solid #939598;
+        position: absolute;
+        top: 20%;
+        left: 1%;
+        border-radius: 5px;
+    }
+}
+
+.filter-element input:checked + label:after {
+    outline: 1px solid #939598;
+    border: 2px solid #fff;
+    width: 10px;
+    height: 10px;
+    background-color: #ffa552;
+}
+
+.filter-element input {
+    display: none;
+}
+
+.filter button {
+    margin-left: 10%;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.apply-button {
+    @include mixins.button;
+    margin-bottom: 10px;
+    min-width: 70%;
+}
+
+.reset-button {
+    @include mixins.button;
+    font-weight: normal;
+    border: 1px solid black;
+    min-width: 70%;
+    color: #000000;
+    background-color: #ffffff;
+    border-width: 1px;
+    margin-bottom: 5%;
+    cursor: pointer;
+}
+
+.advert {
+    grid-area: addvert;
+}
+
+@media screen and (max-width: 900px) {
+    #main-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+    }
+
+    .filter {
+        margin: 20px auto;
+        width: 70%;
+        position: static;
+    }
+}

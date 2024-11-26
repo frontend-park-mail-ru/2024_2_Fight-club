@@ -8,8 +8,8 @@
         "start": "npm run compile:templates && vite",
         "build": "npm run compile:templates && vite build",
         "preview": "vite preview",
-        "prestart": "npm run eslint:fix && npm run compile:templates",
-        "compile:templates": "node hbs-recompile.js",
+        "prestart": "npm run compile:templates",
+        "compile:templates": "node src/vite-plugins/hbs-recompile.js",
         "eslint:fix": "npx  eslint --fix "
     },
     "author": "",
