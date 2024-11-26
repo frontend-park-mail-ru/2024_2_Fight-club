@@ -127,54 +127,42 @@
         />
     </div>
 
-    <aside class='ad-page-profile-container'>
+    <div class='ad-page__author-info'>
+        <img class='ad-page__author-info__avatar' src='{{adAuthor.avatar}}' />
+        <p class='ad-page__author-info__hoster-text'>Хостер</p>
         <a
             href='/profiles?id={{authorUUID}}'
-            class='ad-page-profile-container__center'
-        >
-            <div class='ad-page-profile-container__photo'>
-                <img
-                    src='{{adAuthor.avatar}}'
-                    class='ad-page-profile-container__photo__img1'
-                />
-            </div>
-            <p class='ad-page-profile-container__p1'>{{adAuthor.name}}</p>
-            <p
-                class='ad-page-profile-container__p2'
-            >{{adAuthor.locationMain}}</p>
-            <hr class='ad-page-profile-container__hr' />
-        </a>
+            class='ad-page__author-info__name'
+        >{{adAuthor.name}}</a>
 
-        <div class='ad-page-profile-container__div'>
-            <div class='ad-page-profile-container__p'>Рейтинг:</div>
-            <div class='ad-page-profile-container__info'>
-                <span class='ad-page-profile-container__score-container'>
-                    <img
-                        class='ad-page-profile-container__img2'
-                        src='/star.png'
-                        alt='star'
-                    />
-                    <span
-                        class='ad-page-profile-container__score'
-                    >{{adAuthor.rating}}</span>
-                </span>
-            </div>
-        </div>
-        <div class='ad-page-profile-container__div'>
-            <div class='ad-page-profile-container__p'>Пол:</div>
-            <p class='ad-page-profile-container__info'>{{sex}}</p>
-        </div>
-        <div class='ad-page-profile-container__div'>
-            <div class='ad-page-profile-container__p'>Возраст:</div>
-            <p class='ad-page-profile-container__info'>{{age}}</p>
+        <div class='ad-page__author-info__inner-content'>
+            <dl class='ad-page__author-info__desc'>
+                <div class='ad-page__author-info__desc__item'>
+                    <dt class='ad-page__author-info__desc__term'>Рейтинг</dt>
+                    <dd
+                        class='ad-page__author-info__desc__definition'
+                    >{{adAuthor.rating}}</dd>
+                </div>
+                <div class='ad-page__author-info__desc__item'>
+                    <dt class='ad-page__author-info__desc__term'>Пол</dt>
+                    <dd
+                        class='ad-page__author-info__desc__definition'
+                    >{{sex}}</dd>
+                </div>
+                <div class='ad-page__author-info__desc__item'>
+                    <dt class='ad-page__author-info__desc__term'>Возраст</dt>
+                    <dd
+                        class='ad-page__author-info__desc__definition'
+                    >{{age}}</dd>
+                </div>
+            </dl>
+
+            <button class='ad-page__author-info__write-msg-button'>Напишите
+                {{adAuthor.name}}
+                прямо сейчас
+            </button>
         </div>
 
-        <button class='ad-page-profile-container__write-msg-button'>Напишите
-            {{adAuthor.name}}
-            прямо сейчас
-        </button>
+    </div>
 
-        <a class='ad-page-profile-container__show-on-map-button'>Показать на
-            карте</a>
-    </aside>
 </div>
