@@ -67,7 +67,7 @@ class ProfilePage {
             this.#birthdate = data.birthDate;
             this.#avatar = data.avatar;
             this.#sex = this.#calculateSex(data.sex);
-            this.#age = this.#calculateAge(data.birthDate);
+            this.#age = this.#calculateAge(data.birthdate);
         } else if (response.status !== 401) {
             console.error('Wrong response from server', response);
         }
