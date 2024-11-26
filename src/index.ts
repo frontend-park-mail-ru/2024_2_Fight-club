@@ -11,7 +11,7 @@ import MapPage from './pages/MapPage/MapPage';
 
 import { clearPage } from './modules/Clear';
 
-import './components/precompiled-templates';
+import '../precompiled-templates.js';
 import APIService from './modules/ApiClient';
 import AdPage from './pages/AdPage/AdPage';
 import ApiClient from './modules/ApiClient';
