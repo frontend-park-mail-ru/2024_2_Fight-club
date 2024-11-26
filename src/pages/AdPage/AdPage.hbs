@@ -97,16 +97,23 @@
             </div>
         </div>
 
-        <div class='advert-desc'>
-            <div class='advert-desc__text-data'>
-                <span class='advert-desc__label'>Город:</span>
-                <span class='advert-desc__value'>{{cityName}}</span>
-                <span class='advert-desc__label'>Адрес:</span>
-                <span class='advert-desc__value'>{{address}}</span>
-                <span class='advert-desc__label'>Комнаты:</span>
-                <span class='advert-desc__value'>{{roomsNumber}}</span>
-                <span class='advert-desc__label'>Описание:</span>
-                <span class='advert-desc__value'>{{description}}</span>
+        <p class='ad-page__desc'>
+            {{description}}
+        </p>
+
+        <div class='ad-page__info-table'>
+            <p class='ad-page__info-table__title'>О жилье</p>
+            <div class='ad-page__info-table__row'>
+                <span class='ad-page__info-table__label'>Город</span>
+                <span class='ad-page__info-table__value'>{{cityName}}</span>
+            </div>
+            <div class='ad-page__info-table__row'>
+                <span class='ad-page__info-table__label'>Адрес</span>
+                <span class='ad-page__info-table__value'>{{address}}</span>
+            </div>
+            <div class='ad-page__info-table__row'>
+                <span class='ad-page__info-table__label'>Комнаты</span>
+                <span class='ad-page__info-table__value'>{{roomsNumber}}</span>
             </div>
         </div>
     </main>

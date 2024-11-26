@@ -116,6 +116,46 @@ $secondary-card-size: 64px;
             }
         }
     }
+
+    &__desc {
+        margin: 30px 0;
+        font-size: 17px;
+    }
+
+    &__info-table {
+        margin-top: 70px;
+        border-radius: 10px;
+
+        display: flex;
+        flex-direction: column;
+        font-size: 20px;
+
+        &__title {
+            margin: 20px 0;
+            font-weight: 500;
+            font-size: 30px;
+        }
+
+        &__row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid #e8e9ec;
+            padding: 10px 0;
+            font-weight: 400;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+
+        &__label {
+            color: #737a8e;
+        }
+        &__value {
+            text-align: right;
+        }
+    }
 }
 
 .ad-page__fullscreen-overlay {
@@ -172,25 +212,8 @@ $secondary-card-size: 64px;
         }
     }
 }
-.advert-desc {
-    margin-top: 20px;
-    border-radius: 10px;
-    border: 1px solid #000;
-    padding: 30px;
 
-    &__text-data {
-        display: grid;
-        grid-template-columns: 1fr 7fr;
-        gap: 14px;
-    }
-    &__label {
-        font-weight: 600;
-    }
-    &__value {
-        font-weight: 500;
-    }
-    // PROFILE
-}
+// PROFILE
 .ad-page-profile-container {
     border: solid;
     border-width: 1px;
