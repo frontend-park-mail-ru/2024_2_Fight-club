@@ -64,7 +64,7 @@ class ProfilePage {
             this.#guestCount = data.guestCount;
             this.#score = data.score;
             this.#isHost = data.isHost;
-            this.#birthdate = data.birthDate;
+            this.#birthdate = data.birthdate;
             this.#avatar = data.avatar;
             this.#sex = this.#calculateSex(data.sex);
             this.#age = this.#calculateAge(data.birthdate);

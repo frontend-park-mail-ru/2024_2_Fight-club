@@ -54,7 +54,7 @@ export interface City {
 
 export interface ProfileInfo {
     avatar: string;
-    birthDate: string;
+    birthdate: string;
     email: string;
     guestCount: number;
     id: string;

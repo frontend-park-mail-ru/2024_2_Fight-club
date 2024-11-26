@@ -1,7 +1,13 @@
 'use strict';
 
 import Ajax from './Ajax';
-import { RegisterParams, AdsFilters, LoginParams, EditParams, ReviewData } from './Types';
+import {
+    RegisterParams,
+    AdsFilters,
+    LoginParams,
+    EditParams,
+    ReviewData,
+} from './Types';
 
 interface Limit {
     limit: number;
@@ -16,7 +22,7 @@ class APIClient {
      * @public
      * @description Получает список объявлений
      */
-    async getAds(filters?: AdsFilters, limit?:Limit) {
+    async getAds(filters?: AdsFilters, limit?: Limit) {
         try {
             let url = '/housing?';
 
@@ -188,7 +194,7 @@ class APIClient {
             name: name,
             email: email,
             sex: sex,
-            birthDate: birthdate,
+            birthdate: birthdate,
             isHost: isHost,
         };
 
@@ -200,16 +206,16 @@ class APIClient {
         return Ajax.put({ url, body: formData });
     }
 
-    async leaveReview({hostId, title, text, rating}: ReviewData) {
+    async leaveReview({ hostId, title, text, rating }: ReviewData) {
         const url = this.BASE_URL + '/reviews';
         const body = {
             hostId: hostId,
             title: title,
             text: text,
-            rating: rating
+            rating: rating,
         };
 
-        return Ajax.post({url, body});
+        return Ajax.post({ url, body });
     }
 
     async getReviewsByUser(uuid: string) {

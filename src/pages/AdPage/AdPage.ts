@@ -32,7 +32,7 @@ export default class AdPage extends ReactiveComponent {
             templateData: {
                 ...data,
                 ...authorInfo,
-                age: calculateAge(authorInfo.birthDate),
+                age: calculateAge(authorInfo.birthdate),
                 sex: authorInfo.sex === 'M' ? 'Мужской' : 'Женский',
             },
         });

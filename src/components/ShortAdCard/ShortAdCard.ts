@@ -4,12 +4,12 @@ import { AdvertData } from '../../modules/Types';
 import { calculateAge } from '../../modules/Utils';
 import router from '../../modules/Router';
 
-class ShortHousing{
+class ShortHousing {
     #data: AdvertData;
     #index: number;
     #age: number;
     #sex: string;
-    #clickCallback: (arg0: string, arg1: string)=> void;
+    #clickCallback: (arg0: string, arg1: string) => void;
 
     constructor(
         data: AdvertData,
@@ -18,7 +18,7 @@ class ShortHousing{
     ) {
         this.#data = data;
         this.#index = index;
-        this.#age = calculateAge(this.#data.adAuthor.birthDate);
+        this.#age = calculateAge(this.#data.adAuthor.birthdate);
         this.#sex = this.#calculateSex(this.#data.adAuthor.sex);
         this.#clickCallback = callback;
     }
@@ -36,20 +36,21 @@ class ShortHousing{
 
     async #addEventListeners(wrapper: HTMLDivElement): Promise<void> {
         //При клике на карточку меняется центр карты на это объявление
-        wrapper.addEventListener('click', ()=>{
+        wrapper.addEventListener('click', () => {
             this.#clickCallback(this.#data.cityName, this.#data.address);
         });
 
         //При клике на кнопку "Подробнее" переход на страницу объявления
-        document
-            .querySelector('.js-more-ads[data-index="'+ this.#index +'"]')!.onclick = ()=>{
-                router.navigateTo(`/ads/?id=${this.#data.id}`);
-            };
+        document.querySelector(
+            '.js-more-ads[data-index="' + this.#index + '"]'
+        )!.onclick = () => {
+            router.navigateTo(`/ads/?id=${this.#data.id}`);
+        };
 
         //При клике на кнопку "Напиши мне" БУДЕТ переход на страницу чата
         document
-            .querySelector('.js-new-chat[data-index="'+ this.#index +'"]')
-            ?.addEventListener('click', ()=>{
+            .querySelector('.js-new-chat[data-index="' + this.#index + '"]')
+            ?.addEventListener('click', () => {
                 console.log(this.#index);
             });
     }
@@ -59,9 +60,9 @@ class ShortHousing{
         const shortCardWrapper = document.createElement('div');
         shortCardWrapper.innerHTML = template({
             data: this.#data,
-            sex: this.#sex, 
+            sex: this.#sex,
             age: this.#age,
-            index: this.#index
+            index: this.#index,
         });
         parent.appendChild(shortCardWrapper);
         await this.#addEventListeners(shortCardWrapper);

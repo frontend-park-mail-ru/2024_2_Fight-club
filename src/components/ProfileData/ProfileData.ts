@@ -150,7 +150,7 @@ class ProfileData {
             this.#profileData.email = data.email;
             this.#profileData.isHost = data.isHost;
             this.#profileData.avatar = data.avatar;
-            this.#profileData.birthdate = data.birthDate.slice(0, 10);
+            this.#profileData.birthdate = data.birthdate.slice(0, 10);
             if (this.#profileData.birthdate != '0001-01-01')
                 this.#showBirthdate = true;
             this.#profileData.sex = this.#calculateSex(data.sex);
