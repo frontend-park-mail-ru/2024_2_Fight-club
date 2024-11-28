@@ -9,15 +9,13 @@ import ReactiveComponent from '../ReactiveComponent/ReactiveComponent';
 /** Карточка объявления на главной странице */
 export default class AdCard extends ReactiveComponent {
     private data;
-    private pendingImageIndex: number | null; // Пикчу, которую будем показывать после того, как пользователь закончил мотать в процессе уже работающей анимации
     private plannedImageIndex: number | null; // Пикча, которую анимация хотела показать
     private currentImageIndex;
 
     private oldImage: HTMLImageElement | null;
     private newImage: HTMLImageElement | null;
-    private imgScrollTimeouts;
-    private inAnimation: boolean;
-    private circles: HTMLCollectionOf<Element>;
+    private imgScrollTimeouts: NodeJS.Timeout[];
+    private circles!: HTMLCollectionOf<Element>;
 
     /**
      * @param data - информация о карточке
@@ -35,13 +33,11 @@ export default class AdCard extends ReactiveComponent {
             },
             templateData: data,
         });
-        this.pendingImageIndex = null;
         this.plannedImageIndex = null;
         this.currentImageIndex = 0;
         this.data = data;
         this.oldImage = this.newImage = null;
         this.imgScrollTimeouts = [];
-        this.inAnimation = false;
     }
 
     addEventListeners() {
@@ -128,34 +124,17 @@ export default class AdCard extends ReactiveComponent {
         }
 
         if (
-            (!this.inAnimation && toShowIndex === this.currentImageIndex) ||
-            (this.inAnimation && toShowIndex === this.plannedImageIndex)
+            (!this.imgScrollTimeouts.length &&
+                toShowIndex === this.currentImageIndex) ||
+            (this.imgScrollTimeouts.length !== 0 &&
+                toShowIndex === this.plannedImageIndex)
         ) {
             return;
         }
 
         this.markCircleSelected(toShowIndex);
 
-        // Если были в процессе анимации, но пользователь помотал мышкой и выбрал другой индекс
-        // То запоминаем его выбор
-        if (this.inAnimation) {
-            if (this.inAnimation && toShowIndex === this.pendingImageIndex) {
-                return;
-            }
-
-            console.log(
-                'this.pendingImageIndex = toShowIndex;',
-                this.pendingImageIndex,
-                toShowIndex
-            );
-
-            this.pendingImageIndex = toShowIndex;
-
-            return;
-        }
-
         // Animation begin
-        this.inAnimation = true;
         this.plannedImageIndex = toShowIndex;
 
         // Новая фотка на задний план, а старая на переднем
@@ -164,9 +143,10 @@ export default class AdCard extends ReactiveComponent {
 
         // Меняем src у новой фотки
         this.newImage.src = this.data.images[toShowIndex].path;
-
-        // Теперь просто меняем непрозрачность у старой, чтобы было видно новую
-        this.oldImage.style.opacity = '0';
+        this.newImage.onload = () => {
+            // Теперь просто меняем непрозрачность у старой, чтобы было видно новую
+            this.oldImage!.style.opacity = '0';
+        };
 
         // После завершения анимации СВАПАЕМ местами старую и новую фотку
         // и выполняем переключение изображения, если юзер успел в процессе анимации переместить курсор на область фото
@@ -189,22 +169,9 @@ export default class AdCard extends ReactiveComponent {
             this.imgScrollTimeouts = [];
             this.currentImageIndex = this.plannedImageIndex!;
 
-            // Если юзер переместил курсор, то показывает ту фотку, которую он хотел
-            if (this.pendingImageIndex) {
-                console.log(
-                    'I need to set my index to:',
-                    this.pendingImageIndex
-                );
-                this.inAnimation = false;
-                this.showImage(this.pendingImageIndex);
-                this.pendingImageIndex = null;
-            }
-
             // We've finished the animation
-            this.inAnimation = false;
             this.plannedImageIndex = null;
-            console.log('finished');
-        }, 300); // here should be ANIMATION_TIME defined in CSS
+        }, 200); // here should be ANIMATION_TIME defined in CSS
 
         // Clear all old setTimeouts
         this.imgScrollTimeouts.map((timeoutToClear) =>
@@ -217,7 +184,6 @@ export default class AdCard extends ReactiveComponent {
      * @description Функция, которая показывает первую фотографию, когда курсор вне карточки
      */
     onMouseOut() {
-        console.log('??wtf');
         this.showImage(0);
     }
 
