@@ -5,6 +5,7 @@ import router from '../../modules/Router';
 import HorizontalAdCard from '../../components/HorizontalAdCard/HorizontalAdCard';
 
 import { HorizontalAdCardData } from '../../components/HorizontalAdCard/HorizontalAdCard';
+import EditAdvertPage from '../EditAdvertPage/EditAdvertPage';
 
 function AdListPage(data: HorizontalAdCardData[], isHost: boolean) {
     const pageContainer = document.createElement('div');
@@ -24,8 +25,13 @@ function AdListPage(data: HorizontalAdCardData[], isHost: boolean) {
     const createAdvertElement = pageContainer.querySelector(
         '.js-add-btn'
     ) as HTMLButtonElement;
-    createAdvertElement.onclick = () =>
-        router.navigateTo('/ads/?action=create');
+    createAdvertElement.onclick = () => {
+        const page = new EditAdvertPage('create');
+        const root = document.getElementById(
+            'js-ad-edit-container'
+        ) as HTMLDivElement;
+        root.replaceChildren(page.getElement());
+    };
 
     for (const d of data) {
         const card = HorizontalAdCard(
@@ -37,8 +43,15 @@ function AdListPage(data: HorizontalAdCardData[], isHost: boolean) {
             },
             {
                 onOpen: (uuid: string) => router.navigateTo(`/ads/?id=${uuid}`),
-                onEdit: (uuid: string) =>
-                    router.navigateTo(`/ads/?id=${uuid}&action=edit`),
+                onEdit: async (uuid: string) => {
+                    const data = await ApiClient.getAd(uuid);
+                    console.log(data);
+                    const page = new EditAdvertPage('edit', data);
+                    const root = document.getElementById(
+                        'js-ad-edit-container'
+                    ) as HTMLDivElement;
+                    root.replaceChildren(page.getElement());
+                },
                 onDel: async (uuid: string) => {
                     await ApiClient.deleteAd(uuid);
                     router.navigateTo(location.href);

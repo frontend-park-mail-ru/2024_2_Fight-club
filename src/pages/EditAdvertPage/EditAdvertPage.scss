@@ -3,17 +3,12 @@
 $secondary-card-size: 64px;
 
 .edit-ad-page {
-    max-width: 70%;
-    margin: 50px auto;
-    display: grid;
-    grid-template-areas: 'main aside';
-    gap: 5%;
+    display: flex;
+    flex-direction: column;
 
     &__btn {
         @include mixins.button;
     }
-
-    grid-template-columns: 2fr 1fr;
 
     &__fullscreen-overlay {
         top: 0;
