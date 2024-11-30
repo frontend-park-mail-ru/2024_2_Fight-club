@@ -1,0 +1,62 @@
+@use '../../styles/mixins';
+
+.horizontal-ad-card {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    padding: 15px;
+    transition: 0.3s all;
+    border: 2px #e4e4e4 solid;
+    border-bottom: none;
+
+    &:last-child {
+        border-bottom: 2px #e4e4e4 solid;
+    }
+
+    &:hover {
+        background-color: #cecece;
+    }
+    &__img {
+        width: 200px;
+        border-radius: 2px;
+    }
+    &__info {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+    }
+    &__notification-bell {
+        position: absolute;
+        width: 32px;
+        top: 0px;
+        right: 0px;
+        cursor: pointer;
+    }
+    &__city {
+        font-size: 32px;
+    }
+    &__address {
+        font-size: 20px;
+        color: #7a7a7a;
+    }
+    &__buttons-container {
+        display: flex;
+        gap: 30px;
+    }
+    &__open-btn {
+        @include mixins.button;
+        height: 38px;
+        background-color: #5289ff;
+    }
+    &__edit-btn {
+        @include mixins.button;
+        height: 38px;
+    }
+    &__del-btn {
+        @include mixins.button;
+        background-color: #ff5900;
+        height: 38px;
+    }
+}

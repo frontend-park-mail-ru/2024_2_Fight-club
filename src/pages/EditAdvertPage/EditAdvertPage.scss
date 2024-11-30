@@ -6,6 +6,14 @@ $secondary-card-size: 64px;
     display: flex;
     flex-direction: column;
 
+    position: relative;
+
+    &__close-cross {
+        width: 32px;
+        cursor: pointer;
+        margin-left: auto;
+    }
+
     &__btn {
         @include mixins.button;
     }
@@ -51,8 +59,9 @@ $secondary-card-size: 64px;
             font-size: 16px;
             width: 100%;
             box-sizing: border-box;
-            border: 1px solid black;
+            border: 1px solid #b0b2b8;
             border-radius: 5px;
+            font-family: inherit;
         }
         &__text-area {
             resize: vertical;
@@ -61,15 +70,17 @@ $secondary-card-size: 64px;
             font-size: 16px;
             width: 100%;
             box-sizing: border-box;
-            border: 1px solid black;
+            border: 1px solid #b0b2b8;
             border-radius: 5px;
+            font-family: inherit;
         }
         &__select {
             width: 100%;
-            border: 1px solid #000;
+            border: 1px solid #b0b2b8;
             border-radius: 5px;
             padding: 5px 8px;
             font-size: 16px;
+            font-family: inherit;
             cursor: pointer;
             background-color: #fff;
         }

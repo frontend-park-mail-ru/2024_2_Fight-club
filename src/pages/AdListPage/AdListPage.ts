@@ -21,45 +21,67 @@ function AdListPage(data: HorizontalAdCardData[], isHost: boolean) {
         return pageContainer;
     }
 
-    const advertListElement = pageContainer.querySelector('.js-advert-list');
-    const createAdvertElement = pageContainer.querySelector(
-        '.js-add-btn'
-    ) as HTMLButtonElement;
-    createAdvertElement.onclick = () => {
-        const page = new EditAdvertPage('create');
+    requestAnimationFrame(() => {
+        const advertListElement =
+            pageContainer.querySelector('.js-advert-list');
+        const createAdvertElement = pageContainer.querySelector(
+            '.js-add-btn'
+        ) as HTMLButtonElement;
+
         const root = document.getElementById(
             'js-ad-edit-container'
         ) as HTMLDivElement;
-        root.replaceChildren(page.getElement());
-    };
+        const hint = root.querySelector('.ad-list-page__hint') as HTMLElement;
 
-    for (const d of data) {
-        const card = HorizontalAdCard(
-            {
-                id: d.id,
-                cityName: d.cityName,
-                address: d.address,
-                image: d.image,
-            },
-            {
-                onOpen: (uuid: string) => router.navigateTo(`/ads/?id=${uuid}`),
-                onEdit: async (uuid: string) => {
-                    const data = await ApiClient.getAd(uuid);
-                    console.log(data);
-                    const page = new EditAdvertPage('edit', data);
-                    const root = document.getElementById(
-                        'js-ad-edit-container'
-                    ) as HTMLDivElement;
-                    root.replaceChildren(page.getElement());
+        const onCloseButtonClick = () => {
+            root.replaceChildren(hint);
+            hint.classList.remove('ad-list-page__hint--hidden');
+        };
+
+        createAdvertElement.onclick = () => {
+            const page = new EditAdvertPage({
+                action: 'create',
+                onCloseButtonClick: onCloseButtonClick,
+            });
+
+            hint.classList.add('ad-list-page__hint--hidden');
+
+            root.replaceChildren(hint, page.getElement());
+        };
+
+        for (const d of data) {
+            const card = HorizontalAdCard(
+                {
+                    id: d.id,
+                    cityName: d.cityName,
+                    address: d.address,
+                    image: d.image,
                 },
-                onDel: async (uuid: string) => {
-                    await ApiClient.deleteAd(uuid);
-                    router.navigateTo(location.href);
-                },
-            }
-        );
-        advertListElement?.appendChild(card);
-    }
+                {
+                    onOpen: (uuid: string) =>
+                        router.navigateTo(`/ads/?id=${uuid}`),
+                    onEdit: async (uuid: string) => {
+                        const data = await ApiClient.getAd(uuid);
+                        console.log(data);
+                        const page = new EditAdvertPage({
+                            action: 'edit',
+                            data,
+                            onCloseButtonClick,
+                        });
+                        const root = document.getElementById(
+                            'js-ad-edit-container'
+                        ) as HTMLDivElement;
+                        root.replaceChildren(page.getElement());
+                    },
+                    onDel: async (uuid: string) => {
+                        await ApiClient.deleteAd(uuid);
+                        router.navigateTo(location.href);
+                    },
+                }
+            );
+            advertListElement?.appendChild(card);
+        }
+    });
 
     return pageContainer;
 }

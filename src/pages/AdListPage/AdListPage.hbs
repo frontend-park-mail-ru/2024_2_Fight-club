@@ -2,7 +2,7 @@
     {{#if isHost}}
 
         <div class='ad-list-page__content-container'>
-            <div>
+            <div class='ad-list-page__left-content'>
                 <div class='ad-list-page__upper-container'>
                     <h1 class='ad-list-page__title'>Список объявлений</h1>
                     <button class='ad-list-page__add-button js-add-btn'>Добавить
@@ -16,11 +16,15 @@
                 </div>
             </div>
 
-            <div
-                class='ad-list-page__ad-edit-container'
-                id='js-ad-edit-container'
-            >
+            <div class='ad-list-page__right' id='js-ad-edit-container'>
                 <!-- PASTE CONTENT HERE -->
+                <div class='ad-list-page__hint'>
+                    <p class='ad-list-page__hint__header'>Подсказка</p>
+                    <p class='ad-list-page__hint__text'>Кликните по объявлению,
+                        чтобы отредактировать его.</p>
+                    <p class='ad-list-page__hint__text'>Чтобы добавить новое
+                        объявление, нажмите на кнопку "Добавить объявление".</p>
+                </div>
             </div>
         </div>
 

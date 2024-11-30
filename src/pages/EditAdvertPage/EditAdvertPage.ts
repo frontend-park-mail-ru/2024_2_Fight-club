@@ -44,12 +44,12 @@ interface InputConfig {
 
 export default class EditAdvertPage {
     #templateContainer: HTMLDivElement;
-    #mainImg: HTMLImageElement;
-    #carouselImages: NodeListOf<HTMLImageElement>;
+    #mainImg!: HTMLImageElement;
+    #carouselImages!: NodeListOf<HTMLImageElement>;
     #currentIndex: number;
-    #backgroundImg: HTMLImageElement;
-    #fullscreenImage: HTMLImageElement;
-    #overlay: HTMLDivElement;
+    #backgroundImg!: HTMLImageElement;
+    #fullscreenImage!: HTMLImageElement;
+    #overlay!: HTMLDivElement;
     #images: {
         id: number;
         path: string;
@@ -60,7 +60,17 @@ export default class EditAdvertPage {
     #id: string | undefined;
     #secondaryImageTemplate: HandlebarsTemplateDelegate;
 
-    constructor(action: 'create' | 'edit', data?: AdvertData) {
+    private onCloseButtonClick;
+
+    constructor({
+        action,
+        data,
+        onCloseButtonClick,
+    }: {
+        action: 'create' | 'edit';
+        data?: AdvertData;
+        onCloseButtonClick?: () => void;
+    }) {
         this.#action = action;
         this.#id = data?.id;
         this.#images = data?.images ? data.images : [];
@@ -73,6 +83,7 @@ export default class EditAdvertPage {
 
         const template = Handlebars.templates['EditAdvertPage.hbs'];
         this.#templateContainer = document.createElement('div');
+        this.onCloseButtonClick = onCloseButtonClick;
 
         ApiClient.getCities().then((cities: City[]) => {
             const selectOptions: SelectOption[] = [];
@@ -81,7 +92,7 @@ export default class EditAdvertPage {
                 selectOptions.push({
                     name: city.title,
                     value: city.title,
-                    selected: data?.city === city.title,
+                    selected: data?.cityName === city.title,
                 });
             }
 
@@ -92,7 +103,7 @@ export default class EditAdvertPage {
                     type: 'text',
                     isSelect: true,
                     options: selectOptions,
-                    value: data?.city,
+                    value: data?.cityName,
                 },
                 {
                     label: 'Адрес',
@@ -285,8 +296,16 @@ export default class EditAdvertPage {
             .querySelector('.js-form')
             ?.addEventListener('submit', this.#submitData);
 
+        if (this.onCloseButtonClick) {
+            (
+                document.getElementById(
+                    'js-edit-ad-page-close-cross'
+                ) as HTMLImageElement
+            ).onclick = () => this.onCloseButtonClick!();
+        }
+
         for (const button of document.querySelectorAll('.js-del-img-button')) {
-            button.onclick = this.#onDeleteImage;
+            (button as HTMLButtonElement).onclick = this.#onDeleteImage;
         }
     }
 
