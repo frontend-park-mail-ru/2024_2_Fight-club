@@ -20,21 +20,23 @@ export default function HorizontalAdCard(
 
     pageContainer.innerHTML = template(cardData);
 
-    pageContainer
-        .querySelector('.js-open-btn')
-        ?.addEventListener('click', () => callbacks.onOpen(cardData.id));
+    (pageContainer.querySelector('.js-open-btn') as HTMLButtonElement).onclick =
+        (e) => {
+            e.stopPropagation();
+            callbacks.onOpen(cardData.id);
+        };
 
-    pageContainer
-        .querySelector('.js-edit-btn')
-        ?.addEventListener('click', () => {
+    (pageContainer.querySelector('.js-edit-btn') as HTMLButtonElement).onclick =
+        (pageContainer.firstChild as HTMLElement).onclick = (e) => {
+            e.stopPropagation();
             callbacks.onEdit(cardData.id);
-        });
+        };
 
-    pageContainer
-        .querySelector('.js-del-btn')
-        ?.addEventListener('click', () => {
+    (pageContainer.querySelector('.js-del-btn') as HTMLButtonElement).onclick =
+        (e) => {
+            e.stopPropagation();
             callbacks.onDel(cardData.id);
-        });
+        };
 
     return pageContainer.firstChild as HTMLDivElement;
 }

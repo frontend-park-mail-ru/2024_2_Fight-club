@@ -26,6 +26,24 @@
     }
 }
 
+@mixin small-button {
+    @include button;
+    min-height: 0;
+    min-width: 0;
+    box-sizing: border-box;
+    width: min-content;
+    height: 24px;
+    padding: 3px 11px;
+
+    &:hover {
+        box-shadow: none;
+    }
+
+    &:active {
+        box-shadow: none;
+    }
+}
+
 @mixin prev-next-image-button-mixin {
     display: flex;
     justify-content: center;

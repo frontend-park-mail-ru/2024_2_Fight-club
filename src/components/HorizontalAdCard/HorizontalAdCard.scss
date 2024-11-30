@@ -17,7 +17,10 @@
         background-color: #cecece;
     }
     &__img {
-        width: 200px;
+        min-width: 270px;
+        width: 270px;
+        height: 150px;
+        object-fit: cover;
         border-radius: 2px;
     }
     &__info {
@@ -46,17 +49,30 @@
         gap: 30px;
     }
     &__open-btn {
-        @include mixins.button;
-        height: 38px;
-        background-color: #5289ff;
+        @include mixins.small-button;
+        background-color: #e6f0ff;
+        color: #0661ec;
+
+        &:hover {
+            background-color: #d9e8ff;
+        }
     }
     &__edit-btn {
-        @include mixins.button;
-        height: 38px;
+        @include mixins.small-button;
+        background-color: #e6f0ff;
+        color: #0661ec;
+
+        &:hover {
+            background-color: #d9e8ff;
+        }
     }
     &__del-btn {
-        @include mixins.button;
-        background-color: #ff5900;
-        height: 38px;
+        @include mixins.small-button;
+        background-color: #e6f0ff;
+        color: #0661ec;
+
+        &:hover {
+            background-color: #d9e8ff;
+        }
     }
 }
