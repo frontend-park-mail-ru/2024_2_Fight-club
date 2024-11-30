@@ -31,10 +31,6 @@ class ProfilePopup {
                 title: 'Профиль',
                 href: '/profile',
             },
-            donate: {
-                title: 'Донаты',
-                href: '/donate',
-            },
             myAdvertisements: {
                 title: 'Мои объявления',
                 href: '/ads/?author=me',

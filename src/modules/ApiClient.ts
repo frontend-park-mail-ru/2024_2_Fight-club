@@ -72,7 +72,7 @@ class APIClient {
     async getAd(uuid: string) {
         const response = await Ajax.get(this.BASE_URL + `/housing/${uuid}`);
         const adInfo = await response.json();
-        return adInfo;
+        return adInfo['place'];
     }
 
     async deleteAd(uuid: string) {

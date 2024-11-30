@@ -46,7 +46,11 @@ class ProfileData {
     #uploadAvatarImage?: File;
     #renderProfileInfo;
 
-    constructor(renderProfileInfoCallback: () => void, isMyProfile: boolean, otherUserId?: string) {
+    constructor(
+        renderProfileInfoCallback: () => void,
+        isMyProfile: boolean,
+        otherUserId?: string
+    ) {
         this.#isMyProfile = isMyProfile;
         if (otherUserId) {
             this.#otherUserId = otherUserId;
@@ -122,16 +126,25 @@ class ProfileData {
      */
     #dataToString(data: string): string {
         const monthNames = [
-            'января', 'февраля', 'марта', 'апреля', 
-            'мая', 'июня', 'июля', 'августа', 
-            'сентября', 'октября', 'ноября', 'декабря'
+            'января',
+            'февраля',
+            'марта',
+            'апреля',
+            'мая',
+            'июня',
+            'июля',
+            'августа',
+            'сентября',
+            'октября',
+            'ноября',
+            'декабря',
         ];
-        
+
         const date = new Date(data);
         const day = date.getDate();
         const month = monthNames[date.getMonth()];
         const year = date.getFullYear();
-    
+
         return `${day} ${month} ${year}г.`;
     }
 
@@ -204,11 +217,16 @@ class ProfileData {
     async #leaveReview(): Promise<void> {
         const data: ReviewData = {
             hostId: this.#otherUserId as string,
-            title: (document.querySelector('#review-title') as HTMLInputElement).value,
-            text: (document.querySelector('#review-text') as HTMLTextAreaElement).value,
-            rating: Number((document
-                .querySelector('input[name="rating"]:checked') as HTMLInputElement)!
-                .value)
+            title: (document.querySelector('#review-title') as HTMLInputElement)
+                .value,
+            text: (
+                document.querySelector('#review-text') as HTMLTextAreaElement
+            ).value,
+            rating: Number(
+                (document.querySelector(
+                    'input[name="rating"]:checked'
+                ) as HTMLInputElement)!.value
+            ),
         };
 
         const response = await ApiClient.leaveReview(data);
@@ -218,9 +236,7 @@ class ProfileData {
             dataContainer?.appendChild(this.#content);
         } else {
             clearPage('profile');
-            const errorMessage = PopupAlert(
-                'Неверный формат отзыва'
-            );
+            const errorMessage = PopupAlert('Неверный формат отзыва');
             document
                 .querySelector('#profile-content')
                 ?.appendChild(errorMessage);
@@ -241,9 +257,7 @@ class ProfileData {
             return data;
         } else {
             clearPage('profile');
-            const errorMessage = PopupAlert(
-                'Ошибка получения отзывов'
-            );
+            const errorMessage = PopupAlert('Ошибка получения отзывов');
             document
                 .querySelector('#profile-content')
                 ?.appendChild(errorMessage);
@@ -375,12 +389,12 @@ class ProfileData {
     #addButtonEventListener(): void {
         const editButton = document.getElementById('edit-button');
         if (this.#isMyProfile) {
-            editButton!.addEventListener('click', (e)=>{
+            editButton!.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.#renderForm();
             });
         } else {
-            editButton!.addEventListener('click', (e)=>{
+            editButton!.addEventListener('click', (e) => {
                 e.preventDefault();
                 clearPage('form');
                 this.#content.replaceChildren();
@@ -496,9 +510,9 @@ class ProfileData {
         });
     }
 
-    #submitReviewEventListener(){
+    #submitReviewEventListener() {
         const leaveReviewButton = document.querySelector('.js-leave-review');
-        leaveReviewButton!.addEventListener('click', async (e)=>{
+        leaveReviewButton!.addEventListener('click', async (e) => {
             e.preventDefault();
             await this.#leaveReview();
             await this.#renderProfileInfo();
@@ -511,7 +525,7 @@ class ProfileData {
     #renderGraphicEventListener(): void {
         document
             .querySelector('.js-graphic-href')
-            ?.addEventListener('click', (e)=>{
+            ?.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.#renderGraphic();
             });
@@ -560,7 +574,9 @@ class ProfileData {
     #renderMap() {
         this.#content.replaceChildren();
         this.#content.classList.remove('y-scroll');
-        this.#content.parentElement?.classList.remove('fix-bottom-right-border');
+        this.#content.parentElement?.classList.remove(
+            'fix-bottom-right-border'
+        );
         const wrapper = document.createElement('div');
         wrapper.id = 'wrapper';
         wrapper.classList.add('data-container__wrapper');
@@ -578,16 +594,18 @@ class ProfileData {
         const reviews = await this.#getReviews();
         if (reviews.length != 0) {
             this.#content.classList.add('y-scroll');
-            this.#content.parentElement?.classList.add('fix-bottom-right-border');
+            this.#content.parentElement?.classList.add(
+                'fix-bottom-right-border'
+            );
 
             reviews.forEach((reviewData) => {
                 console.log(reviewData);
-                reviewData.createdAt     = this.#dataToString(reviewData.createdAt);
+                reviewData.createdAt = this.#dataToString(reviewData.createdAt);
                 const review = new ReviewCard(reviewData);
                 review.render(this.#content);
             });
         } else {
-            const noReviews = new NoReviews(this.#isMyProfile, ()=>{
+            const noReviews = new NoReviews(this.#isMyProfile, () => {
                 console.log('there');
                 clearPage('form');
                 this.#content.replaceChildren();
@@ -599,18 +617,20 @@ class ProfileData {
 
     #renderAchievments() {}
 
-    async #renderGraphic(){
+    async #renderGraphic() {
         this.#content.replaceChildren();
         const reviews = await this.#getReviews();
         if (reviews.length != 0) {
             this.#content.classList.remove('y-scroll');
-            this.#content.parentElement?.classList.remove('fix-bottom-right-border');
+            this.#content.parentElement?.classList.remove(
+                'fix-bottom-right-border'
+            );
 
             const graphicData = new Array<GraphicPoint>();
-            for (const {createdAt, rating} of reviews){
+            for (const { createdAt, rating } of reviews) {
                 const point: GraphicPoint = {
-                    date: (new Date(createdAt)).toLocaleDateString('ru-RU'),
-                    rating: rating
+                    date: new Date(createdAt).toLocaleDateString('ru-RU'),
+                    rating: rating,
                 };
                 graphicData.push(point);
             }
@@ -618,7 +638,7 @@ class ProfileData {
             const reviewsGraphic = new ReviewsGraphic(graphicData);
             reviewsGraphic.render(this.#content);
         } else {
-            const noReviews = new NoReviews(this.#isMyProfile, ()=>{
+            const noReviews = new NoReviews(this.#isMyProfile, () => {
                 console.log('there');
                 clearPage('form');
                 this.#content.replaceChildren();
@@ -659,14 +679,11 @@ class ProfileData {
      * @private
      * @description Рендер окна оценивния
      */
-    #renderReviewForm(): void{
+    #renderReviewForm(): void {
         this.#content.replaceChildren();
         const template = Handlebars.templates['RatingForm.hbs'];
-        this.#content.insertAdjacentHTML(
-            'beforeend',
-            template({})
-        );
-        
+        this.#content.insertAdjacentHTML('beforeend', template({}));
+
         this.#submitReviewEventListener();
     }
 

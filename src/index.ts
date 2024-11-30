@@ -45,7 +45,7 @@ const renderFavoritesPage = () => {};
 const renderNotificationsPage = () => {};
 
 const renderAdvertPage = async (id: string) => {
-    const info = (await ApiClient.getAd(id))['place'];
+    const info = await ApiClient.getAd(id);
     const authorInfo = await ApiClient.getUser(info.authorUUID);
 
     const page = new AdPage(pageContainer, info, authorInfo);
@@ -53,7 +53,7 @@ const renderAdvertPage = async (id: string) => {
 };
 
 const renderEditAdvertPage = async (uuid: string) => {
-    const info = (await ApiClient.getAd(uuid))['place'];
+    const info = await ApiClient.getAd(uuid);
 
     const page = new EditAdvertPage('edit', info);
     pageContainer.appendChild(page.getElement());

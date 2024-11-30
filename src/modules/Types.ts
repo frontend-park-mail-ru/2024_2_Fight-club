@@ -25,7 +25,7 @@ export interface AdvertData {
         id: number;
         path: string;
     }[];
-    city: string;
+    cityName: string;
     address: string;
     description: string;
     publicationDate: string;
