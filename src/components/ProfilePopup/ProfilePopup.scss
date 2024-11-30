@@ -11,30 +11,33 @@
 }
 
 .profile-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 10;
     position: relative;
     top: 70px;
-    left: 88%;
-    min-width: min-content;
-    max-width: 120px;
-    padding: 20px 20px 0px 20px;
-    border: solid;
-    border-radius: 10px;
-    border-width: 2px;
-    border-color: #635b5b;
+    left: 100%;
+    transform: translateX(-140%);
+    width: 150px;
+    padding: 18px 16px 20px;
+    border-radius: 4px;
+    box-shadow: 0 8px 16px #0006;
     background-color: #ffffff;
     margin-right: 10px;
 }
 
 .profile-list__href {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 500;
     text-decoration: none;
-    color: #635b5b;
+    color: #152242;
     cursor: pointer;
-}
-
-.profile-list__underline {
     margin-bottom: 20px;
+
+    &:hover {
+        color: #0661ec;
+    }
 }
 
 @media screen and (max-width: 900px) {
