@@ -3,6 +3,8 @@
 import { AdvertData, ProfileInfo } from '../../modules/Types';
 import { calculateAge } from '../../modules/Utils';
 import ReactiveComponent from '../../components/ReactiveComponent/ReactiveComponent';
+import globalStore from '../../modules/GlobalStore';
+import router from '../../modules/Router';
 
 const SECONDARY_IMG_SELECTOR = '.js-carousel-img';
 const FULLSCREEN_OVERLAY_SELECTOR = '.js-fullscreen-overlay';
@@ -34,6 +36,7 @@ export default class AdPage extends ReactiveComponent {
                 ...authorInfo,
                 age: calculateAge(authorInfo.birthdate),
                 sex: authorInfo.sex === 'M' ? 'Мужской' : 'Женский',
+                isAuthor: data.authorUUID === globalStore.auth.userId,
             },
         });
     }
@@ -97,6 +100,14 @@ export default class AdPage extends ReactiveComponent {
                 this.state.currentIndex + 1
             );
         };
+
+        document
+            .getElementById('edit-button')
+            ?.addEventListener('click', () => {
+                router.navigateTo(
+                    `/ads/?author=me&action=edit&id=${this.templateData.id}`
+                );
+            });
 
         carouselImages.forEach((el: HTMLImageElement, index) => {
             el.onclick = () => {

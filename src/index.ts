@@ -24,6 +24,7 @@ const pageContainer = document.createElement('div');
 import router from './modules/Router';
 import { HorizontalAdCardData } from './components/HorizontalAdCard/HorizontalAdCard';
 import { getCookie } from './modules/Utils';
+import globalStore from './modules/GlobalStore';
 
 const renderMainPage = async () => {
     const data = await ApiClient.getAds();
@@ -80,7 +81,7 @@ const renderProfilePage = async () => {
     await profilePage.render(pageContainer);
 };
 
-const renderAdListPage = async () => {
+const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
     const sessionData = await APIService.getSessionData();
     const userId = sessionData['id'];
     const isHost = (await ApiClient.getUser(userId))['isHost'];
@@ -109,6 +110,12 @@ const renderAdListPage = async () => {
     }
     const page = AdListPage(horizontalAdCardData, isHost);
     pageContainer.appendChild(page);
+
+    if (action === 'edit') {
+        requestAnimationFrame(() => {
+            document.getElementById(`housing-card-${adId}`)?.click();
+        });
+    }
 };
 
 /** Объект с коллбеками для header`а */
@@ -132,6 +139,9 @@ const renderHeader = async () => {
     if (getCookie('session_id')) {
         try {
             sessionData = await APIService.getSessionData();
+
+            globalStore.auth.isAuthorized = true;
+            globalStore.auth.userId = sessionData.id;
         } catch {
             //
         }
@@ -160,7 +170,8 @@ router.addRoute('/ads/', async (params: URLSearchParams) => {
     const author = params.get('author');
 
     if (author === 'me') {
-        await renderAdListPage();
+        const action = params.get('action');
+        await renderAdListPage(action, adId);
     } else if (!action && adId) {
         await renderAdvertPage(adId);
     } else if (action === 'edit' && adId) {

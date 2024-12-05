@@ -157,10 +157,19 @@
                 </div>
             </dl>
 
-            <button class='ad-page__author-info__write-msg-button'>Напишите
-                {{adAuthor.name}}
-                прямо сейчас
-            </button>
+            <div class='ad-page__author-info__buttons'>
+                <button class='ad-page__author-info__write-msg-button'>Напишите
+                    {{adAuthor.name}}
+                    прямо сейчас
+                </button>
+                {{#if isAuthor}}
+                    <button
+                        class='ad-page__author-info__edit-button'
+                        id='edit-button'
+                    >Отредактировать объявление
+                    </button>
+                {{/if}}
+            </div>
         </div>
 
     </div>
