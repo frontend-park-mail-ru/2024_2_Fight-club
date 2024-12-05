@@ -99,11 +99,60 @@
         font-size: 14px;
     }
 
+    &__kebab {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+
+        border-radius: 50%;
+        background-color: #00000079;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &__icon {
+            position: absolute;
+            right: 50%;
+            transform: translateX(50%);
+            fill: #fff;
+        }
+
+        &__actions {
+            display: flex;
+            overflow: hidden;
+            flex-direction: row;
+            justify-content: space-between;
+
+            visibility: hidden;
+            width: 0;
+            height: 40px;
+            border-radius: 20px;
+            background: #a7a7a7;
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            transition: all 0.4s;
+        }
+
+        &:hover {
+            visibility: none;
+
+            .housing-card__kebab__icon {
+                visibility: hidden;
+            }
+
+            .housing-card__kebab__actions {
+                width: 90px;
+                visibility: visible;
+            }
+        }
+    }
+
     &__like-button {
         cursor: pointer;
-        position: absolute;
-        top: 5px;
-        right: 5px;
         border-radius: 50%;
         background-color: #00000066;
         color: #fff;
@@ -113,7 +162,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 5;
 
         &__heart {
             color: #fff;
@@ -123,6 +171,30 @@
         &:hover {
             .housing-card__like-button__heart {
                 color: #e43030;
+            }
+        }
+    }
+
+    &__show-on-map-button {
+        cursor: pointer;
+        border-radius: 50%;
+        background-color: #00000066;
+        color: #fff;
+        border: none;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &__location-icon {
+            fill: #ffffff;
+            transition: fill 0.3s ease;
+        }
+
+        &:hover {
+            .housing-card__show-on-map-button__location-icon {
+                fill: #ffa552;
             }
         }
     }

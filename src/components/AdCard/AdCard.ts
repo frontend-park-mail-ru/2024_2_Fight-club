@@ -49,7 +49,13 @@ export default class AdCard extends ReactiveComponent {
             this.thisElement.querySelector(
                 '.js-like-button'
             ) as HTMLButtonElement
-        ).onclick = this.addToFavorite;
+        ).onclick = (e) => this.addToFavorite(e);
+
+        (
+            this.thisElement.querySelector(
+                '.js-show-on-map-button'
+            ) as HTMLButtonElement
+        ).onclick = (e) => this.showOnMap(e);
 
         setTimeout(() => {
             this.addImageScrolling();
@@ -190,7 +196,18 @@ export default class AdCard extends ReactiveComponent {
     /**
      * @description Вызывается при нажатии на кнопку добавить в избранное
      */
-    addToFavorite() {
+    addToFavorite(e: Event) {
+        e.stopPropagation();
+
         console.log('fav btn was clicked!');
+    }
+
+    /**
+     * @description
+     */
+    showOnMap(e: Event) {
+        e.stopPropagation();
+
+        console.log('show on map!');
     }
 }
