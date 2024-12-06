@@ -20,88 +20,86 @@
         </div>
     </div>
 
-    <button class='housing-card__like-button js-like-button'>
+    <div class='housing-card__kebab'>
         <svg
-            width='43'
-            height='43'
-            viewBox='0 0 43 43'
+            class='housing-card__kebab__icon'
+            width='24'
+            height='24'
+            viewBox='0 0 24 24'
             fill='none'
             xmlns='http://www.w3.org/2000/svg'
         >
-            <g style='mix-blend-mode:multiply' filter='url(#filter0_d_181_2)'>
-                <circle cx='21.5' cy='17.5' r='17.5' fill='#9D9999' />
-            </g>
+
             <path
-                fill-rule='evenodd'
-                clip-rule='evenodd'
-                d='M22 13.0001C20.5005 11.2526 17.9948 10.7126 16.116 12.3128C14.2372 13.913 13.9727 16.5884 15.4481 18.481C16.6749 20.0545 20.3873 23.3732 21.6041 24.4474C21.7402 24.5676 21.8082 24.6276 21.8877 24.6512C21.9569 24.6718 22.0327 24.6718 22.1021 24.6512C22.1815 24.6276 22.2495 24.5676 22.3857 24.4474C23.6024 23.3732 27.3148 20.0545 28.5416 18.481C30.017 16.5884 29.7848 13.8961 27.8737 12.3128C25.9626 10.7294 23.4995 11.2526 22 13.0001Z'
+                d='M19 13C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11C18.4477 11 18 11.4477 18 12C18 12.5523 18.4477 13 19 13Z'
                 stroke='white'
                 stroke-width='2'
                 stroke-linecap='round'
                 stroke-linejoin='round'
             />
-            <defs>
-                <filter
-                    id='filter0_d_181_2'
-                    x='0'
-                    y='0'
-                    width='43'
-                    height='43'
-                    filterUnits='userSpaceOnUse'
-                    color-interpolation-filters='sRGB'
-                >
-                    <feFlood flood-opacity='0' result='BackgroundImageFix' />
-                    <feColorMatrix
-                        in='SourceAlpha'
-                        type='matrix'
-                        values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
-                        result='hardAlpha'
-                    />
-                    <feOffset dy='4' />
-                    <feGaussianBlur stdDeviation='2' />
-                    <feComposite in2='hardAlpha' operator='out' />
-                    <feColorMatrix
-                        type='matrix'
-                        values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0'
-                    />
-                    <feBlend
-                        mode='normal'
-                        in2='BackgroundImageFix'
-                        result='effect1_dropShadow_181_2'
-                    />
-                    <feBlend
-                        mode='normal'
-                        in='SourceGraphic'
-                        in2='effect1_dropShadow_181_2'
-                        result='shape'
-                    />
-                </filter>
-            </defs>
+            <path
+                d='M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z'
+                stroke='white'
+                stroke-width='2'
+                stroke-linecap='round'
+                stroke-linejoin='round'
+            />
+            <path
+                d='M5 13C5.55228 13 6 12.5523 6 12C6 11.4477 5.55228 11 5 11C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13Z'
+                stroke='white'
+                stroke-width='2'
+                stroke-linecap='round'
+                stroke-linejoin='round'
+            />
         </svg>
-    </button>
+
+        <div class='housing-card__kebab__actions'>
+            <button class='housing-card__like-button js-like-button'>
+                <svg
+                    aria-label='heart'
+                    class='housing-card__like-button__heart'
+                    aria-hidden='true'
+                    width='16'
+                    height='16'
+                    viewBox='0 0 16 16'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                ><path
+                        fill-rule='evenodd'
+                        clip-rule='evenodd'
+                        d='M4.93 2.98C3.307 2.98 2 4.276 2 5.86c0 2.12 1.476 4.121 3.181 5.692A19.988 19.988 0 0 0 8 13.705a19.988 19.988 0 0 0 2.819-2.152C12.524 9.98 14 7.98 14 5.86c0-1.585-1.306-2.88-2.93-2.88-.928 0-1.753.423-2.29 1.085L8 5.024l-.78-.959a2.942 2.942 0 0 0-2.29-1.084ZM8 14.865l-.49.863h-.001l-.002-.002-.006-.003-.019-.01a7.205 7.205 0 0 1-.307-.182 21.988 21.988 0 0 1-3.357-2.528C2.025 11.348 0 8.847 0 5.86 0 3.17 2.212 1 4.93 1 6.09 1 7.158 1.396 8 2.057A4.956 4.956 0 0 1 11.07 1C13.788 1 16 3.17 16 5.86c0 2.987-2.024 5.488-3.819 7.142a21.994 21.994 0 0 1-3.663 2.71l-.019.01-.006.003-.002.002L8 14.864Zm0 0 .49.863L8 16l-.49-.273.49-.863Zm-.49-.863Z'
+                        fill='currentColor'
+                    ></path></svg>
+            </button>
+
+            <button
+                class='housing-card__show-on-map-button js-show-on-map-button'
+            >
+                <svg
+                    class='housing-card__show-on-map-button__location-icon'
+                    width='14'
+                    height='20'
+                    viewBox='0 0 14 20'
+                    fill='none'
+                    xmlns='http://www.w3.org/2000/svg'
+                >
+                    <path
+                        d='M7 20C6.76667 20 6.56667 19.9333 6.4 19.8C6.23333 19.6667 6.10833 19.4917 6.025 19.275C5.70833 18.3417 5.30833 17.4667 4.825 16.65C4.35833 15.8333 3.7 14.875 2.85 13.775C2 12.675 1.30833 11.625 0.775 10.625C0.258333 9.625 0 8.41667 0 7C0 5.05 0.675 3.4 2.025 2.05C3.39167 0.683333 5.05 0 7 0C8.95 0 10.6 0.683333 11.95 2.05C13.3167 3.4 14 5.05 14 7C14 8.51667 13.7083 9.78333 13.125 10.8C12.5583 11.8 11.9 12.7917 11.15 13.775C10.25 14.975 9.56667 15.975 9.1 16.775C8.65 17.5583 8.275 18.3917 7.975 19.275C7.89167 19.5083 7.75833 19.6917 7.575 19.825C7.40833 19.9417 7.21667 20 7 20ZM7 16.425C7.28333 15.8583 7.6 15.3 7.95 14.75C8.31667 14.2 8.85 13.4667 9.55 12.55C10.2667 11.6167 10.85 10.7583 11.3 9.975C11.7667 9.175 12 8.18333 12 7C12 5.61667 11.5083 4.44167 10.525 3.475C9.55833 2.49167 8.38333 2 7 2C5.61667 2 4.43333 2.49167 3.45 3.475C2.48333 4.44167 2 5.61667 2 7C2 8.18333 2.225 9.175 2.675 9.975C3.14167 10.7583 3.73333 11.6167 4.45 12.55C5.15 13.4667 5.675 14.2 6.025 14.75C6.39167 15.3 6.71667 15.8583 7 16.425ZM7 9.5C7.7 9.5 8.29167 9.25833 8.775 8.775C9.25833 8.29167 9.5 7.7 9.5 7C9.5 6.3 9.25833 5.70833 8.775 5.225C8.29167 4.74167 7.7 4.5 7 4.5C6.3 4.5 5.70833 4.74167 5.225 5.225C4.74167 5.70833 4.5 6.3 4.5 7C4.5 7.7 4.74167 8.29167 5.225 8.775C5.70833 9.25833 6.3 9.5 7 9.5Z'
+                    />
+                </svg>
+
+            </button>
+        </div>
+
+    </div>
 
     <div class='housing-card__info'>
-        <div class='housing-card__location'>
-            <p class='housing-card__city'>{{cityName}}</p>
-            <p class='housing-card__address'>{{address}}</p>
-            <div class='housing-card__view-row'>
-                <span class='housing-card__view'>
-                    <img
-                        src='../../public/svg/eye.svg'
-                        height='15'
-                        width='15'
-                    />
-                    <p class='housing-card__view__p'>{{viewsCount}}</p>
-                </span>
-            </div>
-        </div>
+        <p class='housing-card__apartment-info'>1-комн. кв. · 43 м · 1/2 этаж</p>
+        <p class='housing-card__address'>{{address}}, {{cityName}}</p>
+
         <div class='housing-card__author-info'>
-            <img
-                class='housing-card__avatar'
-                src='{{adAuthor.avatar}}'
-                alt='User avatar'
-            />
             <p class='housing-card__author-name'>{{adAuthor.name}}</p>
+            <div class='separator'>·</div>
             <div class='housing-card__rating-container'>
                 <img class='housing-card__star' src='/star.png' alt='star' />
                 <span class='housing-card__rating'>{{adAuthor.rating}}</span>
