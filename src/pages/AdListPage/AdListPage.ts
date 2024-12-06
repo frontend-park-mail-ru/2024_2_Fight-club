@@ -62,7 +62,6 @@ function AdListPage(data: HorizontalAdCardData[], isHost: boolean) {
                         router.navigateTo(`/ads/?id=${uuid}`),
                     onEdit: async (uuid: string) => {
                         const data = await ApiClient.getAd(uuid);
-                        console.log(data);
                         const page = new EditAdvertPage({
                             action: 'edit',
                             data,

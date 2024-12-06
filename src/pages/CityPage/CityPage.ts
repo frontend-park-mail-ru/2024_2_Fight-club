@@ -29,7 +29,6 @@ class CityPage {
         const infoResponse = await ApiClient.getCity(name);
         if (infoResponse.ok) {
             const data = await infoResponse.json();
-            console.log(data);
             this.#name = data.city['title'];
             this.#description = data.city['description'];
             this.#photo = data.city['image'];
@@ -69,7 +68,6 @@ class CityPage {
     #renderFilter(pageContent: HTMLDivElement): void {
         const filter = new Filter(async (filters) => {
             filters.location = this.#queryName;
-            console.log(filters);
             const data = await ApiClient.getAds(filters);
             this.#places = data;
             document.querySelector('.advert')!.remove();

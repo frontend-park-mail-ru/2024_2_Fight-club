@@ -599,14 +599,12 @@ class ProfileData {
             );
 
             reviews.forEach((reviewData) => {
-                console.log(reviewData);
                 reviewData.createdAt = this.#dataToString(reviewData.createdAt);
                 const review = new ReviewCard(reviewData);
                 review.render(this.#content);
             });
         } else {
             const noReviews = new NoReviews(this.#isMyProfile, () => {
-                console.log('there');
                 clearPage('form');
                 this.#content.replaceChildren();
                 this.#renderReviewForm();
@@ -639,7 +637,6 @@ class ProfileData {
             reviewsGraphic.render(this.#content);
         } else {
             const noReviews = new NoReviews(this.#isMyProfile, () => {
-                console.log('there');
                 clearPage('form');
                 this.#content.replaceChildren();
                 this.#renderReviewForm();

@@ -13,9 +13,8 @@ interface AdditionalInfo {
 class ReviewsGraphic {
     #data: Array<GraphicPoint>;
 
-    constructor(data: Array<GraphicPoint>){
+    constructor(data: Array<GraphicPoint>) {
         this.#data = data;
-        console.log(this.#data);
 
         this.#registerHelper();
     }
@@ -32,14 +31,22 @@ class ReviewsGraphic {
     }
 
     #getAdditionalInfo(): AdditionalInfo {
-        const sortedData = [...this.#data].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        const sortedData = [...this.#data].sort(
+            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
 
         const addInfo: AdditionalInfo = {
             totalRatings: this.#data.length,
             firstDate: sortedData[0]?.date || 'Нет данных',
             lastDate: sortedData[sortedData.length - 1]?.date || 'Нет данных',
-            highestRating: Math.max(...this.#data.map(point => point.rating), 0),
-            lowestRating: Math.min(...this.#data.map(point => point.rating), 5)
+            highestRating: Math.max(
+                ...this.#data.map((point) => point.rating),
+                0
+            ),
+            lowestRating: Math.min(
+                ...this.#data.map((point) => point.rating),
+                5
+            ),
         };
 
         return addInfo;
@@ -52,28 +59,29 @@ class ReviewsGraphic {
             console.error('Canvas context not available');
             return;
         }
-    
+
         // Размеры графика
         const padding = 50; // Отступы от краёв
-        const canvasWidth = canvas.width = 700; // Ширина холста
-        const canvasHeight = canvas.height = 400; // Высота холста
-    
+        const canvasWidth = (canvas.width = 700); // Ширина холста
+        const canvasHeight = (canvas.height = 400); // Высота холста
+
         const graphWidth = canvasWidth - padding * 2;
         const graphHeight = canvasHeight - padding * 2;
-    
+
         // Шаг по X зависит от общего количества точек
         const totalPoints = this.#data.length;
         const xStep = graphWidth / (totalPoints - 1);
-    
+
         // Границы по Y
         const minRating = 1;
         const maxRating = 5;
         const yStep = graphHeight / (maxRating - minRating);
-    
+
         // Функции для преобразования координат
         const toXCoord = (index: number) => padding + index * xStep;
-        const toYCoord = (rating: number) => canvasHeight - padding - (rating - minRating) * yStep;
-    
+        const toYCoord = (rating: number) =>
+            canvasHeight - padding - (rating - minRating) * yStep;
+
         // Сетка
         ctx.strokeStyle = '#e0e0e0';
         ctx.lineWidth = 1;
@@ -84,7 +92,7 @@ class ReviewsGraphic {
             ctx.lineTo(canvasWidth - padding, y);
             ctx.stroke();
         }
-    
+
         for (let i = 0; i < totalPoints; i++) {
             const x = toXCoord(i);
             ctx.beginPath();
@@ -92,7 +100,7 @@ class ReviewsGraphic {
             ctx.lineTo(x, canvasHeight - padding);
             ctx.stroke();
         }
-    
+
         // Оси
         ctx.strokeStyle = '#000';
         ctx.lineWidth = 2;
@@ -101,7 +109,7 @@ class ReviewsGraphic {
         ctx.lineTo(padding, canvasHeight - padding); // Ось Y
         ctx.lineTo(canvasWidth - padding, canvasHeight - padding); // Ось X
         ctx.stroke();
-    
+
         // Метки по оси Y
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
@@ -109,14 +117,18 @@ class ReviewsGraphic {
             const y = toYCoord(i + minRating);
             ctx.fillText((i + minRating).toString(), padding - 30, y + 5);
         }
-    
+
         // Метки по оси X
         ctx.font = '10px Arial';
         for (let i = 0; i < totalPoints; i++) {
             const x = toXCoord(i);
-            ctx.fillText(this.#data[i].date, x - 20, canvasHeight - padding + 20);
+            ctx.fillText(
+                this.#data[i].date,
+                x - 20,
+                canvasHeight - padding + 20
+            );
         }
-    
+
         // Рисуем линии, соединяющие точки
         ctx.strokeStyle = '#ffa552';
         ctx.lineWidth = 2;
@@ -165,7 +177,6 @@ class ReviewsGraphic {
         }
         ctx.stroke(); // Рисуем соединяющую линию среднего значения
     }
-    
 
     async render(parent: HTMLDivElement) {
         const addInfo = this.#getAdditionalInfo();
