@@ -28,6 +28,16 @@ interface SelectOption {
     selected?: boolean;
 }
 
+const HOUSING_TYPES = [
+    'Квартира',
+    'Дом',
+    'Комната',
+    'Таунхаус',
+    'Бунгало',
+    'Гостевой дом',
+    'Квартира-студия',
+];
+
 interface InputConfig {
     label: string;
     name: string;
@@ -35,7 +45,8 @@ interface InputConfig {
     isTextArea?: boolean;
     isSelect?: boolean;
     options?: SelectOption[];
-    value?: string | number;
+    value?: string | number | null | boolean;
+    isChecked?: boolean;
     minLen?: number;
     maxLen?: number;
     min?: number;
@@ -86,23 +97,34 @@ export default class EditAdvertPage {
         this.onCloseButtonClick = onCloseButtonClick;
 
         ApiClient.getCities().then((cities: City[]) => {
-            const selectOptions: SelectOption[] = [];
+            // totally a shit code. TODO: DO NOT PUT  DATA INTO THE CONSTRUCTOR
+
+            const citySelectOptions: SelectOption[] = [];
+            const housingTypeOptions: SelectOption[] = [];
 
             for (const city of cities) {
-                selectOptions.push({
+                citySelectOptions.push({
                     name: city.title,
                     value: city.title,
                     selected: data?.cityName === city.title,
                 });
             }
 
+            for (const housingType of HOUSING_TYPES) {
+                housingTypeOptions.push({
+                    name: housingType,
+                    value: housingType,
+                    selected: data?.buildingType === housingType,
+                });
+            }
+
             const inputsConfig: InputConfig[] = [
                 {
                     label: 'Город',
-                    name: 'city',
+                    name: 'cityName',
                     type: 'text',
                     isSelect: true,
-                    options: selectOptions,
+                    options: citySelectOptions,
                     value: data?.cityName,
                 },
                 {
@@ -114,16 +136,52 @@ export default class EditAdvertPage {
                     maxLen: 100,
                 },
                 {
+                    label: 'Тип дома',
+                    isSelect: true,
+                    name: 'buildingType',
+                    type: 'text',
+                    options: housingTypeOptions,
+                    value: data?.buildingType,
+                },
+                {
                     label: 'Число комнат',
-                    name: 'roomsCount',
+                    name: 'roomsNumber',
                     type: 'number',
                     value: data?.roomsNumber,
                     min: 1,
                     max: 20,
                 },
                 {
+                    label: 'Общая площадь',
+                    name: 'squareMeters',
+                    type: 'number',
+                    value: data?.squareMeters,
+                    min: 1,
+                },
+                {
+                    label: 'Наличие лифта',
+                    name: 'hasElevator',
+                    type: 'checkbox',
+                    isChecked: data?.hasElevator,
+                    value: data?.hasElevator,
+                },
+                {
+                    label: 'Наличие газоснабжения',
+                    name: 'hasGas',
+                    type: 'checkbox',
+                    isChecked: data?.hasGas,
+                    value: data?.hasGas,
+                },
+                {
+                    label: 'Наличие балкона',
+                    name: 'hasBalcony',
+                    type: 'checkbox',
+                    isChecked: data?.hasBalcony,
+                    value: data?.hasBalcony,
+                },
+                {
                     label: 'Описание',
-                    name: 'desc',
+                    name: 'description',
                     type: 'textarea',
                     isTextArea: true,
                     value: data?.description,
@@ -315,15 +373,33 @@ export default class EditAdvertPage {
         const formData = new FormData(formElement);
 
         const formData2Send = new FormData();
+        const dataToSend = {} as Record<string, string | boolean | number>;
+        for (const [key, value] of formData.entries()) {
+            if (['roomsNumber', 'squareMeters'].includes(key)) {
+                dataToSend[key] = parseInt(value as string);
+            } else {
+                dataToSend[key] = value as string;
+            }
+        }
+        // Checkboxes are needed to be handled differently
+        const checkboxes = formElement.querySelectorAll(
+            'input[type=checkbox]'
+        ) as NodeListOf<HTMLInputElement>;
+        checkboxes.forEach((elem) => {
+            dataToSend[elem.name] = elem.checked;
+        });
+
         formData2Send.set(
             'metadata',
             JSON.stringify({
-                cityName: formData.get('city') as string,
-                address: formData.get('address') as string,
+                ...dataToSend,
                 position: [0, 0],
-                distance: 0,
-                description: formData.get('desc') as string,
-                roomsNumber: parseInt(formData.get('roomsCount') as string),
+                rooms: [
+                    {
+                        type: '12',
+                        squareMeters: 32,
+                    },
+                ],
             })
         );
 
@@ -357,7 +433,8 @@ export default class EditAdvertPage {
         const target = e.target as HTMLElement;
         const imageId = parseInt(target.id);
         const imgNameToDelete = target.dataset.name;
-        if (imageId !== 0) ApiClient.deleteImageFromAdvert(this.#id, imageId);
+        if (imageId !== 0 && this.#id)
+            ApiClient.deleteImageFromAdvert(this.#id, imageId);
         (e.target as HTMLElement).parentElement?.remove();
 
         this.#uploadedImages = this.#uploadedImages.filter(

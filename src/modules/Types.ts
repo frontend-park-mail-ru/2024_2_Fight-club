@@ -30,6 +30,18 @@ export interface AdvertData {
     description: string;
     publicationDate: string;
     roomsNumber: number;
+    dateFrom: string;
+    dateTo: string;
+    squareMeters: number;
+    floor: number;
+    hasBalcony: boolean;
+    hasGas: boolean;
+    hasElevator: boolean;
+    buildingType: string;
+    rooms: {
+        type: string;
+        squareMeters: number;
+    }[];
 
     adAuthor: { avatar: string; name: string; rating: number };
     authorUUID: string;

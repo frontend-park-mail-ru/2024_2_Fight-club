@@ -66,6 +66,7 @@
                 </select>
 
             {{else}}
+
                 <input
                     class='edit-ad-page__edit-form__input'
                     name='{{this.name}}'
@@ -76,9 +77,12 @@
                     min='{{this.min}}'
                     max='{{this.max}}'
                     value='{{this.value}}'
-                    required
-                    {{!-- required='{{this.required}}' --}}
-                    {{!<!-- TODO: UNCOMMENT UPPER PART -->}}
+                    {{#if this.isChecked}}
+                        checked
+                    {{/if}}
+                    {{#if this.required}}
+                        required
+                    {{/if}}
                 />
             {{/if}}
         {{/each}}

@@ -62,6 +62,10 @@ $secondary-card-size: 64px;
             border: 1px solid #b0b2b8;
             border-radius: 5px;
             font-family: inherit;
+
+            &[type='checkbox'] {
+                width: 24px;
+            }
         }
         &__text-area {
             resize: vertical;
