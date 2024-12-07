@@ -1,0 +1,93 @@
+.chat-page {
+    &__heading {
+        text-align: center;
+    }
+
+    &__chat-window {
+        width: 800px;
+        margin: 0 auto;
+        border: 1px solid #e4e4e4;
+        // border-radius: 20px;
+        // padding: 30px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        &__message {
+            display: flex;
+            flex-direction: row;
+            gap: 15px;
+
+            width: 100px;
+            width: 100%;
+            min-height: 30px;
+            height: min-content;
+            // background-color: aquamarine;
+            border-radius: 20px;
+            align-items: flex-start;
+            box-sizing: border-box;
+            padding: 10px 10px;
+
+            &__avatar {
+                width: 60px;
+                height: 60px;
+                margin: 0 auto;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+
+            &__author-name {
+                font-weight: 600;
+            }
+
+            &__text {
+            }
+        }
+
+        &__bottom-part {
+            padding: 0 20px;
+            box-sizing: border-box;
+            border-top: 1px solid #e4e4e4;
+            width: 100%;
+            height: 100%;
+        }
+
+        &__input {
+            display: block;
+            padding: 4px 12px;
+            width: 100%;
+            height: 31px;
+            line-height: 20px;
+            overflow: hidden;
+            outline: none;
+            border: 1px solid #ced1d7;
+            font-family: Inter;
+            font-size: 16px;
+            box-sizing: border-box;
+            border-radius: 16px;
+            resize: none;
+        }
+
+        &__bottom-part {
+            padding: 5px 10px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        &__send-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            background-color: #0468ff;
+            width: 32px;
+            height: 32px;
+            color: #fff;
+            rotate: 90deg;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    }
+}
