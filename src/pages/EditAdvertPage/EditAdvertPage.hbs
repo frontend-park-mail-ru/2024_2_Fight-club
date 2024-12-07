@@ -1,0 +1,96 @@
+<div class='edit-ad-page'>
+    <img id="js-edit-ad-page-close-cross" src="/svg/cross.svg" class="edit-ad-page__close-cross" alt="close-cross"/>
+    <div class='edit-advert-images-carousel'>
+        <div class='ad-page__gallery__carousel__img-container js-main-img-div'>
+            <img
+                src='/placeholder-image.avif'
+                class='edit-advert-images-carousel__img-background'
+            />
+            <img
+                src='/placeholder-image.avif'
+                class='edit-advert-images-carousel__main-img'
+            />
+        </div>
+        <div
+            class='edit-advert-images-carousel__secondary-images js-secondary-images-container'
+        >
+            <input type='file' hidden class='js-file-input' />
+            <svg
+                class='edit-advert-images-carousel__secondary-img js-add-img-btn'
+                width='82'
+                height='82'
+                viewBox='0 0 82 82'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+            >
+                <rect
+                    x='0.5'
+                    y='0.5'
+                    width='81'
+                    height='81'
+                    rx='9.5'
+                    stroke='black'
+                />
+                <path
+                    d='M40 42H34V40H40V34H42V40H48V42H42V48H40V42Z'
+                    fill='#1D1B20'
+                />
+            </svg>
+        </div>
+    </div>
+
+    <form class='edit-ad-page__edit-form js-form'>
+        {{#each inputs}}
+            <label for='{{this.name}}'>{{this.label}}</label>
+            {{#if this.isTextArea}}
+                <textarea
+                    class='edit-ad-page__edit-form__text-area'
+                    rows='10'
+                    name='{{this.name}}'
+                    required
+                    minlength='{{this.minLen}}'
+                >{{this.value}}</textarea>
+            {{else if this.isSelect}}
+                <select
+                    name='{{this.name}}'
+                    class='js-cities edit-ad-page__edit-form__select'
+                >
+                    {{#each this.options}}
+                        <option
+                            value='{{this.name}}'
+                            {{#if this.selected}}
+                            selected
+                            {{/if}}
+                        >{{this.value}}</option>
+                    {{/each}}
+                </select>
+
+            {{else}}
+                <input
+                    class='edit-ad-page__edit-form__input'
+                    name='{{this.name}}'
+                    placeholder='{{this.placeholder}}'
+                    type='{{this.type}}'
+                    minlength='{{this.minLen}}'
+                    maxlength='{{this.maxLen}}'
+                    min='{{this.min}}'
+                    max='{{this.max}}'
+                    value='{{this.value}}'
+                    required
+                    {{!-- required='{{this.required}}' --}}
+                    {{!<!-- TODO: UNCOMMENT UPPER PART -->}}
+                />
+            {{/if}}
+        {{/each}}
+        <button class='edit-ad-page__btn'>{{actionButtonTitle}}</button>
+    </form>
+
+    <div
+        class='edit-ad-page__fullscreen-overlay edit-ad-page__fullscreen-overlay_hidden js-fullscreen-overlay'
+    >
+        <img
+            class='edit-ad-page__fullscreen-overlay__image js-main-image-fullscreen'
+        />
+    </div>
+
+</div>

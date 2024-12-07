@@ -1,0 +1,15 @@
+<div class='profile-overlay'>
+    <div class='profile-list'>
+        {{#each this}}
+            <div>
+                <a
+                    href='{{this.href}}'
+                    id='{{@key}}'
+                    class='profile-list__href'
+                >
+                    {{this.title}}
+                </a>
+            </div>
+        {{/each}}
+    </div>
+</div>

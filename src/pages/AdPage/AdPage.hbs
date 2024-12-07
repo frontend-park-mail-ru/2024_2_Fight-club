@@ -1,0 +1,177 @@
+<div class='ad-page' id='{{elementId}}'>
+    <main>
+        <div class='ad-page__gallery'>
+            <ul class='ad-page__gallery__carousel js-main-img-div'>
+                <div class='ad-page__gallery__carousel__buttons-container'>
+                    <button
+                        class='ad-page__gallery__carousel__prev-image-button js-prev-image-button js-carousel-overlay-button'
+                    ><svg
+                            aria-hidden='true'
+                            width='16'
+                            height='16'
+                            viewBox='0 0 16 16'
+                            fill='none'
+                            xmlns='http://www.w3.org/2000/svg'
+                        ><path
+                                fill-rule='evenodd'
+                                clip-rule='evenodd'
+                                d='M3 8.003 10.707.296l1.414 1.414-6.293 6.293 6.293 6.293-1.414 1.414L3 8.003Z'
+                                fill='currentColor'
+                            ></path></svg>
+                    </button>
+                    <button
+                        class='ad-page__gallery__carousel__next-image-button js-next-image-button js-carousel-overlay-button'
+                    >
+                        <svg
+                            class='a10a3f92e9--container--izJBY a10a3f92e9--display_block--ERcB0 a10a3f92e9--color_white_100--B2e13'
+                            aria-hidden='true'
+                            width='16'
+                            height='16'
+                            viewBox='0 0 16 16'
+                            fill='none'
+                            xmlns='http://www.w3.org/2000/svg'
+                        ><path
+                                fill-rule='evenodd'
+                                clip-rule='evenodd'
+                                d='M13.414 8 5.707.293 4.293 1.707 10.586 8l-6.293 6.293 1.414 1.414L13.414 8Z'
+                                fill='currentColor'
+                            ></path></svg>
+                    </button>
+                </div>
+
+                {{#each images}}
+                    <li class='ad-page__gallery__carousel__img-container'>
+                        <img
+                            class='ad-page__gallery__carousel__img-background'
+                            src='{{this.path}}'
+                        />
+                        <img
+                            class='ad-page__gallery__carousel__img'
+                            src='{{this.path}}'
+                        />
+                    </li>
+                {{/each}}
+            </ul>
+            <div class='ad-page__gallery__carousel__secondary-images'>
+                {{#each images}}
+                    <img
+                        class='ad-page__gallery__secondary-img js-carousel-img'
+                        src='{{this.path}}'
+                    />
+                {{/each}}
+            </div>
+        </div>
+
+        <div class='advert-apps'>
+            <div class='advert-apps__element'>
+                <div class='advert-apps__photo-container'>
+                    <img src='/svg/eye-greybg.svg' width='40' height='40' />
+                </div>
+                <div class='advert-apps__info'>
+                    <p class='advert-apps__info__p1'>Просмотрено</p>
+                    <p class='advert-apps__info__p2'>{{viewsCount}} раз</p>
+                </div>
+            </div>
+            <div class='advert-apps__element'>
+                <div class='advert-apps__photo-container'>
+                    <img src='/svg/favorites-grey.svg' width='40' height='40' />
+                </div>
+                <div class='advert-apps__info'>
+                    <p class='advert-apps__info__p1'>Понравилось</p>
+                    <p class='advert-apps__info__p2'>5 раз</p>
+                </div>
+            </div>
+            <div class='advert-apps__element'>
+                <div class='advert-apps__photo-container'>
+                    <img
+                        src='/svg/person-walking.svg'
+                        alt='Количество просмотров объявления'
+                        width='40'
+                        height='40'
+                    />
+                </div>
+                <div class='advert-apps__info'>
+                    <p class='advert-apps__info__p1'>Посещено</p>
+                    <p class='advert-apps__info__p2'>3 раз</p>
+                </div>
+            </div>
+        </div>
+
+        <p class='ad-page__desc'>
+            {{description}}
+        </p>
+
+        <div class='ad-page__info-table'>
+            <p class='ad-page__info-table__title'>О жилье</p>
+            <div class='ad-page__info-table__row'>
+                <span class='ad-page__info-table__label'>Город</span>
+                <span class='ad-page__info-table__value'>{{cityName}}</span>
+            </div>
+            <div class='ad-page__info-table__row'>
+                <span class='ad-page__info-table__label'>Адрес</span>
+                <span class='ad-page__info-table__value'>{{address}}</span>
+            </div>
+            <div class='ad-page__info-table__row'>
+                <span class='ad-page__info-table__label'>Комнаты</span>
+                <span class='ad-page__info-table__value'>{{roomsNumber}}</span>
+            </div>
+        </div>
+    </main>
+
+    <div
+        class='ad-page__fullscreen-overlay ad-page__fullscreen-overlay_hidden js-fullscreen-overlay'
+    >
+        <img
+            src='{{currentImagePath}}'
+            class='ad-page__fullscreen-overlay__image js-main-image-fullscreen'
+        />
+    </div>
+
+    <div class='ad-page__author-info'>
+        <img class='ad-page__author-info__avatar' src='{{adAuthor.avatar}}' />
+        <p class='ad-page__author-info__hoster-text'>Хостер</p>
+        <a
+            href='/profiles?id={{authorUUID}}'
+            class='ad-page__author-info__name'
+        >{{adAuthor.name}}</a>
+
+        <div class='ad-page__author-info__inner-content'>
+            <dl class='ad-page__author-info__desc'>
+                <div class='ad-page__author-info__desc__item'>
+                    <dt class='ad-page__author-info__desc__term'>Рейтинг</dt>
+                    <dd
+                        class='ad-page__author-info__desc__definition'
+                    >{{adAuthor.rating}}</dd>
+                </div>
+                <div class='ad-page__author-info__desc__item'>
+                    <dt class='ad-page__author-info__desc__term'>Пол</dt>
+                    <dd
+                        class='ad-page__author-info__desc__definition'
+                    >{{sex}}</dd>
+                </div>
+                <div class='ad-page__author-info__desc__item'>
+                    <dt class='ad-page__author-info__desc__term'>Возраст</dt>
+                    <dd
+                        class='ad-page__author-info__desc__definition'
+                    >{{age}}</dd>
+                </div>
+            </dl>
+
+            <div class='ad-page__author-info__buttons'>
+                <button class='ad-page__author-info__write-msg-button'>Напишите
+                    {{adAuthor.name}}
+                    прямо сейчас
+                </button>
+                {{#if isAuthor}}
+                    <button
+                        class='ad-page__author-info__edit-button'
+                        id='edit-button'
+                    >Отредактировать объявление
+                    </button>
+                {{/if}}
+            </div>
+        </div>
+
+    </div>
+
+</div>

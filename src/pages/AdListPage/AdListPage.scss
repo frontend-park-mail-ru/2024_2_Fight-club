@@ -1,0 +1,117 @@
+@use '../../styles/mixins';
+
+.ad-list-page {
+    margin-top: 40px;
+    width: 90%;
+    margin: 0 auto;
+
+    &__left-content {
+        min-width: 50%;
+    }
+
+    &__content-container {
+        display: flex;
+        flex-direction: row;
+        gap: 40px;
+    }
+
+    &__title {
+        font-weight: 500;
+    }
+    &__upper-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        margin: 20px 0;
+    }
+    &__add-button {
+        @include mixins.button;
+        background-color: #ff5255;
+    }
+    &__adverts-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        min-width: 50%;
+    }
+    &__no-adverts-text {
+        margin-top: 50px;
+        text-align: center;
+        font-size: 26px;
+    }
+    &__not-host-message {
+        margin-top: 90px;
+        font-size: 40px;
+        text-align: center;
+    }
+
+    &__right {
+        display: flex;
+        margin-top: 80px;
+        border: 2px solid #e4e4e4;
+        border-radius: 4px;
+        padding: 20px;
+    }
+
+    &__hint {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 30px;
+
+        &--hidden {
+            display: none;
+        }
+
+        &__header {
+            font-size: 32px;
+            font-weight: 500;
+        }
+
+        &__text {
+            font-size: 20px;
+        }
+    }
+}
+
+@media screen and (max-width: 900px) {
+    $button-height: 20px;
+    .ad-list-page {
+        &__upper-container {
+            display: flex;
+            text-align: center;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    .horizontal-ad-card {
+        border: 1px solid black;
+        border-radius: 10px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        padding: 10px;
+        transition: 0.3s all;
+
+        &__buttons-container {
+            flex-wrap: wrap;
+        }
+        &__open-btn {
+            @include mixins.button;
+            width: fit-content;
+            height: $button-height;
+            background-color: #5289ff;
+        }
+        &__edit-btn {
+            @include mixins.button;
+            height: $button-height;
+        }
+        &__del-btn {
+            @include mixins.button;
+            background-color: #ff5900;
+            height: $button-height;
+        }
+    }
+}

@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import handlebarsCompilePlugin from './hbs-recompile.js';
+import handlebarsCompilePlugin from './src/vite-plugins/hbs-recompile.js';
 
 /** @type {import('vite').UserConfig} */
 export default defineConfig({

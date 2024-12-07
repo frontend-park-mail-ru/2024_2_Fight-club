@@ -12,7 +12,7 @@ export default [
         },
     },
     {
-        ignores: ['dist/*', 'components/precompiled-templates.js', 'include/*'],
+        ignores: ['dist/*', 'precompiled-templates.js', 'src/include/*'],
     },
     {
         languageOptions: {

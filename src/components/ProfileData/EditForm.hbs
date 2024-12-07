@@ -1,0 +1,124 @@
+<form id="form" class="edit-form" enctype="multipart/form-data">
+    <div class="edit-form__close">
+        <img src="/svg/cross.svg" width="30px" height="30px" class="edit-form__close__cross js-close-cross">
+    </div>
+    <div class="edit-form__title">
+        <p class="edit-form__title__p1">Обновление профиля</p>
+    </div>
+    
+    <div class="edit-form__data">
+        <div class="edit-form__data__first-column">
+            <div class="edit-form__input-line">
+                <p class="edit-form__input-line__title">Никнейм:</p>
+                <input 
+                    id="username"
+                    name="username"
+                    class="edit-form__input-line__input js-validate"
+                    type="text"
+                    value="{{data.username}}"
+                    minlength="6"
+                    maxlength="20"
+                />
+                <a class="none edit-form__input-line__exclamation">
+                    <img src="/svg/exclamation.svg" width="20" alt="!">
+                </a>
+                <div class="edit-form__input-line__validationMessage none"></div>
+            </div>
+            <div class="edit-form__input-line">
+                <p class="edit-form__input-line__title">Имя:</p>
+                <input
+                    id="name"
+                    name="name"
+                    class="edit-form__input-line__input js-validate"
+                    type="text"
+                    value="{{data.name}}"
+                    minlength="5"
+                    maxlength="50"
+                />
+                <a class="none edit-form__input-line__exclamation">
+                    <img src="/svg/exclamation.svg" width="20" alt="!">
+                </a>
+                <div class="edit-form__input-line__validationMessage none"></div>
+            </div>
+            <div class="edit-form__input-line">
+                <p class="edit-form__input-line__title">Почта:</p>
+                <input
+                    id="email"
+                    name="email"
+                    class="edit-form__input-line__input js-validate"
+                    type="email"
+                    value="{{data.email}}"
+                    minlength="3"
+                    maxlength="40"
+                />
+                <a class="none edit-form__input-line__exclamation">
+                    <img src="/svg/exclamation.svg" width="20" alt="!">
+                </a>
+                <div class="edit-form__input-line__validationMessage none"></div>
+            </div>
+            <div class="edit-form__input-line">
+                <p class="edit-form__input-line__title">Пол:</p>
+                <div class="edit-form__sex">
+                    <span class="edit-form__sex__radio">
+                        <input id="sexNS" name="sex" type="radio" {{#if sex.ns}}checked{{/if}}>
+                        <span class="custom-radio"></span>
+                        <label for="sexNS">Не указано</label>
+                    </span>
+
+                    <span class="edit-form__sex__radio">
+                        <input id="sexM" name="sex" type="radio" {{#if sex.male}}checked{{/if}}>
+                        <span class="custom-radio"></span>
+                        <label for="sexM">Муж.</label>
+                    </span>
+                    
+                    <span class="edit-form__sex__radio">
+                        <input id="sexF" name="sex" type="radio" {{#if sex.female}}checked{{/if}}>
+                        <span class="custom-radio"></span>
+                        <label for="sexF">Жен.</label>
+                    </span>
+                </div>
+            </div>
+            <div class="edit-form__input-line">
+                <p class="edit-form__input-line__title">День рождения:</p>
+                <input
+                    id="birthdate"
+                    name="birthdate"
+                    class="edit-form__input-line__input js-validate"
+                    type="date"
+                    min="1900-01-01"
+                    {{#if showBirthdate}} value="{{data.birthdate}}" {{/if}}
+                />
+                <a class="none edit-form__input-line__exclamation">
+                    <img src="/svg/exclamation.svg" width="20" alt="!">
+                </a>
+                <div class="edit-form__input-line__validationMessage none"></div>
+            </div>
+            <div class="edit-form__input-line">
+                <p class="edit-form__input-line__title">Хост:</p>
+                <label class="edit-form__toggle">
+                    <input id="isHost" name="isHost" class="edit-form__toggle__input" type="checkbox" {{#if data.isHost}}checked{{/if}}>
+                    <span class="edit-form__toggle__slider round"></span>
+                </label>
+            </div>
+            {{!-- <div class="edit-form__input-line">
+                <p class="edit-form__input-line__title">Пароль:</p>
+                <input id="password" name="password" class="edit-form__input-line__input" type="password">
+            </div> --}}
+        </div>
+
+
+        <div class="edit-form__data__second-column">
+            <div class="edit-form__avatar__image-container">
+                <img src="{{data.avatar}}" class="edit-form__avatar__image-container__image js-avatar-upload-image">
+            </div>
+            <div class="edit-form__avatar__file-upload-wrapper js-avatar-upload-wrapper" data-text="Select your file!">
+                <input id="avatar" name="avatar" type="file" class="edit-form__avatar__file-upload-wrapper__input" value="">
+            </div>
+
+            <div class="edit-form__buttons">
+                <button id="submit" type="submit" class="edit-form__buttons__submit-button">Обновить</button>
+                <button id="reset" type="reset" class="edit-form__buttons__reset-button js-reset-button">Сбросить</button>
+            </div>
+        </div>
+    </div>
+</form>
