@@ -1,3 +1,35 @@
+<template id="room-info-row-template">
+    <fieldset class="edit-ad-page__edit-form__room-info-row">
+        <legend>Комната #0</legend>
+        <div class="edit-ad-page__edit-form__room-info-row__inner-content js-room-info">
+            <label for=''>Тип комнаты</label>
+            <input
+                class='edit-ad-page__edit-form__input edit-ad-page__edit-form__room-info-row__input
+                js-room-type'
+                name=''
+                placeholder='Это может быть Гостиная, Спальная...'
+                type='text'
+                min='1'
+                max='30'
+                value=''
+                required
+            />
+
+            <label for=''>Ее площадь</label>
+            <input
+                class='edit-ad-page__edit-form__input edit-ad-page__edit-form__room-info-row__input
+                js-room-area'
+                name=''
+                placeholder='Введите площадь комнаты в м²'
+                type='number'
+                min='1'
+                value=''
+                required
+            />
+        </div>
+  </fieldset>
+</template>
+
 <div class='edit-ad-page'>
     <img id="js-edit-ad-page-close-cross" src="/svg/cross.svg" class="edit-ad-page__close-cross" alt="close-cross"/>
     <div class='edit-advert-images-carousel'>
@@ -39,7 +71,7 @@
         </div>
     </div>
 
-    <form class='edit-ad-page__edit-form js-form'>
+    <form class='edit-ad-page__edit-form' id="js-edit-advert-form">
         {{#each inputs}}
             <label for='{{this.name}}'>{{this.label}}</label>
             {{#if this.isTextArea}}
@@ -64,9 +96,7 @@
                         >{{this.value}}</option>
                     {{/each}}
                 </select>
-
             {{else}}
-
                 <input
                     class='edit-ad-page__edit-form__input'
                     name='{{this.name}}'
@@ -84,6 +114,12 @@
                         required
                     {{/if}}
                 />
+
+                {{#ifEquals this.name 'roomsNumber'}}
+                    <div class="edit-ad-page__edit-form__rooms-info-container"
+                    id="js-rooms-info-container">
+                    </div>
+                {{/ifEquals}}
             {{/if}}
         {{/each}}
         <button class='edit-ad-page__btn'>{{actionButtonTitle}}</button>

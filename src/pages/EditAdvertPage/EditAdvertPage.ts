@@ -218,6 +218,34 @@ export default class EditAdvertPage {
 
             if (data) this.#showImage(this.#currentIndex);
 
+            // ROOMS INFO. TODO: REFACTOR THIS FILE
+            const rowTemplate = document.getElementById(
+                'room-info-row-template'
+            ) as HTMLTemplateElement;
+
+            const roomsInfoContainer = document.getElementById(
+                'js-rooms-info-container'
+            ) as HTMLDivElement;
+
+            for (let i = 0; i < data.rooms.length; ++i) {
+                const newElem = rowTemplate.content.cloneNode(
+                    true
+                ) as DocumentFragment;
+                (
+                    newElem.querySelector('legend') as HTMLLegendElement
+                ).textContent = `Комната №${i + 1}`;
+
+                (
+                    newElem.querySelector('.js-room-type') as HTMLInputElement
+                ).value = data.rooms[i].type;
+
+                (
+                    newElem.querySelector('.js-room-area') as HTMLInputElement
+                ).value = '' + data.rooms[i].squareMeters;
+
+                roomsInfoContainer.appendChild(newElem);
+            }
+
             this.#addEventListeners();
         });
     }
@@ -350,9 +378,17 @@ export default class EditAdvertPage {
             .querySelector(FILE_INPUT_SELECTOR)
             ?.addEventListener('change', this.#onImageLoaded);
 
-        this.#templateContainer
-            .querySelector('.js-form')
-            ?.addEventListener('submit', this.#submitData);
+        // Form
+        const form = document.getElementById(
+            'js-edit-advert-form'
+        ) as HTMLFormElement;
+        form.onsubmit = this.#submitData;
+
+        const roomsNumberInput = form.querySelector(
+            'input[name=roomsNumber]'
+        ) as HTMLInputElement;
+
+        roomsNumberInput.oninput = () => this.addRoomsInfo(roomsNumberInput);
 
         if (this.onCloseButtonClick) {
             (
@@ -367,20 +403,72 @@ export default class EditAdvertPage {
         }
     }
 
+    private addRoomsInfo(roomsNumberInput: HTMLInputElement) {
+        const roomsInfoContainer = document.getElementById(
+            'js-rooms-info-container'
+        ) as HTMLDivElement;
+
+        const roomsNumber = parseInt(roomsNumberInput.value as string);
+
+        const elementsCountDelta =
+            roomsNumber - roomsInfoContainer.children.length;
+        const numerationStart = roomsInfoContainer.children.length;
+
+        if (elementsCountDelta < 0) {
+            roomsInfoContainer.replaceChildren(
+                ...[...roomsInfoContainer.children].slice(0, roomsNumber)
+            );
+        } else {
+            const template = document.getElementById(
+                'room-info-row-template'
+            ) as HTMLTemplateElement;
+
+            for (let i = 0; i < elementsCountDelta; ++i) {
+                const newElem = template.content.cloneNode(
+                    true
+                ) as DocumentFragment;
+                (
+                    newElem.querySelector('legend') as HTMLLegendElement
+                ).textContent = `Комната №${numerationStart + i + 1}`;
+
+                roomsInfoContainer.appendChild(newElem);
+            }
+        }
+    }
+
     #submitData = async (e: Event) => {
+        interface Room {
+            type: string;
+            squareMeters: number;
+        }
+
+        interface FormDataToSend {
+            roomsNumber: number;
+            squareMeters: number;
+            [key: string]: string | number | boolean | Room[];
+        }
         e.preventDefault();
         const formElement = e.target as HTMLFormElement;
         const formData = new FormData(formElement);
 
         const formData2Send = new FormData();
-        const dataToSend = {} as Record<string, string | boolean | number>;
+        const dataToSend: FormDataToSend = {
+            rooms: [],
+        };
+
         for (const [key, value] of formData.entries()) {
+            if (typeof key !== 'string') {
+                throw new Error('error');
+            }
+
+            // belowe are the number fields. parse them as integers
             if (['roomsNumber', 'squareMeters'].includes(key)) {
                 dataToSend[key] = parseInt(value as string);
-            } else {
+            } else if (typeof value === 'string') {
                 dataToSend[key] = value as string;
             }
         }
+
         // Checkboxes are needed to be handled differently
         const checkboxes = formElement.querySelectorAll(
             'input[type=checkbox]'
@@ -389,17 +477,33 @@ export default class EditAdvertPage {
             dataToSend[elem.name] = elem.checked;
         });
 
+        // Rooms Info
+        const roomsInfoElements = formElement.querySelectorAll('.js-room-info');
+        roomsInfoElements.forEach((roomInfoContainer) => {
+            const roomType = (
+                roomInfoContainer.querySelector(
+                    '.js-room-type'
+                ) as HTMLInputElement
+            ).value;
+            const roomArea = parseInt(
+                (
+                    roomInfoContainer.querySelector(
+                        '.js-room-area'
+                    ) as HTMLInputElement
+                ).value
+            );
+
+            dataToSend.rooms.push({
+                type: roomType,
+                squareMeters: roomArea,
+            });
+        });
+
         formData2Send.set(
             'metadata',
             JSON.stringify({
                 ...dataToSend,
                 position: [0, 0],
-                rooms: [
-                    {
-                        type: '12',
-                        squareMeters: 32,
-                    },
-                ],
             })
         );
 
