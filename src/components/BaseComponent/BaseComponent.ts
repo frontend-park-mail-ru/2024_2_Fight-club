@@ -38,7 +38,7 @@ export default abstract class BaseComponent {
     /**
      * Func that attaches event listeners.
      */
-    abstract addEventListeners(): void;
+    protected abstract addEventListeners(): void;
 
     /**
      * Called only once.
