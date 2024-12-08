@@ -90,8 +90,7 @@ $secondary-card-size: 64px;
         }
 
         &__rooms-info-container {
-            grid-column: span 2;
-            width: 80%;
+            width: 100%;
             margin-left: auto;
             display: flex;
             flex-direction: column;
@@ -99,8 +98,6 @@ $secondary-card-size: 64px;
         }
 
         &__room-info-row {
-            margin-left: auto;
-            width: 80%;
             grid-column: span 2;
             padding: 10px;
             border-radius: 4px;
