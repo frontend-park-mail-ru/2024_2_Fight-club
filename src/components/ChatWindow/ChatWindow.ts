@@ -1,10 +1,9 @@
 import BaseComponent from '../BaseComponent/BaseComponent';
 import globalStore from '../../modules/GlobalStore';
 import { convertTimeToMinutesAndSeconds } from '../../modules/Utils';
-import ChatRepository, { Message } from '../../repositories/ChatRepository';
+import { Message } from '../../repositories/ChatRepository';
 
 export default class ChatWindow extends BaseComponent {
-    private socket: WebSocket;
     private messages: Message[];
     private messagesContainer: HTMLDivElement;
     private recipientId: string;
@@ -25,21 +24,38 @@ export default class ChatWindow extends BaseComponent {
             this.displayMessageHistory();
         });
 
-        this.socket = new WebSocket(
+        if (globalStore.chat.socket) {
+            globalStore.chat.socket.close();
+        }
+
+        globalStore.chat.socket = new WebSocket(
             `wss://${window.location.hostname}/websocket/`
         );
+    }
 
-        this.socket.onopen = (e) => {
+    private async displayMessageHistory() {
+        for (const message of this.messages) {
+            this.addNewMessageElement(message);
+        }
+    }
+
+    private attachSocketEventListeners() {
+        const socket = globalStore.chat.socket;
+        if (!socket) {
+            throw new Error('socket is null!');
+        }
+
+        socket.onopen = (e) => {
             console.log('[open] Соединение установлено');
             console.log('Отправляем данные на сервер');
         };
 
-        this.socket.onmessage = (event) => {
+        socket.onmessage = (event) => {
             console.log(`[message] Данные получены с сервера: ${event.data}`);
             this.addNewMessageElement(JSON.parse(event.data) as Message);
         };
 
-        this.socket.onclose = function (event) {
+        socket.onclose = function (event) {
             if (event.wasClean) {
                 console.log(
                     `[close] Соединение закрыто чисто, код=${event.code} причина=${event.reason}`
@@ -51,18 +67,20 @@ export default class ChatWindow extends BaseComponent {
             }
         };
 
-        this.socket.onerror = function (error) {
+        socket.onerror = function (error) {
             console.error(error);
         };
     }
 
-    private async displayMessageHistory() {
-        for (const message of this.messages) {
-            this.addNewMessageElement(message);
-        }
-    }
-
     protected addEventListeners(): void {
+        this.attachSocketEventListeners();
+
+        window.onbeforeunload = () => {
+            // If user wants to refresh page close the connection
+            globalStore.chat.socket?.close();
+            globalStore.chat.socket = null;
+        };
+
         const textArea = this.thisElement.querySelector(
             '.js-message-input'
         ) as HTMLInputElement;
@@ -83,17 +101,17 @@ export default class ChatWindow extends BaseComponent {
             textArea.value = '';
         };
 
-        textArea.addEventListener('keydown', (event) => {
+        textArea.onkeydown = (event) => {
             if (event.ctrlKey && event.key === 'Enter') {
                 const text = textArea.value;
                 this.sendMessage(text);
                 textArea.value = '';
             }
-        });
+        };
     }
 
     private sendMessage(text: string) {
-        this.socket.send(
+        globalStore.chat.socket?.send(
             JSON.stringify({
                 receiverId: this.recipientId,
                 content: text,
