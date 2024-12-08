@@ -1,7 +1,13 @@
 <template id='js-chat-message-template'>
     <div class='chat-page__chat-window__message'>
-        <span class='chat-page__chat-window-message__text js-message-text'>Тут
-            текст сообщения</span>
+        <span class='chat-page__chat-window__message__text js-message-text'>
+            Тут текст сообщения
+        </span>
+        <div class='chat-page__chat-window__message__time-wrapper'>
+            <span class='chat-page__chat-window__message__time js-message-time'>
+                14:24
+            </span>
+        </div>
     </div>
 </template>
 
@@ -10,21 +16,7 @@
 
     <div class='chat-page__chat-window'>
         <div class='chat-page__chat-window__messages' id='js-messages'>
-            <div class='chat-page__chat-window__message'>
-                <span class='chat-page__chat-window-message__text'>В первую
-                    очередь посети Кремль, самое красивое место Москвы. Недалеко
-                    от Кремля есть парк Зарядье. Обязательно погуляй там.
-                    Загляни на висячий мост - там получаются хорошие фотки</span>
-            </div>
-
-            <div
-                class='chat-page__chat-window__message chat-page__chat-window__message--mine'
-            >
-                <span class='chat-page__chat-window-message__text'>В первую
-                    очередь посети Кремль, самое красивое место Москвы. Недалеко
-                    от Кремля есть парк Зарядье. Обязательно погуляй там.
-                    Загляни на висячий мост - там получаются хорошие фотки</span>
-            </div>
+            <!-- Messages will be here -->
         </div>
 
         <div class='chat-page__chat-window__bottom-part'>

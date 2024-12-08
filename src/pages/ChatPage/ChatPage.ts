@@ -1,16 +1,11 @@
 import BaseComponent from '../../components/BaseComponent/BaseComponent';
-
-interface ReceivedMessage {
-    id: number;
-    senderId: string;
-    receiverId: string;
-    content: string;
-    createdAt: string;
-}
+import globalStore from '../../modules/GlobalStore';
+import { convertTimeToMinutesAndSeconds } from '../../modules/Utils';
+import ChatRepository, { Message } from '../../repositories/ChatRepository';
 
 export default class ChatPage extends BaseComponent {
     private socket: WebSocket;
-    private messages: HTMLDivElement;
+    private messagesContainer: HTMLDivElement;
     private recipentId: string;
 
     constructor(parent: HTMLElement, recipientId: string) {
@@ -23,7 +18,9 @@ export default class ChatPage extends BaseComponent {
         this.recipentId = recipientId;
 
         requestAnimationFrame(() => {
-            this.messages = document.getElementById('js-messages');
+            this.messagesContainer = document.getElementById('js-messages');
+
+            this.displayMessageHistory();
         });
 
         this.socket = new WebSocket(
@@ -37,7 +34,7 @@ export default class ChatPage extends BaseComponent {
 
         this.socket.onmessage = (event) => {
             console.log(`[message] Данные получены с сервера: ${event.data}`);
-            this.onMessageReceive(JSON.parse(event.data) as ReceivedMessage);
+            this.addNewMessageElement(JSON.parse(event.data) as Message);
         };
 
         this.socket.onclose = function (event) {
@@ -55,6 +52,13 @@ export default class ChatPage extends BaseComponent {
         this.socket.onerror = function (error) {
             console.error(error);
         };
+    }
+
+    private async displayMessageHistory() {
+        const messages = await ChatRepository.get(this.recipentId);
+        for (const message of messages) {
+            this.addNewMessageElement(message);
+        }
     }
 
     protected addEventListeners(): void {
@@ -94,14 +98,16 @@ export default class ChatPage extends BaseComponent {
                 content: text,
             })
         );
-        this.addNewMessageElement(text, true);
+        this.addNewMessageElement({
+            content: text,
+            receiverId: '',
+            senderId: globalStore.auth.userId!,
+            id: 0,
+            createdAt: new Date().toISOString(),
+        });
     }
 
-    private onMessageReceive(data: ReceivedMessage) {
-        this.addNewMessageElement(data.content, false);
-    }
-
-    private addNewMessageElement(text: string, mine: boolean) {
+    private addNewMessageElement(message: Message) {
         const template = document.getElementById(
             'js-chat-message-template'
         ) as HTMLTemplateElement;
@@ -109,14 +115,18 @@ export default class ChatPage extends BaseComponent {
         const newMessage = template.content.cloneNode(true) as DocumentFragment;
         (
             newMessage.querySelector('.js-message-text') as HTMLSpanElement
-        ).textContent = text;
+        ).textContent = message.content;
 
-        if (mine) {
+        (
+            newMessage.querySelector('.js-message-time') as HTMLSpanElement
+        ).textContent = convertTimeToMinutesAndSeconds(message.createdAt);
+
+        if (message.senderId === globalStore.auth.userId) {
             newMessage.children[0]!.classList!.add(
                 'chat-page__chat-window__message--mine'
             );
         }
 
-        this.messages.appendChild(newMessage);
+        this.messagesContainer.appendChild(newMessage);
     }
 }
