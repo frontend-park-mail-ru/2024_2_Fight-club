@@ -15,6 +15,7 @@
 @use "../src/components/ProfileData/NoReviews/NoReviews"
 @use "../src/components/Spinner/Spinner"
 @use '../src/components/HorizontalAdCard/HorizontalAdCard'
+@use '../src/components/ChatWindow/ChatWindow'
 
 /* pages */
 @use '../src/pages/MainPage/MainPage'
@@ -35,14 +36,30 @@
 *
     margin: 0
     padding: 0
+    box-sizing: border-box
     
+html
+    height: 100%
 
 body
+    display: flex
+    flex-direction: column
+    height: 100%
     font-optical-sizing: auto
     font-style: normal
     font-family: Inter, Arial, 'sans-serif'
     background-color: #fff
 
+#root
+    flex: 1 1 auto
+    height: 100%
+    display: flex
+    flex-direction: column
+
+.page-container
+    height: 100%
+    flex: 1 1
+    display: flex
 
 @font-face
     font-family: MarckScript-Regular

@@ -8,10 +8,18 @@ export interface Message {
     senderId: string;
 }
 
+export interface Chat {
+    authorAvatar: string;
+    authorName: string;
+    authorUuid: string;
+    lastDate: string;
+    lastMessage: string;
+}
+
 export default class ChatRepository {
     static async getAll() {
         const response = await Ajax.get('/api/messages/chats');
-        return await response.json();
+        return (await response.json()) as { chats: Chat[] };
     }
 
     static async get(recipientId: string) {
