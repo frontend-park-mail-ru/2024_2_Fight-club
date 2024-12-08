@@ -4,7 +4,9 @@
     }
 
     &__chat-window {
-        width: 800px;
+        background: url('https://static.cdn-cian.ru/frontend/collections-assets/chat-backgrounds/daily.png');
+        width: 80%;
+        height: 80vh;
         margin: 0 auto;
         border: 1px solid #e4e4e4;
         // border-radius: 20px;
@@ -14,16 +16,23 @@
         flex-direction: column;
         gap: 10px;
 
+        &__messages {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            row-gap: 10px;
+            padding: 10px 20px 0;
+        }
+
         &__message {
             display: flex;
             flex-direction: row;
             gap: 15px;
 
-            width: 100px;
-            width: 100%;
+            width: fit-content;
             min-height: 30px;
             height: min-content;
-            // background-color: aquamarine;
+            background-color: #ffffff;
             border-radius: 20px;
             align-items: flex-start;
             box-sizing: border-box;
@@ -43,14 +52,20 @@
 
             &__text {
             }
+
+            &--mine {
+                margin-left: auto;
+                color: #fff;
+                background-color: #0468ff;
+            }
         }
 
         &__bottom-part {
             padding: 0 20px;
             box-sizing: border-box;
             border-top: 1px solid #e4e4e4;
+            background-color: #fff;
             width: 100%;
-            height: 100%;
         }
 
         &__input {

@@ -1,16 +1,30 @@
 import BaseComponent from '../../components/BaseComponent/BaseComponent';
 
+interface ReceivedMessage {
+    id: number;
+    senderId: string;
+    receiverId: string;
+    content: string;
+    createdAt: string;
+}
+
 export default class ChatPage extends BaseComponent {
     private socket: WebSocket;
+    private messages: HTMLDivElement;
+    private recipentId: string;
 
-    constructor(parent: HTMLElement) {
+    constructor(parent: HTMLElement, recipientId: string) {
         super({
             parent: parent,
             id: '0',
             templateData: {},
         });
 
-        return;
+        this.recipentId = recipientId;
+
+        requestAnimationFrame(() => {
+            this.messages = document.getElementById('js-messages');
+        });
 
         this.socket = new WebSocket(
             `wss://${window.location.hostname}/websocket/`
@@ -21,8 +35,9 @@ export default class ChatPage extends BaseComponent {
             console.log('Отправляем данные на сервер');
         };
 
-        this.socket.onmessage = function (event) {
+        this.socket.onmessage = (event) => {
             console.log(`[message] Данные получены с сервера: ${event.data}`);
+            this.onMessageReceive(JSON.parse(event.data) as ReceivedMessage);
         };
 
         this.socket.onclose = function (event) {
@@ -46,7 +61,6 @@ export default class ChatPage extends BaseComponent {
         const textArea = this.thisElement.querySelector(
             '.js-message-input'
         ) as HTMLInputElement;
-
         textArea.oninput = () => {
             setTimeout(function () {
                 textArea.style.cssText =
@@ -57,14 +71,52 @@ export default class ChatPage extends BaseComponent {
         const sendMessageButton = document.getElementById(
             'js-send-message-button'
         ) as HTMLButtonElement;
+
         sendMessageButton.onclick = () => {
             const text = textArea.value;
-            this.socket.send(
-                JSON.stringify({
-                    receiverId: 'd6f8a223-2dde-4b0d-b7ae-32d244aa83b8',
-                    content: text,
-                })
-            );
+            this.sendMessage(text);
+            textArea.value = '';
         };
+
+        textArea.addEventListener('keydown', (event) => {
+            if (event.ctrlKey && event.key === 'Enter') {
+                const text = textArea.value;
+                this.sendMessage(text);
+                textArea.value = '';
+            }
+        });
+    }
+
+    private sendMessage(text: string) {
+        this.socket.send(
+            JSON.stringify({
+                receiverId: this.recipentId,
+                content: text,
+            })
+        );
+        this.addNewMessageElement(text, true);
+    }
+
+    private onMessageReceive(data: ReceivedMessage) {
+        this.addNewMessageElement(data.content, false);
+    }
+
+    private addNewMessageElement(text: string, mine: boolean) {
+        const template = document.getElementById(
+            'js-chat-message-template'
+        ) as HTMLTemplateElement;
+
+        const newMessage = template.content.cloneNode(true) as DocumentFragment;
+        (
+            newMessage.querySelector('.js-message-text') as HTMLSpanElement
+        ).textContent = text;
+
+        if (mine) {
+            newMessage.children[0]!.classList!.add(
+                'chat-page__chat-window__message--mine'
+            );
+        }
+
+        this.messages.appendChild(newMessage);
     }
 }

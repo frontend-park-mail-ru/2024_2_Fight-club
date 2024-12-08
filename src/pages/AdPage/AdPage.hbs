@@ -158,10 +158,14 @@
             </dl>
 
             <div class='ad-page__author-info__buttons'>
-                <button class='ad-page__author-info__write-msg-button'>Напишите
+                <a
+                    class='ad-page__author-info__write-msg-button'
+                    href='/chat?recipientId={{authorUUID}}'
+                >
+                    Напишите
                     {{adAuthor.name}}
                     прямо сейчас
-                </button>
+                </a>
                 {{#if isAuthor}}
                     <button
                         class='ad-page__author-info__edit-button'

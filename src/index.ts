@@ -194,8 +194,10 @@ router.addRoute('/profiles', async (params: URLSearchParams) => {
     page.render(pageContainer);
 });
 
-router.addRoute('/chats', async () => {
-    const chatPage = new ChatPage(pageContainer);
+router.addRoute('/chat', async (params: URLSearchParams) => {
+    const recipientId = params.get('recipientId') as string;
+
+    const chatPage = new ChatPage(pageContainer, recipientId);
     chatPage.render();
 });
 

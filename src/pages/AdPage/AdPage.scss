@@ -275,6 +275,9 @@ $secondary-card-size: 64px;
 
         &__write-msg-button {
             @include mixins.button;
+            text-align: center;
+            box-sizing: border-box;
+            text-decoration: none;
             width: 100%;
         }
 
