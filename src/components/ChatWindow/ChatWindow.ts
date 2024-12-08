@@ -22,6 +22,9 @@ export default class ChatWindow extends BaseComponent {
             this.messagesContainer = document.getElementById('js-messages');
 
             this.displayMessageHistory();
+
+            this.messagesContainer.scrollTop =
+                this.messagesContainer.scrollHeight;
         });
 
         if (globalStore.chat.socket) {
