@@ -196,10 +196,10 @@ router.addRoute('/profiles', async (params: URLSearchParams) => {
 });
 
 router.addRoute('/chat', async (params: URLSearchParams) => {
-    // const recipientId = params.get('recipientId') as string;
+    const recipientId = params.get('recipientId') as string;
 
     const data = await ChatRepository.getAll();
-    const chatPage = new ChatPage(pageContainer, data);
+    const chatPage = new ChatPage(pageContainer, data, recipientId);
     chatPage.render();
 });
 

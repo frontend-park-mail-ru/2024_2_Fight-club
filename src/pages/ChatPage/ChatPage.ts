@@ -3,11 +3,29 @@ import ChatWindow from '../../components/ChatWindow/ChatWindow';
 import ChatRepository, { Chat } from '../../repositories/ChatRepository';
 
 export default class ChatPage extends BaseComponent {
-    constructor(parent: HTMLElement, data: { chats: Chat[] }) {
+    constructor(
+        parent: HTMLElement,
+        data: { chats: Chat[] },
+        startChatWithRecipientId?: string
+    ) {
         super({
             parent: parent,
             id: '',
             templateData: data,
+        });
+
+        if (!startChatWithRecipientId) return;
+
+        requestAnimationFrame(async () => {
+            const data = await ChatRepository.get(startChatWithRecipientId);
+
+            const chatWindow = new ChatWindow(
+                this.thisElement,
+                startChatWithRecipientId,
+                data
+            );
+
+            chatWindow.render();
         });
     }
 
