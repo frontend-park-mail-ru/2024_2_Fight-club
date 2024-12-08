@@ -41,7 +41,7 @@ $secondary-card-size: 64px;
             z-index: 3;
             cursor: zoom-out;
         }
-        &_hidden {
+        &--hidden {
             display: none;
         }
     }

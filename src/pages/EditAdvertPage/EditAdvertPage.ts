@@ -15,7 +15,7 @@ const SECONDARY_IMG_SELECTOR = '.js-carousel-img';
 const FULLSCREEN_IMG_SELECTOR = '.js-main-image-fullscreen';
 const FULLSCREEN_OVERLAY_SELECTOR = '.js-fullscreen-overlay';
 const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
-    'ad-page__fullscreen-overlay_hidden';
+    'edit-ad-page__fullscreen-overlay--hidden';
 
 const SECONDARY_IMG_SELECTED_CLASS_NAME =
     'edit-advert-images-carousel__secondary-img_current';
@@ -357,8 +357,9 @@ export default class EditAdvertPage {
     #addEventListeners() {
         this.#addSecondaryImagesEvents();
 
+        console.log(this.#overlay);
         this.#overlay.addEventListener('click', () =>
-            this.#overlay.classList.add(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME)
+            this.#overlay.classList.toggle(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME)
         );
 
         this.#templateContainer
