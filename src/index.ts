@@ -195,7 +195,7 @@ router.addRoute('/profiles', async (params: URLSearchParams) => {
     page.render(pageContainer);
 });
 
-router.addRoute('/chat', async (params: URLSearchParams) => {
+router.addRoute('/chats', async (params: URLSearchParams) => {
     const recipientId = params.get('recipientId') as string;
 
     const data = await ChatRepository.getAll();
