@@ -1,0 +1,11 @@
+<div id="carousel-{{id}}" class="carousel-container">
+    <div class="carousel">
+        {{#each images}}
+            <div class="carousel-item" style="display: {{#if @first}}block{{else}}none{{/if}};">
+                <img src="{{this.path}}" alt="Image {{@index}}" class="carousel-image" height="150px" width="150px">
+            </div>
+        {{/each}}
+    </div>
+    <button class="carousel-btn prev" data-direction="-1" data-carousel-id="{{id}}">&lt;</button>
+    <button class="carousel-btn next" data-direction="1" data-carousel-id="{{id}}">&gt;</button>
+</div>
