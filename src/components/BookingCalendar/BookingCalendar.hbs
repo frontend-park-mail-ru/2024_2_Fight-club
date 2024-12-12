@@ -19,12 +19,8 @@
                     {{#each week as |day|}}
                         <td
                             class='booking-calendar__cell
-                                {{#if day.isBooked}}
-                                     booking-calendar__cell--booked 
-                                {{/if}}
-                                {{#unless day.isCurrentMonth}}
-                                     booking-calendar__cell_not-current-month"
-                                {{/unless}}'
+                                {{#if day.isBooked}} booking-calendar__cell--booked {{/if}}
+                                {{#unless day.isCurrentMonth}} booking-calendar__cell--not-current-month {{/unless}}'
                         >
                             {{day.date}}
                         </td>

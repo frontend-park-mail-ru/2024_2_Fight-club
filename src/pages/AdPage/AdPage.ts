@@ -5,7 +5,7 @@ import { calculateAge } from '../../modules/Utils';
 import ReactiveComponent from '../../components/ReactiveComponent/ReactiveComponent';
 import globalStore from '../../modules/GlobalStore';
 import router from '../../modules/Router';
-import BookingCalendar from '../../components/Calendar/Calendar';
+import BookingCalendar from '../../components/BookingCalendar/BookingCalendar';
 
 const SECONDARY_IMG_SELECTOR = '.js-carousel-img';
 const FULLSCREEN_OVERLAY_SELECTOR = '.js-fullscreen-overlay';
@@ -50,7 +50,7 @@ export default class AdPage extends ReactiveComponent {
 
         const elem = new BookingCalendar(
             document.getElementById('js-date-container'),
-            new Date(),
+            new Date(2024, 12, 30),
             new Date(2025, 1, 1)
         );
         elem.render();

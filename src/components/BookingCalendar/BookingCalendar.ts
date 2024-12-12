@@ -86,7 +86,8 @@ export default class BookingCalendar {
         return days;
     }
 
-    isDateBooked(
+    /** Checks whether date is in booked range */
+    private isDateBooked(
         date: Date,
         startDate: Date | undefined,
         endDate: Date | undefined
@@ -119,10 +120,10 @@ export default class BookingCalendar {
         const year = this.startDate?.getFullYear() || new Date().getFullYear();
         const month = this.startDate?.getMonth() || new Date().getMonth();
 
-        const template = Handlebars.templates['Calendar.hbs'];
+        const template = Handlebars.templates['BookingCalendar.hbs'];
 
         if (!template) {
-            console.error('Шаблон Calendar.hbs не найден.');
+            console.error('Шаблон BookingCalendar.hbs не найден.');
             return;
         }
 
