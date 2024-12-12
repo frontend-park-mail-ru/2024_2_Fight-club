@@ -1,0 +1,29 @@
+.booking-calendar {
+    font-family: sans-serif;
+}
+
+.booking-calendar table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.booking-calendar th,
+.booking-calendar td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    width: calc(100% / 7); /* Равномерное распределение ширины ячеек */
+}
+
+.booking-calendar th {
+    font-weight: bold;
+    background-color: #f0f0f0;
+}
+
+.booking-calendar .booked {
+    background-color: #e0f2f7; /* Или любой другой цвет */
+}
+
+.booking-calendar .not-current-month {
+    color: #ccc;
+}

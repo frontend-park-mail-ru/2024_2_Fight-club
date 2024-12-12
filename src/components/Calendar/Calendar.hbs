@@ -1,0 +1,25 @@
+<div class='booking-calendar'>
+    <h2>{{monthName}} {{year}}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Вс</th><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th
+                >Пт</th><th>Сб</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each days as |week|}}
+                <tr>
+                    {{#each week as |day|}}
+                        <td
+                            class='{{#if day.isBooked}} "booked" {{/if}}
+                                {{#unless day.isCurrentMonth }}
+                                    "not-current-month"
+                                {{/unless}}
+                        >{{day.date}}</td>
+                    {{/each}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
