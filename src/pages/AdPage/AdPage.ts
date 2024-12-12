@@ -12,6 +12,7 @@ const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
     'ad-page__fullscreen-overlay_hidden';
 
 export default class AdPage extends ReactiveComponent {
+    #data;
     #scrollWidth: number = 0;
     #scrollWasAutomated: boolean = false;
 
@@ -39,6 +40,8 @@ export default class AdPage extends ReactiveComponent {
                 isAuthor: data.authorUUID === globalStore.auth.userId,
             },
         });
+
+        this.#data = data;
     }
 
     addEventListeners(): void {
@@ -120,6 +123,38 @@ export default class AdPage extends ReactiveComponent {
             carouselImages,
             this.state.currentIndex as number
         );
+
+        this.#renderMap()
+    }
+
+    async #renderMap() {
+        const city = this.#data.cityName;
+        const address = this.#data.address;
+        const mapContainer = document.getElementById('map')
+
+        const map = new ymaps.Map(mapContainer, {
+            center: [55.755808716436846, 37.61771300861586],
+            zoom: 4,
+        });
+
+        const addresGeocoder = ymaps.geocode(city + ' ' + address);
+        addresGeocoder.then(
+            function(res) {
+                const result = res.geoObjects
+                const coordinates = result
+                    .get(0)
+                    .geometry.getCoordinates();
+                console.log(coordinates)
+                map.geoObjects.add(result);
+                map.setCenter(
+                    coordinates,
+                    11
+                );
+            },
+            function(err) {
+                console.log('error: ', err)
+            }
+        )
     }
 
     showImage(

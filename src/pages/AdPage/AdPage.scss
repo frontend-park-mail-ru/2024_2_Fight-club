@@ -132,7 +132,6 @@ $secondary-card-size: 64px;
 
     &__info-table {
         width: 100%;
-        margin-top: 70px;
         border-radius: 10px;
 
         display: flex;
@@ -327,6 +326,19 @@ $secondary-card-size: 64px;
     }
 }
 
+.mini-map {
+    width: 100%;
+    height: 500px;
+    border: none;
+    margin: 30px 0px;
+
+    h1 {
+        margin-bottom: 20px;
+        font-weight: 500;
+        font-size: 27px;
+    }
+}
+
 @media screen and (max-width: 900px) {
     .ad-page {
         display: flex;
@@ -349,6 +361,17 @@ $secondary-card-size: 64px;
                 height: 300px;
             }
         }
+
+        &__info-tables {
+            flex-direction: column;
+            gap: 0px;
+        }
+
+        &__author-info {
+            position: static;
+            margin-top: 100px;
+            width: 100%;
+        }
     }
 
     .advert-apps {
@@ -356,5 +379,9 @@ $secondary-card-size: 64px;
         flex-direction: row;
         flex-wrap: wrap;
         align-items: start;
+    }
+
+    .mini-map {
+        height: 300px !important;
     }
 }
