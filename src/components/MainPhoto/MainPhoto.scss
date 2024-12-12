@@ -13,6 +13,12 @@
     padding-top: 4%;
 }
 
+.search__hint {
+    margin-top: 8px;
+    color: #767676;
+    font-size: 13px;
+}
+
 .hosts a {
     text-decoration: none;
     color: #fff;
@@ -48,7 +54,6 @@
     border: solid 1px;
     border-radius: 5px;
     border-color: #ccc;
-
 }
 
 .custom-search__row {
