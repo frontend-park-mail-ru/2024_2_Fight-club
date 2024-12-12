@@ -1,5 +1,20 @@
+const MONTH_NAMES = [
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь',
+];
+
 /** Shows calendar with available dates on AdPage */
-class BookingCalendar {
+export default class BookingCalendar {
     parent: HTMLElement;
     startDate: Date | undefined;
     endDate: Date | undefined;
@@ -12,36 +27,24 @@ class BookingCalendar {
         this.parent = parent;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.render();
     }
 
     formatDate(date: Date | undefined): string {
         if (!date) {
             return '';
         }
-        const monthNames = [
-            'Январь',
-            'Февраль',
-            'Март',
-            'Апрель',
-            'Май',
-            'Июнь',
-            'Июль',
-            'Август',
-            'Сентябрь',
-            'Октябрь',
-            'Ноябрь',
-            'Декабрь',
-        ];
+
         const day = date.getDate();
-        const month = monthNames[date.getMonth()];
+        const month = MONTH_NAMES[date.getMonth()];
         const year = date.getFullYear();
         return `${day} ${month} ${year}`;
     }
 
     generateCalendarData(
         year: number,
-        month: number
+        month: number,
+        startDate: Date | undefined,
+        endDate: Date | undefined
     ): { date: number; isBooked: boolean; isCurrentMonth: boolean }[][] {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const firstDay = new Date(year, month, 1).getDay();
@@ -66,7 +69,8 @@ class BookingCalendar {
 
         for (let i = 1; i <= daysInMonth; i++) {
             const currentDate = new Date(year, month, i);
-            const isBooked = this.isDateBooked(currentDate);
+            const isBooked = this.isDateBooked(currentDate, startDate, endDate); // Используем новую функцию isDateBooked
+
             currentWeek.push({
                 date: i,
                 isBooked: isBooked,
@@ -82,11 +86,15 @@ class BookingCalendar {
         return days;
     }
 
-    isDateBooked(date: Date): boolean {
-        if (!this.startDate || !this.endDate) {
+    isDateBooked(
+        date: Date,
+        startDate: Date | undefined,
+        endDate: Date | undefined
+    ): boolean {
+        if (!startDate || !endDate) {
             return false;
         }
-        return date >= this.startDate && date <= this.endDate;
+        return date >= startDate && date <= endDate;
     }
 
     formatMonth(monthIndex: number): string {
@@ -113,14 +121,22 @@ class BookingCalendar {
 
         const template = Handlebars.templates['Calendar.hbs'];
 
+        if (!template) {
+            console.error('Шаблон Calendar.hbs не найден.');
+            return;
+        }
+
         const context = {
             monthName: this.formatMonth(month),
             year: year,
-            days: this.generateCalendarData(year, month),
+            days: this.generateCalendarData(
+                year,
+                month,
+                this.startDate,
+                this.endDate
+            ),
         };
         const html = template(context);
         this.parent.innerHTML = html;
     }
 }
-
-export default BookingCalendar; // Если используется модульная система
