@@ -44,6 +44,10 @@ export default class AdPage extends ReactiveComponent {
         this.#data = data;
     }
 
+    afterRender(): void {
+        this.#renderMap();
+    }
+
     addEventListeners(): void {
         const carouselImages = this.thisElement.querySelectorAll(
             SECONDARY_IMG_SELECTOR
@@ -123,14 +127,12 @@ export default class AdPage extends ReactiveComponent {
             carouselImages,
             this.state.currentIndex as number
         );
-
-        this.#renderMap()
     }
 
     async #renderMap() {
         const city = this.#data.cityName;
         const address = this.#data.address;
-        const mapContainer = document.getElementById('map')
+        const mapContainer = document.getElementById('map');
 
         const map = new ymaps.Map(mapContainer, {
             center: [55.755808716436846, 37.61771300861586],
@@ -139,22 +141,17 @@ export default class AdPage extends ReactiveComponent {
 
         const addresGeocoder = ymaps.geocode(city + ' ' + address);
         addresGeocoder.then(
-            function(res) {
-                const result = res.geoObjects
-                const coordinates = result
-                    .get(0)
-                    .geometry.getCoordinates();
-                console.log(coordinates)
+            function (res) {
+                const result = res.geoObjects;
+                const coordinates = result.get(0).geometry.getCoordinates();
+                console.log(coordinates);
                 map.geoObjects.add(result);
-                map.setCenter(
-                    coordinates,
-                    11
-                );
+                map.setCenter(coordinates, 11);
             },
-            function(err) {
-                console.log('error: ', err)
+            function (err) {
+                console.log('error: ', err);
             }
-        )
+        );
     }
 
     showImage(
