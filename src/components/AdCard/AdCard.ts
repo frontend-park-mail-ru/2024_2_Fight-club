@@ -1,7 +1,5 @@
 'use strict';
 
-const SCROLL_DELAY = 200;
-
 import router from '../../modules/Router';
 import { AdvertData } from '../../modules/Types';
 import ReactiveComponent from '../ReactiveComponent/ReactiveComponent';
@@ -203,7 +201,7 @@ export default class AdCard extends ReactiveComponent {
     }
 
     /**
-     * @description
+     * @description Вызывается при нажатии на кнопку "Показать на карте"
      */
     showOnMap(e: Event) {
         e.stopPropagation();

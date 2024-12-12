@@ -1,5 +1,5 @@
-<div class='ad-page' id='{{elementId}}'>
-    <main>
+<main class='ad-page' id='{{elementId}}'>
+    <article>
         <div class='ad-page__gallery'>
             <ul class='ad-page__gallery__carousel js-main-img-div'>
                 <div class='ad-page__gallery__carousel__buttons-container'>
@@ -122,6 +122,7 @@
         <p class='ad-page__desc'>
             {{description}}
         </p>
+
         <div class='ad-page__info-tables'>
             <div class='ad-page__info-table'>
                 <p class='ad-page__info-table__title'>О жилье</p>
@@ -198,7 +199,7 @@
                 </div>
             </div>
         </div>
-    </main>
+    </article>
 
     <div
         class='ad-page__fullscreen-overlay ad-page__fullscreen-overlay_hidden js-fullscreen-overlay'
@@ -209,7 +210,7 @@
         />
     </div>
 
-    <div class='ad-page__author-info'>
+    <aside class='ad-page__author-info'>
         <img class='ad-page__author-info__avatar' src='{{adAuthor.avatar}}' />
         <p class='ad-page__author-info__hoster-text'>Хостер</p>
         <a
@@ -254,6 +255,6 @@
             </div>
         </div>
 
-    </div>
+    </aside>
 
-</div>
+</main>
