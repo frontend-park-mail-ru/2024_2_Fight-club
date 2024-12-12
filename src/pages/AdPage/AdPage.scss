@@ -139,12 +139,6 @@ $secondary-card-size: 64px;
         font-size: 17px;
         line-height: 1.5;
 
-        &__title {
-            margin: 20px 0;
-            font-weight: 500;
-            font-size: 27px;
-        }
-
         &__row {
             display: flex;
             justify-content: space-between;
@@ -292,6 +286,12 @@ $secondary-card-size: 64px;
             background-color: #0077cc;
         }
     }
+}
+
+.section-title {
+    margin: 20px 0;
+    font-weight: 500;
+    font-size: 27px;
 }
 
 .advert-apps {
