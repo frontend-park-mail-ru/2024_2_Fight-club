@@ -68,32 +68,38 @@ class MapPage {
         if (!carousel) {
             throw new Error(`Carousel with id "carousel-${id}" not found`);
         }
-    
-        const items = carousel.querySelectorAll<HTMLDivElement>('.carousel-item');
+
+        const items =
+            carousel.querySelectorAll<HTMLDivElement>('.carousel-item');
         const itemsArray = Array.from(items);
-    
-        const activeIndex = itemsArray.findIndex(item => item.style.display === 'block');
+
+        const activeIndex = itemsArray.findIndex(
+            (item) => item.style.display === 'block'
+        );
         if (activeIndex === -1) {
-            throw new Error(`No active carousel item found for id "carousel-${id}"`);
+            throw new Error(
+                `No active carousel item found for id "carousel-${id}"`
+            );
         }
-    
+
         itemsArray[activeIndex].style.display = 'none';
-        const newIndex = (activeIndex + direction + itemsArray.length) % itemsArray.length;
+        const newIndex =
+            (activeIndex + direction + itemsArray.length) % itemsArray.length;
         itemsArray[newIndex].style.display = 'block';
-    }    
+    }
 
     async #renderMap(mapContainer: HTMLDivElement) {
         this.#map = new ymaps.Map('map', {
             center: [55.755808716436846, 37.61771300861586],
             zoom: this.#TOTAL_ZOOM,
         });
-    
+
         const cities = (await ApiClient.getCities()) as City[];
         const myClasters = new Map();
         for (const city of cities) {
             myClasters.set(city.title, []);
         }
-    
+
         const data = await ApiClient.getAds();
         const geocodePromises = data.map((d) => {
             const query = d.cityName + ', ' + d.address;
@@ -102,40 +108,49 @@ class MapPage {
                     const coordinates = res.geoObjects
                         .get(0)
                         .geometry.getCoordinates();
-    
+
                     const mockImages = [
                         { path: '/default.png' },
                         { path: '/journey.jpg' },
                         { path: '/myMap.jpg' },
                     ];
-    
+
                     const template = Handlebars.templates['ImageCarousel.hbs'];
                     const carouselContainer = document.createElement('div');
-                    carouselContainer.setAttribute('id', `carousel-container-${d.id}`);
-                    //carouselContainer.innerHTML = template({ id: d.id, images: d.images });
-                    carouselContainer.innerHTML = template({ id: d.id, images: mockImages });
-    
-                    const placemark = new ymaps.GeoObject({
-                        geometry: {
-                            type: 'Point',
-                            coordinates: coordinates,
-                        },
-                        properties: {
-                            hintContent: d.address,
-                            balloonContentHeader: d.address,
-                            balloonContentBody: carouselContainer.innerHTML,
-                        },
-                    }, {
-                        balloonMinWidth: 250
+                    carouselContainer.setAttribute(
+                        'id',
+                        `carousel-container-${d.id}`
+                    );
+                    carouselContainer.innerHTML = template({
+                        id: d.id,
+                        images: d.images,
                     });
-    
+                    // carouselContainer.innerHTML = template({ id: d.id, images: mockImages });
+
+                    const placemark = new ymaps.GeoObject(
+                        {
+                            geometry: {
+                                type: 'Point',
+                                coordinates: coordinates,
+                            },
+                            properties: {
+                                hintContent: d.address,
+                                balloonContentHeader: d.address,
+                                balloonContentBody: carouselContainer.innerHTML,
+                            },
+                        },
+                        {
+                            balloonMinWidth: 250,
+                        }
+                    );
+
                     placemark.events.add('click', () => {
                         this.#map.setCenter(
                             placemark.geometry._coordinates,
                             this.#PLACE_ZOOM
                         );
                     });
-    
+
                     myClasters.get(d.cityName).push(placemark);
                 },
                 (err) => {
@@ -146,9 +161,9 @@ class MapPage {
                 }
             );
         });
-    
+
         await Promise.all(geocodePromises);
-    
+
         for (const adsInCity of myClasters.values()) {
             if (adsInCity.length != 0) {
                 const cluster = new ymaps.Clusterer();
@@ -156,7 +171,7 @@ class MapPage {
                 this.#map.geoObjects.add(cluster);
             }
         }
-    
+
         document.addEventListener('click', (event) => {
             const button = event.target as HTMLButtonElement;
             if (button && button.classList.contains('carousel-btn')) {
@@ -168,7 +183,6 @@ class MapPage {
             }
         });
     }
-    
 
     async #renderAds(adsContainer: HTMLDivElement) {
         try {
