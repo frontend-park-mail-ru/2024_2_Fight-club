@@ -1,3 +1,4 @@
+// booking-calendar.ts
 const MONTH_NAMES = [
     'Январь',
     'Февраль',
@@ -13,7 +14,6 @@ const MONTH_NAMES = [
     'Декабрь',
 ];
 
-/** Shows calendar with available dates on AdPage */
 export default class BookingCalendar {
     parent: HTMLElement;
     startDate: Date | undefined;
@@ -27,13 +27,13 @@ export default class BookingCalendar {
         this.parent = parent;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.render();
     }
 
     formatDate(date: Date | undefined): string {
         if (!date) {
             return '';
         }
-
         const day = date.getDate();
         const month = MONTH_NAMES[date.getMonth()];
         const year = date.getFullYear();
@@ -69,8 +69,11 @@ export default class BookingCalendar {
 
         for (let i = 1; i <= daysInMonth; i++) {
             const currentDate = new Date(year, month, i);
-            const isBooked = this.isDateBooked(currentDate, startDate, endDate); // Используем новую функцию isDateBooked
-
+            const isBooked = this.isWithinRange(
+                currentDate,
+                startDate,
+                endDate
+            );
             currentWeek.push({
                 date: i,
                 isBooked: isBooked,
@@ -86,8 +89,7 @@ export default class BookingCalendar {
         return days;
     }
 
-    /** Checks whether date is in booked range */
-    private isDateBooked(
+    isWithinRange(
         date: Date,
         startDate: Date | undefined,
         endDate: Date | undefined
@@ -95,31 +97,49 @@ export default class BookingCalendar {
         if (!startDate || !endDate) {
             return false;
         }
+
         return date >= startDate && date <= endDate;
     }
 
+    generateMonthsData(
+        startDate: Date,
+        endDate: Date
+    ): {
+        monthName: string;
+        year: number;
+        days: { date: number; isBooked: boolean; isCurrentMonth: boolean }[][];
+    }[] {
+        const months = [];
+        let currentYear = startDate.getFullYear();
+        let currentMonth = startDate.getMonth();
+
+        while (new Date(currentYear, currentMonth) <= endDate) {
+            months.push({
+                monthName: this.formatMonth(currentMonth),
+                year: currentYear,
+                days: this.generateCalendarData(
+                    currentYear,
+                    currentMonth,
+                    startDate,
+                    endDate
+                ),
+            });
+
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+        }
+
+        return months;
+    }
+
     formatMonth(monthIndex: number): string {
-        const monthNames = [
-            'Январь',
-            'Февраль',
-            'Март',
-            'Апрель',
-            'Май',
-            'Июнь',
-            'Июль',
-            'Август',
-            'Сентябрь',
-            'Октябрь',
-            'Ноябрь',
-            'Декабрь',
-        ];
-        return monthNames[monthIndex];
+        return MONTH_NAMES[monthIndex];
     }
 
     render(): void {
-        const year = this.startDate?.getFullYear() || new Date().getFullYear();
-        const month = this.startDate?.getMonth() || new Date().getMonth();
-
         const template = Handlebars.templates['BookingCalendar.hbs'];
 
         if (!template) {
@@ -127,16 +147,12 @@ export default class BookingCalendar {
             return;
         }
 
-        const context = {
-            monthName: this.formatMonth(month),
-            year: year,
-            days: this.generateCalendarData(
-                year,
-                month,
-                this.startDate,
-                this.endDate
-            ),
-        };
+        const months = this.generateMonthsData(
+            this.startDate || new Date(),
+            this.endDate || new Date()
+        );
+
+        const context = { months: months };
         const html = template(context);
         this.parent.innerHTML = html;
     }

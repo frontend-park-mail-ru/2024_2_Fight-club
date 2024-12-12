@@ -1,5 +1,7 @@
-<section class='booking-calendar'>
-    <h3 class='booking-calendar__month-year'>{{monthName}} {{year}}</h3>
+<div class='booking-calendars'>
+{{#each months as |monthData|}}
+<div class="booking-calendar">
+    <h3 class='booking-calendar__month-year'>{{monthData.monthName}} {{monthData.year}}</h3>
     <table class='booking-calendar__table' border="0">
         <thead class='booking-calendar__head'>
             <tr class='booking-calendar__row booking-calendar__heading-row'>
@@ -12,9 +14,9 @@
                 <th class='booking-calendar__cell booking-calendar__cell--heading'>Вс</th>
             </tr>
         </thead>
-        
+
         <tbody class='booking-calendar__body'>
-            {{#each days as |week|}}
+            {{#each monthData.days as |week|}}
                 <tr class='booking-calendar__row'>
                     {{#each week as |day|}}
                         <td
@@ -29,4 +31,6 @@
             {{/each}}
         </tbody>
     </table>
-</section>
+    </div>
+{{/each}}
+</div>

@@ -1,5 +1,12 @@
+.booking-calendars {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
 .booking-calendar {
     font-family: Inter;
+    width: 100%;
 
     &__month-year {
         font-weight: 500;

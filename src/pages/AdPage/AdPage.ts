@@ -49,7 +49,7 @@ export default class AdPage extends ReactiveComponent {
         this.#renderMap();
 
         const elem = new BookingCalendar(
-            document.getElementById('js-date-container'),
+            document.getElementById('js-date-container')!,
             new Date(2024, 12, 30),
             new Date(2025, 1, 1)
         );
