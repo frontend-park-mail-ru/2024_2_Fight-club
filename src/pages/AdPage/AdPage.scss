@@ -191,16 +191,17 @@ $secondary-card-size: 64px;
         display: flex;
         flex-direction: column;
         width: 350px;
-        height: 400px;
+        height: fit-content;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         background-color: #fff;
         align-items: center;
         border-radius: 5px;
+        padding-bottom: 20px;
 
         &::before {
             content: '';
             width: 100%;
-            height: 190px;
+            height: 90px;
             background: #e5f0ff;
             top: 0;
         }
