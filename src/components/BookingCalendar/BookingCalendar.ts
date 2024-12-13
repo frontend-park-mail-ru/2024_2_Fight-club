@@ -87,10 +87,6 @@ export default class BookingCalendar {
     }
 
     isWithinRange(date: Date, startDate: Date, endDate: Date): boolean {
-        if (!startDate || !endDate) {
-            return false;
-        }
-
         return date >= startDate && date <= endDate;
     }
 

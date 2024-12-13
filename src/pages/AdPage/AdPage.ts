@@ -48,10 +48,16 @@ export default class AdPage extends ReactiveComponent {
     afterRender(): void {
         this.#renderMap();
 
+        const dateFrom = new Date(this.#data.adDateFrom);
+        const dateTo = new Date(this.#data.adDateTo);
+
+        dateFrom.setHours(0, 0, 0, 0);
+        dateTo.setHours(0, 0, 0, 0);
+
         const elem = new BookingCalendar(
             document.getElementById('js-date-container')!,
-            new Date(2024, 12, 30),
-            new Date(2025, 1, 1)
+            dateFrom,
+            dateTo
         );
         elem.render();
     }
@@ -152,12 +158,11 @@ export default class AdPage extends ReactiveComponent {
             function (res) {
                 const result = res.geoObjects;
                 const coordinates = result.get(0).geometry.getCoordinates();
-                console.log(coordinates);
                 map.geoObjects.add(result);
                 map.setCenter(coordinates, 11);
             },
             function (err) {
-                console.log('error: ', err);
+                console.error('error: ', err);
             }
         );
     }
