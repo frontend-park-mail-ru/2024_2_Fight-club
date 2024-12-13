@@ -5,6 +5,7 @@ import { calculateAge } from '../../modules/Utils';
 import ReactiveComponent from '../../components/ReactiveComponent/ReactiveComponent';
 import globalStore from '../../modules/GlobalStore';
 import router from '../../modules/Router';
+import BookingCalendar from '../../components/BookingCalendar/BookingCalendar';
 
 const SECONDARY_IMG_SELECTOR = '.js-carousel-img';
 const FULLSCREEN_OVERLAY_SELECTOR = '.js-fullscreen-overlay';
@@ -46,6 +47,19 @@ export default class AdPage extends ReactiveComponent {
 
     afterRender(): void {
         this.#renderMap();
+
+        const dateFrom = new Date(this.#data.adDateFrom);
+        const dateTo = new Date(this.#data.adDateTo);
+
+        dateFrom.setHours(0, 0, 0, 0);
+        dateTo.setHours(0, 0, 0, 0);
+
+        const elem = new BookingCalendar(
+            document.getElementById('js-date-container')!,
+            dateFrom,
+            dateTo
+        );
+        elem.render();
     }
 
     addEventListeners(): void {
@@ -144,12 +158,11 @@ export default class AdPage extends ReactiveComponent {
             function (res) {
                 const result = res.geoObjects;
                 const coordinates = result.get(0).geometry.getCoordinates();
-                console.log(coordinates);
                 map.geoObjects.add(result);
                 map.setCenter(coordinates, 11);
             },
             function (err) {
-                console.log('error: ', err);
+                console.error('error: ', err);
             }
         );
     }

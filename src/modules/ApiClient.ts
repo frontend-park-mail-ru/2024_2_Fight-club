@@ -42,6 +42,14 @@ class APIClient {
                 url += `&guests=${filters.guests}`;
             }
 
+            if (filters?.dateFrom) {
+                url += `&dateFrom=${filters.dateFrom}`;
+            }
+
+            if (filters?.dateTo) {
+                url += `&dateTo=${filters.dateTo}`;
+            }
+
             if (limit?.limit) {
                 url += `&limit=${limit.limit}`;
             }

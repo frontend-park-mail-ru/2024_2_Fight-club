@@ -130,6 +130,16 @@ export default class Filter {
             e.preventDefault();
             this.#onApply(this.getFilterValues());
         });
+
+        const visSlider = this.#filterContainer.querySelector(
+            '#vis-slider'
+        ) as HTMLInputElement;
+        const visValue = this.#filterContainer.querySelector(
+            '#vis-value'
+        ) as HTMLSpanElement;
+        visSlider?.addEventListener('input', () => {
+            visValue.textContent = visSlider.value;
+        });
     }
 
     /**
@@ -170,6 +180,30 @@ export default class Filter {
         values.guests = (parseInt(
             Array.from(visInputs).find((input) => input.checked)!.value
         ) || undefined) as typeof values.guests;
+
+        values.guests = parseInt(
+            (
+                this.#filterContainer.querySelector(
+                    '#vis-slider'
+                ) as HTMLInputElement
+            )?.value || '1',
+            10
+        );
+
+        const startDateInput = this.#filterContainer.querySelector(
+            '#start-date'
+        ) as HTMLInputElement;
+        const endDateInput = this.#filterContainer.querySelector(
+            '#end-date'
+        ) as HTMLInputElement;
+
+        values.dateFrom = startDateInput.value
+            ? new Date(startDateInput.value).toISOString().slice(0, 10)
+            : undefined;
+        values.dateTo = endDateInput.value
+            ? new Date(endDateInput.value).toISOString().slice(0, 10)
+            : undefined;
+
         return values;
     }
 

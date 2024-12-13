@@ -16,6 +16,8 @@ export interface AdsFilters {
     new?: boolean;
     gender?: 'male' | 'female';
     guests?: 5 | 10 | 20 | 50;
+    dateFrom?: string;
+    dateTo?: string;
 }
 
 // Interface of a response from DB
@@ -30,8 +32,8 @@ export interface AdvertData {
     description: string;
     publicationDate: string;
     roomsNumber: number;
-    dateFrom: string;
-    dateTo: string;
+    adDateFrom: string;
+    adDateTo: string;
     squareMeters: number;
     floor: number;
     hasBalcony: boolean;

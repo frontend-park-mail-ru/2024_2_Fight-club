@@ -123,9 +123,14 @@
             {{description}}
         </p>
 
+        <section>
+            <h2 class='section-title'>Доступные даты</h2>
+            <div id='js-date-container'></div>
+        </section>
+
         <div class='ad-page__info-tables'>
-            <div class='ad-page__info-table'>
-                <p class='ad-page__info-table__title'>О жилье</p>
+            <section class='ad-page__info-table'>
+                <h2 class='section-title'>О жилье</h2>
 
                 <div class='ad-page__info-table__row'>
                     <span class='ad-page__info-table__label'>Город</span>
@@ -163,9 +168,10 @@
                         </span>
                     </div>
                 {{/each}}
-            </div>
-            <div class='ad-page__info-table'>
-                <p class='ad-page__info-table__title'>О доме</p>
+            </section>
+
+            <section class='ad-page__info-table'>
+                <p class='section-title'>О доме</p>
 
                 {{#if buildingType}}
                     <div class='ad-page__info-table__row'>
@@ -197,13 +203,13 @@
                         {{/if}}
                     </span>
                 </div>
-            </div>
+            </section>
         </div>
 
-        <div id="map" class="mini-map">
-            <h1>На карте</h1>
-        </div>
-        
+        <section id='map' class='mini-map'>
+            <h2 class='section-title'>На карте</h2>
+        </section>
+
     </article>
 
     <div
