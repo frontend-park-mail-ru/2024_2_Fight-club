@@ -159,6 +159,22 @@ export default class EditAdvertPage {
                     min: 1,
                 },
                 {
+                    label: 'Доступные даты: с',
+                    name: 'dateFrom',
+                    type: 'date',
+                    value: data
+                        ? data.adDateFrom
+                        : new Date().toISOString().slice(0, 10),
+                },
+                {
+                    label: 'Доступные даты: по',
+                    name: 'dateTo',
+                    type: 'date',
+                    value: data
+                        ? data.adDateTo
+                        : new Date().toISOString().slice(0, 10),
+                },
+                {
                     label: 'Наличие лифта',
                     name: 'hasElevator',
                     type: 'checkbox',
@@ -357,7 +373,6 @@ export default class EditAdvertPage {
     #addEventListeners() {
         this.#addSecondaryImagesEvents();
 
-        console.log(this.#overlay);
         this.#overlay.addEventListener('click', () =>
             this.#overlay.classList.toggle(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME)
         );
@@ -469,6 +484,14 @@ export default class EditAdvertPage {
                 dataToSend[key] = value as string;
             }
         }
+
+        // Dates should be handled differently too
+        dataToSend.dateFrom = new Date(
+            formData.get('dateFrom') as string
+        ).toISOString();
+        dataToSend.dateTo = new Date(
+            formData.get('dateTo') as string
+        ).toISOString();
 
         // Checkboxes are needed to be handled differently
         const checkboxes = formElement.querySelectorAll(
