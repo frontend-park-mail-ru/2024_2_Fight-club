@@ -16,21 +16,17 @@ const MONTH_NAMES = [
 
 export default class BookingCalendar {
     parent: HTMLElement;
-    startDate: Date | undefined;
-    endDate: Date | undefined;
+    startDate: Date;
+    endDate: Date;
 
-    constructor(
-        parent: HTMLElement,
-        startDate: Date | undefined,
-        endDate: Date | undefined
-    ) {
+    constructor(parent: HTMLElement, startDate: Date, endDate: Date) {
         this.parent = parent;
         this.startDate = startDate;
         this.endDate = endDate;
         this.render();
     }
 
-    formatDate(date: Date | undefined): string {
+    formatDate(date: Date): string {
         if (!date) {
             return '';
         }
@@ -43,11 +39,12 @@ export default class BookingCalendar {
     generateCalendarData(
         year: number,
         month: number,
-        startDate: Date | undefined,
-        endDate: Date | undefined
+        startDate: Date,
+        endDate: Date
     ): { date: number; isBooked: boolean; isCurrentMonth: boolean }[][] {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const firstDay = new Date(year, month, 1).getDay();
+        const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
+
         const days: {
             date: number;
             isBooked: boolean;
@@ -80,7 +77,7 @@ export default class BookingCalendar {
                 isCurrentMonth: true,
             });
 
-            if (currentDate.getDay() === 6 || i === daysInMonth) {
+            if (currentDate.getDay() === 0 || i === daysInMonth) {
                 days.push(currentWeek);
                 currentWeek = [];
             }
@@ -89,11 +86,7 @@ export default class BookingCalendar {
         return days;
     }
 
-    isWithinRange(
-        date: Date,
-        startDate: Date | undefined,
-        endDate: Date | undefined
-    ): boolean {
+    isWithinRange(date: Date, startDate: Date, endDate: Date): boolean {
         if (!startDate || !endDate) {
             return false;
         }
@@ -147,10 +140,7 @@ export default class BookingCalendar {
             return;
         }
 
-        const months = this.generateMonthsData(
-            this.startDate || new Date(),
-            this.endDate || new Date()
-        );
+        const months = this.generateMonthsData(this.startDate, this.endDate);
 
         const context = { months: months };
         const html = template(context);
