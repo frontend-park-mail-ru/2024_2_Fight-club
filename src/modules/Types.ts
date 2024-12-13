@@ -16,6 +16,8 @@ export interface AdsFilters {
     new?: boolean;
     gender?: 'male' | 'female';
     guests?: 5 | 10 | 20 | 50;
+    dateFrom?: string;
+    dateTo?: string;
 }
 
 // Interface of a response from DB
