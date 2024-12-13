@@ -41,24 +41,24 @@ export default class BookingCalendar {
         month: number,
         startDate: Date,
         endDate: Date
-    ): { date: number; isBooked: boolean; isCurrentMonth: boolean }[][] {
+    ): { date: number | null; isBooked: boolean; isCurrentMonth: boolean }[][] {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
 
         const days: {
-            date: number;
+            date: number | null;
             isBooked: boolean;
             isCurrentMonth: boolean;
         }[][] = [];
         let currentWeek: {
-            date: number;
+            date: number | null;
             isBooked: boolean;
             isCurrentMonth: boolean;
         }[] = [];
 
         for (let i = 0; i < firstDay; i++) {
             currentWeek.push({
-                date: 0,
+                date: null,
                 isBooked: false,
                 isCurrentMonth: false,
             });
@@ -100,7 +100,11 @@ export default class BookingCalendar {
     ): {
         monthName: string;
         year: number;
-        days: { date: number; isBooked: boolean; isCurrentMonth: boolean }[][];
+        days: {
+            date: number | null;
+            isBooked: boolean;
+            isCurrentMonth: boolean;
+        }[][];
     }[] {
         const months = [];
         let currentYear = startDate.getFullYear();
