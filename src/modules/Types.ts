@@ -30,8 +30,8 @@ export interface AdvertData {
     description: string;
     publicationDate: string;
     roomsNumber: number;
-    dateFrom: string;
-    dateTo: string;
+    adDateFrom: string;
+    adDateTo: string;
     squareMeters: number;
     floor: number;
     hasBalcony: boolean;
