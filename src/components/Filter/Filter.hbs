@@ -49,11 +49,13 @@
 
   <hr>
   <div class="filter-group date-group">
-    <p class="filter__group-name">Фильтр по дате</p>
-    <label for="start-date">Дата начала</label>
-    <input type="date" id="start-date" name="start-date">
-    <label for="end-date">Дата конца</label>
-    <input type="date" id="end-date" name="end-date">
+    <p class="filter__group-name">Даты приёма гостей</p>
+    <div class="filter__date-inputs">
+      <label for="start-date">С</label>
+      <input class="filter__date-input" type="date" id="start-date" name="start-date">
+      <label for="end-date">По</label>
+      <input class="filter__date-input" type="date" id="end-date" name="end-date">
+    </div>
   </div>
   
   <button type="submit" class="apply-button">Применить</button>

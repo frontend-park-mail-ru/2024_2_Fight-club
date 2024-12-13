@@ -29,6 +29,18 @@
         font-size: 20px;
         font-weight: 500;
     }
+
+    &__date-inputs {
+        display: grid;
+        align-items: center;
+        grid-template-columns: 1fr 5fr;
+        row-gap: 5px;
+    }
+
+    &__date-input {
+        display: inline-block;
+        width: 100%;
+    }
 }
 
 .filter-group {
@@ -134,7 +146,6 @@
     }
 
     input[type='date'] {
-        width: 100%;
         padding: 5px;
         border: 1px solid #a8a5a5;
         border-radius: 5px;
@@ -142,7 +153,7 @@
 }
 
 input[type='date'] {
-    font-family: Arial, sans-serif;
+    font-family: Inter;
     font-size: 16px;
     padding: 5px;
     border: 1px solid #ccc;
