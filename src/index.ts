@@ -8,6 +8,7 @@ import MainPage from './pages/MainPage/MainPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import CityPage from './pages/CityPage/CityPage';
 import MapPage from './pages/MapPage/MapPage';
+import FavouritePage from './pages/FavouritePage/FavouritePage';
 
 import { clearPage } from './modules/Clear';
 
@@ -41,7 +42,10 @@ const renderArticlesPage = () => {};
 
 const renderMessagesPage = () => {};
 
-const renderFavoritesPage = () => {};
+const renderFavoritesPage = () => {
+    const favouritePage = new FavouritePage();
+    favouritePage.render(pageContainer);
+};
 
 const renderNotificationsPage = () => {};
 

@@ -1,5 +1,6 @@
 'use strict';
 
+import ApiClient from '../../modules/ApiClient';
 import router from '../../modules/Router';
 import { AdvertData } from '../../modules/Types';
 import ReactiveComponent from '../ReactiveComponent/ReactiveComponent';
@@ -194,9 +195,9 @@ export default class AdCard extends ReactiveComponent {
     /**
      * @description Вызывается при нажатии на кнопку добавить в избранное
      */
-    addToFavorite(e: Event) {
+    async addToFavorite(e: Event) {
         e.stopPropagation();
-
+        await ApiClient.adToFavourites(this.data.id);
         console.log('fav btn was clicked!');
     }
 
