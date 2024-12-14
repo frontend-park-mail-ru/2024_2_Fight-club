@@ -33,8 +33,13 @@ const renderMainPage = async () => {
     mainPage.render();
 };
 
-function renderMapPage() {
-    const mapPage = new MapPage();
+function renderMapPage(adId?: string) {
+    let mapPage;
+    if (adId) {
+        mapPage = new MapPage(adId);
+    } else {
+        mapPage = new MapPage();
+    }
     mapPage.render(pageContainer);
 }
 
@@ -164,8 +169,9 @@ router.addRoute('/profile', async () => {
     await renderProfilePage();
 });
 
-router.addRoute('/map', async () => {
-    renderMapPage();
+router.addRoute('/map', async (params: URLSearchParams) => {
+    const adId = params.get('ad');
+    renderMapPage(adId as string);
 });
 
 router.addRoute('/favorites', async () => {

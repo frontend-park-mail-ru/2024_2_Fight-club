@@ -7,18 +7,26 @@
         </div>
         <div class="favourite-card__details">
             <span class="favourite-card__title js-favourite-card-link">{{cityName}}, {{address}}</span>
+            <div class="favourite-card__options">
+                <span class="favourite-card__options__row">
+                    <img src="/svg/floor.svg" height="16" width="16">
+                    <p>{{floor}}&nbsp;этаж</p>
+                </span>
+                <span class="favourite-card__options__row">
+                    <img src="/svg/size.svg" height="16" width="16">
+                    <p>{{squareMeters}}&nbsp;м²</p>
+                </span>
+            </div>
             <div class="favourite-card__info">
                 {{description}}
             </div>
             <div class="favourite-card__actions">
                 <button class="favourite-card__actions__chat js-favourite-card-chat">Напишите {{adAuthor.name}}</button>
-                <a href="?={{id}}">
-                    <button class="favourite-card__actions__map js-favourite-card-map">
-                        <img src="/earth.svg" height="20" width="20">
-                    </button>
-                </a>
+                <button class="favourite-card__actions__map js-favourite-card-map">
+                    <img src="/svg/earth.svg" height="20" width="20">
+                </button>
                 <button class="favourite-card__actions__remove js-favourite-card-remove">
-                    <img src="/delete-basket.svg" height="20" width="20">
+                    <img src="/svg/delete-basket.svg" height="20" width="20">
                 </button>
             </div>
         </div>

@@ -32,8 +32,7 @@ class FavouritePage {
 
             const mapButton: HTMLButtonElement = card.querySelector('.js-favourite-card-map')!;
             mapButton.onclick = () => {
-                const mapPage = new MapPage(link.innerHTML);
-                mapPage.render(this.#parent);
+                router.navigateTo(`/map?ad=${card.id}`);
             }
 
             const deleteButton: HTMLButtonElement = card.querySelector('.js-favourite-card-remove')!;

@@ -16,16 +16,16 @@ class MapPage {
     #CITY_ZOOM: number;
     #PLACE_ZOOM: number;
 
-    #currentAddress?: string;
+    #currentIdAdd?: string;
     #isCertainPoint: boolean;
 
-    constructor(address?: string) {
+    constructor(adId?: string) {
         this.#TOTAL_ZOOM = 4;
         this.#CITY_ZOOM = 11;
         this.#PLACE_ZOOM = 13;
 
-        this.#currentAddress = address;
-        this.#isCertainPoint = (address) ? true : false;
+        this.#currentIdAdd = adId;
+        this.#isCertainPoint = (adId) ? true : false;
     }
 
     #getLocation() {
@@ -131,11 +131,7 @@ class MapPage {
                     // carouselContainer.innerHTML = template({ id: d.id, images: mockImages });
 
                     let placemark;
-                    console.log(this.#isCertainPoint);
-                    console.log(this.#currentAddress);
-                    console.log(d.cityName + ', ' + d.address);
-                    console.log(this.#currentAddress === d.cityName + ', ' + d.address);
-                    if (this.#isCertainPoint && this.#currentAddress === d.cityName + ', ' + d.address) {
+                    if (this.#isCertainPoint && this.#currentIdAdd === d.id) {
                         // Смотрим определенную точку, например, перешли по кнопке Показать на карте
                         placemark = new ymaps.GeoObject(
                             {
