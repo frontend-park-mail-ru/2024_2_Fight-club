@@ -1,0 +1,27 @@
+<div class="favourite">
+    <h1 class="favourite__title">Избранное</h1>
+    {{#each housing}}
+    <div id="{{id}}" class="favourite-card">
+        <div class="favourite-card__image">
+            <img src="{{images.[0].path}}" alt="{{address}}">
+        </div>
+        <div class="favourite-card__details">
+            <span class="favourite-card__title js-favourite-card-link">
+                {{cityName}}, {{address}}
+            </span>
+            <div class="favourite-card__info">
+                {{description}}
+            </div>
+            <div class="favourite-card__actions">
+                <button class="favourite-card__actions__chat js-favourite-card-chat">Напишите {{adAuthor.name}}</button>
+                <button class="favourite-card__actions__map js-favourite-card-map">
+                    <img src="/earth.svg" height="20" width="20">
+                </button>
+                <button class="favourite-card__actions__remove js-favourite-card-remove">
+                    <img src="/delete-basket.svg" height="20" width="20">
+                </button>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>

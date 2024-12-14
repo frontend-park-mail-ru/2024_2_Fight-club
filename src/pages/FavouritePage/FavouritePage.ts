@@ -2,26 +2,42 @@
 
 import { AdvertData } from "../../modules/Types";
 import ApiClient from "../../modules/ApiClient";
-import { getCookie } from "../../modules/Utils";
+
+import router from "../../modules/Router";
 
 class FavouritePage {
     #favourites: AdvertData;
 
     constructor(){}
 
-    async #getFavourites() {
+    async #getFavourites(): Promise<void> {
         const userData = await ApiClient.getSessionData();
         const response = await ApiClient.getFavourites(userData.id as string);
         const data = await response.json();
-        console.log(data);
+        this.#favourites = data;
     }
 
-    render(parent: HTMLElement) {
-        this.#getFavourites();
+    async #addEventListeners(): Promise<void> {
+        const cards = document
+            .querySelectorAll('.favourite-card');
 
-        const favouritesContainer = document.createElement('div');
+        for (const card of cards) {
+            //Обработчик на клик по названию
+            const link: HTMLSpanElement = card.querySelector('.js-favourite-card-link')!;
+            link.onclick = () => {
+                router.navigateTo(`/ads/?id=${card.id}`);
+            }
+        }
+    }
+
+    async render(parent: HTMLElement): Promise<void> {
+        await this.#getFavourites();
+
+        const template = Handlebars.templates['FavouritePage.hbs'];
         parent.replaceChildren();
-        parent.appendChild(favouritesContainer);
+        parent.insertAdjacentHTML('afterbegin', template(this.#favourites));
+
+        await this.#addEventListeners();
     }
 }
 
