@@ -198,7 +198,6 @@ export default class AdCard extends ReactiveComponent {
     async addToFavorite(e: Event) {
         e.stopPropagation();
         await ApiClient.adToFavourites(this.data.id);
-        console.log('fav btn was clicked!');
     }
 
     /**
@@ -206,7 +205,6 @@ export default class AdCard extends ReactiveComponent {
      */
     showOnMap(e: Event) {
         e.stopPropagation();
-
-        console.log('show on map!');
+        router.navigateTo(`/map?ad=${this.data.id}`);
     }
 }
