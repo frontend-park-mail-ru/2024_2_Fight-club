@@ -12,17 +12,20 @@ interface Limit {
 
 class MapPage {
     #map;
-    // #placemarks;
     #TOTAL_ZOOM: number;
     #CITY_ZOOM: number;
     #PLACE_ZOOM: number;
 
-    constructor() {
+    #currentAddress?: string;
+    #isCertainPoint: boolean;
+
+    constructor(address?: string) {
         this.#TOTAL_ZOOM = 4;
         this.#CITY_ZOOM = 11;
         this.#PLACE_ZOOM = 13;
 
-        // this.#placemarks = new Map();
+        this.#currentAddress = address;
+        this.#isCertainPoint = (address) ? true : false;
     }
 
     #getLocation() {
@@ -127,22 +130,55 @@ class MapPage {
                     });
                     // carouselContainer.innerHTML = template({ id: d.id, images: mockImages });
 
-                    const placemark = new ymaps.GeoObject(
-                        {
-                            geometry: {
-                                type: 'Point',
-                                coordinates: coordinates,
+                    let placemark;
+                    console.log(this.#isCertainPoint);
+                    console.log(this.#currentAddress);
+                    console.log(d.cityName + ', ' + d.address);
+                    console.log(this.#currentAddress === d.cityName + ', ' + d.address);
+                    if (this.#isCertainPoint && this.#currentAddress === d.cityName + ', ' + d.address) {
+                        // Смотрим определенную точку, например, перешли по кнопке Показать на карте
+                        placemark = new ymaps.GeoObject(
+                            {
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: coordinates,
+                                },
+                                properties: {
+                                    hintContent: d.address,
+                                    balloonContentHeader: d.address,
+                                    balloonContentBody: carouselContainer.innerHTML,
+                                },
                             },
-                            properties: {
-                                hintContent: d.address,
-                                balloonContentHeader: d.address,
-                                balloonContentBody: carouselContainer.innerHTML,
+                            {
+                                balloonMinWidth: 250,
+                                preset: "islands#redDotIcon",
+                            }
+                        );
+
+                        this.#map.setCenter(
+                            placemark.geometry._coordinates,
+                            this.#PLACE_ZOOM
+                        );
+
+                    } else {
+                        // Просто добавление точки в кластер
+                        placemark = new ymaps.GeoObject(
+                            {
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: coordinates,
+                                },
+                                properties: {
+                                    hintContent: d.address,
+                                    balloonContentHeader: d.address,
+                                    balloonContentBody: carouselContainer.innerHTML,
+                                },
                             },
-                        },
-                        {
-                            balloonMinWidth: 250,
-                        }
-                    );
+                            {
+                                balloonMinWidth: 250,
+                            }
+                        );
+                    }
 
                     placemark.events.add('click', () => {
                         this.#map.setCenter(

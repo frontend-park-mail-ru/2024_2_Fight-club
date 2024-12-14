@@ -2,11 +2,13 @@
 
 import { AdvertData } from "../../modules/Types";
 import ApiClient from "../../modules/ApiClient";
+import MapPage from "../MapPage/MapPage";
 
 import router from "../../modules/Router";
 
 class FavouritePage {
     #favourites: AdvertData;
+    #parent?: HTMLDivElement;
 
     constructor(){}
 
@@ -27,15 +29,28 @@ class FavouritePage {
             link.onclick = () => {
                 router.navigateTo(`/ads/?id=${card.id}`);
             }
+
+            const mapButton: HTMLButtonElement = card.querySelector('.js-favourite-card-map')!;
+            mapButton.onclick = () => {
+                const mapPage = new MapPage(link.innerHTML);
+                mapPage.render(this.#parent);
+            }
+
+            const deleteButton: HTMLButtonElement = card.querySelector('.js-favourite-card-remove')!;
+            deleteButton.onclick = async () => {
+                await ApiClient.removeFromFavourites(card.id);
+                this.render();
+            }
         }
     }
 
-    async render(parent: HTMLElement): Promise<void> {
+    async render(parent?: HTMLDivElement): Promise<void> {
         await this.#getFavourites();
+        if (parent) this.#parent = parent;
 
         const template = Handlebars.templates['FavouritePage.hbs'];
-        parent.replaceChildren();
-        parent.insertAdjacentHTML('afterbegin', template(this.#favourites));
+        this.#parent!.replaceChildren();
+        this.#parent!.insertAdjacentHTML('afterbegin', template(this.#favourites));
 
         await this.#addEventListeners();
     }

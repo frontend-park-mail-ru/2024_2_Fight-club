@@ -165,7 +165,11 @@ router.addRoute('/profile', async () => {
 });
 
 router.addRoute('/map', async () => {
-    await renderMapPage();
+    renderMapPage();
+});
+
+router.addRoute('/favorites', async () => {
+    renderFavoritesPage();
 });
 
 router.addRoute('/ads/', async (params: URLSearchParams) => {

@@ -6,17 +6,17 @@
             <img src="{{images.[0].path}}" alt="{{address}}">
         </div>
         <div class="favourite-card__details">
-            <span class="favourite-card__title js-favourite-card-link">
-                {{cityName}}, {{address}}
-            </span>
+            <span class="favourite-card__title js-favourite-card-link">{{cityName}}, {{address}}</span>
             <div class="favourite-card__info">
                 {{description}}
             </div>
             <div class="favourite-card__actions">
                 <button class="favourite-card__actions__chat js-favourite-card-chat">Напишите {{adAuthor.name}}</button>
-                <button class="favourite-card__actions__map js-favourite-card-map">
-                    <img src="/earth.svg" height="20" width="20">
-                </button>
+                <a href="?={{id}}">
+                    <button class="favourite-card__actions__map js-favourite-card-map">
+                        <img src="/earth.svg" height="20" width="20">
+                    </button>
+                </a>
                 <button class="favourite-card__actions__remove js-favourite-card-remove">
                     <img src="/delete-basket.svg" height="20" width="20">
                 </button>
