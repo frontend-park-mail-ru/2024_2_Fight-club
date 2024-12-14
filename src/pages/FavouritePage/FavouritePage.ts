@@ -24,23 +24,32 @@ class FavouritePage {
             .querySelectorAll('.favourite-card');
 
         for (const card of cards) {
-            //Обработчик на клик по названию
+            //Объявление
             const link: HTMLSpanElement = card.querySelector('.js-favourite-card-link')!;
             link.onclick = () => {
                 router.navigateTo(`/ads/?id=${card.id}`);
             }
 
+            //Карта
             const mapButton: HTMLButtonElement = card.querySelector('.js-favourite-card-map')!;
             mapButton.onclick = () => {
                 router.navigateTo(`/map?ad=${card.id}`);
             }
 
+            //Удаление
             const deleteButton: HTMLButtonElement = card.querySelector('.js-favourite-card-remove')!;
             deleteButton.onclick = async () => {
                 await ApiClient.removeFromFavourites(card.id);
                 this.render();
             }
         }
+
+        const mainPageButton: HTMLButtonElement | null = document.querySelector('.no-reviews__button');
+        if (mainPageButton){
+            mainPageButton.onclick = () => {
+                router.navigateTo('/');
+            }
+        } 
     }
 
     async render(parent?: HTMLDivElement): Promise<void> {
