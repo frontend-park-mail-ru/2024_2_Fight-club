@@ -36,9 +36,14 @@ export default abstract class BaseComponent {
     }
 
     /**
-     * Func that attaches event listeners.
+     * Attaches event listeners.
      */
     protected abstract addEventListeners(): void;
+
+    /**
+     * Called once after render was completed
+     */
+    protected afterRender(): void {}
 
     /**
      * Called only once.
@@ -58,6 +63,7 @@ export default abstract class BaseComponent {
                 this.elementId
             ) as HTMLElement;
 
+            this.afterRender();
             this.addEventListeners();
         });
     }
