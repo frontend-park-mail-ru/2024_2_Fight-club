@@ -12,17 +12,20 @@ interface Limit {
 
 class MapPage {
     #map;
-    // #placemarks;
     #TOTAL_ZOOM: number;
     #CITY_ZOOM: number;
     #PLACE_ZOOM: number;
 
-    constructor() {
+    #currentIdAdd?: string;
+    #isCertainPoint: boolean;
+
+    constructor(adId?: string) {
         this.#TOTAL_ZOOM = 4;
         this.#CITY_ZOOM = 11;
         this.#PLACE_ZOOM = 13;
 
-        // this.#placemarks = new Map();
+        this.#currentIdAdd = adId;
+        this.#isCertainPoint = (adId) ? true : false;
     }
 
     #getLocation() {
@@ -63,6 +66,31 @@ class MapPage {
         );
     }
 
+    moveSlide(id: string, direction: number): void {
+        const carousel = document.getElementById(`carousel-${id}`);
+        if (!carousel) {
+            throw new Error(`Carousel with id "carousel-${id}" not found`);
+        }
+
+        const items =
+            carousel.querySelectorAll<HTMLDivElement>('.carousel-item');
+        const itemsArray = Array.from(items);
+
+        const activeIndex = itemsArray.findIndex(
+            (item) => item.style.display === 'block'
+        );
+        if (activeIndex === -1) {
+            throw new Error(
+                `No active carousel item found for id "carousel-${id}"`
+            );
+        }
+
+        itemsArray[activeIndex].style.display = 'none';
+        const newIndex =
+            (activeIndex + direction + itemsArray.length) % itemsArray.length;
+        itemsArray[newIndex].style.display = 'block';
+    }
+
     async #renderMap(mapContainer: HTMLDivElement) {
         this.#map = new ymaps.Map('map', {
             center: [55.755808716436846, 37.61771300861586],
@@ -83,14 +111,79 @@ class MapPage {
                     const coordinates = res.geoObjects
                         .get(0)
                         .geometry.getCoordinates();
-                    const placemark = new ymaps.GeoObject({
-                        geometry: {
-                            type: 'Point',
-                            coordinates: coordinates,
-                        },
+
+                    const mockImages = [
+                        { path: '/default.png' },
+                        { path: '/journey.jpg' },
+                        { path: '/myMap.jpg' },
+                    ];
+
+                    const template = Handlebars.templates['ImageCarousel.hbs'];
+                    const carouselContainer = document.createElement('div');
+                    carouselContainer.setAttribute(
+                        'id',
+                        `carousel-container-${d.id}`
+                    );
+                    carouselContainer.innerHTML = template({
+                        id: d.id,
+                        images: d.images,
                     });
+                    // carouselContainer.innerHTML = template({ id: d.id, images: mockImages });
+
+                    let placemark;
+                    if (this.#isCertainPoint && this.#currentIdAdd === d.id) {
+                        // Смотрим определенную точку, например, перешли по кнопке Показать на карте
+                        placemark = new ymaps.GeoObject(
+                            {
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: coordinates,
+                                },
+                                properties: {
+                                    hintContent: d.address,
+                                    balloonContentHeader: d.address,
+                                    balloonContentBody: carouselContainer.innerHTML,
+                                },
+                            },
+                            {
+                                balloonMinWidth: 250,
+                                preset: "islands#redDotIcon",
+                            }
+                        );
+
+                        this.#map.setCenter(
+                            placemark.geometry._coordinates,
+                            this.#PLACE_ZOOM
+                        );
+
+                    } else {
+                        // Просто добавление точки в кластер
+                        placemark = new ymaps.GeoObject(
+                            {
+                                geometry: {
+                                    type: 'Point',
+                                    coordinates: coordinates,
+                                },
+                                properties: {
+                                    hintContent: d.address,
+                                    balloonContentHeader: d.address,
+                                    balloonContentBody: carouselContainer.innerHTML,
+                                },
+                            },
+                            {
+                                balloonMinWidth: 250,
+                            }
+                        );
+                    }
+
+                    placemark.events.add('click', () => {
+                        this.#map.setCenter(
+                            placemark.geometry._coordinates,
+                            this.#PLACE_ZOOM
+                        );
+                    });
+
                     myClasters.get(d.cityName).push(placemark);
-                    // this.#placemarks.set(coordinates, placemark);
                 },
                 (err) => {
                     const errorPopup = PopupAlert('Место не найдено');
@@ -110,6 +203,17 @@ class MapPage {
                 this.#map.geoObjects.add(cluster);
             }
         }
+
+        document.addEventListener('click', (event) => {
+            const button = event.target as HTMLButtonElement;
+            if (button && button.classList.contains('carousel-btn')) {
+                const carouselId = button.getAttribute('data-carousel-id');
+                const direction = parseInt(button.dataset.direction!, 10);
+                if (carouselId) {
+                    this.moveSlide(carouselId, direction);
+                }
+            }
+        });
     }
 
     async #renderAds(adsContainer: HTMLDivElement) {

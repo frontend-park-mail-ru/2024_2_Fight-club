@@ -97,6 +97,11 @@ export default abstract class ReactiveComponent {
     abstract addEventListeners(): void;
 
     /**
+     * Called after innerHTML finished its job but before addEventListeners()
+     */
+    afterRender(): void {}
+
+    /**
      * Called only one time
      */
     render() {
@@ -114,6 +119,8 @@ export default abstract class ReactiveComponent {
             this.thisElement = document.getElementById(
                 this.#elementId
             ) as HTMLElement;
+
+            this.afterRender();
 
             this.addEventListeners();
         });

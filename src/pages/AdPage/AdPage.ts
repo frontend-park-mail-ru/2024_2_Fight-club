@@ -5,6 +5,7 @@ import { calculateAge } from '../../modules/Utils';
 import ReactiveComponent from '../../components/ReactiveComponent/ReactiveComponent';
 import globalStore from '../../modules/GlobalStore';
 import router from '../../modules/Router';
+import BookingCalendar from '../../components/BookingCalendar/BookingCalendar';
 
 const SECONDARY_IMG_SELECTOR = '.js-carousel-img';
 const FULLSCREEN_OVERLAY_SELECTOR = '.js-fullscreen-overlay';
@@ -12,6 +13,7 @@ const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
     'ad-page__fullscreen-overlay_hidden';
 
 export default class AdPage extends ReactiveComponent {
+    #data;
     #scrollWidth: number = 0;
     #scrollWasAutomated: boolean = false;
 
@@ -39,6 +41,25 @@ export default class AdPage extends ReactiveComponent {
                 isAuthor: data.authorUUID === globalStore.auth.userId,
             },
         });
+
+        this.#data = data;
+    }
+
+    afterRender(): void {
+        this.#renderMap();
+
+        const dateFrom = new Date(this.#data.adDateFrom);
+        const dateTo = new Date(this.#data.adDateTo);
+
+        dateFrom.setHours(0, 0, 0, 0);
+        dateTo.setHours(0, 0, 0, 0);
+
+        const elem = new BookingCalendar(
+            document.getElementById('js-date-container')!,
+            dateFrom,
+            dateTo
+        );
+        elem.render();
     }
 
     addEventListeners(): void {
@@ -119,6 +140,30 @@ export default class AdPage extends ReactiveComponent {
             carousel,
             carouselImages,
             this.state.currentIndex as number
+        );
+    }
+
+    async #renderMap() {
+        const city = this.#data.cityName;
+        const address = this.#data.address;
+        const mapContainer = document.getElementById('map');
+
+        const map = new ymaps.Map(mapContainer, {
+            center: [55.755808716436846, 37.61771300861586],
+            zoom: 4,
+        });
+
+        const addresGeocoder = ymaps.geocode(city + ' ' + address);
+        addresGeocoder.then(
+            function (res) {
+                const result = res.geoObjects;
+                const coordinates = result.get(0).geometry.getCoordinates();
+                map.geoObjects.add(result);
+                map.setCenter(coordinates, 11);
+            },
+            function (err) {
+                console.error('error: ', err);
+            }
         );
     }
 

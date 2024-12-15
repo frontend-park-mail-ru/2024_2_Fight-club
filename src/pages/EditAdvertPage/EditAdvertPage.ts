@@ -15,7 +15,7 @@ const SECONDARY_IMG_SELECTOR = '.js-carousel-img';
 const FULLSCREEN_IMG_SELECTOR = '.js-main-image-fullscreen';
 const FULLSCREEN_OVERLAY_SELECTOR = '.js-fullscreen-overlay';
 const FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME =
-    'ad-page__fullscreen-overlay_hidden';
+    'edit-ad-page__fullscreen-overlay--hidden';
 
 const SECONDARY_IMG_SELECTED_CLASS_NAME =
     'edit-advert-images-carousel__secondary-img_current';
@@ -28,6 +28,16 @@ interface SelectOption {
     selected?: boolean;
 }
 
+const HOUSING_TYPES = [
+    'Квартира',
+    'Дом',
+    'Комната',
+    'Таунхаус',
+    'Бунгало',
+    'Гостевой дом',
+    'Квартира-студия',
+];
+
 interface InputConfig {
     label: string;
     name: string;
@@ -35,7 +45,8 @@ interface InputConfig {
     isTextArea?: boolean;
     isSelect?: boolean;
     options?: SelectOption[];
-    value?: string | number;
+    value?: string | number | null | boolean;
+    isChecked?: boolean;
     minLen?: number;
     maxLen?: number;
     min?: number;
@@ -86,23 +97,34 @@ export default class EditAdvertPage {
         this.onCloseButtonClick = onCloseButtonClick;
 
         ApiClient.getCities().then((cities: City[]) => {
-            const selectOptions: SelectOption[] = [];
+            // totally a shit code. TODO: DO NOT PUT  DATA INTO THE CONSTRUCTOR
+
+            const citySelectOptions: SelectOption[] = [];
+            const housingTypeOptions: SelectOption[] = [];
 
             for (const city of cities) {
-                selectOptions.push({
+                citySelectOptions.push({
                     name: city.title,
                     value: city.title,
                     selected: data?.cityName === city.title,
                 });
             }
 
+            for (const housingType of HOUSING_TYPES) {
+                housingTypeOptions.push({
+                    name: housingType,
+                    value: housingType,
+                    selected: data?.buildingType === housingType,
+                });
+            }
+
             const inputsConfig: InputConfig[] = [
                 {
                     label: 'Город',
-                    name: 'city',
+                    name: 'cityName',
                     type: 'text',
                     isSelect: true,
-                    options: selectOptions,
+                    options: citySelectOptions,
                     value: data?.cityName,
                 },
                 {
@@ -114,16 +136,68 @@ export default class EditAdvertPage {
                     maxLen: 100,
                 },
                 {
+                    label: 'Тип дома',
+                    isSelect: true,
+                    name: 'buildingType',
+                    type: 'text',
+                    options: housingTypeOptions,
+                    value: data?.buildingType,
+                },
+                {
                     label: 'Число комнат',
-                    name: 'roomsCount',
+                    name: 'roomsNumber',
                     type: 'number',
                     value: data?.roomsNumber,
                     min: 1,
                     max: 20,
                 },
                 {
+                    label: 'Общая площадь',
+                    name: 'squareMeters',
+                    type: 'number',
+                    value: data?.squareMeters,
+                    min: 1,
+                },
+                {
+                    label: 'Доступные даты: с',
+                    name: 'dateFrom',
+                    type: 'date',
+                    value: data
+                        ? data.adDateFrom
+                        : new Date().toISOString().slice(0, 10),
+                },
+                {
+                    label: 'Доступные даты: по',
+                    name: 'dateTo',
+                    type: 'date',
+                    value: data
+                        ? data.adDateTo
+                        : new Date().toISOString().slice(0, 10),
+                },
+                {
+                    label: 'Наличие лифта',
+                    name: 'hasElevator',
+                    type: 'checkbox',
+                    isChecked: data?.hasElevator,
+                    value: data?.hasElevator,
+                },
+                {
+                    label: 'Наличие газоснабжения',
+                    name: 'hasGas',
+                    type: 'checkbox',
+                    isChecked: data?.hasGas,
+                    value: data?.hasGas,
+                },
+                {
+                    label: 'Наличие балкона',
+                    name: 'hasBalcony',
+                    type: 'checkbox',
+                    isChecked: data?.hasBalcony,
+                    value: data?.hasBalcony,
+                },
+                {
                     label: 'Описание',
-                    name: 'desc',
+                    name: 'description',
                     type: 'textarea',
                     isTextArea: true,
                     value: data?.description,
@@ -159,6 +233,34 @@ export default class EditAdvertPage {
             );
 
             if (data) this.#showImage(this.#currentIndex);
+
+            // ROOMS INFO. TODO: REFACTOR THIS FILE
+            const rowTemplate = document.getElementById(
+                'room-info-row-template'
+            ) as HTMLTemplateElement;
+
+            const roomsInfoContainer = document.getElementById(
+                'js-rooms-info-container'
+            ) as HTMLDivElement;
+
+            for (let i = 0; i < data.rooms.length; ++i) {
+                const newElem = rowTemplate.content.cloneNode(
+                    true
+                ) as DocumentFragment;
+                (
+                    newElem.querySelector('legend') as HTMLLegendElement
+                ).textContent = `Комната №${i + 1}`;
+
+                (
+                    newElem.querySelector('.js-room-type') as HTMLInputElement
+                ).value = data.rooms[i].type;
+
+                (
+                    newElem.querySelector('.js-room-area') as HTMLInputElement
+                ).value = '' + data.rooms[i].squareMeters;
+
+                roomsInfoContainer.appendChild(newElem);
+            }
 
             this.#addEventListeners();
         });
@@ -272,7 +374,7 @@ export default class EditAdvertPage {
         this.#addSecondaryImagesEvents();
 
         this.#overlay.addEventListener('click', () =>
-            this.#overlay.classList.add(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME)
+            this.#overlay.classList.toggle(FULLSCREEN_OVERLAY_HIDDEN_CLASSNAME)
         );
 
         this.#templateContainer
@@ -292,9 +394,17 @@ export default class EditAdvertPage {
             .querySelector(FILE_INPUT_SELECTOR)
             ?.addEventListener('change', this.#onImageLoaded);
 
-        this.#templateContainer
-            .querySelector('.js-form')
-            ?.addEventListener('submit', this.#submitData);
+        // Form
+        const form = document.getElementById(
+            'js-edit-advert-form'
+        ) as HTMLFormElement;
+        form.onsubmit = this.#submitData;
+
+        const roomsNumberInput = form.querySelector(
+            'input[name=roomsNumber]'
+        ) as HTMLInputElement;
+
+        roomsNumberInput.oninput = () => this.addRoomsInfo(roomsNumberInput);
 
         if (this.onCloseButtonClick) {
             (
@@ -309,21 +419,115 @@ export default class EditAdvertPage {
         }
     }
 
+    private addRoomsInfo(roomsNumberInput: HTMLInputElement) {
+        const roomsInfoContainer = document.getElementById(
+            'js-rooms-info-container'
+        ) as HTMLDivElement;
+
+        const roomsNumber = parseInt(roomsNumberInput.value as string);
+
+        const elementsCountDelta =
+            roomsNumber - roomsInfoContainer.children.length;
+        const numerationStart = roomsInfoContainer.children.length;
+
+        if (elementsCountDelta < 0) {
+            roomsInfoContainer.replaceChildren(
+                ...[...roomsInfoContainer.children].slice(0, roomsNumber)
+            );
+        } else {
+            const template = document.getElementById(
+                'room-info-row-template'
+            ) as HTMLTemplateElement;
+
+            for (let i = 0; i < elementsCountDelta; ++i) {
+                const newElem = template.content.cloneNode(
+                    true
+                ) as DocumentFragment;
+                (
+                    newElem.querySelector('legend') as HTMLLegendElement
+                ).textContent = `Комната №${numerationStart + i + 1}`;
+
+                roomsInfoContainer.appendChild(newElem);
+            }
+        }
+    }
+
     #submitData = async (e: Event) => {
+        interface Room {
+            type: string;
+            squareMeters: number;
+        }
+
+        interface FormDataToSend {
+            roomsNumber: number;
+            squareMeters: number;
+            [key: string]: string | number | boolean | Room[];
+        }
         e.preventDefault();
         const formElement = e.target as HTMLFormElement;
         const formData = new FormData(formElement);
 
         const formData2Send = new FormData();
+        const dataToSend: FormDataToSend = {
+            rooms: [],
+        };
+
+        for (const [key, value] of formData.entries()) {
+            if (typeof key !== 'string') {
+                throw new Error('error');
+            }
+
+            // belowe are the number fields. parse them as integers
+            if (['roomsNumber', 'squareMeters'].includes(key)) {
+                dataToSend[key] = parseInt(value as string);
+            } else if (typeof value === 'string') {
+                dataToSend[key] = value as string;
+            }
+        }
+
+        // Dates should be handled differently too
+        dataToSend.dateFrom = new Date(
+            formData.get('dateFrom') as string
+        ).toISOString();
+        dataToSend.dateTo = new Date(
+            formData.get('dateTo') as string
+        ).toISOString();
+
+        // Checkboxes are needed to be handled differently
+        const checkboxes = formElement.querySelectorAll(
+            'input[type=checkbox]'
+        ) as NodeListOf<HTMLInputElement>;
+        checkboxes.forEach((elem) => {
+            dataToSend[elem.name] = elem.checked;
+        });
+
+        // Rooms Info
+        const roomsInfoElements = formElement.querySelectorAll('.js-room-info');
+        roomsInfoElements.forEach((roomInfoContainer) => {
+            const roomType = (
+                roomInfoContainer.querySelector(
+                    '.js-room-type'
+                ) as HTMLInputElement
+            ).value;
+            const roomArea = parseInt(
+                (
+                    roomInfoContainer.querySelector(
+                        '.js-room-area'
+                    ) as HTMLInputElement
+                ).value
+            );
+
+            dataToSend.rooms.push({
+                type: roomType,
+                squareMeters: roomArea,
+            });
+        });
+
         formData2Send.set(
             'metadata',
             JSON.stringify({
-                cityName: formData.get('city') as string,
-                address: formData.get('address') as string,
+                ...dataToSend,
                 position: [0, 0],
-                distance: 0,
-                description: formData.get('desc') as string,
-                roomsNumber: parseInt(formData.get('roomsCount') as string),
             })
         );
 
@@ -357,7 +561,8 @@ export default class EditAdvertPage {
         const target = e.target as HTMLElement;
         const imageId = parseInt(target.id);
         const imgNameToDelete = target.dataset.name;
-        if (imageId !== 0) ApiClient.deleteImageFromAdvert(this.#id, imageId);
+        if (imageId !== 0 && this.#id)
+            ApiClient.deleteImageFromAdvert(this.#id, imageId);
         (e.target as HTMLElement).parentElement?.remove();
 
         this.#uploadedImages = this.#uploadedImages.filter(

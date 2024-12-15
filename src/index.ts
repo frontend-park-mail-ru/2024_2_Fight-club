@@ -8,6 +8,7 @@ import MainPage from './pages/MainPage/MainPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import CityPage from './pages/CityPage/CityPage';
 import MapPage from './pages/MapPage/MapPage';
+import FavouritePage from './pages/FavouritePage/FavouritePage';
 
 import { clearPage } from './modules/Clear';
 
@@ -34,8 +35,13 @@ const renderMainPage = async () => {
     mainPage.render();
 };
 
-function renderMapPage() {
-    const mapPage = new MapPage();
+function renderMapPage(adId?: string) {
+    let mapPage;
+    if (adId) {
+        mapPage = new MapPage(adId);
+    } else {
+        mapPage = new MapPage();
+    }
     mapPage.render(pageContainer);
 }
 
@@ -43,7 +49,10 @@ const renderArticlesPage = () => {};
 
 const renderMessagesPage = () => {};
 
-const renderFavoritesPage = () => {};
+const renderFavoritesPage = () => {
+    const favouritePage = new FavouritePage();
+    favouritePage.render(pageContainer);
+};
 
 const renderNotificationsPage = () => {};
 
@@ -122,11 +131,6 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
 
 /** Объект с коллбеками для header`а */
 const headerCallbacks = {
-    mainPage: () => {
-        router.navigateTo('/');
-    },
-    mapPage: renderMapPage,
-    articlesPage: renderArticlesPage,
     messagesPage: renderMessagesPage,
     favoritesPage: renderFavoritesPage,
     notificationsPage: renderNotificationsPage,
@@ -162,8 +166,13 @@ router.addRoute('/profile', async () => {
     await renderProfilePage();
 });
 
-router.addRoute('/map', async () => {
-    await renderMapPage();
+router.addRoute('/map', async (params: URLSearchParams) => {
+    const adId = params.get('ad');
+    renderMapPage(adId as string);
+});
+
+router.addRoute('/favorites', async () => {
+    renderFavoritesPage();
 });
 
 router.addRoute('/ads/', async (params: URLSearchParams) => {
@@ -210,4 +219,16 @@ const init = async () => {
     router.navigateTo(location.href);
 };
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' });
+}
+
+// TODO: move it somewhere
+const registerHBSHelpers = () => {
+    Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
+        return arg1 == arg2 ? options.fn(this) : options.inverse(this);
+    });
+};
+
+registerHBSHelpers();
 init();
