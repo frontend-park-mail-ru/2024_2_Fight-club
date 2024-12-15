@@ -129,11 +129,6 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
 
 /** Объект с коллбеками для header`а */
 const headerCallbacks = {
-    mainPage: () => {
-        router.navigateTo('/');
-    },
-    mapPage: renderMapPage,
-    articlesPage: renderArticlesPage,
     messagesPage: renderMessagesPage,
     favoritesPage: renderFavoritesPage,
     notificationsPage: renderNotificationsPage,

@@ -4,9 +4,6 @@ import ApiClient from '../../modules/ApiClient';
 import PopupAlert from '../PopupAlert/PopupAlert';
 
 interface HeaderCallbacks {
-    mainPage: () => void;
-    mapPage: () => void;
-    articlesPage: () => void;
     messagesPage: () => void;
     favoritesPage: () => void;
     notificationsPage: () => void;
@@ -37,12 +34,10 @@ class Header {
                 Map: {
                     href: '/map',
                     text: 'Карта',
-                    callback: headerCallbacks.mapPage,
                 },
                 Articles: {
                     href: '/articles',
                     text: 'Статьи',
-                    callback: headerCallbacks.articlesPage,
                 },
             },
 
@@ -91,7 +86,7 @@ class Header {
         const hrefs = document.createElement('div');
         hrefs.classList.add('header__hrefs');
         Object.entries(this.#config.menu).forEach(
-            ([key, { href, text, callback }], index) => {
+            ([key, { href, text }], index) => {
                 const menuElement = document.createElement('a');
                 menuElement.href = href;
                 menuElement.text = text;
@@ -106,7 +101,6 @@ class Header {
                     );
 
                     menuElement.classList.add('header__hrefs__href-active');
-                    callback();
                 });
                 menuElement.classList.add('header__hrefs__href');
 
