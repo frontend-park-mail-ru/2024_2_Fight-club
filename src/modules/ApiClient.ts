@@ -233,19 +233,38 @@ class APIClient {
 
     async adToFavourites(id: string) {
         const url = this.BASE_URL + `/housing/${id}/like`;
-        const body = {}
-        return Ajax.post({url, body});
+        const body = {};
+        return Ajax.post({ url, body });
     }
 
     async removeFromFavourites(id: string) {
         const url = this.BASE_URL + `/housing/${id}/dislike`;
-        const body = {}
-        return Ajax.post({url, body});
+        const body = {};
+        return Ajax.post({ url, body });
     }
 
     async getFavourites(uuid: string) {
         const url = this.BASE_URL + `users/${uuid}/favorites`;
         return Ajax.get(url);
+    }
+
+    async payment(
+        adId: string,
+        cardNumber: string,
+        cardExpiry: string,
+        cardCVC: string,
+        donationAmount: string
+    ) {
+        const url = this.BASE_URL + `/housing/${adId}/payment`;
+        return Ajax.put({
+            url: url,
+            body: {
+                cardNumber: cardNumber,
+                cardExpiry: cardExpiry,
+                cardCVC: cardCVC,
+                donationAmount: donationAmount,
+            },
+        });
     }
 }
 

@@ -28,6 +28,7 @@ import { getCookie } from './modules/Utils';
 import globalStore from './modules/GlobalStore';
 import ChatPage from './pages/ChatPage/ChatPage';
 import ChatRepository from './repositories/ChatRepository';
+import PaymentPage from './pages/PaymentPage/PaymentPage';
 
 const renderMainPage = async () => {
     const data = await ApiClient.getAds();
@@ -210,6 +211,11 @@ router.addRoute('/chats', async (params: URLSearchParams) => {
     const data = await ChatRepository.getAll();
     const chatPage = new ChatPage(pageContainer, data, recipientId);
     chatPage.render();
+});
+
+router.addRoute('/payment', async (params: URLSearchParams) => {
+    const page = new PaymentPage(pageContainer);
+    page.render();
 });
 
 const init = async () => {

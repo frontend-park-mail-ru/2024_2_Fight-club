@@ -27,6 +27,10 @@
     }
 }
 
+.button {
+    @include button;
+}
+
 @mixin small-button {
     @include button;
     min-height: 0;
