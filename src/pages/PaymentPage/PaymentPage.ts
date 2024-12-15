@@ -1,5 +1,6 @@
 import BaseComponent from '../../components/BaseComponent/BaseComponent';
 import ApiClient from '../../modules/ApiClient';
+import PaymentSuccessPage from '../PaymentSuccessPage/PaymentSuccessPage';
 
 export default class PaymentPage extends BaseComponent {
     private adId: string;
@@ -89,7 +90,16 @@ export default class PaymentPage extends BaseComponent {
                 this.CVVInput!.value,
                 '' + this.price
             );
-            console.log(await response.json());
+
+            if (response.ok) {
+                this.showThanksScreen();
+            }
         };
+    }
+
+    private showThanksScreen() {
+        const page = new PaymentSuccessPage(this.parent);
+        this.parent.replaceChildren();
+        page.render();
     }
 }

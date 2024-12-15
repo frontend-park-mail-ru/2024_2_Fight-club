@@ -1,0 +1,19 @@
+.payment-success-page {
+    width: 30%;
+    margin: 30px auto;
+    text-align: center;
+
+    &__heading {
+        font-weight: 500;
+    }
+
+    &__desc {
+        display: block;
+        margin-top: 10px;
+    }
+
+    &__return-button {
+        margin: 30px auto 0;
+        height: min-content;
+    }
+}
