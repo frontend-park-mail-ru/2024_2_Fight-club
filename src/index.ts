@@ -214,7 +214,14 @@ router.addRoute('/chats', async (params: URLSearchParams) => {
 });
 
 router.addRoute('/payment', async (params: URLSearchParams) => {
-    const page = new PaymentPage(pageContainer);
+    const adId = params.get('adId');
+
+    if (!adId) {
+        router.navigateTo('/'); // TODO: Maybe 404 / 403 / 400?
+        return;
+    }
+
+    const page = new PaymentPage(pageContainer, adId);
     page.render();
 });
 

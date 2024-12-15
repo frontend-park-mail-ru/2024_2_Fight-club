@@ -58,10 +58,9 @@ function AdListPage(data: HorizontalAdCardData[], isHost: boolean) {
                     image: d.image,
                 },
                 {
-                    onOpen: (uuid: string) =>
-                        router.navigateTo(`/ads/?id=${uuid}`),
-                    onEdit: async (uuid: string) => {
-                        const data = await ApiClient.getAd(uuid);
+                    onOpen: () => router.navigateTo(`/ads/?id=${d.id}`),
+                    onEdit: async () => {
+                        const data = await ApiClient.getAd(d.id);
                         const page = new EditAdvertPage({
                             action: 'edit',
                             data,
@@ -72,9 +71,12 @@ function AdListPage(data: HorizontalAdCardData[], isHost: boolean) {
                         ) as HTMLDivElement;
                         root.replaceChildren(page.getElement());
                     },
-                    onDel: async (uuid: string) => {
-                        await ApiClient.deleteAd(uuid);
+                    onDel: async () => {
+                        await ApiClient.deleteAd(d.id);
                         router.navigateTo(location.href);
+                    },
+                    onBoost: async () => {
+                        router.navigateTo(`/payment?adId=${d.id}`);
                     },
                 }
             );

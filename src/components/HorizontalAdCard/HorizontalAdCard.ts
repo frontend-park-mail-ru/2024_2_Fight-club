@@ -1,7 +1,8 @@
 interface HorizontalAdCardCallbacks {
-    onOpen: (uuid: string) => void;
-    onEdit: (uuid: string) => void;
-    onDel: (uuid: string) => void;
+    onOpen: () => void;
+    onEdit: () => void;
+    onDel: () => void;
+    onBoost: () => void;
 }
 
 export interface HorizontalAdCardData {
@@ -23,20 +24,27 @@ export default function HorizontalAdCard(
     (pageContainer.querySelector('.js-open-btn') as HTMLButtonElement).onclick =
         (e) => {
             e.stopPropagation();
-            callbacks.onOpen(cardData.id);
+            callbacks.onOpen();
         };
 
     (pageContainer.querySelector('.js-edit-btn') as HTMLButtonElement).onclick =
         (pageContainer.firstChild as HTMLElement).onclick = (e) => {
             e.stopPropagation();
-            callbacks.onEdit(cardData.id);
+            callbacks.onEdit();
         };
 
     (pageContainer.querySelector('.js-del-btn') as HTMLButtonElement).onclick =
         (e) => {
             e.stopPropagation();
-            callbacks.onDel(cardData.id);
+            callbacks.onDel();
         };
+
+    (
+        pageContainer.querySelector('.js-boost-button') as HTMLButtonElement
+    ).onclick = (e) => {
+        e.stopPropagation();
+        callbacks.onBoost();
+    };
 
     return pageContainer.firstChild as HTMLDivElement;
 }
