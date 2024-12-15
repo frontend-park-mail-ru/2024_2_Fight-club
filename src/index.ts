@@ -209,6 +209,10 @@ const init = async () => {
     router.navigateTo(location.href);
 };
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' });
+}
+
 // TODO: move it somewhere
 const registerHBSHelpers = () => {
     Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
