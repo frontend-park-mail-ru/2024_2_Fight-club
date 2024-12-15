@@ -1,6 +1,7 @@
 @mixin button {
     display: flex;
     box-sizing: border-box;
+    text-decoration: none;
     justify-content: center;
     align-items: center;
     margin: 0;
