@@ -161,3 +161,8 @@ export const updateDOM = (oldElement: HTMLElement, newElement: HTMLElement) => {
     }
     compareAndReplace(oldElement, newElement);
 };
+
+export const convertTimeToMinutesAndSeconds = (isoString: string): string => {
+    const date = new Date(isoString);
+    return date.toTimeString().slice(0, 5);
+};

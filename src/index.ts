@@ -26,6 +26,8 @@ import router from './modules/Router';
 import { HorizontalAdCardData } from './components/HorizontalAdCard/HorizontalAdCard';
 import { getCookie } from './modules/Utils';
 import globalStore from './modules/GlobalStore';
+import ChatPage from './pages/ChatPage/ChatPage';
+import ChatRepository from './repositories/ChatRepository';
 
 const renderMainPage = async () => {
     const data = await ApiClient.getAds();
@@ -200,6 +202,14 @@ router.addRoute('/profiles', async (params: URLSearchParams) => {
     const profileId = params.get('id') as string;
     const page = new ProfilePage(profileId);
     page.render(pageContainer);
+});
+
+router.addRoute('/chats', async (params: URLSearchParams) => {
+    const recipientId = params.get('recipientId') as string;
+
+    const data = await ChatRepository.getAll();
+    const chatPage = new ChatPage(pageContainer, data, recipientId);
+    chatPage.render();
 });
 
 const init = async () => {

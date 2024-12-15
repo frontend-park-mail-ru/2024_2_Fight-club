@@ -16,6 +16,7 @@
 @use "../src/components/ProfileData/NoReviews/NoReviews"
 @use "../src/components/Spinner/Spinner"
 @use '../src/components/HorizontalAdCard/HorizontalAdCard'
+@use '../src/components/ChatWindow/ChatWindow'
 @use '../src/components/BookingCalendar/BookingCalendar'
 
 /* pages */
@@ -26,6 +27,7 @@
 @use "../src/pages/MapPage/MapPage"
 @use "../src/pages/CityPage/CityPage"
 @use '../src/pages/AdPage/AdPage'
+@use '../src/pages/ChatPage/ChatPage'
 @use '../src/pages/FavouritePage/FavouritePage'
 
 
@@ -39,13 +41,28 @@
     margin: 0
     padding: 0
     
+html
+    height: 100%
 
 body
+    display: flex
+    flex-direction: column
+    height: 100%
     font-optical-sizing: auto
     font-style: normal
     font-family: Inter, Arial, 'sans-serif'
     background-color: #fff
 
+#root
+    flex: 1 1 auto
+    height: 100%
+    display: flex
+    flex-direction: column
+
+.page-container
+    flex: 1 1
+    display: flex
+    flex-direction: column
 
 @font-face
     font-family: MarckScript-Regular
