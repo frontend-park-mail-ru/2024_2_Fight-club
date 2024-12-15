@@ -188,7 +188,7 @@ class Header {
         } else {
             const entryButton = document.createElement('button');
             entryButton.classList.add('header__button');
-            entryButton.textContent = 'Войти!';
+            entryButton.textContent = 'Войти';
             entryButton.addEventListener(
                 'click',
                 this.#headerCallbacks.signInPage
