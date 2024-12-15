@@ -1,9 +1,14 @@
 @mixin button {
+    display: flex;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
     margin: 0;
     background-color: #ffa552;
     color: white;
     padding: 5px 20px;
     min-width: fit-content;
+    width: fit-content;
     min-height: 35px;
     height: fit-content;
     font-style: normal;
