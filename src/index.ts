@@ -221,7 +221,7 @@ router.addRoute('/payment', async (params: URLSearchParams) => {
         return;
     }
 
-    const page = new PaymentPage(pageContainer, adId);
+    const page = new PaymentPage(pageContainer, adId, 10502121111);
     page.render();
 });
 

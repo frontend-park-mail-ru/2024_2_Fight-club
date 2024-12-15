@@ -1,8 +1,10 @@
 <main class='payment-page'>
     <h1 class='payment-page__heading'>Оплата банковской картой</h1>
 
-    <p class='payment-page__total-label'>Итого</p>
-    <p class='payment-page__price'>1 077&nbsp₽</p>
+    <div class='payment-page__price-and-hint'>
+        <p class='payment-page__total-label'>Итого с учётом НДС</p>
+        <p class='payment-page__price'>{{price}}&nbsp₽</p>
+    </div>
 
     <div class='payment-card'>
         <div class='payment-card__front'>
@@ -116,5 +118,6 @@
         </div>
     </div>
 
-    <button class='payment-page__pay-button button'>Оплатить 1 259&nbsp₽</button>
+    <button class='payment-page__pay-button button' id='js-pay-button'>Оплатить
+        {{price}}&nbsp₽</button>
 </main>
