@@ -221,6 +221,10 @@
     }
 }
 
+.already-liked {
+    color: #e43030 !important;
+}
+
 @media screen and (max-width: 900px) {
     .housing-card {
         &__city {

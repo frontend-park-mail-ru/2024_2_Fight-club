@@ -4,6 +4,7 @@ import ApiClient from '../../modules/ApiClient';
 import router from '../../modules/Router';
 import { AdvertData } from '../../modules/Types';
 import ReactiveComponent from '../ReactiveComponent/ReactiveComponent';
+import PopupSuccess from '../PopupSuccess/PopupSuccess';
 
 /** Карточка объявления на главной странице */
 export default class AdCard extends ReactiveComponent {
@@ -197,7 +198,31 @@ export default class AdCard extends ReactiveComponent {
      */
     async addToFavorite(e: Event) {
         e.stopPropagation();
-        await ApiClient.adToFavourites(this.data.id);
+        const response = await ApiClient.adToFavourites(this.data.id);
+        const heartButton = this.thisElement.querySelector(
+            '.js-fill-heart'
+        ) as HTMLButtonElement;
+
+        if (response.ok){
+            this.data.isFavorite = true;
+            const successMessage = PopupSuccess(
+                'Объявление добавлено в избранное'
+            );
+            document
+                .querySelector('.page-container')
+                ?.appendChild(successMessage);
+            heartButton.classList.add('already-liked');
+        } else {
+            this.data.isFavorite = false;
+            await ApiClient.removeFromFavourites(this.data.id)
+            const successMessage = PopupSuccess(
+                'Успешно удалено'
+            );
+            document
+                .querySelector('.page-container')
+                ?.appendChild(successMessage);
+            heartButton.classList.remove('already-liked');
+        }
     }
 
     /**
