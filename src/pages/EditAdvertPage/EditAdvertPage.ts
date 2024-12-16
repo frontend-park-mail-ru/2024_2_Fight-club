@@ -243,23 +243,29 @@ export default class EditAdvertPage {
                 'js-rooms-info-container'
             ) as HTMLDivElement;
 
-            for (let i = 0; i < data.rooms.length; ++i) {
-                const newElem = rowTemplate.content.cloneNode(
-                    true
-                ) as DocumentFragment;
-                (
-                    newElem.querySelector('legend') as HTMLLegendElement
-                ).textContent = `Комната №${i + 1}`;
+            if (data) {
+                for (let i = 0; i < data.rooms.length; ++i) {
+                    const newElem = rowTemplate.content.cloneNode(
+                        true
+                    ) as DocumentFragment;
+                    (
+                        newElem.querySelector('legend') as HTMLLegendElement
+                    ).textContent = `Комната №${i + 1}`;
 
-                (
-                    newElem.querySelector('.js-room-type') as HTMLInputElement
-                ).value = data.rooms[i].type;
+                    (
+                        newElem.querySelector(
+                            '.js-room-type'
+                        ) as HTMLInputElement
+                    ).value = data.rooms[i].type;
 
-                (
-                    newElem.querySelector('.js-room-area') as HTMLInputElement
-                ).value = '' + data.rooms[i].squareMeters;
+                    (
+                        newElem.querySelector(
+                            '.js-room-area'
+                        ) as HTMLInputElement
+                    ).value = '' + data.rooms[i].squareMeters;
 
-                roomsInfoContainer.appendChild(newElem);
+                    roomsInfoContainer.appendChild(newElem);
+                }
             }
 
             this.#addEventListeners();
