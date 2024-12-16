@@ -117,6 +117,7 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
                 cityName: d.cityName,
                 address: d.address,
                 image: d.images[0],
+                priority: d.priority,
             });
         }
     }

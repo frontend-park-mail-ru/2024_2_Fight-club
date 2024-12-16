@@ -547,9 +547,7 @@ export default class EditAdvertPage {
             response = await ApiClient.createAdvert(formData2Send);
 
             if (response?.ok) {
-                const data = await response.json();
-                const id = data['place']['uuid'];
-                router.navigateTo(`/ads/?id=${id}`);
+                router.navigateTo(location.href);
             }
         } else if (this.#action == 'edit' && this.#id) {
             response = await ApiClient.updateAdvert(this.#id, formData2Send);

@@ -10,6 +10,7 @@ export interface HorizontalAdCardData {
     cityName: string;
     address: string;
     image: string;
+    priority: number;
 }
 
 export default function HorizontalAdCard(
@@ -39,12 +40,12 @@ export default function HorizontalAdCard(
             callbacks.onDel();
         };
 
-    (
-        pageContainer.querySelector('.js-boost-button') as HTMLButtonElement
-    ).onclick = (e) => {
-        e.stopPropagation();
-        callbacks.onBoost();
-    };
+    pageContainer
+        .querySelector('.js-boost-button')
+        ?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            callbacks.onBoost();
+        });
 
     return pageContainer.firstChild as HTMLDivElement;
 }
