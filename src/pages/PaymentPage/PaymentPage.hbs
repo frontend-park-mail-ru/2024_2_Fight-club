@@ -6,7 +6,7 @@
         <p class='payment-page__price'>{{price}}&nbsp₽</p>
     </div>
 
-    <div class='payment-card'>
+    <form class='payment-card' id="js-card-form">
         <div class='payment-card__front'>
             <div class='payment-card__logos'>
                 <img class='payment-card__logo' src='mir.png' alt='mir-logo' />
@@ -46,6 +46,7 @@
                     maxlength='19'
                     placeholder='XXXX XXXX XXXX XXXX'
                     autocomplete='cc-number'
+                    required
                 />
             </div>
 
@@ -67,6 +68,7 @@
                         autocorrect='off'
                         spellcheck='true'
                         autocapitalize='off'
+                        required
                     />
 
                     <span style='color: rgb(128, 141, 154);'>/</span>
@@ -87,6 +89,7 @@
                         autocorrect='off'
                         spellcheck='true'
                         autocapitalize='off'
+                        required
                     />
                 </div>
             </div>
@@ -97,7 +100,7 @@
             </div>
 
             <div class='payment-card__visible-back'>
-                <label class='payment-card__label'>CVV/CVC</label>
+                <label for="cc-csc" class='payment-card__label'>CVV/CVC</label>
                 <input
                     id='js-cvv'
                     type='tel'
@@ -112,12 +115,17 @@
                     spellcheck='true'
                     autocapitalize='off'
                     class='payment-card__input payment-card__input-cvc'
+                    required
                 />
                 <p class='payment-card__hint'>три цифры с обратной стороны карты</p>
             </div>
         </div>
-    </div>
 
-    <button class='payment-page__pay-button button' id='js-pay-button'>Оплатить
-        {{price}}&nbsp₽</button>
+        <input
+            class='payment-page__pay-button button'
+            id='js-pay-button'
+            type='submit'
+            value='Оплатить {{price}}&nbsp₽'
+        ></input>
+    </form>
 </main>

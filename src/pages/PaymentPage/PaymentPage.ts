@@ -9,7 +9,7 @@ export default class PaymentPage extends BaseComponent {
     private expMonthInput: HTMLInputElement | null;
     private expYearInput: HTMLInputElement | null;
     private CVVInput: HTMLInputElement | null;
-    private payButton: HTMLButtonElement | null;
+    private form: HTMLFormElement | null;
 
     constructor(parent: HTMLElement, adId: string, price: number) {
         super({
@@ -26,10 +26,12 @@ export default class PaymentPage extends BaseComponent {
         this.expMonthInput = null;
         this.expYearInput = null;
         this.CVVInput = null;
-        this.payButton = null;
+        this.form = null;
     }
 
     protected afterRender(): void {
+        this.form = document.getElementById('js-card-form') as HTMLFormElement;
+
         this.cardNumberInput = document.getElementById(
             'js-card-number-input'
         ) as HTMLInputElement;
@@ -43,10 +45,6 @@ export default class PaymentPage extends BaseComponent {
         ) as HTMLInputElement;
 
         this.CVVInput = document.getElementById('js-cvv') as HTMLInputElement;
-
-        this.payButton = document.getElementById(
-            'js-pay-button'
-        ) as HTMLButtonElement;
     }
 
     protected addEventListeners(): void {
@@ -79,7 +77,9 @@ export default class PaymentPage extends BaseComponent {
             this.CVVInput!.value = this.CVVInput!.value.replace(/[^0-9]/, '');
         };
 
-        this.payButton!.onclick = async () => {
+        this.form!.onsubmit = async (e) => {
+            e.preventDefault();
+
             const cardNumber = this.cardNumberInput!.value;
             const expDate = `${this.expMonthInput!.value}/${this.expYearInput!.value}`;
 
