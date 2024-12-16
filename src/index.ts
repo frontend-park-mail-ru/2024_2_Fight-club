@@ -8,6 +8,7 @@ import MainPage from './pages/MainPage/MainPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import CityPage from './pages/CityPage/CityPage';
 import MapPage from './pages/MapPage/MapPage';
+import FavouritePage from './pages/FavouritePage/FavouritePage';
 
 import { clearPage } from './modules/Clear';
 
@@ -23,8 +24,10 @@ const pageContainer = document.createElement('div');
 
 import router from './modules/Router';
 import { HorizontalAdCardData } from './components/HorizontalAdCard/HorizontalAdCard';
-import { getCookie } from './modules/Utils';
 import globalStore from './modules/GlobalStore';
+import ChatPage from './pages/ChatPage/ChatPage';
+import ChatRepository from './repositories/ChatRepository';
+import PaymentPage from './pages/PaymentPage/PaymentPage';
 
 const renderMainPage = async () => {
     const data = await ApiClient.getAds();
@@ -32,8 +35,13 @@ const renderMainPage = async () => {
     mainPage.render();
 };
 
-function renderMapPage() {
-    const mapPage = new MapPage();
+function renderMapPage(adId?: string) {
+    let mapPage;
+    if (adId) {
+        mapPage = new MapPage(adId);
+    } else {
+        mapPage = new MapPage();
+    }
     mapPage.render(pageContainer);
 }
 
@@ -41,7 +49,10 @@ const renderArticlesPage = () => {};
 
 const renderMessagesPage = () => {};
 
-const renderFavoritesPage = () => {};
+const renderFavoritesPage = () => {
+    const favouritePage = new FavouritePage();
+    favouritePage.render(pageContainer);
+};
 
 const renderNotificationsPage = () => {};
 
@@ -91,10 +102,10 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
     }
 
     let data = await ApiClient.getAdsOfUser(userId);
-    if (!('housing' in data)) {
+    if (!('places' in data)) {
         data = [];
     } else {
-        data = data['housing'];
+        data = data['places']['housing'];
     }
 
     const horizontalAdCardData: HorizontalAdCardData[] = [];
@@ -105,6 +116,8 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
                 cityName: d.cityName,
                 address: d.address,
                 image: d.images[0],
+                priority: d.priority,
+                endBoostDate: d.endBoostDate,
             });
         }
     }
@@ -120,11 +133,6 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
 
 /** Объект с коллбеками для header`а */
 const headerCallbacks = {
-    mainPage: () => {
-        router.navigateTo('/');
-    },
-    mapPage: renderMapPage,
-    articlesPage: renderArticlesPage,
     messagesPage: renderMessagesPage,
     favoritesPage: renderFavoritesPage,
     notificationsPage: renderNotificationsPage,
@@ -136,15 +144,13 @@ const renderHeader = async () => {
     document.querySelector('.header')?.remove();
 
     let sessionData;
-    if (getCookie('session_id')) {
-        try {
-            sessionData = await APIService.getSessionData();
+    try {
+        sessionData = await APIService.getSessionData();
 
-            globalStore.auth.isAuthorized = true;
-            globalStore.auth.userId = sessionData.id;
-        } catch {
-            //
-        }
+        globalStore.auth.isAuthorized = true;
+        globalStore.auth.userId = sessionData.id;
+    } catch {
+        globalStore.auth.isAuthorized = false;
     }
 
     const header = new Header(headerCallbacks, sessionData ? true : false);
@@ -160,8 +166,13 @@ router.addRoute('/profile', async () => {
     await renderProfilePage();
 });
 
-router.addRoute('/map', async () => {
-    await renderMapPage();
+router.addRoute('/map', async (params: URLSearchParams) => {
+    const adId = params.get('ad');
+    renderMapPage(adId as string);
+});
+
+router.addRoute('/favorites', async () => {
+    renderFavoritesPage();
 });
 
 router.addRoute('/ads/', async (params: URLSearchParams) => {
@@ -193,6 +204,26 @@ router.addRoute('/profiles', async (params: URLSearchParams) => {
     page.render(pageContainer);
 });
 
+router.addRoute('/chats', async (params: URLSearchParams) => {
+    const recipientId = params.get('recipientId') as string;
+
+    const data = await ChatRepository.getAll();
+    const chatPage = new ChatPage(pageContainer, data, recipientId);
+    chatPage.render();
+});
+
+router.addRoute('/payment', async (params: URLSearchParams) => {
+    const adId = params.get('adId');
+
+    if (!adId) {
+        router.navigateTo('/'); // TODO: Maybe 404 / 403 / 400?
+        return;
+    }
+
+    const page = new PaymentPage(pageContainer, adId, 500);
+    page.render();
+});
+
 const init = async () => {
     await renderHeader();
     pageContainer.classList.add('page-container');
@@ -200,4 +231,16 @@ const init = async () => {
     router.navigateTo(location.href);
 };
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' });
+}
+
+// TODO: move it somewhere
+const registerHBSHelpers = () => {
+    Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
+        return arg1 == arg2 ? options.fn(this) : options.inverse(this);
+    });
+};
+
+registerHBSHelpers();
 init();

@@ -51,6 +51,7 @@
         border: 2px solid #e4e4e4;
         border-radius: 4px;
         padding: 20px;
+        height: fit-content;
     }
 
     &__hint {
@@ -58,6 +59,7 @@
         flex-direction: column;
         gap: 20px;
         padding: 30px;
+        height: fit-content;
 
         &--hidden {
             display: none;
@@ -114,4 +116,10 @@
             height: $button-height;
         }
     }
+}
+
+.rainbow-text {
+    background-image: linear-gradient(rgb(230, 63, 33), rgb(30, 30, 247));
+    color: transparent;
+    background-clip: text;
 }

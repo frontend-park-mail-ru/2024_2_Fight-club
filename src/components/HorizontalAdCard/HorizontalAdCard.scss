@@ -75,4 +75,16 @@
             background-color: #d9e8ff;
         }
     }
+
+    &__boost-button {
+        @include mixins.small-button;
+        background: linear-gradient(
+            45deg,
+            #f09433 0%,
+            #e6683c 25%,
+            #dc2743 50%,
+            #cc2366 75%,
+            #bc1888 100%
+        );
+    }
 }

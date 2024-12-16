@@ -1,10 +1,12 @@
 'use strict';
 
-const SCROLL_DELAY = 200;
-
+import ApiClient from '../../modules/ApiClient';
 import router from '../../modules/Router';
 import { AdvertData } from '../../modules/Types';
 import ReactiveComponent from '../ReactiveComponent/ReactiveComponent';
+import PopupSuccess from '../PopupSuccess/PopupSuccess';
+import PopupAlert from '../PopupAlert/PopupAlert';
+import globalStore from '../../modules/GlobalStore';
 
 /** Карточка объявления на главной странице */
 export default class AdCard extends ReactiveComponent {
@@ -31,13 +33,24 @@ export default class AdCard extends ReactiveComponent {
                 //     return data.images[state.toShowIndex as number].path;
                 // },
             },
-            templateData: data,
+            templateData: {
+                ...data,
+                rating: ('' + data.author.rating).slice(0, 3),
+            },
         });
         this.plannedImageIndex = null;
         this.currentImageIndex = 0;
         this.data = data;
         this.oldImage = this.newImage = null;
         this.imgScrollTimeouts = [];
+
+        this.registerHelper();
+    }
+
+    private registerHelper() {
+        Handlebars.registerHelper('gte', function (a: number, b: number) {
+            return a >= b;
+        });      
     }
 
     addEventListeners() {
@@ -196,18 +209,46 @@ export default class AdCard extends ReactiveComponent {
     /**
      * @description Вызывается при нажатии на кнопку добавить в избранное
      */
-    addToFavorite(e: Event) {
+    async addToFavorite(e: Event) {
         e.stopPropagation();
-
-        console.log('fav btn was clicked!');
+        const heartButton = this.thisElement.querySelector(
+            '.js-fill-heart'
+        ) as HTMLButtonElement;
+        
+        console.log(globalStore.auth.isAuthorized)
+        if (globalStore.auth.isAuthorized) {
+            if (!this.data.isFavorite) {
+                await ApiClient.adToFavourites(this.data.id);
+                this.data.isFavorite = true;
+                const successMessage = PopupSuccess(
+                    'Объявление добавлено в избранное'
+                );
+                document
+                    .querySelector('.page-container')
+                    ?.appendChild(successMessage);
+                heartButton.classList.add('already-liked');
+            } else {
+                this.data.isFavorite = false;
+                await ApiClient.removeFromFavourites(this.data.id);
+                const successMessage = PopupSuccess('Успешно удалено');
+                document
+                    .querySelector('.page-container')
+                    ?.appendChild(successMessage);
+                heartButton.classList.remove('already-liked');
+            }
+        } else {
+            const errorMessage = PopupAlert('Необходимо зарегистрироваться');
+            document
+                .querySelector('.page-container')
+                ?.appendChild(errorMessage);
+        }
     }
 
     /**
-     * @description
+     * @description Вызывается при нажатии на кнопку "Показать на карте"
      */
     showOnMap(e: Event) {
         e.stopPropagation();
-
-        console.log('show on map!');
+        router.navigateTo(`/map?ad=${this.data.id}`);
     }
 }

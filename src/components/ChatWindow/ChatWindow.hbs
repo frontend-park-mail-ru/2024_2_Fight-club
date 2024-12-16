@@ -1,0 +1,46 @@
+<template id='js-chat-message-template'>
+    <div class='chat-window__chat-window__message'>
+        <span class='chat-window__chat-window__message__text js-message-text'>
+            Тут текст сообщения
+        </span>
+        <div class='chat-window__chat-window__message__time-wrapper'>
+            <span
+                class='chat-window__chat-window__message__time js-message-time'
+            >
+                00:00
+            </span>
+        </div>
+    </div>
+</template>
+
+<div class='chat-window__chat-window' id='{{id}}'>
+    <div class='chat-window__chat-window__messages' id='js-messages'>
+        <!-- Messages will be here -->
+    </div>
+
+    <div class='chat-window__chat-window__bottom-part'>
+        <textarea
+            placeholder='Написать сообщение'
+            class='chat-window__chat-window__input js-message-input'
+            rows='1'
+            maxlength='300'
+        ></textarea>
+        <button
+            class='chat-window__chat-window__send-button'
+            id='js-send-message-button'
+        >
+            <svg
+                aria-hidden='true'
+                width='16'
+                height='16'
+                viewBox='0 0 16 16'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+            ><path
+                    d='M15.968 9.02v-2.1H3.88l4.495-4.544L6.953.971.03 7.969l6.924 6.999 1.422-1.407L3.882 9.02h12.086Z'
+                    fill='currentColor'
+                ></path>
+            </svg>
+        </button>
+    </div>
+</div>

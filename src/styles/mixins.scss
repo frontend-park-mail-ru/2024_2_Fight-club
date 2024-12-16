@@ -1,9 +1,15 @@
 @mixin button {
+    display: flex;
+    box-sizing: border-box;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
     margin: 0;
     background-color: #ffa552;
     color: white;
     padding: 5px 20px;
     min-width: fit-content;
+    width: fit-content;
     min-height: 35px;
     height: fit-content;
     font-style: normal;
@@ -11,6 +17,7 @@
     border: none;
     font-size: 16px;
     font-weight: 600;
+    user-select: none;
     cursor: pointer;
     transition:
         transform 0.1s,
@@ -24,6 +31,10 @@
         transform: translateY(2px);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
+}
+
+.button {
+    @include button;
 }
 
 @mixin small-button {

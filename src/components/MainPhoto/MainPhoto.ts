@@ -45,6 +45,10 @@ class MainPhoto {
 
     render(parent: HTMLElement) {
         const searchCityForm = document.createElement('div');
+        const searchFormTitle = document.createElement('div');
+        searchFormTitle.textContent = 'Куда направимся?';
+        const hintLabel = document.createElement('p');
+        hintLabel.textContent = 'Введите интересующий Вас город';
         const searchButtonDiv = document.createElement('div');
         const searchButtonWrapper = document.createElement('div');
         const search = document.createElement('input');
@@ -53,12 +57,16 @@ class MainPhoto {
         search.placeholder = 'Поиск по городам';
 
         search.classList.add('js-find-city');
+        hintLabel.classList.add('search__hint');
         searchButtonWrapper.classList.add('custom-search__row');
         searchButtonDiv.classList.add('custom-search');
         searchCityForm.classList.add('search-container');
+        searchFormTitle.classList.add('search__title');
 
         searchButtonDiv.appendChild(searchButtonWrapper);
+        searchCityForm.appendChild(searchFormTitle);
         searchCityForm.appendChild(searchButtonDiv);
+        searchCityForm.appendChild(hintLabel);
 
         this.#mainPhotoContainer.appendChild(searchCityForm);
 

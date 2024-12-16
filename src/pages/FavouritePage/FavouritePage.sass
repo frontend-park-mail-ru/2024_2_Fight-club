@@ -1,0 +1,146 @@
+@use '../../styles/mixins'
+
+.favourite-cards
+    row-gap: 10px
+    column-gap: 20px
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr))
+    flex-grow: 1
+
+.favourite
+    padding: 20px
+    margin: 0 auto
+    width: 80%
+
+    &__title
+        font-size: 24px
+        margin-bottom: 20px
+        font-weight: bold
+
+    &-card
+        display: flex
+        flex-direction: row
+        background: #fff
+        border: 1px solid #e5e5e5
+        border-radius: 8px
+        padding: 16px
+        margin-bottom: 16px
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
+        transition: transform 0.2s ease-in-out
+        overflow: hidden
+
+        &:hover
+            transform: scale(1.02)
+
+        &__image
+            min-width: 200px
+            width: 200px
+            height: 100%
+            border-radius: 8px
+            overflow: hidden
+            margin-right: 16px
+            display: flex
+            align-items: center
+
+            img
+                width: 100%
+                height: 100%
+                object-fit: cover
+
+        &__details
+            flex: 1
+            display: flex
+            flex-direction: column
+            justify-content: space-between
+            gap: 10px
+            overflow: hidden
+            text-overflow: ellipsis 
+            -webkit-box-orient: vertical
+            word-wrap: break-word 
+
+        &__title
+            font-size: 18px
+            font-weight: bold
+            margin-bottom: 8px
+            cursor: pointer
+            display: flex
+            word-wrap: break-word
+        
+        &__options
+            display: flex
+            flex-direction: column
+            gap: 5px
+
+            &__row
+                display: flex
+                flex-direction: row
+                gap: 5px
+
+        &__info
+            font-size: 16px
+            color: #666
+            margin-bottom: 12px
+            max-height: 200px
+            overflow: hidden
+            text-overflow: ellipsis
+            display: -webkit-box
+            -webkit-line-clamp: 3
+            -webkit-box-orient: vertical
+            word-wrap: break-word
+
+            span
+                display: block
+
+        &__actions
+            display: flex
+            flex-direction: row
+            gap: 8px
+
+            button
+                @include mixins.button
+
+                min-height: 30px !important
+                height: 30px !important
+                display: flex
+                align-items: center
+                justify-content: center
+
+            &__chat
+                width: 180px
+
+            &__map
+                background-color: #E6F0FF !important
+                min-width: 50px !important
+                width: 50px !important     
+
+            &__remove
+                background: #f5c6cb !important
+                min-width: 50px !important
+                width: 50px !important
+
+@media screen and (max-width: 500px)
+    .favourite
+        width: 90%
+
+        &__title
+            text-align: center
+        
+        &-cards
+            display: flex
+            flex-direction: column
+            width: 100%
+
+    .favourite-card
+        flex-direction: column
+        width: 300px
+        min-width: 300px
+
+        &__title
+            width: 100%
+            display: flex
+            flex-wrap: wrap
+
+        &__image
+            width: 100%
+
+    

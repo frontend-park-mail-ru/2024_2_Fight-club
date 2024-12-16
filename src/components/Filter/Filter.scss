@@ -29,6 +29,19 @@
         font-size: 20px;
         font-weight: 500;
     }
+
+    &__date-inputs {
+        display: grid;
+        align-items: center;
+        grid-template-columns: 1fr 5fr;
+        row-gap: 5px;
+    }
+
+    &__date-input {
+        box-sizing: border-box;
+        display: inline-block;
+        width: 100%;
+    }
 }
 
 .filter-group {
@@ -107,6 +120,54 @@
 
 .advert {
     grid-area: addvert;
+}
+
+.visitors-slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    input[type='range'] {
+        width: 100%;
+    }
+
+    #vis-value {
+        font-size: 16px;
+        text-align: center;
+    }
+}
+
+.date-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    label {
+        font-size: 16px;
+    }
+
+    input[type='date'] {
+        padding: 5px;
+        border: 1px solid #a8a5a5;
+        border-radius: 5px;
+    }
+}
+
+input[type='date'] {
+    font-family: Inter;
+    font-size: 16px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+
+    &:focus {
+        outline: none;
+        border-color: #ffa552;
+        box-shadow: 0 0 5px rgba(255, 165, 82, 0.5);
+    }
 }
 
 @media screen and (max-width: 900px) {

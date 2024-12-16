@@ -1,0 +1,36 @@
+<div class='booking-calendars'>
+{{#each months as |monthData|}}
+<div class="booking-calendar">
+    <h3 class='booking-calendar__month-year'>{{monthData.monthName}} {{monthData.year}}</h3>
+    <table class='booking-calendar__table' border="0">
+        <thead class='booking-calendar__head'>
+            <tr class='booking-calendar__row booking-calendar__heading-row'>
+                <th class='booking-calendar__cell booking-calendar__cell--heading'>Пн</th>
+                <th class='booking-calendar__cell booking-calendar__cell--heading'>Вт</th>
+                <th class='booking-calendar__cell booking-calendar__cell--heading'>Ср</th>
+                <th class='booking-calendar__cell booking-calendar__cell--heading'>Чт</th>
+                <th class='booking-calendar__cell booking-calendar__cell--heading'>Пт</th>
+                <th class='booking-calendar__cell booking-calendar__cell--heading'>Сб</th>
+                <th class='booking-calendar__cell booking-calendar__cell--heading'>Вс</th>
+            </tr>
+        </thead>
+
+        <tbody class='booking-calendar__body'>
+            {{#each monthData.days as |week|}}
+                <tr class='booking-calendar__row'>
+                    {{#each week as |day|}}
+                        <td
+                            class='booking-calendar__cell
+                                {{#if day.isBooked}} booking-calendar__cell--booked {{/if}}
+                                {{#unless day.isCurrentMonth}} booking-calendar__cell--not-current-month {{/unless}}'
+                        >
+                            {{day.date}}
+                        </td>
+                    {{/each}}
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    </div>
+{{/each}}
+</div>

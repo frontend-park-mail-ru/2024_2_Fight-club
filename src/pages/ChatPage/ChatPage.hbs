@@ -1,0 +1,16 @@
+<div class='chat-page' id='{{id}}'>
+    <div class='recipients-list'>
+        {{#each chats}}
+            <div class='recipient-card' data-id='{{this.authorUuid}}'>
+                <img
+                    class='recipient-card__avatar'
+                    src='{{this.authorAvatar}}'
+                />
+                <div class='recipient-card__info'>
+                    <p class='recipient-card__name'>{{this.authorName}}</p>
+                    <p class='recipient-card__text'>{{this.lastMessage}}</p>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>

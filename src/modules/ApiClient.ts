@@ -42,6 +42,14 @@ class APIClient {
                 url += `&guests=${filters.guests}`;
             }
 
+            if (filters?.dateFrom) {
+                url += `&dateFrom=${filters.dateFrom}`;
+            }
+
+            if (filters?.dateTo) {
+                url += `&dateTo=${filters.dateTo}`;
+            }
+
             if (limit?.limit) {
                 url += `&limit=${limit.limit}`;
             }
@@ -221,6 +229,42 @@ class APIClient {
     async getReviewsByUser(uuid: string) {
         const url = this.BASE_URL + `/reviews/${uuid}`;
         return Ajax.get(url);
+    }
+
+    async adToFavourites(id: string) {
+        const url = this.BASE_URL + `/housing/${id}/like`;
+        const body = {};
+        return Ajax.post({ url, body });
+    }
+
+    async removeFromFavourites(id: string) {
+        const url = this.BASE_URL + `/housing/${id}/dislike`;
+        const body = {};
+        return Ajax.post({ url, body });
+    }
+
+    async getFavourites(uuid: string) {
+        const url = this.BASE_URL + `users/${uuid}/favorites`;
+        return Ajax.get(url);
+    }
+
+    async payment(
+        adId: string,
+        cardNumber: string,
+        cardExpiry: string,
+        cardCVC: string,
+        donationAmount: string
+    ) {
+        const url = this.BASE_URL + `/housing/${adId}/payment`;
+        return Ajax.put({
+            url: url,
+            body: {
+                cardNumber: cardNumber,
+                cardExpiry: cardExpiry,
+                cardCVC: cardCVC,
+                donationAmount: donationAmount,
+            },
+        });
     }
 }
 

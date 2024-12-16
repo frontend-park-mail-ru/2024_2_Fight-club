@@ -1,5 +1,5 @@
-<div class='ad-page' id='{{elementId}}'>
-    <main>
+<main class='ad-page' id='{{elementId}}'>
+    <article>
         <div class='ad-page__gallery'>
             <ul class='ad-page__gallery__carousel js-main-img-div'>
                 <div class='ad-page__gallery__carousel__buttons-container'>
@@ -63,13 +63,48 @@
         </div>
 
         <div class='advert-apps'>
+
             <div class='advert-apps__element'>
                 <div class='advert-apps__photo-container'>
-                    <img src='/svg/eye-greybg.svg' width='40' height='40' />
+                    <img
+                        src='/svg/size.svg'
+                        alt='Общая площадь'
+                        width='40'
+                        height='40'
+                    />
                 </div>
                 <div class='advert-apps__info'>
-                    <p class='advert-apps__info__p1'>Просмотрено</p>
-                    <p class='advert-apps__info__p2'>{{viewsCount}} раз</p>
+                    <p class='advert-apps__info__title'>Общая площадь</p>
+                    <p
+                        class='advert-apps__info__value'
+                    >{{squareMeters}}&nbsp;м²</p>
+                </div>
+            </div>
+
+            {{#if floor}}
+                <div class='advert-apps__element'>
+                    <div class='advert-apps__photo-container'>
+                        <img
+                            src='/svg/floor.svg'
+                            alt='Этаж'
+                            width='40'
+                            height='40'
+                        />
+                    </div>
+                    <div class='advert-apps__info'>
+                        <p class='advert-apps__info__title'>Этаж</p>
+                        <p class='advert-apps__info__value'>{{floor}}</p>
+                    </div>
+                </div>
+            {{/if}}
+
+            <div class='advert-apps__element'>
+                <div class='advert-apps__photo-container'>
+                    <img src='/svg/eye.svg' width='40' height='40' />
+                </div>
+                <div class='advert-apps__info'>
+                    <p class='advert-apps__info__title'>Просмотрено</p>
+                    <p class='advert-apps__info__value'>{{viewsCount}} раз</p>
                 </div>
             </div>
             <div class='advert-apps__element'>
@@ -77,46 +112,105 @@
                     <img src='/svg/favorites-grey.svg' width='40' height='40' />
                 </div>
                 <div class='advert-apps__info'>
-                    <p class='advert-apps__info__p1'>Понравилось</p>
-                    <p class='advert-apps__info__p2'>5 раз</p>
+                    <p class='advert-apps__info__title'>Понравилось</p>
+                    <p class='advert-apps__info__value'>{{likesCount}}</p>
                 </div>
             </div>
-            <div class='advert-apps__element'>
-                <div class='advert-apps__photo-container'>
-                    <img
-                        src='/svg/person-walking.svg'
-                        alt='Количество просмотров объявления'
-                        width='40'
-                        height='40'
-                    />
-                </div>
-                <div class='advert-apps__info'>
-                    <p class='advert-apps__info__p1'>Посещено</p>
-                    <p class='advert-apps__info__p2'>3 раз</p>
-                </div>
-            </div>
+
         </div>
 
         <p class='ad-page__desc'>
             {{description}}
         </p>
 
-        <div class='ad-page__info-table'>
-            <p class='ad-page__info-table__title'>О жилье</p>
-            <div class='ad-page__info-table__row'>
-                <span class='ad-page__info-table__label'>Город</span>
-                <span class='ad-page__info-table__value'>{{cityName}}</span>
-            </div>
-            <div class='ad-page__info-table__row'>
-                <span class='ad-page__info-table__label'>Адрес</span>
-                <span class='ad-page__info-table__value'>{{address}}</span>
-            </div>
-            <div class='ad-page__info-table__row'>
-                <span class='ad-page__info-table__label'>Комнаты</span>
-                <span class='ad-page__info-table__value'>{{roomsNumber}}</span>
-            </div>
+        <section>
+            <h2 class='section-title'>Доступные даты</h2>
+            <div id='js-date-container'></div>
+        </section>
+
+        <div class='ad-page__info-tables'>
+            <section class='ad-page__info-table'>
+                <h2 class='section-title'>О жилье</h2>
+
+                <div class='ad-page__info-table__row'>
+                    <span class='ad-page__info-table__label'>Город</span>
+                    <span class='ad-page__info-table__value'>{{cityName}}</span>
+                </div>
+
+                <div class='ad-page__info-table__row'>
+                    <span class='ad-page__info-table__label'>Адрес</span>
+                    <span class='ad-page__info-table__value'>{{address}}</span>
+                </div>
+
+                <div class='ad-page__info-table__row'>
+                    <span class='ad-page__info-table__label'>Комнаты</span>
+                    <span
+                        class='ad-page__info-table__value'
+                    >{{roomsNumber}}</span>
+                </div>
+
+                <div class='ad-page__info-table__row'>
+                    <span class='ad-page__info-table__label'>Балкон</span>
+                    <span class='ad-page__info-table__value'>
+                        {{#if hasBalcony}}Есть
+                        {{else}}
+                            Отсутствует
+                        {{/if}}</span>
+                </div>
+
+                {{#each rooms}}
+                    <div class='ad-page__info-table__row'>
+                        <span
+                            class='ad-page__info-table__label'
+                        >{{this.type}}</span>
+                        <span class='ad-page__info-table__value'>
+                            {{this.squareMeters}}&nbsp;м²
+                        </span>
+                    </div>
+                {{/each}}
+            </section>
+
+            <section class='ad-page__info-table'>
+                <p class='section-title'>О доме</p>
+
+                {{#if buildingType}}
+                    <div class='ad-page__info-table__row'>
+                        <span class='ad-page__info-table__label'>Тип дома</span>
+                        <span
+                            class='ad-page__info-table__value'
+                        >{{buildingType}}</span>
+                    </div>
+                {{/if}}
+
+                <div class='ad-page__info-table__row'>
+                    <span
+                        class='ad-page__info-table__label'
+                    >Газоснабжение</span>
+                    <span class='ad-page__info-table__value'>
+                        {{#if hasGas}}Есть
+                        {{else}}
+                            Отсутствует
+                        {{/if}}
+                    </span>
+                </div>
+
+                <div class='ad-page__info-table__row'>
+                    <span class='ad-page__info-table__label'>Лифт</span>
+                    <span class='ad-page__info-table__value'>
+                        {{#if hasElevator}}Есть
+                        {{else}}
+                            Отсутствует
+                        {{/if}}
+                    </span>
+                </div>
+            </section>
         </div>
-    </main>
+
+        <section id='map' class='mini-map'>
+            <h2 class='section-title'>На карте</h2>
+        </section>
+
+    </article>
 
     <div
         class='ad-page__fullscreen-overlay ad-page__fullscreen-overlay_hidden js-fullscreen-overlay'
@@ -127,13 +221,13 @@
         />
     </div>
 
-    <div class='ad-page__author-info'>
-        <img class='ad-page__author-info__avatar' src='{{adAuthor.avatar}}' />
+    <aside class='ad-page__author-info'>
+        <img class='ad-page__author-info__avatar' src='{{author.avatar}}' />
         <p class='ad-page__author-info__hoster-text'>Хостер</p>
         <a
             href='/profiles?id={{authorUUID}}'
             class='ad-page__author-info__name'
-        >{{adAuthor.name}}</a>
+        >{{author.name}}</a>
 
         <div class='ad-page__author-info__inner-content'>
             <dl class='ad-page__author-info__desc'>
@@ -141,7 +235,7 @@
                     <dt class='ad-page__author-info__desc__term'>Рейтинг</dt>
                     <dd
                         class='ad-page__author-info__desc__definition'
-                    >{{adAuthor.rating}}</dd>
+                    >{{rating}}</dd>
                 </div>
                 <div class='ad-page__author-info__desc__item'>
                     <dt class='ad-page__author-info__desc__term'>Пол</dt>
@@ -158,10 +252,14 @@
             </dl>
 
             <div class='ad-page__author-info__buttons'>
-                <button class='ad-page__author-info__write-msg-button'>Напишите
-                    {{adAuthor.name}}
+                <a
+                    class='ad-page__author-info__write-msg-button'
+                    href='/chats?recipientId={{authorUUID}}'
+                >
+                    Напишите
+                    {{author.name}}
                     прямо сейчас
-                </button>
+                </a>
                 {{#if isAuthor}}
                     <button
                         class='ad-page__author-info__edit-button'
@@ -172,6 +270,6 @@
             </div>
         </div>
 
-    </div>
+    </aside>
 
-</div>
+</main>

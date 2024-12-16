@@ -1,0 +1,141 @@
+<main class='payment-page'>
+    <h1 class='payment-page__heading'>Оплата банковской картой</h1>
+
+    <div class='payment-page__price-and-hint'>
+        <p class='payment-page__total-label'>Итого с учётом НДС</p>
+        <p class='payment-page__price'>{{price}}&nbsp₽</p>
+    </div>
+
+    <form class='payment-form' id='js-card-form'>
+        <div class='payment-card'>
+            <div class='payment-card__front'>
+                <div class='payment-card__logos'>
+                    <img
+                        class='payment-card__logo'
+                        src='mir.png'
+                        alt='mir-logo'
+                    />
+                    <img
+                        class='payment-card__logo'
+                        src='visa.png'
+                        alt='visa-logo'
+                    />
+                    <img
+                        class='payment-card__logo'
+                        src='mastercard-1.png'
+                        alt='mastercard-logo'
+                    />
+                    <img
+                        class='payment-card__logo'
+                        src='mastercard-2.png'
+                        alt='mastercard-logo'
+                    />
+                    <img
+                        class='payment-card__logo'
+                        src='american-express.png'
+                        alt='american-express-logo'
+                    />
+                    <img
+                        class='payment-card__logo'
+                        src='union-pay.png'
+                        alt='union-pay-logo'
+                    />
+                </div>
+
+                <div>
+                    <label class='payment-card__label'>Номер карты</label>
+                    <input
+                        class='payment-card__input payment-card__number-input'
+                        id='js-card-number-input'
+                        type='tel'
+                        maxlength='19'
+                        placeholder='XXXX XXXX XXXX XXXX'
+                        autocomplete='cc-number'
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label class='payment-card__label'>Действует до</label>
+                    <div>
+                        <input
+                            class='payment-card__input payment-card__input-date'
+                            id='js-exp-month'
+                            type='tel'
+                            placeholder='ММ'
+                            pattern='[0-9]{1,2}'
+                            maxlength='2'
+                            max='12'
+                            tabindex='2'
+                            autocomplete='cc-exp-month'
+                            x-autocompletetype='cc-exp-month'
+                            name='cc-exp-month'
+                            autocorrect='off'
+                            spellcheck='true'
+                            autocapitalize='off'
+                            required
+                        />
+
+                        <span style='color: rgb(128, 141, 154);'>/</span>
+
+                        <input
+                            class='payment-card__input payment-card__input-date'
+                            id='js-exp-year'
+                            type='tel'
+                            placeholder='ГГ'
+                            pattern='[0-9]{1,2}'
+                            maxlength='2'
+                            min='24'
+                            max='99'
+                            tabindex='3'
+                            autocomplete='cc-exp-year'
+                            x-autocompletetype='cc-exp-year'
+                            name='cc-exp-year'
+                            autocorrect='off'
+                            spellcheck='true'
+                            autocapitalize='off'
+                            required
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class='payment-card__back'>
+                <div class='payment-card__back-line'>
+                </div>
+
+                <div class='payment-card__visible-back'>
+                    <label
+                        for='cc-csc'
+                        class='payment-card__label'
+                    >CVV/CVC</label>
+                    <input
+                        id='js-cvv'
+                        type='tel'
+                        placeholder='000'
+                        pattern='[0-9]{3,4}'
+                        maxlength='3'
+                        max=''
+                        autocomplete='cc-csc'
+                        x-autocompletetype='cc-csc'
+                        name='cc-csc'
+                        autocorrect='off'
+                        spellcheck='true'
+                        autocapitalize='off'
+                        class='payment-card__input payment-card__input-cvc'
+                        required
+                    />
+                    <p class='payment-card__hint'>три цифры с обратной стороны
+                        карты</p>
+                </div>
+            </div>
+        </div>
+
+        <input
+            class='payment-page__pay-button button'
+            id='js-pay-button'
+            type='submit'
+            value='Оплатить {{price}}&nbsp₽'
+        />
+    </form>
+</main>

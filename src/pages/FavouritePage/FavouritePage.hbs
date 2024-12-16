@@ -1,0 +1,79 @@
+<div class='favourite'>
+    {{#if housing}}
+        <h1 class='favourite__title'>Избранное</h1>
+        <div class='favourite-cards'>
+            {{#each housing}}
+                <div id='{{id}}' class='favourite-card'>
+                    <div class='favourite-card__image'>
+                        <img src="{{images.[0].path}}" alt="{{address}}">
+                        {{!-- <img src='/myMap.jpg' alt='{{address}}' /> --}}
+                    </div>
+                    <div class='favourite-card__details'>
+                        <div
+                            class='favourite-card__title js-favourite-card-link'
+                        >{{cityName}}, {{address}}</div>
+                        <div class='favourite-card__options'>
+                            <span class='favourite-card__options__row'>
+                                <img
+                                    src='/svg/floor.svg'
+                                    height='16'
+                                    width='16'
+                                />
+                                <p>{{floor}}&nbsp;этаж</p>
+                            </span>
+                            <span class='favourite-card__options__row'>
+                                <img
+                                    src='/svg/size.svg'
+                                    height='16'
+                                    width='16'
+                                />
+                                <p>{{squareMeters}}&nbsp;м²</p>
+                            </span>
+                        </div>
+                        <div class='favourite-card__info'>
+                            {{description}}
+                        </div>
+                        <div class='favourite-card__actions'>
+                            <button
+                                class='favourite-card__actions__chat js-favourite-card-chat'
+                            >Написать {{author.name}}</button>
+                            <button
+                                class='favourite-card__actions__map js-favourite-card-map'
+                            >
+                                <img
+                                    src='/svg/earth.svg'
+                                    height='20'
+                                    width='20'
+                                />
+                            </button>
+                            <button
+                                class='favourite-card__actions__remove js-favourite-card-remove'
+                            >
+                                <img
+                                    src='/svg/delete-basket.svg'
+                                    height='20'
+                                    width='20'
+                                />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+    {{else}}
+        <div class='no-reviews'>
+            <div class='no-reviews__img-container'>
+                <img src='/walking.webp' />
+            </div>
+
+            <div class='no-reviews__content'>
+                <p>В избранном пока пусто</p>
+                <div class='no-reviews__button-container'>
+                    <button class='no-reviews__button'>
+                        На главную
+                    </button>
+                </div>
+            </div>
+        </div>
+    {{/if}}
+</div>

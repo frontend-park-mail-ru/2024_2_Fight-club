@@ -1,11 +1,9 @@
 'use strict';
 
 import ApiClient from '../../modules/ApiClient';
+import PopupAlert from '../PopupAlert/PopupAlert';
 
 interface HeaderCallbacks {
-    mainPage: () => void;
-    mapPage: () => void;
-    articlesPage: () => void;
     messagesPage: () => void;
     favoritesPage: () => void;
     notificationsPage: () => void;
@@ -36,12 +34,10 @@ class Header {
                 Map: {
                     href: '/map',
                     text: 'Карта',
-                    callback: headerCallbacks.mapPage,
                 },
                 Articles: {
                     href: '/articles',
                     text: 'Статьи',
-                    callback: headerCallbacks.articlesPage,
                 },
             },
 
@@ -90,7 +86,7 @@ class Header {
         const hrefs = document.createElement('div');
         hrefs.classList.add('header__hrefs');
         Object.entries(this.#config.menu).forEach(
-            ([key, { href, text, callback }], index) => {
+            ([key, { href, text }], index) => {
                 const menuElement = document.createElement('a');
                 menuElement.href = href;
                 menuElement.text = text;
@@ -105,7 +101,6 @@ class Header {
                     );
 
                     menuElement.classList.add('header__hrefs__href-active');
-                    callback();
                 });
                 menuElement.classList.add('header__hrefs__href');
 
@@ -127,14 +122,24 @@ class Header {
         Object.entries(this.#config.signs).forEach(
             ([_, { href, src, callback }]) => {
                 const signElement = document.createElement('a');
-                signElement.href = href;
+                if (this.#isAuthorized) signElement.href = href;
                 const img = document.createElement('img');
                 img.src = src;
                 img.width = 30;
                 signElement.appendChild(img);
-                signElement.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    callback();
+                signElement.addEventListener('click', (e: Event) => {
+                    if (this.#isAuthorized) {
+                        callback();
+                    } else {
+                        e.preventDefault();
+                        this.#headerCallbacks.signInPage();
+                        const errorMessage = PopupAlert(
+                            'Необходимо зарегистрироваться'
+                        );
+                        document
+                            .querySelector('.overlay')
+                            ?.appendChild(errorMessage);
+                    }
                 });
 
                 signsContainer.appendChild(signElement);
@@ -177,7 +182,7 @@ class Header {
         } else {
             const entryButton = document.createElement('button');
             entryButton.classList.add('header__button');
-            entryButton.textContent = 'Войти!';
+            entryButton.textContent = 'Войти';
             entryButton.addEventListener(
                 'click',
                 this.#headerCallbacks.signInPage

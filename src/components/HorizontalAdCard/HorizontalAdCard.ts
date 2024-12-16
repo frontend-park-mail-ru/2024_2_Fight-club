@@ -1,7 +1,8 @@
 interface HorizontalAdCardCallbacks {
-    onOpen: (uuid: string) => void;
-    onEdit: (uuid: string) => void;
-    onDel: (uuid: string) => void;
+    onOpen: () => void;
+    onEdit: () => void;
+    onDel: () => void;
+    onBoost: () => void;
 }
 
 export interface HorizontalAdCardData {
@@ -9,6 +10,8 @@ export interface HorizontalAdCardData {
     cityName: string;
     address: string;
     image: string;
+    priority: number;
+    endBoostDate: string;
 }
 
 export default function HorizontalAdCard(
@@ -18,25 +21,38 @@ export default function HorizontalAdCard(
     const template = Handlebars.templates['HorizontalAdCard.hbs'];
     const pageContainer = document.createElement('div');
 
-    pageContainer.innerHTML = template(cardData);
+    pageContainer.innerHTML = template({
+        ...cardData,
+        boostDaysLeft: Math.round(
+            (new Date(cardData.endBoostDate).valueOf() - new Date().valueOf()) /
+                (60 * 60 * 24 * 1000)
+        ).toString(),
+    });
 
     (pageContainer.querySelector('.js-open-btn') as HTMLButtonElement).onclick =
         (e) => {
             e.stopPropagation();
-            callbacks.onOpen(cardData.id);
+            callbacks.onOpen();
         };
 
     (pageContainer.querySelector('.js-edit-btn') as HTMLButtonElement).onclick =
         (pageContainer.firstChild as HTMLElement).onclick = (e) => {
             e.stopPropagation();
-            callbacks.onEdit(cardData.id);
+            callbacks.onEdit();
         };
 
     (pageContainer.querySelector('.js-del-btn') as HTMLButtonElement).onclick =
         (e) => {
             e.stopPropagation();
-            callbacks.onDel(cardData.id);
+            callbacks.onDel();
         };
+
+    pageContainer
+        .querySelector('.js-boost-button')
+        ?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            callbacks.onBoost();
+        });
 
     return pageContainer.firstChild as HTMLDivElement;
 }

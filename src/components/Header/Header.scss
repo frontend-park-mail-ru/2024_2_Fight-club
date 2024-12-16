@@ -1,6 +1,7 @@
 .header {
     background-color: #ffffff;
     height: 80px;
+    box-sizing: content-box;
     display: flex;
     align-items: center;
     border-bottom: 1px #e8e9ec solid;
@@ -58,6 +59,10 @@
     justify-content: space-between;
     padding-left: 20px;
     padding-right: 20px;
+
+    a {
+        cursor: pointer;
+    }
 }
 
 .header__button {
