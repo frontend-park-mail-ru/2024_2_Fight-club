@@ -222,12 +222,12 @@
     </div>
 
     <aside class='ad-page__author-info'>
-        <img class='ad-page__author-info__avatar' src='{{adAuthor.avatar}}' />
+        <img class='ad-page__author-info__avatar' src='{{author.avatar}}' />
         <p class='ad-page__author-info__hoster-text'>Хостер</p>
         <a
             href='/profiles?id={{authorUUID}}'
             class='ad-page__author-info__name'
-        >{{adAuthor.name}}</a>
+        >{{author.name}}</a>
 
         <div class='ad-page__author-info__inner-content'>
             <dl class='ad-page__author-info__desc'>
@@ -235,7 +235,7 @@
                     <dt class='ad-page__author-info__desc__term'>Рейтинг</dt>
                     <dd
                         class='ad-page__author-info__desc__definition'
-                    >{{adAuthor.rating}}</dd>
+                    >{{author.rating}}</dd>
                 </div>
                 <div class='ad-page__author-info__desc__item'>
                     <dt class='ad-page__author-info__desc__term'>Пол</dt>
@@ -257,7 +257,7 @@
                     href='/chat?recipientId={{authorUUID}}'
                 >
                     Напишите
-                    {{adAuthor.name}}
+                    {{author.name}}
                     прямо сейчас
                 </a>
                 {{#if isAuthor}}
