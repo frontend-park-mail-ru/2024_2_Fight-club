@@ -103,10 +103,10 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
     }
 
     let data = await ApiClient.getAdsOfUser(userId);
-    if (!('housing' in data)) {
+    if (!('places' in data)) {
         data = [];
     } else {
-        data = data['housing'];
+        data = data['places']['housing'];
     }
 
     const horizontalAdCardData: HorizontalAdCardData[] = [];
