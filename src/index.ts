@@ -24,7 +24,6 @@ const pageContainer = document.createElement('div');
 
 import router from './modules/Router';
 import { HorizontalAdCardData } from './components/HorizontalAdCard/HorizontalAdCard';
-import { getCookie } from './modules/Utils';
 import globalStore from './modules/GlobalStore';
 import ChatPage from './pages/ChatPage/ChatPage';
 import ChatRepository from './repositories/ChatRepository';
@@ -144,15 +143,13 @@ const renderHeader = async () => {
     document.querySelector('.header')?.remove();
 
     let sessionData;
-    if (getCookie('session_id')) {
-        try {
-            sessionData = await APIService.getSessionData();
+    try {
+        sessionData = await APIService.getSessionData();
 
-            globalStore.auth.isAuthorized = true;
-            globalStore.auth.userId = sessionData.id;
-        } catch {
-            //
-        }
+        globalStore.auth.isAuthorized = true;
+        globalStore.auth.userId = sessionData.id;
+    } catch {
+        //
     }
 
     const header = new Header(headerCallbacks, sessionData ? true : false);
