@@ -163,7 +163,7 @@ export default class EditAdvertPage {
                     name: 'dateFrom',
                     type: 'date',
                     value: data
-                        ? data.adDateFrom
+                        ? data.adDateFrom.slice(0, 10)
                         : new Date().toISOString().slice(0, 10),
                 },
                 {
@@ -171,7 +171,7 @@ export default class EditAdvertPage {
                     name: 'dateTo',
                     type: 'date',
                     value: data
-                        ? data.adDateTo
+                        ? data.adDateTo.slice(0, 10)
                         : new Date().toISOString().slice(0, 10),
                 },
                 {
