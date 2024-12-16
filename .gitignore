@@ -3,3 +3,4 @@ node_modules/
 precompiled-templates.js
 /images/
 /nginx/ssl/
+dist/
