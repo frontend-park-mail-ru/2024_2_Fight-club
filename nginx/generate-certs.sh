@@ -1,12 +1,14 @@
 #!/bin/bash
 
-# Установка OpenSSL, если он не установлен
-if ! command -v openssl &> /dev/null; then
-    echo "OpenSSL не найден. Устанавливаем..."
-    apt update && apt install -y openssl
-else
-    echo "OpenSSL уже установлен."
-fi
+# # Установка OpenSSL, если он не установлен
+# if ! command -v openssl &> /dev/null; then
+#     echo "OpenSSL не найден. Устанавливаем..."
+#     apt update && apt install -y openssl
+# else
+#     echo "OpenSSL уже установлен."
+# fi
+
+ls /app/ -la
 
 # Папка для хранения сертификатов
 CERT_DIR="/etc/nginx/ssl"

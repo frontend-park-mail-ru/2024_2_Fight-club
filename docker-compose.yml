@@ -1,17 +1,20 @@
+version: '3.8'
+
 services:
     frontend:
         image: node:20
         working_dir: /app
         volumes:
-            - ./:/app
+            - .:/app
             - /app/node_modules
         command: >
-            sh -c "npm i && npm run build"
+            sh -c "npm i && npm run start"
 
     nginx:
         image: nginx:latest
         volumes:
             - ./nginx/:/etc/nginx/
+            # - ./app:/app/ # изменено на правильный путь
         ports:
             - '80:80'
             - '443:443'
@@ -20,4 +23,4 @@ services:
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         command: >
-            sh -c "chmod +x /etc/nginx/generate-certs.sh && sh /etc/nginx/generate-certs.sh"
+            sh /etc/nginx/generate-certs.sh
