@@ -31,7 +31,10 @@ export default class AdCard extends ReactiveComponent {
                 //     return data.images[state.toShowIndex as number].path;
                 // },
             },
-            templateData: data,
+            templateData: {
+                ...data,
+                rating: ('' + data.author.rating).slice(0, 3),
+            },
         });
         this.plannedImageIndex = null;
         this.currentImageIndex = 0;
@@ -203,7 +206,7 @@ export default class AdCard extends ReactiveComponent {
             '.js-fill-heart'
         ) as HTMLButtonElement;
 
-        if (response.ok){
+        if (response.ok) {
             this.data.isFavorite = true;
             const successMessage = PopupSuccess(
                 'Объявление добавлено в избранное'
@@ -214,10 +217,8 @@ export default class AdCard extends ReactiveComponent {
             heartButton.classList.add('already-liked');
         } else {
             this.data.isFavorite = false;
-            await ApiClient.removeFromFavourites(this.data.id)
-            const successMessage = PopupSuccess(
-                'Успешно удалено'
-            );
+            await ApiClient.removeFromFavourites(this.data.id);
+            const successMessage = PopupSuccess('Успешно удалено');
             document
                 .querySelector('.page-container')
                 ?.appendChild(successMessage);

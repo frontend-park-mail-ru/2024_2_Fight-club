@@ -36,6 +36,7 @@ export default class AdPage extends ReactiveComponent {
             templateData: {
                 ...data,
                 ...authorInfo,
+                rating: ('' + data.author.rating).slice(0, 3),
                 age: calculateAge(authorInfo.birthdate),
                 sex: authorInfo.sex === 'M' ? 'Мужской' : 'Женский',
                 isAuthor: data.authorUUID === globalStore.auth.userId,
