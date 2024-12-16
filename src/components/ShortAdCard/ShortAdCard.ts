@@ -18,8 +18,8 @@ class ShortHousing {
     ) {
         this.#data = data;
         this.#index = index;
-        this.#age = calculateAge(this.#data.adAuthor.birthdate);
-        this.#sex = this.#calculateSex(this.#data.adAuthor.sex);
+        this.#age = calculateAge(this.#data.author.birthdate);
+        this.#sex = this.#calculateSex(this.#data.author.sex);
         this.#clickCallback = callback;
     }
 

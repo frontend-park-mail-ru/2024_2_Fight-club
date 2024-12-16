@@ -45,7 +45,7 @@ export interface AdvertData {
         squareMeters: number;
     }[];
     isFavorite: boolean;
-    adAuthor: { avatar: string; name: string; rating: number };
+    author: { avatar: string; name: string; rating: number };
     authorUUID: string;
 }
 
