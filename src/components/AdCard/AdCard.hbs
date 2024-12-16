@@ -94,7 +94,9 @@
     </div>
 
     <div class='housing-card__info'>
-        <p class='housing-card__apartment-info'>1-комн. кв. · 43 м · 1/2 этаж</p>
+        <p class='housing-card__apartment-info {{#if (gte priority 50)}}boosted{{/if}}'>
+            {{roomsNumber}}-комн. кв. · {{squareMeters}}&nbsp;м² · {{floor}} этаж
+        </p>
         <p class='housing-card__address'>{{address}}, {{cityName}}</p>
 
         <div class='housing-card__author-info'>

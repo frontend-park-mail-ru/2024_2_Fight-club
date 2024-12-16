@@ -43,6 +43,14 @@ export default class AdCard extends ReactiveComponent {
         this.data = data;
         this.oldImage = this.newImage = null;
         this.imgScrollTimeouts = [];
+
+        this.registerHelper();
+    }
+
+    private registerHelper() {
+        Handlebars.registerHelper('gte', function (a: number, b: number) {
+            return a >= b;
+        });      
     }
 
     addEventListeners() {
