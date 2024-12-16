@@ -2,7 +2,6 @@
 
 import { AdvertData } from "../../modules/Types";
 import ApiClient from "../../modules/ApiClient";
-import MapPage from "../MapPage/MapPage";
 
 import router from "../../modules/Router";
 
