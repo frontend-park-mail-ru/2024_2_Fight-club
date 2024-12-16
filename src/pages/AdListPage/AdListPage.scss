@@ -51,6 +51,7 @@
         border: 2px solid #e4e4e4;
         border-radius: 4px;
         padding: 20px;
+        height: fit-content;
     }
 
     &__hint {
@@ -58,6 +59,7 @@
         flex-direction: column;
         gap: 20px;
         padding: 30px;
+        height: fit-content;
 
         &--hidden {
             display: none;
