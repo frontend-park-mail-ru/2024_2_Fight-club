@@ -150,7 +150,7 @@ const renderHeader = async () => {
         globalStore.auth.isAuthorized = true;
         globalStore.auth.userId = sessionData.id;
     } catch {
-        //
+        globalStore.auth.isAuthorized = false;
     }
 
     const header = new Header(headerCallbacks, sessionData ? true : false);

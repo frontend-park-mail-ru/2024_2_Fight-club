@@ -5,6 +5,8 @@ import router from '../../modules/Router';
 import { AdvertData } from '../../modules/Types';
 import ReactiveComponent from '../ReactiveComponent/ReactiveComponent';
 import PopupSuccess from '../PopupSuccess/PopupSuccess';
+import PopupAlert from '../PopupAlert/PopupAlert';
+import globalStore from '../../modules/GlobalStore';
 
 /** Карточка объявления на главной странице */
 export default class AdCard extends ReactiveComponent {
@@ -201,28 +203,36 @@ export default class AdCard extends ReactiveComponent {
      */
     async addToFavorite(e: Event) {
         e.stopPropagation();
-        const response = await ApiClient.adToFavourites(this.data.id);
         const heartButton = this.thisElement.querySelector(
             '.js-fill-heart'
         ) as HTMLButtonElement;
-
-        if (response.ok) {
-            this.data.isFavorite = true;
-            const successMessage = PopupSuccess(
-                'Объявление добавлено в избранное'
-            );
-            document
-                .querySelector('.page-container')
-                ?.appendChild(successMessage);
-            heartButton.classList.add('already-liked');
+        
+        console.log(globalStore.auth.isAuthorized)
+        if (globalStore.auth.isAuthorized) {
+            if (!this.data.isFavorite) {
+                await ApiClient.adToFavourites(this.data.id);
+                this.data.isFavorite = true;
+                const successMessage = PopupSuccess(
+                    'Объявление добавлено в избранное'
+                );
+                document
+                    .querySelector('.page-container')
+                    ?.appendChild(successMessage);
+                heartButton.classList.add('already-liked');
+            } else {
+                this.data.isFavorite = false;
+                await ApiClient.removeFromFavourites(this.data.id);
+                const successMessage = PopupSuccess('Успешно удалено');
+                document
+                    .querySelector('.page-container')
+                    ?.appendChild(successMessage);
+                heartButton.classList.remove('already-liked');
+            }
         } else {
-            this.data.isFavorite = false;
-            await ApiClient.removeFromFavourites(this.data.id);
-            const successMessage = PopupSuccess('Успешно удалено');
+            const errorMessage = PopupAlert('Необходимо зарегистрироваться');
             document
                 .querySelector('.page-container')
-                ?.appendChild(successMessage);
-            heartButton.classList.remove('already-liked');
+                ?.appendChild(errorMessage);
         }
     }
 
