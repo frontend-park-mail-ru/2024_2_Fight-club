@@ -115,3 +115,9 @@
         }
     }
 }
+
+.rainbow-text {
+    background-image: linear-gradient(rgb(230, 63, 33), rgb(30, 30, 247));
+    color: transparent;
+    background-clip: text;
+}
