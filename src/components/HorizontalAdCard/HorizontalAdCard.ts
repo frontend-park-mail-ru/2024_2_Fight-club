@@ -11,6 +11,7 @@ export interface HorizontalAdCardData {
     address: string;
     image: string;
     priority: number;
+    endBoostDate: string;
 }
 
 export default function HorizontalAdCard(
@@ -20,7 +21,13 @@ export default function HorizontalAdCard(
     const template = Handlebars.templates['HorizontalAdCard.hbs'];
     const pageContainer = document.createElement('div');
 
-    pageContainer.innerHTML = template(cardData);
+    pageContainer.innerHTML = template({
+        ...cardData,
+        boostDaysLeft: Math.round(
+            (new Date(cardData.endBoostDate).valueOf() - new Date().valueOf()) /
+                (60 * 60 * 24 * 1000)
+        ).toString(),
+    });
 
     (pageContainer.querySelector('.js-open-btn') as HTMLButtonElement).onclick =
         (e) => {

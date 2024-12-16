@@ -117,6 +117,7 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
                 address: d.address,
                 image: d.images[0],
                 priority: d.priority,
+                endBoostDate: d.endBoostDate,
             });
         }
     }

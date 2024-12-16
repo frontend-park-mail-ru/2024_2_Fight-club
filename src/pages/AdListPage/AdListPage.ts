@@ -57,6 +57,7 @@ function AdListPage(data: HorizontalAdCardData[], isHost: boolean) {
                     address: d.address,
                     image: d.image,
                     priority: d.priority,
+                    endBoostDate: d.endBoostDate,
                 },
                 {
                     onOpen: () => router.navigateTo(`/ads/?id=${d.id}`),

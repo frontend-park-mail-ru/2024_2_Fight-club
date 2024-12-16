@@ -2,9 +2,13 @@
     <img class='horizontal-ad-card__img' src='{{image.path}}' />
 
     <div class='horizontal-ad-card__info'>
-        <p class='horizontal-ad-card__city'>{{cityName}}
-            {{#if priority}} 🚀 {{/if}}</p>
+        <p class='horizontal-ad-card__city'>{{cityName}}</p>
         <p class='horizontal-ad-card__address'>{{address}}</p>
+        {{#if priority}}
+            <p class='horizontal-ad-card__address'>🚀 Буст действует еще
+                {{boostDaysLeft}}
+                дней</p>
+        {{/if}}
         <div class='horizontal-ad-card__buttons-container'>
             <button
                 class='horizontal-ad-card__open-btn js-open-btn'
