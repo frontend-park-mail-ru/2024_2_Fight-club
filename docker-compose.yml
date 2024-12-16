@@ -5,10 +5,8 @@ services:
         volumes:
             - ./:/app
             - /app/node_modules
-        ports:
-            - '5173:5173' # For local development!
         command: >
-            sh -c "npm i && npm run start"
+            sh -c "npm i && npm run build"
 
     nginx:
         image: nginx:latest
