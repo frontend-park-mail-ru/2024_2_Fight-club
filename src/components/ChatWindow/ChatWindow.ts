@@ -25,7 +25,9 @@ export default class ChatWindow extends BaseComponent {
         this.messages = messages;
 
         requestAnimationFrame(() => {
-            this.messagesContainer = document.getElementById('js-messages');
+            this.messagesContainer = document.getElementById(
+                'js-messages'
+            ) as HTMLElement;
 
             this.displayMessageHistory();
 
@@ -176,9 +178,7 @@ export default class ChatWindow extends BaseComponent {
         ).textContent = convertTimeToMinutesAndSeconds(message.createdAt);
 
         if (message.senderId == globalStore.auth.userId) {
-            newMessage.children[0]!.classList!.add(
-                'chat-window__chat-window__message--mine'
-            );
+            newMessage.children[0]!.classList!.add('message--mine');
         }
 
         this.messagesContainer.appendChild(newMessage);
