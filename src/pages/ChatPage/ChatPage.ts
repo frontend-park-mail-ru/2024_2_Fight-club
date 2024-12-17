@@ -1,5 +1,6 @@
 import BaseComponent from '../../components/BaseComponent/BaseComponent';
 import ChatWindow from '../../components/ChatWindow/ChatWindow';
+import ApiClient from '../../modules/ApiClient';
 import ChatRepository, { Chat } from '../../repositories/ChatRepository';
 
 export default class ChatPage extends BaseComponent {
@@ -18,21 +19,31 @@ export default class ChatPage extends BaseComponent {
         if (!startChatWithRecipientId) return;
 
         requestAnimationFrame(async () => {
-            // const data = await ChatRepository.get(startChatWithRecipientId);
-            // const chatWindow = new ChatWindow(
-            //     this.thisElement,
-            //     startChatWithRecipientId,
-            //     data
-            // );
-            // chatWindow.on('new-message', (message) => {
-            //     if (typeof message === 'string')
-            //         (
-            //             document.getElementById(
-            //                 `recipient-${el.dataset.id}-last-message`
-            //             ) as HTMLElement
-            //         ).textContent = message;
-            // });
-            // chatWindow.render();
+            const data = await ChatRepository.get(startChatWithRecipientId);
+            const recipientName = (
+                await ApiClient.getUser(startChatWithRecipientId)
+            )['name'];
+
+            const chatWindow = new ChatWindow(
+                this.thisElement,
+                startChatWithRecipientId,
+                recipientName,
+                data
+            );
+
+            document
+                .getElementById(`recipient-${startChatWithRecipientId}`)
+                ?.classList.add('recipient-card--active');
+
+            chatWindow.on('new-message', (message) => {
+                if (typeof message === 'string')
+                    (
+                        document.getElementById(
+                            `recipient-${startChatWithRecipientId}-last-message`
+                        ) as HTMLElement
+                    ).textContent = message;
+            });
+            chatWindow.render();
         });
     }
 
