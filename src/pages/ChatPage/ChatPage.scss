@@ -44,5 +44,10 @@
     &__text {
         color: #737a8e;
         font-size: 14px;
+
+        width: 200px;
+        height: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }
