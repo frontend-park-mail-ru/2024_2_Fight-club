@@ -13,27 +13,23 @@ export default class ChatWindow extends BaseComponent {
     private messagesContainer: HTMLDivElement;
     private recipientId: string;
 
-    constructor(parent: HTMLElement, recipientId: string, messages: Message[]) {
+    constructor(
+        parent: HTMLElement,
+        recipientId: string,
+        recipientName: string,
+        messages: Message[]
+    ) {
         super({
             parent: parent,
             id: '0',
-            templateData: {},
+            templateData: {
+                recipientName,
+            },
             templateName: 'ChatWindow',
         });
 
         this.recipientId = recipientId;
         this.messages = messages;
-
-        requestAnimationFrame(() => {
-            this.messagesContainer = document.getElementById(
-                'js-messages'
-            ) as HTMLElement;
-
-            this.displayMessageHistory();
-
-            this.messagesContainer.scrollTop =
-                this.messagesContainer.scrollHeight;
-        });
 
         if (globalStore.chat.socket) {
             globalStore.chat.socket.close();
@@ -42,6 +38,16 @@ export default class ChatWindow extends BaseComponent {
         globalStore.chat.socket = new WebSocket(
             `wss://${window.location.hostname}:${location.port}/websocket`
         );
+    }
+
+    protected afterRender() {
+        this.messagesContainer = document.getElementById(
+            'js-messages'
+        ) as HTMLDivElement;
+
+        this.displayMessageHistory();
+
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
     }
 
     private async displayMessageHistory() {

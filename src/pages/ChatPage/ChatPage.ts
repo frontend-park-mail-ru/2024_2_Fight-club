@@ -18,14 +18,12 @@ export default class ChatPage extends BaseComponent {
         if (!startChatWithRecipientId) return;
 
         requestAnimationFrame(async () => {
-            const data = await ChatRepository.get(startChatWithRecipientId);
-
-            const chatWindow = new ChatWindow(
-                this.thisElement,
-                startChatWithRecipientId,
-                data
-            );
-
+            // const data = await ChatRepository.get(startChatWithRecipientId);
+            // const chatWindow = new ChatWindow(
+            //     this.thisElement,
+            //     startChatWithRecipientId,
+            //     data
+            // );
             // chatWindow.on('new-message', (message) => {
             //     if (typeof message === 'string')
             //         (
@@ -34,8 +32,7 @@ export default class ChatPage extends BaseComponent {
             //             ) as HTMLElement
             //         ).textContent = message;
             // });
-
-            chatWindow.render();
+            // chatWindow.render();
         });
     }
 
@@ -45,31 +42,36 @@ export default class ChatPage extends BaseComponent {
         ) as HTMLCollectionOf<HTMLElement>;
 
         for (const el of cards) {
-            (el as HTMLElement).onclick = async () => {
-                if (!el.dataset.id) {
-                    throw new Error('recipient id is not defined');
-                }
-
-                document.getElementById('ChatWindow-0')?.remove();
-                const data = await ChatRepository.get(el.dataset.id);
-
-                const chatWindow = new ChatWindow(
-                    this.thisElement,
-                    el.dataset.id!,
-                    data
-                );
-
-                chatWindow.on('new-message', (message) => {
-                    if (typeof message === 'string')
-                        (
-                            document.getElementById(
-                                `recipient-${el.dataset.id}-last-message`
-                            ) as HTMLElement
-                        ).textContent = message;
-                });
-
-                chatWindow.render();
+            (el as HTMLElement).onclick = async (e) => {
+                this.handleCardClick(e, el);
             };
         }
+    }
+
+    private async handleCardClick(e: Event, el: HTMLElement) {
+        if (!el.dataset.id) {
+            throw new Error('recipient id is not defined');
+        }
+
+        document.getElementById('ChatWindow-0')?.remove();
+        const data = await ChatRepository.get(el.dataset.id);
+
+        const chatWindow = new ChatWindow(
+            this.thisElement,
+            el.dataset.id!,
+            el.dataset.name!,
+            data
+        );
+
+        chatWindow.on('new-message', (message) => {
+            if (typeof message !== 'string') return;
+            (
+                document.getElementById(
+                    `recipient-${el.dataset.id}-last-message`
+                ) as HTMLElement
+            ).textContent = message;
+        });
+
+        chatWindow.render();
     }
 }
