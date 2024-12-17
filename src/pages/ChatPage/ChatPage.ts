@@ -1,20 +1,25 @@
 import BaseComponent from '../../components/BaseComponent/BaseComponent';
+import ChatRecipientCard from '../../components/ChatRecipientCard/ChatRecipientCard';
 import ChatWindow from '../../components/ChatWindow/ChatWindow';
 import ApiClient from '../../modules/ApiClient';
 import ChatRepository, { Chat } from '../../repositories/ChatRepository';
 
 export default class ChatPage extends BaseComponent {
+    private chats: Chat[];
+
     constructor(
         parent: HTMLElement,
-        data: { chats: Chat[] },
+        chats: Chat[],
         startChatWithRecipientId?: string
     ) {
         super({
             parent: parent,
             id: '',
-            templateData: data,
+            templateData: { chats: chats },
             templateName: 'ChatPage',
         });
+
+        this.chats = chats;
 
         if (!startChatWithRecipientId) return;
 
@@ -47,46 +52,48 @@ export default class ChatPage extends BaseComponent {
         });
     }
 
-    protected addEventListeners(): void {
-        const cards = document.getElementsByClassName(
-            'recipient-card'
-        ) as HTMLCollectionOf<HTMLElement>;
+    protected addEventListeners(): void {}
 
-        for (const el of cards) {
-            (el as HTMLElement).onclick = async (e) => {
-                this.handleCardClick(e, el);
-            };
-        }
+    protected afterRender(): void {
+        this.renderItems();
+
+        const id = setInterval(async () => {
+            const chats = (await ChatRepository.getAll()).chats;
+
+            // That means that we are not on ChatPage
+            if (!document.getElementById('recipients-list')) {
+                clearInterval(id);
+                return;
+            }
+
+            if (chats === this.chats) {
+                return;
+            }
+
+            this.chats = chats;
+            this.renderItems();
+        }, 5_000);
     }
 
-    private async handleCardClick(e: Event, el: HTMLElement) {
-        // Remove active class from already selected chat list item
-        document
-            .querySelector('.recipient-card--active')
-            ?.classList.remove('recipient-card--active');
-        el.classList.add('recipient-card--active');
+    private renderItems() {
+        const listEl = document.getElementById(
+            'recipients-list'
+        ) as HTMLElement;
 
-        // Remove old Chat Window if present
-        document.getElementById('ChatWindow-0')?.remove();
+        listEl.replaceChildren();
 
-        // Create new Chat Window
-        const data = await ChatRepository.get(el.dataset.id!);
-        const chatWindow = new ChatWindow(
-            this.thisElement,
-            el.dataset.id!,
-            el.dataset.name!,
-            data
-        );
-
-        chatWindow.on('new-message', (message) => {
-            if (typeof message !== 'string') return;
-            (
-                document.getElementById(
-                    `recipient-${el.dataset.id}-last-message`
-                ) as HTMLElement
-            ).textContent = message;
-        });
-
-        chatWindow.render();
+        for (const card of this.chats) {
+            const el = new ChatRecipientCard(
+                listEl,
+                card.authorUuid,
+                {
+                    name: card.authorName,
+                    id: card.authorUuid,
+                    avatar: card.authorAvatar,
+                },
+                card.lastMessage
+            );
+            el.render();
+        }
     }
 }

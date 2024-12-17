@@ -43,10 +43,6 @@ function renderMapPage(adId?: string) {
     mapPage.render(pageContainer);
 }
 
-const renderArticlesPage = () => {};
-
-const renderMessagesPage = () => {};
-
 const renderFavoritesPage = () => {
     const favouritePage = new FavouritePage();
     favouritePage.render(pageContainer);
@@ -199,7 +195,7 @@ router.addRoute('/chats', async (params: URLSearchParams) => {
     const recipientId = params.get('recipientId') as string;
 
     const data = await ChatRepository.getAll();
-    const chatPage = new ChatPage(pageContainer, data, recipientId);
+    const chatPage = new ChatPage(pageContainer, data.chats, recipientId);
     chatPage.render();
 });
 
