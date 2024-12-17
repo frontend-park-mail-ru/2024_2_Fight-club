@@ -17,10 +17,14 @@ class Header {
     #headerCallbacks;
     #headerState;
     #menuContainer;
+    #menuContainerWrapper;
 
     constructor(headerCallbacks: HeaderCallbacks, isAuth: boolean) {
         this.#headerCallbacks = headerCallbacks;
-        this.#menuContainer = document.createElement('header');
+        this.#menuContainerWrapper = document.createElement('header');
+        this.#menuContainerWrapper.id = 'header';
+        this.#menuContainerWrapper.classList.add('header-wrapper');
+        this.#menuContainer = document.createElement('div');
         this.#menuContainer.classList.add('header');
         this.#menuContainer.id = 'header';
 
@@ -195,6 +199,8 @@ class Header {
         }
         this.#menuContainer.appendChild(menu);
 
+        this.#menuContainerWrapper.appendChild(this.#menuContainer);
+
         this.#renderHrefs();
         this.#renderMainText();
         this.#renderSigns();
@@ -202,7 +208,7 @@ class Header {
     }
 
     getElement() {
-        return this.#menuContainer;
+        return this.#menuContainerWrapper;
     }
 }
 

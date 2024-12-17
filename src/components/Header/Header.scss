@@ -1,5 +1,5 @@
 .header {
-    padding: 5px 0;
+    padding: 0;
     box-sizing: border-box;
     margin: 0 100px;
     position: relative;
@@ -9,6 +9,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.header-wrapper {
     border-bottom: 1px #e8e9ec solid;
 }
 
@@ -56,6 +59,7 @@
 
 .header__img2 {
     height: 60px;
+    margin-top: 10px;
 }
 
 .header__signs {

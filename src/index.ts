@@ -139,7 +139,7 @@ const headerCallbacks = {
 };
 
 const renderHeader = async () => {
-    document.querySelector('.header')?.remove();
+    document.getElementById('header')?.remove();
 
     let sessionData;
     try {
