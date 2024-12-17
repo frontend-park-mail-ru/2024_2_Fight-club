@@ -3,6 +3,11 @@ import globalStore from '../../modules/GlobalStore';
 import { convertTimeToMinutesAndSeconds } from '../../modules/Utils';
 import { Message } from '../../repositories/ChatRepository';
 
+interface BackendReply {
+    response: string;
+    sent: boolean;
+}
+
 export default class ChatWindow extends BaseComponent {
     private messages: Message[];
     private messagesContainer: HTMLDivElement;
@@ -54,10 +59,7 @@ export default class ChatWindow extends BaseComponent {
             console.log('Отправляем данные на сервер');
         };
 
-        socket.onmessage = (event) => {
-            console.log(`[message] Данные получены с сервера: ${event.data}`);
-            this.addNewMessageElement(JSON.parse(event.data) as Message);
-        };
+        socket.onmessage = (e) => this.handleMessageReceive(e);
 
         socket.onclose = function (event) {
             if (event.wasClean) {
@@ -121,6 +123,7 @@ export default class ChatWindow extends BaseComponent {
                 content: text,
             })
         );
+
         this.addNewMessageElement({
             content: text,
             receiverId: '',
@@ -128,6 +131,24 @@ export default class ChatWindow extends BaseComponent {
             id: 0,
             createdAt: new Date().toISOString(),
         });
+    }
+
+    private handleMessageReceive(event: MessageEvent) {
+        let message;
+
+        try {
+            message = JSON.parse(event.data) as Message | BackendReply;
+        } catch {
+            console.warn('Received non-JSON message! Ignoring it');
+            return;
+        }
+
+        console.log(`[message] Данные получены с сервера: ${message}`);
+        if ('content' in message) {
+            this.addNewMessageElement(message);
+        } else {
+            console.log('other type of message');
+        }
     }
 
     private addNewMessageElement(message: Message) {
