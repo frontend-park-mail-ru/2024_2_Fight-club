@@ -140,6 +140,8 @@ export default class ChatWindow extends BaseComponent {
             id: 0,
             createdAt: new Date().toISOString(),
         });
+
+        this.emit('new-message', text);
     }
 
     private handleMessageReceive(event: MessageEvent) {
@@ -154,6 +156,7 @@ export default class ChatWindow extends BaseComponent {
 
         console.log(`[message] Данные получены с сервера: ${message}`);
         if ('content' in message) {
+            this.emit('new-message', message.content);
             this.addNewMessageElement(message);
 
             this.messagesContainer.scrollTop =

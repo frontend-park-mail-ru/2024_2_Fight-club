@@ -26,6 +26,15 @@ export default class ChatPage extends BaseComponent {
                 data
             );
 
+            // chatWindow.on('new-message', (message) => {
+            //     if (typeof message === 'string')
+            //         (
+            //             document.getElementById(
+            //                 `recipient-${el.dataset.id}-last-message`
+            //             ) as HTMLElement
+            //         ).textContent = message;
+            // });
+
             chatWindow.render();
         });
     }
@@ -49,6 +58,15 @@ export default class ChatPage extends BaseComponent {
                     el.dataset.id!,
                     data
                 );
+
+                chatWindow.on('new-message', (message) => {
+                    if (typeof message === 'string')
+                        (
+                            document.getElementById(
+                                `recipient-${el.dataset.id}-last-message`
+                            ) as HTMLElement
+                        ).textContent = message;
+                });
 
                 chatWindow.render();
             };

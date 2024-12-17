@@ -1,14 +1,21 @@
 <div class='chat-page' id='{{id}}'>
     <div class='recipients-list'>
         {{#each chats}}
-            <div class='recipient-card' data-id='{{this.authorUuid}}'>
+            <div
+                class='recipient-card'
+                data-id='{{this.authorUuid}}'
+                id='recipient-{{this.authorUuid}}'
+            >
                 <img
                     class='recipient-card__avatar'
                     src='{{this.authorAvatar}}'
                 />
                 <div class='recipient-card__info'>
                     <p class='recipient-card__name'>{{this.authorName}}</p>
-                    <p class='recipient-card__text'>{{this.lastMessage}}</p>
+                    <p
+                        class='recipient-card__text'
+                        id='recipient-{{this.authorUuid}}-last-message'
+                    >{{this.lastMessage}}</p>
                 </div>
             </div>
         {{/each}}
