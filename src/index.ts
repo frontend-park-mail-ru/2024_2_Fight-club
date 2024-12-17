@@ -82,7 +82,7 @@ const renderSignInPage = () => {
 
 const renderProfileList = () => {
     const profileList = new ProfilePopup();
-    profileList.render(root);
+    profileList.render(document.getElementById('header')!);
 };
 
 const renderProfilePage = async () => {
@@ -132,7 +132,6 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
 
 /** Объект с коллбеками для header`а */
 const headerCallbacks = {
-    messagesPage: renderMessagesPage,
     favoritesPage: renderFavoritesPage,
     notificationsPage: renderNotificationsPage,
     signInPage: renderSignInPage,

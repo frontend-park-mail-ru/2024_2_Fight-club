@@ -1,9 +1,14 @@
 .header {
+    padding: 5px 0;
+    box-sizing: border-box;
+    margin: 0 100px;
+    position: relative;
     background-color: #ffffff;
     height: 80px;
     box-sizing: content-box;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     border-bottom: 1px #e8e9ec solid;
 }
 
@@ -11,7 +16,7 @@
     width: 300px;
     display: flex;
     justify-content: space-between;
-    padding-left: 50px;
+    padding: 0;
 }
 
 .header__hrefs__href {
@@ -80,10 +85,9 @@
 }
 
 .header__avatar-container {
-    width: 110px;
+    width: fit-content;
     height: 50px;
     margin-left: 50px;
-    margin-right: 50px;
     display: flex;
     align-items: center;
 }
@@ -93,6 +97,7 @@
     height: 50px;
     margin-left: 10px;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 .header__avatar-container__options {

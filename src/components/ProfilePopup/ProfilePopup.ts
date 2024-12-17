@@ -56,22 +56,31 @@ class ProfilePopup {
 
         const profileList = document.createElement('div');
         profileList.innerHTML = template(data);
-        parent.appendChild(profileList);
-        this.#addEventListeners();
-        setTimeout(() => this.#closeOverlay(parent), 0);
-    }
 
-    /**
-     * @description Добавляет событие для скрытия оверлея
-     * @param {HTMLElement} parent
-     */
-    #closeOverlay(parent: HTMLElement): void {
-        const overlay = parent.querySelector('.profile-overlay');
-        if (overlay != null) {
-            overlay.addEventListener('click', () => {
-                overlay.remove();
-            });
-        }
+        parent.appendChild(profileList);
+
+        const clickOutsideHandler = (e: Event) => {
+            const target = e.target as HTMLElement;
+
+            if (profileList && !profileList.contains(target)) {
+                console.log('OUTSIDE');
+                document.removeEventListener('click', clickOutsideHandler);
+                profileList.remove();
+            }
+        };
+        setTimeout(() =>
+            document.addEventListener('click', clickOutsideHandler)
+        );
+
+        // links
+        profileList.onclick = (e) => {
+            const link = (e.target as HTMLElement).closest('a');
+            if (link) {
+                profileList.remove();
+            }
+        };
+
+        this.#addEventListeners();
     }
 
     /**
