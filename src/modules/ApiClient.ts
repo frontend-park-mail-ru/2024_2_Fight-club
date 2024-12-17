@@ -244,7 +244,7 @@ class APIClient {
     }
 
     async getFavourites(uuid: string) {
-        const url = this.BASE_URL + `users/${uuid}/favorites`;
+        const url = this.BASE_URL + `/users/${uuid}/favorites`;
         return Ajax.get(url);
     }
 
