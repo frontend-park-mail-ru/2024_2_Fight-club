@@ -2,7 +2,10 @@
 
 interface BaseComponentData {
     parent: HTMLElement;
-    id: number | string;
+    templateName: string /** Name of the template without extension */;
+    id:
+        | number
+        | string /** Id of the component which will be used to refer the HTMLElement. `${templateName}-${id}` */;
     templateData: { [key: string]: unknown };
 }
 
@@ -22,13 +25,12 @@ export default abstract class BaseComponent {
     constructor(data: BaseComponentData) {
         this.thisElement = null as unknown as HTMLElement; // fuck typescript =D
 
-        this.elementId = this.constructor.name + '-' + data.id;
+        this.elementId = data.templateName + '-' + data.id;
 
         // Automatic template set
-        const templateName = `${this.constructor.name}.hbs`;
-        this.template = Handlebars.templates[templateName];
+        this.template = Handlebars.templates[`${data.templateName}.hbs`];
         if (!this.template) {
-            throw new Error('No such template found:' + templateName);
+            throw new Error('No such template found:' + data.templateName);
         }
 
         this.parent = data.parent;

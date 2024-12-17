@@ -12,6 +12,7 @@ export default class ChatPage extends BaseComponent {
             parent: parent,
             id: '',
             templateData: data,
+            templateName: 'ChatPage',
         });
 
         if (!startChatWithRecipientId) return;

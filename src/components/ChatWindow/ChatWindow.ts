@@ -13,6 +13,7 @@ export default class ChatWindow extends BaseComponent {
             parent: parent,
             id: '0',
             templateData: {},
+            templateName: 'ChatWindow',
         });
 
         this.recipientId = recipientId;

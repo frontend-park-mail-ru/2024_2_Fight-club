@@ -23,6 +23,7 @@ interface ReactiveComponentData {
     parent: HTMLElement;
     id: number | string;
     initialState: object;
+    templateName: string;
     templateData: { [key: string]: unknown };
     computedValues: {
         [key: string]: (state: Record<string, unknown>) => unknown;
@@ -46,13 +47,12 @@ export default abstract class ReactiveComponent {
     constructor(data: ReactiveComponentData) {
         this.thisElement = null as unknown as HTMLElement; // fuck typescript =D
 
-        this.#elementId = this.constructor.name + '-' + data.id;
+        this.#elementId = data.templateName + '-' + data.id;
         this.#currentFunc2Recompute = null;
 
-        const templateName = `${this.constructor.name}.hbs`;
-        this.#template = Handlebars.templates[templateName];
+        this.#template = Handlebars.templates[`${data.templateName}.hbs`];
         if (!this.#template) {
-            throw new Error('No such template found:' + templateName);
+            throw new Error('No such template found:' + data.templateName);
         }
 
         this.parent = data.parent;

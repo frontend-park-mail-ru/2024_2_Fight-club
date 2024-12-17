@@ -33,6 +33,7 @@ export default class AdCard extends ReactiveComponent {
                 //     return data.images[state.toShowIndex as number].path;
                 // },
             },
+            templateName: 'AdCard',
             templateData: {
                 ...data,
                 rating: ('' + data.author.rating).slice(0, 3),
@@ -50,7 +51,7 @@ export default class AdCard extends ReactiveComponent {
     private registerHelper() {
         Handlebars.registerHelper('gte', function (a: number, b: number) {
             return a >= b;
-        });      
+        });
     }
 
     addEventListeners() {
@@ -214,8 +215,8 @@ export default class AdCard extends ReactiveComponent {
         const heartButton = this.thisElement.querySelector(
             '.js-fill-heart'
         ) as HTMLButtonElement;
-        
-        console.log(globalStore.auth.isAuthorized)
+
+        console.log(globalStore.auth.isAuthorized);
         if (globalStore.auth.isAuthorized) {
             if (!this.data.isFavorite) {
                 await ApiClient.adToFavourites(this.data.id);

@@ -41,6 +41,7 @@ export default class AdPage extends ReactiveComponent {
                 sex: authorInfo.sex === 'M' ? 'Мужской' : 'Женский',
                 isAuthor: data.authorUUID === globalStore.auth.userId,
             },
+            templateName: 'AdPage',
         });
 
         this.#data = data;
