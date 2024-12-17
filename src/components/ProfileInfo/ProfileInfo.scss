@@ -1,7 +1,7 @@
 @use '../../styles/mixins';
 
 .profile-container {
-    margin: 40px 0px 0px 35%;
+    margin: 40px 0px 0px auto;
     box-shadow:
         2px 5px 8px 1px rgba(0, 0, 0, 0.2),
         0px 1px 1px 0px rgba(0, 0, 0, 0.14),
