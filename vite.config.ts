@@ -26,12 +26,13 @@ export default defineConfig({
             },
 
             '/websocket': {
-                target: 'https://localhost:8008/api/messages/setconn',
+                target: 'http://localhost:8008/api/messages/setconn',
                 changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/websocket/, ''),
                 ws: true, // Обязательно для WebSocket
             },
-            '/images/': 'http://localhost:9000/',
 
+            '/images/': 'http://localhost:9000/',
             '/cities/': 'http://localhost:9000/',
         },
     },

@@ -33,7 +33,7 @@ export default class ChatWindow extends BaseComponent {
         }
 
         globalStore.chat.socket = new WebSocket(
-            `wss://${window.location.hostname}/websocket/`
+            `wss://${window.location.hostname}:${location.port}/websocket`
         );
     }
 
