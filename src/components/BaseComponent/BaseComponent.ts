@@ -16,6 +16,9 @@ export default abstract class BaseComponent {
     protected template: HandlebarsTemplateDelegate;
     private elementId: string;
 
+    /** Used for observable */
+    private listeners: Record<string, Set<(arg0: unknown) => void>>;
+
     public thisElement: HTMLElement;
 
     /**
@@ -24,8 +27,9 @@ export default abstract class BaseComponent {
      */
     constructor(data: BaseComponentData) {
         this.thisElement = null as unknown as HTMLElement; // fuck typescript =D
-
         this.elementId = data.templateName + '-' + data.id;
+
+        this.listeners = {};
 
         // Automatic template set
         this.template = Handlebars.templates[`${data.templateName}.hbs`];
@@ -68,5 +72,21 @@ export default abstract class BaseComponent {
             this.afterRender();
             this.addEventListeners();
         });
+    }
+
+    public on(event: string, callback: (arg0: unknown) => void) {
+        if (!this.listeners[event]) {
+            this.listeners[event] = new Set();
+        }
+        this.listeners[event].add(callback);
+    }
+
+    public off(event: string, callback: (arg0: unknown) => void) {
+        this.listeners[event]?.delete(callback);
+    }
+
+    protected emit(event: string, data?: unknown) {
+        if (this.listeners[event])
+            this.listeners[event].forEach((listener) => listener(data));
     }
 }
