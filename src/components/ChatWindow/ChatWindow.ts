@@ -108,7 +108,7 @@ export default class ChatWindow extends BaseComponent {
         };
 
         textArea.onkeydown = (event) => {
-            if (event.ctrlKey && event.key === 'Enter') {
+            if (!event.shiftKey && !event.ctrlKey && event.key === 'Enter') {
                 const text = textArea.value;
                 this.sendMessage(text);
                 textArea.value = '';
