@@ -196,7 +196,7 @@ class ProfileData {
             clearPage('form', 'profile');
             const dataContainer = document.getElementById('container');
             const header = document.createElement('div');
-            header.id = 'header';
+            header.id = 'my-header';
             header.classList.add('data-container__header');
 
             dataContainer?.appendChild(header);
@@ -496,7 +496,7 @@ class ProfileData {
             clearPage('form');
             const dataContainer = document.getElementById('container');
             const header = document.createElement('div');
-            header.id = 'header';
+            header.id = 'my-header';
             header.classList.add('data-container__header');
 
             dataContainer?.appendChild(header);
@@ -650,7 +650,7 @@ class ProfileData {
      * @description Рендер формы изменения данных
      */
     async #renderForm(): Promise<void> {
-        clearPage('header', 'content', 'form');
+        clearPage('my-header', 'content', 'form');
         await this.#getProfileData();
         const template = Handlebars.templates['EditForm.hbs'];
         const container = document.getElementById('container');
@@ -714,7 +714,7 @@ class ProfileData {
         dataContainer.classList.add('data-container');
 
         const header = document.createElement('div');
-        header.id = 'header';
+        header.id = 'my-header';
         header.classList.add('data-container__header');
         this.#renderHeader(header);
         dataContainer.appendChild(header);
