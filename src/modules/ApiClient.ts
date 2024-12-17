@@ -202,7 +202,7 @@ class APIClient {
             name: name,
             email: email,
             sex: sex,
-            birthdate: birthdate,
+            birthDate: birthdate,
             isHost: isHost,
         };
 
