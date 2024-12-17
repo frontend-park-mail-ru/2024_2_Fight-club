@@ -157,6 +157,7 @@ export default class EditAdvertPage {
                     type: 'number',
                     value: data?.squareMeters,
                     min: 1,
+                    max: 500,
                 },
                 {
                     label: 'Доступные даты: с',
