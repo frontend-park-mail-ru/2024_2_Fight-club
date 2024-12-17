@@ -12,7 +12,6 @@ import FavouritePage from './pages/FavouritePage/FavouritePage';
 
 import { clearPage } from './modules/Clear';
 
-import '../precompiled-templates.js';
 import APIService from './modules/ApiClient';
 import AdPage from './pages/AdPage/AdPage';
 import ApiClient from './modules/ApiClient';
