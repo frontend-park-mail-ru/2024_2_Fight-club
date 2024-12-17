@@ -3,13 +3,13 @@
 $secondary-card-size: 64px;
 
 .ad-page {
-    max-width: 80%;
     margin: 50px auto;
     display: grid;
     grid-template-areas: 'main aside';
     gap: 5%;
 
-    grid-template-columns: 2fr 1fr;
+    width: 70%;
+    grid-template-columns: 60% 1fr;
 
     &__gallery {
         display: flex;
@@ -118,6 +118,8 @@ $secondary-card-size: 64px;
     }
 
     &__desc {
+        width: 100%;
+        overflow-wrap: anywhere;
         margin: 30px 0;
         font-size: 17px;
         line-height: 1.5;
