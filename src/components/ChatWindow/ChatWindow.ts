@@ -90,28 +90,35 @@ export default class ChatWindow extends BaseComponent {
         const textArea = this.thisElement.querySelector(
             '.js-message-input'
         ) as HTMLInputElement;
-        textArea.oninput = () => {
-            setTimeout(function () {
-                textArea.style.cssText =
-                    'height:' + textArea.scrollHeight + 'px';
-            }, 0);
+
+        const resizeTextArea = () => {
+            textArea.style.cssText = 'height: auto';
+            textArea.style.cssText = 'height:' + textArea.scrollHeight + 'px';
         };
+
+        textArea.oninput = resizeTextArea;
 
         const sendMessageButton = document.getElementById(
             'js-send-message-button'
         ) as HTMLButtonElement;
 
-        sendMessageButton.onclick = () => {
+        /** Sends message and clears input */
+        const sendMessage = (e: Event) => {
+            // Prevent from new line
+            e.preventDefault();
+            e.stopPropagation();
+
             const text = textArea.value;
             this.sendMessage(text);
             textArea.value = '';
+            resizeTextArea();
         };
+
+        sendMessageButton.onclick = sendMessage;
 
         textArea.onkeydown = (event) => {
             if (!event.shiftKey && !event.ctrlKey && event.key === 'Enter') {
-                const text = textArea.value;
-                this.sendMessage(text);
-                textArea.value = '';
+                sendMessage(event);
             }
         };
     }
