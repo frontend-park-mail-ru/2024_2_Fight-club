@@ -2,7 +2,6 @@
 
 import Header from './components/Header/Header';
 import AuthPopup from './components/AuthPopup/AuthPopup';
-import ProfilePopup from './components/ProfilePopup/ProfilePopup';
 
 import MainPage from './pages/MainPage/MainPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
@@ -80,11 +79,6 @@ const renderSignInPage = () => {
     auth.render(root);
 };
 
-const renderProfileList = () => {
-    const profileList = new ProfilePopup();
-    profileList.render(document.getElementById('header')!);
-};
-
 const renderProfilePage = async () => {
     clearPage('main-photo', 'main-content');
     const profilePage = new ProfilePage();
@@ -135,7 +129,6 @@ const headerCallbacks = {
     favoritesPage: renderFavoritesPage,
     notificationsPage: renderNotificationsPage,
     signInPage: renderSignInPage,
-    profileList: renderProfileList,
 };
 
 const renderHeader = async () => {

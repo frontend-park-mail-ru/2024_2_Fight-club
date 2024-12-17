@@ -2,13 +2,13 @@
 
 import ApiClient from '../../modules/ApiClient';
 import PopupAlert from '../PopupAlert/PopupAlert';
+import ProfilePopup from '../ProfilePopup/ProfilePopup';
 
 interface HeaderCallbacks {
     messagesPage: () => void;
     favoritesPage: () => void;
     notificationsPage: () => void;
     signInPage: () => void;
-    profileList: () => void;
 }
 
 class Header {
@@ -26,7 +26,7 @@ class Header {
         this.#menuContainerWrapper.classList.add('header-wrapper');
         this.#menuContainer = document.createElement('div');
         this.#menuContainer.classList.add('header');
-        this.#menuContainer.id = 'header';
+        this.#menuContainer.id = 'header-inner';
 
         this.#isAuthorized = isAuth;
 
@@ -167,7 +167,10 @@ class Header {
             avatar.classList.add('header__avatar-container__avatar');
             avatar.classList.add('js-header-avatar');
 
-            avatar.onclick = this.#headerCallbacks.profileList;
+            avatar.onclick = () => {
+                const profileList = new ProfilePopup();
+                profileList.render(this.#menuContainer);
+            };
 
             avatarContainer.appendChild(avatar);
 

@@ -63,7 +63,6 @@ class ProfilePopup {
             const target = e.target as HTMLElement;
 
             if (profileList && !profileList.contains(target)) {
-                console.log('OUTSIDE');
                 document.removeEventListener('click', clickOutsideHandler);
                 profileList.remove();
             }
