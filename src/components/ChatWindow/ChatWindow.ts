@@ -146,6 +146,9 @@ export default class ChatWindow extends BaseComponent {
         console.log(`[message] Данные получены с сервера: ${message}`);
         if ('content' in message) {
             this.addNewMessageElement(message);
+
+            this.messagesContainer.scrollTop =
+                this.messagesContainer.scrollHeight;
         } else {
             console.log('other type of message');
         }
