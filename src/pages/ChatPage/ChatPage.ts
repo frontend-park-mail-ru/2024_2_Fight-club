@@ -49,13 +49,17 @@ export default class ChatPage extends BaseComponent {
     }
 
     private async handleCardClick(e: Event, el: HTMLElement) {
-        if (!el.dataset.id) {
-            throw new Error('recipient id is not defined');
-        }
+        // Remove active class from already selected chat list item
+        document
+            .querySelector('.recipient-card--active')
+            ?.classList.remove('recipient-card--active');
+        el.classList.add('recipient-card--active');
 
+        // Remove old Chat Window if present
         document.getElementById('ChatWindow-0')?.remove();
-        const data = await ChatRepository.get(el.dataset.id);
 
+        // Create new Chat Window
+        const data = await ChatRepository.get(el.dataset.id!);
         const chatWindow = new ChatWindow(
             this.thisElement,
             el.dataset.id!,

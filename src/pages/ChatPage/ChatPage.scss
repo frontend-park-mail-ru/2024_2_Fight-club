@@ -50,4 +50,8 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    &--active {
+        background-color: #f3f6ff;
+    }
 }
