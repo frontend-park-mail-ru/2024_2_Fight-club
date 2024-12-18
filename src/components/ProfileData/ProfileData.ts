@@ -10,6 +10,7 @@ import ReviewCard from '../ReviewCard/ReviewCard';
 import { GraphicPoint } from '../../modules/Types';
 import ReviewsGraphic from '../ReviewsGraphic/ReviewsGraphic';
 import NoReviews from './NoReviews/NoReviews';
+import JourneyMap from '../JourneyMap/JourneyMap';
 
 interface userData {
     name: string | undefined;
@@ -577,16 +578,18 @@ class ProfileData {
         this.#content.parentElement?.classList.remove(
             'fix-bottom-right-border'
         );
-        const wrapper = document.createElement('div');
-        wrapper.id = 'wrapper';
-        wrapper.classList.add('data-container__wrapper');
+        // const wrapper = document.createElement('div');
+        // wrapper.id = 'wrapper';
+        // wrapper.classList.add('data-container__wrapper');
 
-        const map = document.createElement('img');
-        map.classList.add('data-container__wrapper__img');
-        map.src = '/myMap.jpg';
+        // const map = document.createElement('img');
+        // map.classList.add('data-container__wrapper__img');
+        // map.src = '/myMap.jpg';
 
-        wrapper.appendChild(map);
-        this.#content.appendChild(wrapper);
+        // wrapper.appendChild(map);
+        // this.#content.appendChild(wrapper);
+        const journeyMap = new JourneyMap();
+        journeyMap.render(this.#content);
     }
 
     async #renderReviews(): Promise<void> {
