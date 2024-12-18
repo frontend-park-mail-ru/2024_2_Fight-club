@@ -12,6 +12,7 @@ export default class ChatWindow extends BaseComponent {
     private messages: Message[];
     private messagesContainer: HTMLDivElement;
     private recipientId: string;
+    private messageQueue: Message[] = [];
 
     constructor(
         parent: HTMLElement,
@@ -142,16 +143,13 @@ export default class ChatWindow extends BaseComponent {
                 })
             );
 
-            this.addNewMessageElement({
+            this.messageQueue.push({
                 content: text,
                 receiverId: '',
                 senderId: globalStore.auth.userId!,
                 id: 0,
                 createdAt: new Date().toISOString(),
             });
-            this.scrollToTheBottom();
-
-            this.emit('new-message', text);
         } catch (e) {
             console.error('Error:', e);
         }
@@ -174,7 +172,12 @@ export default class ChatWindow extends BaseComponent {
 
             this.scrollToTheBottom();
         } else {
-            console.log('other type of message');
+            const outComingMessage = this.messageQueue.shift();
+            if (!outComingMessage || message.sent === 'false') return;
+
+            this.addNewMessageElement(outComingMessage);
+            this.scrollToTheBottom();
+            this.emit('new-message', outComingMessage.content);
         }
     }
 
