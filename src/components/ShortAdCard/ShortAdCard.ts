@@ -51,7 +51,7 @@ class ShortHousing {
         document
             .querySelector('.js-new-chat[data-index="' + this.#index + '"]')
             ?.addEventListener('click', () => {
-                console.log(this.#index);
+                router.navigateTo(`/chats?recipientId=${this.#data.authorUUID}`)
             });
     }
 
