@@ -45,7 +45,7 @@ class Header {
             signs: {
                 Messages: {
                     src: '/svg/messages.svg',
-                    href: '/messages',
+                    href: '/chats',
                     callback: headerCallbacks.messagesPage,
                 },
                 Favorites: {
