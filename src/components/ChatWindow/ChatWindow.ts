@@ -173,7 +173,7 @@ export default class ChatWindow extends BaseComponent {
             this.scrollToTheBottom();
         } else {
             const outComingMessage = this.messageQueue.shift();
-            if (!outComingMessage || message.sent === 'false') return;
+            if (!outComingMessage || !message.sent) return;
 
             this.addNewMessageElement(outComingMessage);
             this.scrollToTheBottom();
