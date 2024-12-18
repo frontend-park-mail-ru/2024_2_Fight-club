@@ -64,7 +64,6 @@ export default class ChatWindow extends BaseComponent {
 
         socket.onopen = (e) => {
             console.log('[open] Соединение установлено');
-            console.log('Отправляем данные на сервер');
         };
 
         socket.onmessage = (e) => this.handleMessageReceive(e);
@@ -99,6 +98,7 @@ export default class ChatWindow extends BaseComponent {
             '.js-message-input'
         ) as HTMLInputElement;
 
+        /** Resizes <textarea> to fit the content */
         const resizeTextArea = () => {
             textArea.style.cssText = 'height: auto';
             textArea.style.cssText = 'height:' + textArea.scrollHeight + 'px';
@@ -132,22 +132,29 @@ export default class ChatWindow extends BaseComponent {
     }
 
     private sendMessage(text: string) {
-        globalStore.chat.socket?.send(
-            JSON.stringify({
-                receiverId: this.recipientId,
+        if (!globalStore.chat.socket) return;
+
+        try {
+            globalStore.chat.socket.send(
+                JSON.stringify({
+                    receiverId: this.recipientId,
+                    content: text,
+                })
+            );
+
+            this.addNewMessageElement({
                 content: text,
-            })
-        );
+                receiverId: '',
+                senderId: globalStore.auth.userId!,
+                id: 0,
+                createdAt: new Date().toISOString(),
+            });
+            this.scrollToTheBottom();
 
-        this.addNewMessageElement({
-            content: text,
-            receiverId: '',
-            senderId: globalStore.auth.userId!,
-            id: 0,
-            createdAt: new Date().toISOString(),
-        });
-
-        this.emit('new-message', text);
+            this.emit('new-message', text);
+        } catch (e) {
+            console.error('Error:', e);
+        }
     }
 
     private handleMessageReceive(event: MessageEvent) {
@@ -165,8 +172,7 @@ export default class ChatWindow extends BaseComponent {
             this.emit('new-message', message.content);
             this.addNewMessageElement(message);
 
-            this.messagesContainer.scrollTop =
-                this.messagesContainer.scrollHeight;
+            this.scrollToTheBottom();
         } else {
             console.log('other type of message');
         }
@@ -191,5 +197,9 @@ export default class ChatWindow extends BaseComponent {
         }
 
         this.messagesContainer.appendChild(newMessage);
+    }
+
+    private scrollToTheBottom() {
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
     }
 }
