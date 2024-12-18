@@ -35,10 +35,6 @@ class ProfilePopup {
                 title: 'Мои объявления',
                 href: '/ads/?author=me',
             },
-            chats: {
-                title: 'Мессенджер',
-                href: '/chats',
-            },
             logout: {
                 title: 'Выйти',
                 href: '',
