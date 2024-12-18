@@ -64,11 +64,7 @@ class ProfileData {
             reviews: {
                 title: 'Отзывы',
                 action: this.#renderReviews.bind(this),
-            },
-            achievments: {
-                title: 'Достижения',
-                action: this.#renderAchievments.bind(this),
-            },
+            }
         };
 
         this.#content = document.createElement('div');
@@ -571,23 +567,13 @@ class ProfileData {
         }
     }
 
-    //TODO Когда карты появятся
     #renderMap() {
         this.#content.replaceChildren();
         this.#content.classList.remove('y-scroll');
         this.#content.parentElement?.classList.remove(
             'fix-bottom-right-border'
         );
-        // const wrapper = document.createElement('div');
-        // wrapper.id = 'wrapper';
-        // wrapper.classList.add('data-container__wrapper');
 
-        // const map = document.createElement('img');
-        // map.classList.add('data-container__wrapper__img');
-        // map.src = '/myMap.jpg';
-
-        // wrapper.appendChild(map);
-        // this.#content.appendChild(wrapper);
         const journeyMap = new JourneyMap();
         journeyMap.render(this.#content);
     }
@@ -615,8 +601,6 @@ class ProfileData {
             noReviews.render(this.#content);
         }
     }
-
-    #renderAchievments() {}
 
     async #renderGraphic() {
         this.#content.replaceChildren();
@@ -667,7 +651,7 @@ class ProfileData {
         );
 
         document
-            .getElementById('data-container')
+            .getElementById('data-container')!
             .classList.remove('mobile-hidden');
 
         this.#addCheckedRadio();
