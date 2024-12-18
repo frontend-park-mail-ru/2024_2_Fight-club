@@ -40,10 +40,6 @@ class Header {
                     href: '/map',
                     text: 'Карта',
                 },
-                Articles: {
-                    href: '/articles',
-                    text: 'Статьи',
-                },
             },
 
             signs: {
