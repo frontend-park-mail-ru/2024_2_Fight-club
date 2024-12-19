@@ -44,14 +44,6 @@ export default class AdCard extends ReactiveComponent {
         this.data = data;
         this.oldImage = this.newImage = null;
         this.imgScrollTimeouts = [];
-
-        this.registerHelper();
-    }
-
-    private registerHelper() {
-        Handlebars.registerHelper('gte', function (a: number, b: number) {
-            return a >= b;
-        });
     }
 
     addEventListeners() {
@@ -216,7 +208,6 @@ export default class AdCard extends ReactiveComponent {
             '.js-fill-heart'
         ) as HTMLButtonElement;
 
-        console.log(globalStore.auth.isAuthorized);
         if (globalStore.auth.isAuthorized) {
             if (!this.data.isFavorite) {
                 await ApiClient.adToFavourites(this.data.id);
