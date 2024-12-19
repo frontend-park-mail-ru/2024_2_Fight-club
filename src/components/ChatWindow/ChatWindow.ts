@@ -32,13 +32,15 @@ export default class ChatWindow extends BaseComponent {
         this.recipientId = recipientId;
         this.messages = messages;
 
-        if (globalStore.chat.socket) {
-            globalStore.chat.socket.close();
+        if (
+            !globalStore.chat.socket ||
+            globalStore.chat.socket.readyState === WebSocket.CLOSED ||
+            globalStore.chat.socket.readyState === WebSocket.CLOSING
+        ) {
+            globalStore.chat.socket = new WebSocket(
+                `wss://${window.location.hostname}:${location.port}/websocket`
+            );
         }
-
-        globalStore.chat.socket = new WebSocket(
-            `wss://${window.location.hostname}:${location.port}/websocket`
-        );
     }
 
     protected afterRender() {
