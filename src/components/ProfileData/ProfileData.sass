@@ -353,7 +353,57 @@
 @media screen and (max-width: 900px)
     .profile__data-container
         width: 80%
+        min-height: auto !important
+        height: 100px
     .edit-form
         padding: 0
+
+        &__close
+            display: flex
+            justify-content: flex-end
+            &__cross
+                margin: 5px
+
         &__buttons
             margin-top: 20px
+            flex-direction: column
+
+        &__title
+            padding: 0
+            margin-bottom: 15px
+            &__p1
+                text-align: center
+                font-size: 24px
+                padding: 0
+        
+        &__sex
+            margin-top: 5px
+            span
+                font-size: 18px
+                margin-bottom: 5px
+        
+        &__data__first-column
+            gap: 10px !important
+
+        &__data__second-column
+            width: 100%
+            margin: 30px 0 15px 0 !important
+
+        &__input-line__title
+            width: 100%
+            padding: 3px
+            font-size: 18px
+
+        &__avatar__file-upload-wrapper
+            width: 85% !important
+
+    .data-container
+        height: min-content
+        min-height: 200px
+        padding-bottom: 20px
+        margin: auto
+        margin-bottom: 20px
+
+        &__header
+            a
+                font-size: 18px
