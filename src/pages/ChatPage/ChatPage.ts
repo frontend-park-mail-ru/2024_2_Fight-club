@@ -2,6 +2,8 @@ import BaseComponent from '../../components/BaseComponent/BaseComponent';
 import ChatRecipientCard from '../../components/ChatRecipientCard/ChatRecipientCard';
 import ChatWindow from '../../components/ChatWindow/ChatWindow';
 import ApiClient from '../../modules/ApiClient';
+import globalStore from '../../modules/GlobalStore';
+import router from '../../modules/Router';
 import ChatRepository, { Chat } from '../../repositories/ChatRepository';
 
 export default class ChatPage extends BaseComponent {
@@ -21,6 +23,7 @@ export default class ChatPage extends BaseComponent {
 
         this.chats = chats;
 
+        // If a chat should be preopened
         if (!startChatWithRecipientId) return;
 
         requestAnimationFrame(async () => {
@@ -55,6 +58,10 @@ export default class ChatPage extends BaseComponent {
     protected addEventListeners(): void {}
 
     protected afterRender(): void {
+        if (!globalStore.auth.isAuthorized) {
+            router.navigateTo('/403');
+        }
+
         this.renderItems();
 
         const id = setInterval(async () => {

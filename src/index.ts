@@ -26,6 +26,7 @@ import globalStore from './modules/GlobalStore';
 import ChatPage from './pages/ChatPage/ChatPage';
 import ChatRepository from './repositories/ChatRepository';
 import PaymentPage from './pages/PaymentPage/PaymentPage';
+import Page403 from './pages/Page403/Page403';
 
 const renderMainPage = async () => {
     const data = await ApiClient.getAds();
@@ -208,6 +209,11 @@ router.addRoute('/payment', async (params: URLSearchParams) => {
     }
 
     const page = new PaymentPage(pageContainer, adId, 500);
+    page.render();
+});
+
+router.addRoute('/403', async () => {
+    const page = new Page403(pageContainer);
     page.render();
 });
 
