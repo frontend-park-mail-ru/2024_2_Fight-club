@@ -94,6 +94,10 @@
     margin-left: 50px;
     display: flex;
     align-items: center;
+
+    img {
+        object-fit: cover;
+    }
 }
 
 .header__avatar-container__avatar {
