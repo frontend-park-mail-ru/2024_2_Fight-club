@@ -9,7 +9,6 @@
     overflow: hidden;
     position: relative;
     cursor: pointer;
-
     transition: box-shadow 0.3s;
 
     &:hover {
@@ -227,24 +226,30 @@
 }
 
 .boosted {
-    background-color: yellow;
     position: relative;
-
-    // &:hover::after {
-    //     content: 'Рекомендуем!';
-    //     position: absolute;
-    //     top: -30px;
-    //     left: 50%;
-    //     transform: translateX(-50%);
-    //     background-color: green;
-    //     color: white;
-    //     padding: 5px 10px;
-    //     border-radius: 4px;
-    //     white-space: nowrap;
-    //     font-size: 12px;
-    //     z-index: 10;
-    // }
+    border-radius: 12px;
+    padding: 5px;
+    background: linear-gradient(90deg, #ff9966, #f59218, #ff9966, #f59218);
+    background-size: 200% 200%;
+    animation: border-spin 3s linear infinite;
+    box-sizing: border-box;
 }
+
+.boosted > * {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+@keyframes border-spin {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
 
 @media screen and (max-width: 900px) {
     .housing-card {
