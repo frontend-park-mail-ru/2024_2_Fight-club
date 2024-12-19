@@ -1,4 +1,4 @@
-<div class='housing-card' id='{{elementId}}'>
+<div class='housing-card {{#if priority}}housing-card--boosted{{/if}}' id='{{elementId}}'>
     <!-- ID is used for js not styles -->
     <div class='housing-card__main-img-container js-image-container'>
         <img
@@ -94,8 +94,8 @@
     </div>
 
     <div class='housing-card__info'>
-        <p class='housing-card__apartment-info {{#if (gte priority 50)}}boosted{{/if}}'>
-            {{roomsNumber}}-комн. кв. · {{squareMeters}}&nbsp;м² · {{floor}} этаж
+        <p class='housing-card__apartment-info'>
+            {{roomsNumber}}-комн. кв. · {{squareMeters}}&nbsp;м² · {{floor}}&nbsp;этаж
         </p>
         <p class='housing-card__address'>{{address}}, {{cityName}}</p>
 
