@@ -32,7 +32,7 @@
 @use '../src/pages/FavouritePage/FavouritePage';
 @use '../src/pages/PaymentPage/PaymentPage';
 @use '../src/pages/PaymentSuccessPage/PaymentSuccessPage';
-@use '../src/pages/Page403/Page403';
+@use './ErrorPage';
 
 @font-face {
     font-family: Inter;
