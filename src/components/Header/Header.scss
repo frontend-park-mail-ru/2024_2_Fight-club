@@ -22,7 +22,7 @@
     padding: 0;
 }
 
-.header__hrefs__href {
+.header__href {
     color: #635b5b;
     text-decoration: none;
     font-size: 24px;
@@ -36,7 +36,7 @@
     height: 100px;
 }
 
-.header__hrefs__href-active {
+.header__href--active {
     font-weight: bold;
     position: relative;
 
@@ -216,6 +216,7 @@
     }
 
     .header__avatar-container {
+        display: none;
         position: absolute;
         right: 0;
         margin: 0;
@@ -236,7 +237,6 @@
     }
 
     .header__img-logo,
-    .header__signs,
     .header__hrefs {
         display: none;
     }

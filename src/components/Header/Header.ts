@@ -1,214 +1,126 @@
 'use strict';
 
-import ApiClient from '../../modules/ApiClient';
+import globalStore from '../../modules/GlobalStore';
+import AuthPopup from '../AuthPopup/AuthPopup';
+import BaseComponent from '../BaseComponent/BaseComponent';
 import PopupAlert from '../PopupAlert/PopupAlert';
 import ProfilePopup from '../ProfilePopup/ProfilePopup';
 
-interface HeaderCallbacks {
-    messagesPage: () => void;
-    favoritesPage: () => void;
-    notificationsPage: () => void;
-    signInPage: () => void;
+interface SessionData {
+    avatar: string;
+    id: string;
 }
 
-class Header {
-    #config;
-    #isAuthorized;
-    #headerCallbacks;
-    #headerState;
-    #menuContainer;
-    #menuContainerWrapper;
-
-    constructor(headerCallbacks: HeaderCallbacks, isAuth: boolean) {
-        this.#headerCallbacks = headerCallbacks;
-        this.#menuContainerWrapper = document.createElement('header');
-        this.#menuContainerWrapper.id = 'header';
-        this.#menuContainerWrapper.classList.add('header-wrapper');
-        this.#menuContainer = document.createElement('div');
-        this.#menuContainer.classList.add('header');
-        this.#menuContainer.id = 'header-inner';
-
-        this.#isAuthorized = isAuth;
-
-        this.#config = {
-            menu: {
-                Main: {
-                    href: '/',
-                    text: 'Главная',
+export default class Header extends BaseComponent {
+    constructor(parent: HTMLElement, sessionData?: SessionData) {
+        super({
+            parent: parent,
+            id: '',
+            templateName: 'Header',
+            templateData: {
+                isAuthorized: globalStore.auth.isAuthorized,
+                sessionData: sessionData,
+                menu: {
+                    Main: {
+                        href: '/',
+                        text: 'Главная',
+                    },
+                    Map: {
+                        href: '/map',
+                        text: 'Карта',
+                    },
                 },
-                Map: {
-                    href: '/map',
-                    text: 'Карта',
-                },
-            },
 
-            signs: {
-                Messages: {
-                    src: '/svg/messages.svg',
-                    href: '/chats',
-                    callback: headerCallbacks.messagesPage,
-                },
-                Favorites: {
-                    src: '/svg/favorites.svg',
-                    href: '/favorites',
-                    callback: headerCallbacks.favoritesPage,
-                },
-                Notifications: {
-                    src: '/svg/notifications.svg',
-                    href: '/notifications',
-                    callback: headerCallbacks.notificationsPage,
+                signs: {
+                    Messages: {
+                        src: '/svg/messages.svg',
+                        href: '/chats',
+                    },
+                    Favorites: {
+                        src: '/svg/favorites.svg',
+                        href: '/favorites',
+                    },
+                    Notifications: {
+                        src: '/svg/notifications.svg',
+                        href: '/notifications',
+                    },
                 },
             },
-        };
-
-        this.#headerState = {
-            activePageLink: null,
-            headerElements: {},
-        };
-
-        this.#render();
+        });
     }
 
-    #renderMainText() {
-        const nameImg = document.createElement('img');
-        nameImg.classList.add('header__img2');
-        nameImg.src = '/name.png';
-
-        const link = document.createElement('a');
-        link.classList.add('header__logo-text-link');
-        link.href = '/';
-
-        link.appendChild(nameImg);
-
-        this.#menuContainer.appendChild(link);
+    protected addEventListeners(): void {
+        this.addLinksEventListeners();
+        this.addAvatarEventListeners();
+        this.addSignsEventListeners();
+        this.addLoginButtonEventListenListener();
     }
 
-    #renderHrefs() {
-        const hrefs = document.createElement('div');
-        hrefs.classList.add('header__hrefs');
-        Object.entries(this.#config.menu).forEach(
-            ([key, { href, text }], index) => {
-                const menuElement = document.createElement('a');
-                menuElement.href = href;
-                menuElement.text = text;
-                menuElement.addEventListener('click', (e) => {
-                    e.preventDefault();
+    private addLinksEventListeners() {
+        const links = document.getElementsByClassName(
+            'header__href'
+        ) as HTMLCollectionOf<HTMLAnchorElement>;
 
-                    const elements = document.getElementsByClassName(
-                        'header__hrefs__href'
-                    );
-                    [...elements].forEach((elem) =>
-                        elem.classList.remove('header__hrefs__href-active')
-                    );
+        [...links].forEach((elem: HTMLAnchorElement) => {
+            elem.onclick = () => {
+                document
+                    .querySelector('.header__href--active')
+                    ?.classList.remove('header__href--active');
 
-                    menuElement.classList.add('header__hrefs__href-active');
-                });
-                menuElement.classList.add('header__hrefs__href');
-
-                if (index === 0) {
-                    menuElement.classList.add('header__hrefs__href-active');
-                    this.#headerState.activePageLink = menuElement;
-                }
-
-                this.#headerState.headerElements[key] = menuElement;
-                hrefs.appendChild(menuElement);
-            }
-        );
-        this.#menuContainer.appendChild(hrefs);
-    }
-
-    #renderSigns() {
-        const signsContainer = document.createElement('div');
-        signsContainer.classList.add('header__signs');
-        Object.entries(this.#config.signs).forEach(
-            ([_, { href, src, callback }]) => {
-                const signElement = document.createElement('a');
-                if (this.#isAuthorized) signElement.href = href;
-                const img = document.createElement('img');
-                img.src = src;
-                img.width = 30;
-                signElement.appendChild(img);
-                signElement.addEventListener('click', (e: Event) => {
-                    if (this.#isAuthorized) {
-                        callback();
-                    } else {
-                        e.preventDefault();
-                        this.#headerCallbacks.signInPage();
-                        const errorMessage = PopupAlert(
-                            'Необходимо зарегистрироваться'
-                        );
-                        document
-                            .querySelector('.overlay')
-                            ?.appendChild(errorMessage);
-                    }
-                });
-
-                signsContainer.appendChild(signElement);
-            }
-        );
-        this.#menuContainer.appendChild(signsContainer);
-    }
-
-    async #renderButtonOrAvatar() {
-        if (this.#isAuthorized) {
-            const avatarContainer = document.createElement('div');
-            avatarContainer.classList.add('header__avatar-container');
-            const avatar = document.createElement('img');
-
-            const uuid = await ApiClient.getSessionData();
-            const data = await ApiClient.getUser(uuid.id);
-            avatar.src = data.avatar;
-            avatar.width = 50;
-            avatar.height = 50;
-            avatar.classList.add('header__avatar-container__avatar');
-            avatar.classList.add('js-header-avatar');
-
-            avatar.onclick = () => {
-                const profileList = new ProfilePopup();
-                profileList.render(this.#menuContainer);
+                elem.classList.add('header__href--active');
             };
 
-            avatarContainer.appendChild(avatar);
-
-            this.#menuContainer.appendChild(avatarContainer);
-        } else {
-            const entryButton = document.createElement('button');
-            entryButton.classList.add('header__button');
-            entryButton.textContent = 'Войти';
-            entryButton.addEventListener(
-                'click',
-                this.#headerCallbacks.signInPage
-            );
-            this.#menuContainer.appendChild(entryButton);
-        }
+            if (elem.href === location.href) {
+                elem.classList.add('header__href--active');
+            }
+        });
     }
 
-    async #render() {
-        // TODO: REWRITE TO HBS. IT IS TOO HARD TO MAINTAIN JS ONLY COMPONENT LIKE THIS
+    private addAvatarEventListeners() {
+        const avatarContainer = document.getElementById('js-header-avatar');
+        if (!avatarContainer) return;
 
-        const menu = document.createElement('ul');
-        menu.classList.add('menu');
-        for (const menuSection in this.#config.menu) {
-            const data = this.#config.menu[menuSection];
-            const elem = document.createElement('a');
-            elem.classList.add('menu__element');
-            elem.textContent = data['text'];
-            elem.href = data['href'];
-            menu.appendChild(elem);
-        }
-        this.#menuContainer.appendChild(menu);
-
-        this.#menuContainerWrapper.appendChild(this.#menuContainer);
-
-        this.#renderHrefs();
-        this.#renderMainText();
-        this.#renderSigns();
-        await this.#renderButtonOrAvatar();
+        avatarContainer.onclick = function () {
+            const menu = new ProfilePopup();
+            menu.render(avatarContainer.parentElement!);
+        };
     }
 
-    getElement() {
-        return this.#menuContainerWrapper;
+    private addSignsEventListeners() {
+        const signs = Array.from(
+            document.getElementsByClassName(
+                'header__sign'
+            ) as HTMLCollectionOf<HTMLAnchorElement>
+        );
+
+        signs.forEach((elem: HTMLAnchorElement) => {
+            if (!globalStore.auth.isAuthorized) {
+                elem.href = '';
+            }
+
+            elem.onclick = () => {
+                if (!globalStore.auth.isAuthorized) {
+                    const errorMessage = PopupAlert(
+                        'Необходимо зарегистрироваться'
+                    );
+                    const authPopup = new AuthPopup();
+
+                    authPopup.render(document.body);
+                    document
+                        .getElementById('overlay')
+                        ?.appendChild(errorMessage);
+                }
+            };
+        });
+    }
+
+    private addLoginButtonEventListenListener() {
+        const button = document.getElementById('header-signin-button');
+        if (!button) return;
+
+        button.onclick = () => {
+            const authPopup = new AuthPopup();
+            authPopup.render(document.body);
+        };
     }
 }
-
-export default Header;

@@ -1,0 +1,37 @@
+<header id='header' class='header-wrapper'>
+    <div class='header' id='header-inner'>
+        <div class='header__hrefs'>
+            {{#each menu}}
+                <a href='{{this.href}}' class='header__href'>{{this.text}}</a>
+            {{/each}}
+        </div>
+
+        <a class='header__logo-text-link' href='/'>
+            <img class='header__img2' src='/name.png' /></a>
+
+        <div class='header__signs'>
+            {{#each signs}}
+                <a class='header__sign' href='{{this.href}}'>
+                    <img src='{{this.src}}' width='30' />
+                </a>
+            {{/each}}
+        </div>
+
+        {{#if isAuthorized}}
+            <div class='header__avatar-container' id='js-avatar-container'>
+                <img
+                    src='{{sessionData.avatar}}'
+                    id='js-header-avatar'
+                    class='header__avatar-container__avatar'
+                    width='50'
+                    height='50'
+                />
+            </div>
+        {{else}}
+            <button
+                class='header__button'
+                id='header-signin-button'
+            >Войти</button>
+        {{/if}}
+    </div>
+</header>
