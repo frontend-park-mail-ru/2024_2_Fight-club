@@ -3,38 +3,47 @@
 .journey-map
     height: 100%
 
+    button
+            @include mixins.button
+
     svg
         width:100%
         margin-left: 3%
+        margin-top: 20px
 
         path
             fill: rgba(0, 0, 0, 0.2)
+            cursor: pointer
 
     &__action-container 
         display: flex
         flex-direction: row
-        justify-content: center
-        gap: 30px
+        justify-content: space-evenly
     
-    &__dates 
-        display: flex
-        flex-direction: row
-        gap: 30px
-        width: 40%
+    &__date-container
+        position: relative
+        width: 30%
 
-        &__date
-            width: 50%
-            min-width: 150px
-            
+        label
+            position: absolute
+            top: -10px
+            left: 10px
+            background: #fff
+            font-size: 14px
+        
+        input
+            padding-left: 20px
     
-    &__button
-        button
-            @include mixins.button
+    &__date
+        width: 100%
+        min-width: 150px
+        
+    &__save-button  
+        background-color: #4daf7c !important
+        color: white
 
-        &__save
-            background-color: #4daf7c !important
-            color: white
-
+.region-choose
+    fill: #f5cb42 !important
 
 .region-hover
     fill: #f5cb42 !important

@@ -266,6 +266,17 @@ class APIClient {
             },
         });
     }
+
+    async addNewRegion(name: string, firstDate: string, secondDate: string) {
+        const url = this.BASE_URL + `/users/regions`;
+        const body = {
+            regionName: name,
+            startVisitedDate: firstDate,
+            endVisitedDate: secondDate
+        }
+
+        return Ajax.post({url, body})
+    }
 }
 
 export default new APIClient();
