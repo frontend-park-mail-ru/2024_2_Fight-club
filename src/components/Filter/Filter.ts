@@ -11,44 +11,44 @@ export default class Filter {
         this.#onApply = onApply;
 
         this.#config = {
-            geoposition: {
-                name: 'geo',
-                title: 'По геопозиции',
-                variations: {
-                    city: {
-                        text: 'В моём городе',
-                        value: undefined,
-                        isDefault: true,
-                    },
-                    '10km': {
-                        text: 'В радиусе 10 км',
-                        value: '10',
-                        isDefault: false,
-                    },
-                    '5km': {
-                        text: 'В радиусе 5 км',
-                        value: '5',
-                        isDefault: false,
-                    },
-                    '3km': {
-                        text: 'В радиусе 3 км',
-                        value: '3',
-                        isDefault: false,
-                    },
-                    '1km': {
-                        text: 'В радиусе 1 км',
-                        value: '1',
-                        isDefault: false,
-                    },
-                },
-            },
+            // geoposition: {
+            //     name: 'geo',
+            //     title: 'По геопозиции',
+            //     variations: {
+            //         city: {
+            //             text: 'В моём городе',
+            //             value: undefined,
+            //             isDefault: true,
+            //         },
+            //         '10km': {
+            //             text: 'В радиусе 10 км',
+            //             value: '10',
+            //             isDefault: false,
+            //         },
+            //         '5km': {
+            //             text: 'В радиусе 5 км',
+            //             value: '5',
+            //             isDefault: false,
+            //         },
+            //         '3km': {
+            //             text: 'В радиусе 3 км',
+            //             value: '3',
+            //             isDefault: false,
+            //         },
+            //         '1km': {
+            //             text: 'В радиусе 1 км',
+            //             value: '1',
+            //             isDefault: false,
+            //         },
+            //     },
+            // },
             rating: {
                 name: 'rating',
                 title: null,
                 variations: {
                     true: {
                         text: 'Рейтинг 4 и выше',
-                        isDefault: true,
+                        isDefault: false,
                     },
                 },
             },
@@ -149,12 +149,12 @@ export default class Filter {
     getFilterValues(): AdsFilters {
         const values = {} as AdsFilters;
 
-        const geoInputs = this.#filterContainer.querySelectorAll(
-            'input[name="geo"]'
-        ) as NodeListOf<HTMLInputElement>;
-        values.distance = (parseInt(
-            Array.from(geoInputs).find((input) => input.checked)!.value
-        ) || undefined) as typeof values.distance;
+        // const geoInputs = this.#filterContainer.querySelectorAll(
+        //     'input[name="geo"]'
+        // ) as NodeListOf<HTMLInputElement>;
+        // values.distance = (parseInt(
+        //     Array.from(geoInputs).find((input) => input.checked)!.value
+        // ) || undefined) as typeof values.distance;
 
         const ratingInputs = this.#filterContainer.querySelectorAll(
             'input[name="rating"]'
@@ -174,21 +174,25 @@ export default class Filter {
         values.gender = (Array.from(sexInputs).find((input) => input.checked)
             ?.value || undefined) as typeof values.gender;
 
-        const visInputs = this.#filterContainer.querySelectorAll(
-            'input[name="vis"]'
-        ) as NodeListOf<HTMLInputElement>;
-        values.guests = (parseInt(
-            Array.from(visInputs).find((input) => input.checked)!.value
-        ) || undefined) as typeof values.guests;
-
-        values.guests = parseInt(
-            (
-                this.#filterContainer.querySelector(
-                    '#vis-slider'
-                ) as HTMLInputElement
-            )?.value || '1',
-            10
-        );
+        const visSlider = this.#filterContainer.querySelector(
+            '#vis-slider'
+        ) as HTMLInputElement;
+    
+        if (visSlider && visSlider.value && visSlider.value !== '1') {
+            values.guests = parseInt(visSlider.value, 10);
+        } else {
+            const visInputs = this.#filterContainer.querySelectorAll(
+                'input[name="vis"]'
+            ) as NodeListOf<HTMLInputElement>;
+            const selectedVis = Array.from(visInputs).find((input) => input.checked);
+            const visValue = selectedVis?.value;
+    
+            if (visValue !== 'undefined') {
+                values.guests = parseInt(visValue || '0', 10);
+            } else {
+                values.guests = undefined;
+            }
+        }
 
         const startDateInput = this.#filterContainer.querySelector(
             '#start-date'
