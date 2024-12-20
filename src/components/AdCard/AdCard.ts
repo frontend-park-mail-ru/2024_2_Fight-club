@@ -63,6 +63,10 @@ export default class AdCard extends ReactiveComponent {
             ) as HTMLButtonElement
         ).onclick = (e) => this.showOnMap(e);
 
+        (this.thisElement.querySelector('.js-kebab') as HTMLElement).onclick = (
+            e
+        ) => e.stopPropagation();
+
         setTimeout(() => {
             this.addImageScrolling();
         }, 0); // setTimeout ensures the code will be called AFTER browser finished rendering innerHTML new content
