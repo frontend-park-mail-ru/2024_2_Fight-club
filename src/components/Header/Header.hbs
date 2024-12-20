@@ -56,18 +56,31 @@
         >
         </button>
 
-        <div class='header-menu__avatar-container'>
-            <img
-                src='{{sessionData.avatar}}'
-                id='js-header-avatar'
-                class='header__avatar'
-                width='50'
-                height='50'
-            />
-            <a href='/profile' class='header-menu__profile-button'>
-                Личный кабинет
-            </a>
-        </div>
+        {{#if isAuthorized}}
+            <div class='header-menu__avatar-container'>
+                <img
+                    src='{{sessionData.avatar}}'
+                    id='js-header-avatar'
+                    class='header__avatar'
+                    width='50'
+                    height='50'
+                />
+                <a href='/profile' class='header-menu__profile-button'>
+                    Личный кабинет
+                </a>
+            </div>
+        {{else}}
+            <div
+                class='header-menu__avatar-container'
+                id='header-menu-sign-in-button'
+            >
+                <img src='/svg/signin.svg' class='header-menu__sign-in-icon' />
+                <a class='header-menu__profile-button'>
+                    Войти
+                </a>
+            </div>
+        {{/if}}
+
         <ul>
             {{#each menu}}
                 <li class='header-menu__entry'>
@@ -75,17 +88,21 @@
                 </li>
             {{/each}}
 
-            {{#each signs}}
-                <li class='header-menu__entry'>
-                    <a href='{{this.href}}'>{{this.text}}</a>
-                </li>
-            {{/each}}
+            {{#if isAuthorized}}
+                {{#each signs}}
+                    <li class='header-menu__entry'>
+                        <a href='{{this.href}}'>{{this.text}}</a>
+                    </li>
+                {{/each}}
 
-            <li class='header-menu__entry'>
-                <a href='/ads/?author=me'>Мои объявления</a></li>
-            <li id='header-mobile-logout-button' class='header-menu__entry'><a
-                    href='#'
-                >Выйти</a></li>
+                <li class='header-menu__entry'>
+                    <a href='/ads/?author=me'>Мои объявления</a></li>
+
+                <li
+                    id='header-mobile-logout-button'
+                    class='header-menu__entry'
+                ><a href='#'>Выйти</a></li>
+            {{/if}}
         </ul>
     </div>
 

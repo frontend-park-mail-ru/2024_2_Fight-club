@@ -194,6 +194,18 @@
         gap: 10px;
     }
 
+    &__signin-button {
+        display: block;
+    }
+
+    &__sign-in-icon {
+        width: 30px;
+    }
+
+    &__profile-button {
+        cursor: pointer;
+    }
+
     a {
         text-decoration: none;
         color: inherit;
@@ -277,6 +289,10 @@
         &__sign img {
             width: 24px;
             height: 24px;
+        }
+
+        &__button {
+            display: none;
         }
     }
 

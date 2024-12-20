@@ -62,7 +62,7 @@ export default class Header extends BaseComponent {
         this.addSignsEventListeners();
         this.addLoginButtonEventListenListener();
 
-        this.addMobileEvents();
+        setTimeout(() => this.addMobileEvents(), 50);
     }
 
     protected afterRender(): void {
@@ -138,25 +138,34 @@ export default class Header extends BaseComponent {
     }
 
     private addMobileEvents() {
+        // TODO: ADD CHECK FOR MOBILE
         const burger = document.getElementById('header-burger')!;
         burger.onclick = () => {
             this.mobileMenu.classList.add('header-menu--shown');
+        };
+
+        const loginButton = document.getElementById(
+            'header-menu-sign-in-button'
+        );
+        loginButton.onclick = () => {
+            const popup = new AuthPopup();
+            popup.render(document.body);
         };
 
         const logoutButton = document.getElementById(
             'header-mobile-logout-button'
         );
 
-        if (!logoutButton) return;
-
-        logoutButton.onclick = async () => {
-            const response = await ApiClient.logout();
-            if (response.ok) {
-                router.navigateTo('/');
-                return;
-            }
-            throw new Error('Failed to logout');
-        };
+        if (logoutButton) {
+            logoutButton.onclick = async () => {
+                const response = await ApiClient.logout();
+                if (response.ok) {
+                    router.navigateTo('/');
+                    return;
+                }
+                throw new Error('Failed to logout');
+            };
+        }
 
         document.getElementById('header-mobile-go-back-button')!.onclick = () =>
             this.mobileMenu.classList.remove('header-menu--shown');
