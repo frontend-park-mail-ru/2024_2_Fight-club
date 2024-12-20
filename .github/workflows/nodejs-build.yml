@@ -43,7 +43,7 @@ jobs:
                   ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
             - name: Create remote directory (if it doesn't exist)
-              run: ssh ubuntu@37.139.41.110 "mkdir -p /home/ubuntu/frontend/"
+              run: ssh ubuntu@pootnick.ru "mkdir -p /home/ubuntu/frontend/"
 
             - name: Copy build artifacts via SSH
-              run: rsync -avzP ./dist/ ubuntu@37.139.41.110:/home/ubuntu/frontend/
+              run: rsync -avzP ./dist/ ubuntu@pootnick.ru:/home/ubuntu/frontend/
