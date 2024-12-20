@@ -567,14 +567,22 @@ class ProfileData {
         }
     }
 
-    #renderMap() {
+    async #renderMap() {
         this.#content.replaceChildren();
         this.#content.classList.remove('y-scroll');
         this.#content.parentElement?.classList.remove(
             'fix-bottom-right-border'
         );
+        
+        let uuid;
+        if (this.#isMyProfile) {
+            const userData = await APIClient.getSessionData();
+            uuid = userData.id;
+        } else {
+            uuid = this.#otherUserId;
+        }
 
-        const journeyMap = new JourneyMap();
+        const journeyMap = new JourneyMap(uuid, this.#isMyProfile);
         journeyMap.render(this.#content);
     }
 
