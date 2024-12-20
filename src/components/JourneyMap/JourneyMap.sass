@@ -1,13 +1,40 @@
+@use '../../styles/mixins'
+    
 .journey-map
-    margin: auto 0px
+    height: 100%
 
     svg
         width:100%
-        margin-top: 2%
         margin-left: 3%
 
         path
             fill: rgba(0, 0, 0, 0.2)
+
+    &__action-container 
+        display: flex
+        flex-direction: row
+        justify-content: center
+        gap: 30px
+    
+    &__dates 
+        display: flex
+        flex-direction: row
+        gap: 30px
+        width: 40%
+
+        &__date
+            width: 50%
+            min-width: 150px
+            
+    
+    &__button
+        button
+            @include mixins.button
+
+        &__save
+            background-color: #4daf7c !important
+            color: white
+
 
 .region-hover
     fill: #f5cb42 !important
