@@ -3,6 +3,8 @@
 import { AdvertData } from '../../modules/Types';
 import { calculateAge } from '../../modules/Utils';
 import router from '../../modules/Router';
+import globalStore from '../../modules/GlobalStore';
+import AuthPopup from '../AuthPopup/AuthPopup';
 
 class ShortHousing {
     #data: AdvertData;
@@ -48,11 +50,17 @@ class ShortHousing {
         };
 
         //При клике на кнопку "Напиши мне" БУДЕТ переход на страницу чата
-        document
-            .querySelector('.js-new-chat[data-index="' + this.#index + '"]')
-            ?.addEventListener('click', () => {
-                router.navigateTo(`/chats?recipientId=${this.#data.authorUUID}`)
-            });
+        (document
+            .querySelector('.js-new-chat[data-index="' + this.#index + '"]') as HTMLButtonElement)!
+            .onclick = (e) => {
+                e.stopPropagation();
+                if (globalStore.auth.isAuthorized) {
+                    router.navigateTo(`/chats?recipientId=${this.#data.authorUUID}`)
+                } else {
+                    const auth = new AuthPopup();
+                    auth.render(document.getElementById('root') as HTMLElement);
+                }
+            };
     }
 
     async render(parent: HTMLDivElement) {
