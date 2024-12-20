@@ -1,6 +1,8 @@
 'use strict';
 
+import ApiClient from '../../modules/ApiClient';
 import globalStore from '../../modules/GlobalStore';
+import router from '../../modules/Router';
 import AuthPopup from '../AuthPopup/AuthPopup';
 import BaseComponent from '../BaseComponent/BaseComponent';
 import PopupAlert from '../PopupAlert/PopupAlert';
@@ -12,6 +14,8 @@ interface SessionData {
 }
 
 export default class Header extends BaseComponent {
+    private mobileMenu!: HTMLElement;
+
     constructor(parent: HTMLElement, sessionData?: SessionData) {
         super({
             parent: parent,
@@ -35,14 +39,17 @@ export default class Header extends BaseComponent {
                     Messages: {
                         src: '/svg/messages.svg',
                         href: '/chats',
+                        text: 'Сообщения',
                     },
                     Favorites: {
                         src: '/svg/favorites.svg',
                         href: '/favorites',
+                        text: 'Избранное',
                     },
                     Notifications: {
                         src: '/svg/notifications.svg',
                         href: '/notifications',
+                        text: 'Уведомления',
                     },
                 },
             },
@@ -54,6 +61,12 @@ export default class Header extends BaseComponent {
         this.addAvatarEventListeners();
         this.addSignsEventListeners();
         this.addLoginButtonEventListenListener();
+
+        this.addMobileEvents();
+    }
+
+    protected afterRender(): void {
+        this.mobileMenu = document.getElementById('mobile-menu')!;
     }
 
     private addLinksEventListeners() {
@@ -122,5 +135,41 @@ export default class Header extends BaseComponent {
             const authPopup = new AuthPopup();
             authPopup.render(document.body);
         };
+    }
+
+    private addMobileEvents() {
+        const burger = document.getElementById('header-burger')!;
+        burger.onclick = () => {
+            this.mobileMenu.classList.add('header-menu--shown');
+        };
+
+        const logoutButton = document.getElementById(
+            'header-mobile-logout-button'
+        );
+
+        if (!logoutButton) return;
+
+        logoutButton.onclick = async () => {
+            const response = await ApiClient.logout();
+            if (response.ok) {
+                router.navigateTo('/');
+                return;
+            }
+            throw new Error('Failed to logout');
+        };
+
+        document.getElementById('header-mobile-go-back-button')!.onclick = () =>
+            this.mobileMenu.classList.remove('header-menu--shown');
+
+        document.querySelectorAll('a').forEach((elem) => {
+            elem.onclick = () => this.closeMobileHeaderMenu();
+        });
+
+        document.getElementById('header-mobile-go-back-button')!.onclick = () =>
+            this.closeMobileHeaderMenu();
+    }
+
+    private closeMobileHeaderMenu() {
+        this.mobileMenu.classList.remove('header-menu--shown');
     }
 }
