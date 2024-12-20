@@ -34,20 +34,19 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v4
 
-            - name: Get current branch name
-              id: branch_name
-              run: echo "BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
-
             - name: Install SSH Client
               run: sudo apt-get update && sudo apt-get install -y openssh-client
 
-            - name: Add SSH key to the agent
-              uses: webfactory/ssh-agent@v0.9.0
+            - name: chmod
+              uses: appleboy/ssh-action@master
               with:
-                  ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  host: 37.139.41.110
+                  username: ubuntu
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  script: ssh ubuntu@37.139.41.110 "mkdir -p /home/ubuntu/frontend/"
 
-            - name: Create remote directory (if it doesn't exist)
-              run: ssh ubuntu@37.139.41.110 "mkdir -p /home/ubuntu/frontend/"
+            # - name: Create remote directory (if it doesn't exist)
+            #   run: ssh ubuntu@37.139.41.110 "mkdir -p /home/ubuntu/frontend/"
 
             - name: Copy build artifacts via SSH
               run: rsync -avzP ./dist/ ubuntu@37.139.41.110:/home/ubuntu/frontend/
