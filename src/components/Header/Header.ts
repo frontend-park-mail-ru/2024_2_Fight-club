@@ -46,11 +46,11 @@ export default class Header extends BaseComponent {
                         href: '/favorites',
                         text: 'Избранное',
                     },
-                    Notifications: {
-                        src: '/svg/notifications.svg',
-                        href: '/notifications',
-                        text: 'Уведомления',
-                    },
+                    // Notifications: {
+                    //     src: '/svg/notifications.svg',
+                    //     href: '/notifications',
+                    //     text: 'Уведомления',
+                    // },
                 },
             },
         });
