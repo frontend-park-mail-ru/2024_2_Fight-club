@@ -1,3 +1,5 @@
+@use '../../styles/mixins'
+
 .map-page
     display: grid
     grid-template-areas: 'people map'
@@ -78,7 +80,25 @@
         &.next 
             right: 10px
 
+.center-button
+    display: flex
+    justify-content: center
+    
+.learn-more
+    @include mixins.button
+    min-height: 20px
+    height: 25px !important
+    border: 1px solid
+    color: #000 !important
+    background-color: #fff !important
+    font-weight: 600
 
+.highlight
+    background-color: #ffffcc
+    transition: background-color 0.5s ease
+
+.highlight.fade-out 
+    background-color: #fff
 
 @media screen and (max-width: 900px)
     .map-page
