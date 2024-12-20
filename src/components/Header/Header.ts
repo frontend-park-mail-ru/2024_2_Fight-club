@@ -147,10 +147,12 @@ export default class Header extends BaseComponent {
         const loginButton = document.getElementById(
             'header-menu-sign-in-button'
         );
-        loginButton.onclick = () => {
-            const popup = new AuthPopup();
-            popup.render(document.body);
-        };
+        if (loginButton) {
+            loginButton.onclick = () => {
+                const popup = new AuthPopup();
+                popup.render(document.body);
+            };
+        }
 
         const logoutButton = document.getElementById(
             'header-mobile-logout-button'
