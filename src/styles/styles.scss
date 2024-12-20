@@ -43,9 +43,11 @@
     margin: 0;
     padding: 0;
 }
+
 html {
     height: 100%;
 }
+
 body {
     display: flex;
     flex-direction: column;
@@ -55,17 +57,20 @@ body {
     font-family: Inter, Arial, 'sans-serif';
     background-color: #fff;
 }
+
 #root {
     flex: 1 1 auto;
     height: 100%;
     display: flex;
     flex-direction: column;
 }
+
 .page-container {
     flex: 1 1;
     display: flex;
     flex-direction: column;
 }
+
 @font-face {
     font-family: MarckScript-Regular;
     src: url('/fonts/MarckScript-Regular.ttf');
@@ -79,4 +84,9 @@ body {
 @font-face {
     font-family: Dimkin-Regular;
     src: url('/fonts/Dimkin-Regular.ttf');
+}
+
+::selection {
+    color: #fff;
+    background: #ffa552;
 }
