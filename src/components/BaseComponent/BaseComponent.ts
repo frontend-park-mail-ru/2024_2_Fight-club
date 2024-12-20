@@ -54,9 +54,9 @@ export default abstract class BaseComponent {
     /**
      * Called only once.
      */
-    render() {
+    render(insertPosition?: InsertPosition) {
         this.parent.insertAdjacentHTML(
-            'beforeend',
+            insertPosition ? insertPosition : 'beforeend',
             this.template({
                 id: this.elementId,
                 ...this.templateData,
