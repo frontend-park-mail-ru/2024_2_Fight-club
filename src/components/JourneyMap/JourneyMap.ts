@@ -265,6 +265,9 @@ class JourneyMap {
                     if (region.classList.contains('region-choose')) {
                         region.classList.remove('region-choose');
                         this.#choosenRegion = null;
+                        document
+                            .querySelector('.journey-map__action-container')!
+                            .replaceChildren();
                     } else {
                         region.classList.add('region-choose');
                         if (this.#choosenRegion) {
