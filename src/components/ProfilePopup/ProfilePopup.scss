@@ -32,9 +32,10 @@
     color: #152242;
     cursor: pointer;
     margin-bottom: 20px;
+    transition: color 0.2s;
 
     &:hover {
-        color: #0661ec;
+        color: #f39e4e;
     }
 }
 
