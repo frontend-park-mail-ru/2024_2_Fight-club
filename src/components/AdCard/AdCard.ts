@@ -204,9 +204,6 @@ export default class AdCard extends ReactiveComponent {
      */
     async addToFavorite(e: Event) {
         e.stopPropagation();
-        const heartButton = this.thisElement.querySelector(
-            '.js-fill-heart'
-        ) as HTMLButtonElement;
 
         if (globalStore.auth.isAuthorized) {
             if (!this.data.isFavorite) {
@@ -218,7 +215,12 @@ export default class AdCard extends ReactiveComponent {
                 document
                     .querySelector('.page-container')
                     ?.appendChild(successMessage);
-                heartButton.classList.add('already-liked');
+                this.thisElement
+                    .querySelector('.js-filled-heart')
+                    ?.setAttribute('display', 'unset');
+                this.thisElement
+                    .querySelector('.js-empty-heart')
+                    ?.setAttribute('display', 'none');
             } else {
                 this.data.isFavorite = false;
                 await ApiClient.removeFromFavourites(this.data.id);
@@ -226,7 +228,12 @@ export default class AdCard extends ReactiveComponent {
                 document
                     .querySelector('.page-container')
                     ?.appendChild(successMessage);
-                heartButton.classList.remove('already-liked');
+                this.thisElement
+                    .querySelector('.js-filled-heart')
+                    ?.setAttribute('display', 'none');
+                this.thisElement
+                    .querySelector('.js-empty-heart')
+                    ?.setAttribute('display', 'unset');
             }
         } else {
             const errorMessage = PopupAlert('Необходимо зарегистрироваться');
