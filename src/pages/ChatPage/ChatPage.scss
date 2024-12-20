@@ -55,3 +55,14 @@
         background-color: #f3f6ff;
     }
 }
+
+@media screen and (max-width: 900px) {
+    .chat-page {
+        flex-direction: column-reverse;
+        flex: 0 0 auto;
+    }
+
+    .recipients-list {
+        width: 100%;
+    }
+}
