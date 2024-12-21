@@ -1,6 +1,8 @@
 'use strict';
 
-import path from "path";
+import PopupAlert from "../PopupAlert/PopupAlert";
+import ApiClient from "../../modules/ApiClient";
+import { start } from "repl";
 
 const idAarr = [
     "RU-MOW",
@@ -179,27 +181,187 @@ const idAarr2 = {
 };
 
 class JourneyMap {
+    #userID: string;
+    #isMyProfile: boolean
+    #parent: HTMLDivElement | null;
+    #choosenRegion: SVGPathElement | null;
 
-    constructor() {}
+    constructor(uuid: string, isMyProfile: boolean) {
+        this.#userID = uuid;
+        this.#isMyProfile = isMyProfile;
+        this.#parent = null;
+        this.#choosenRegion = null;
+    }
+
+    #submitEventListener() {
+        const submitButton = (document
+            .querySelector('.js-add-region') as HTMLButtonElement);
+        
+        submitButton.onclick = async () => {
+            if (this.#choosenRegion) {
+                const startDate = (document
+                    .getElementById('visit-date') as HTMLInputElement)
+                    .value
+                const finishDate = (document
+                    .getElementById('leave-date') as HTMLInputElement)
+                    .value
+                
+                console.log(startDate)
+
+                if (startDate !== '' && finishDate !== '') {
+                    await ApiClient.addNewRegion(this.#choosenRegion.id, startDate, finishDate)
+                    this.#parent?.replaceChildren();
+                    this.render();
+                } else {
+                    const errorMessage = PopupAlert('Заполните даты');
+                    document
+                        .querySelector('.page-container')
+                        ?.appendChild(errorMessage);
+                }
+            
+            } else {
+                const errorMessage = PopupAlert('Выберите регион');
+                document
+                    .querySelector('.page-container')
+                    ?.appendChild(errorMessage);
+            }
+        }
+    }
+
+    #removeEventListener() {
+        const removeButton = (document
+            .querySelector('.js-remove-region') as HTMLButtonElement);
+        
+        removeButton.onclick = async () => {
+            if (this.#choosenRegion) {
+                await ApiClient.removeRegion(this.#choosenRegion.id)
+                this.#parent?.replaceChildren();
+                this.render();
+            } else {
+                const errorMessage = PopupAlert('Выберите регион');
+                document
+                    .querySelector('.page-container')
+                    ?.appendChild(errorMessage);
+            }
+        }
+    }
 
     #addEventListeners() {
         const regions = document.getElementsByTagName('path');
         for (let i = 0; i < regions.length; i++) {
             const region = regions[i];
+
+            // Желтый при наведении
             region.addEventListener('mouseover', () => {
                 region.classList.add('region-hover');
             });
             region.addEventListener('mouseout', () => {
                 region.classList.remove('region-hover');
             });
+
+            // Желтый фиксированно при клике
+            if (this.#isMyProfile) {
+                region.addEventListener('click', () => {
+                    if (region.classList.contains('region-choose')) {
+                        region.classList.remove('region-choose');
+                        this.#choosenRegion = null;
+                        document
+                            .querySelector('.journey-map__action-container')!
+                            .replaceChildren();
+                    } else {
+                        region.classList.add('region-choose');
+                        if (this.#choosenRegion) {
+                            this.#choosenRegion.classList.remove('region-choose');
+                        }
+                        this.#choosenRegion = region;
+                        const isVisited = region.classList.contains('region-visited')
+                        this.#renderActionContainer(isVisited);
+                        if (isVisited) {
+                            this.#removeEventListener();
+                        } else {
+                            this.#submitEventListener();
+                        }
+                        
+                    }
+                });
+            }
         }
     }
 
-    render(parent: HTMLDivElement) {
+    #renderActionContainer(isVisited: boolean) {
+        if (!this.#isMyProfile) return;
+
+        const container = document.querySelector('.journey-map__action-container');
+        container?.replaceChildren();
+
+        if (!isVisited) {
+            const firstDateContainer = document.createElement('div');
+            firstDateContainer.classList.add('journey-map__date-container');
+            const firstLabel = document.createElement('label');
+            firstLabel.textContent = "Начало поездки";
+            firstLabel.setAttribute("for", 'visit-date');
+            const startDateInput = document.createElement('input');
+            startDateInput.id = "visit-date";
+            startDateInput.name = "visit-date";
+            startDateInput.classList.add("journey-map__date");
+            startDateInput.type = "date";
+            startDateInput.min = "1900-01-01";
+            firstDateContainer.appendChild(firstLabel);
+            firstDateContainer.appendChild(startDateInput)
+
+            const secondDateContainer = document.createElement('div');
+            secondDateContainer.classList.add('journey-map__date-container');
+            const secondLabel = document.createElement('label');
+            secondLabel.textContent = "Конец поездки";
+            secondLabel.setAttribute("for", 'leave-date');
+            const endDateInput = document.createElement('input');
+            endDateInput.id = "leave-date";
+            endDateInput.name = "leave-date";
+            endDateInput.classList.add("journey-map__date");
+            endDateInput.type = "date";
+            endDateInput.max = (new Date()).toString();
+            secondDateContainer.appendChild(secondLabel);
+            secondDateContainer.appendChild(endDateInput);
+
+            const submitButton = document.createElement('button');
+            submitButton.classList.add('journey-map__save-button');
+            submitButton.classList.add('js-add-region');
+            submitButton.textContent = 'Сохранить';
+
+            container!.appendChild(firstDateContainer);
+            container!.appendChild(secondDateContainer);
+            container!.appendChild(submitButton);
+        } else {
+            const removeButton = document.createElement('button');
+            removeButton.classList.add('journey-map__remove-button');
+            removeButton.classList.add('js-remove-region');
+            removeButton.textContent = 'Удалить';
+            container!.appendChild(removeButton);
+        }
+    }
+
+    async #markVisitedRegions() {
+        const response = await ApiClient.getVisitedRegions(this.#userID);
+        const visitedRegions = await response.json();
+        for (const region of visitedRegions) {
+            document
+                .getElementById(String(region.name))!
+                .classList
+                .add('region-visited');
+        }
+    }
+
+    render(parent?: HTMLDivElement) {
+        if (parent) {
+            this.#parent = parent;
+        }
+
         const template = Handlebars.templates['JourneyMap.hbs'];
-        parent.insertAdjacentHTML('afterbegin', template({}));
+        this.#parent!.insertAdjacentHTML('afterbegin', template({}));
 
         setTimeout(() => this.#addEventListeners(), 0);
+
+        this.#markVisitedRegions();
     }
 }
 

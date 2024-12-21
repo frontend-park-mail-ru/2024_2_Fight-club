@@ -177,11 +177,24 @@ class MapPage {
                     }
 
                     placemark.events.add('click', () => {
-                        this.#map.setCenter(
-                            placemark.geometry._coordinates,
-                            this.#PLACE_ZOOM
-                        );
+                        this.#map.setCenter(placemark.geometry._coordinates, this.#PLACE_ZOOM);
+                    
+                        const adElement = document.querySelector(`[data-ad-id="${d.id}"]`);
+                        if (adElement) {
+                            adElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                            adElement.classList.add('highlight'); 
+                            setTimeout(() => {
+                                adElement.classList.add('fade-out'); 
+                            }, 1000); 
+                    
+                            setTimeout(() => {
+                                adElement.classList.remove('highlight', 'fade-out'); 
+                            }, 3000);
+                        }
                     });
+                    
+                    
 
                     myClasters.get(d.cityName).push(placemark);
                 },

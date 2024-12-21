@@ -211,34 +211,43 @@ class ProfileData {
         }
     }
 
-    async #leaveReview(): Promise<void> {
+    async #leaveReview(): Promise<boolean> {
+        const titleInput = document.querySelector('#review-title') as HTMLInputElement;
+        const textInput = document.querySelector('#review-text') as HTMLTextAreaElement;
+        const ratingInput = document.querySelector('input[name="rating"]:checked') as HTMLInputElement | null;
+    
+        if (!titleInput.value.trim() || !textInput.value.trim() || !ratingInput) {
+            const errorMessage = PopupAlert('Заполните все поля');
+            document
+                .querySelector('#profile-content')
+                ?.appendChild(errorMessage);
+            return false;
+        }
+    
         const data: ReviewData = {
             hostId: this.#otherUserId as string,
-            title: (document.querySelector('#review-title') as HTMLInputElement)
-                .value,
-            text: (
-                document.querySelector('#review-text') as HTMLTextAreaElement
-            ).value,
-            rating: Number(
-                (document.querySelector(
-                    'input[name="rating"]:checked'
-                ) as HTMLInputElement)!.value
-            ),
+            title: titleInput.value,
+            text: textInput.value,
+            rating: Number(ratingInput.value),
         };
-
+    
         const response = await ApiClient.leaveReview(data);
         if (response.ok) {
             clearPage('new-rate', 'profile');
             const dataContainer = document.getElementById('container');
             dataContainer?.appendChild(this.#content);
+            return true;
         } else {
             clearPage('profile');
             const errorMessage = PopupAlert('Неверный формат отзыва');
             document
                 .querySelector('#profile-content')
                 ?.appendChild(errorMessage);
+            return false;
         }
+
     }
+    
 
     async #getReviews(): Promise<ReviewData[]> {
         let uuid;
@@ -405,35 +414,46 @@ class ProfileData {
      * @description Изменение фото при загрузке
      */
     #fileUploadEventListener(): void {
-        const fileUpload = document.getElementById(
-            'avatar'
-        ) as HTMLInputElement;
+        const fileUpload = document.getElementById('avatar') as HTMLInputElement;
         const avatarImage = document.querySelector(
             '.edit-form__avatar__image-container__image'
         ) as HTMLImageElement;
-
+    
         fileUpload?.addEventListener('change', (e) => {
             e.preventDefault();
+    
             if (fileUpload && fileUpload.files && fileUpload.files.length > 0) {
-                this.#uploadAvatarImage = fileUpload.files[0];
-                const fileName = fileUpload.files[0].name;
-                const wrapper = fileUpload.closest(
-                    '.edit-form__avatar__file-upload-wrapper'
-                );
+                const file = fileUpload.files[0];
+                const fileName = file.name;
+                const wrapper = fileUpload.closest('.edit-form__avatar__file-upload-wrapper');
+    
+                // Проверка MIME типа файла
+                const mimeType = file.type;
+                const validMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                
+                if (!validMimeTypes.includes(mimeType)) {
+                    const errorMessage = PopupAlert('Неверный формат файла');
+                    document
+                        .querySelector('.page-container')
+                        ?.appendChild(errorMessage);
+                    return;
+                }
+    
                 if (wrapper) {
                     wrapper.setAttribute('data-text', fileName);
                 }
-
+    
                 const reader = new FileReader();
                 reader.onload = () => {
                     if (avatarImage) {
                         avatarImage.src = reader.result as string;
                     }
                 };
-                reader.readAsDataURL(this.#uploadAvatarImage);
+                reader.readAsDataURL(file);
             }
         });
     }
+    
 
     /**
      * @private
@@ -479,7 +499,7 @@ class ProfileData {
                 '.js-avatar-upload-wrapper'
             ) as HTMLInputElement;
             if (this.#profileData.avatar) image.src = this.#profileData.avatar;
-            wrapper.setAttribute('data-text', 'Select your file!');
+            wrapper.setAttribute('data-text', 'Загрузите фото!');
         });
     }
 
@@ -511,11 +531,13 @@ class ProfileData {
         const leaveReviewButton = document.querySelector('.js-leave-review');
         leaveReviewButton!.addEventListener('click', async (e) => {
             e.preventDefault();
-            await this.#leaveReview();
-            await this.#renderProfileInfo();
-            this.#renderReviews();
-            this.#addButtonEventListener();
-            this.#renderGraphicEventListener();
+            const isSuccess = await this.#leaveReview();
+            if (isSuccess) {
+                this.#renderProfileInfo();
+                this.#renderReviews();
+                this.#addButtonEventListener();
+                this.#renderGraphicEventListener();
+            }
         });
     }
 
@@ -567,14 +589,22 @@ class ProfileData {
         }
     }
 
-    #renderMap() {
+    async #renderMap() {
         this.#content.replaceChildren();
         this.#content.classList.remove('y-scroll');
         this.#content.parentElement?.classList.remove(
             'fix-bottom-right-border'
         );
+        
+        let uuid;
+        if (this.#isMyProfile) {
+            const userData = await APIClient.getSessionData();
+            uuid = userData.id;
+        } else {
+            uuid = this.#otherUserId;
+        }
 
-        const journeyMap = new JourneyMap();
+        const journeyMap = new JourneyMap(uuid, this.#isMyProfile);
         journeyMap.render(this.#content);
     }
 

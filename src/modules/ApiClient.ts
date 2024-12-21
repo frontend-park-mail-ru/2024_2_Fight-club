@@ -266,6 +266,27 @@ class APIClient {
             },
         });
     }
+
+    async addNewRegion(name: string, firstDate: string, secondDate: string) {
+        const url = this.BASE_URL + `/users/regions`;
+        const body = {
+            regionName: name,
+            startVisitedDate: firstDate,
+            endVisitedDate: secondDate
+        }
+
+        return Ajax.post({url, body})
+    }
+
+    async removeRegion(name: string) {
+        const url = this.BASE_URL + `/users/regions/${name}`;
+        return Ajax.delete({url, body: {}})
+    }
+    
+    async getVisitedRegions(uuid: string) {
+        const url = this.BASE_URL + `/users/${uuid}/regions`;
+        return Ajax.get(url);
+    }
 }
 
 export default new APIClient();
