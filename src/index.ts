@@ -64,12 +64,12 @@ const renderAdvertPage = async (id: string) => {
 const renderEditAdvertPage = async (uuid: string) => {
     const info = await ApiClient.getAd(uuid);
 
-    const page = new EditAdvertPage('edit', info);
+    const page = new EditAdvertPage({ action: 'edit', data: info });
     pageContainer.appendChild(page.getElement());
 };
 
 const renderCreateAdvertPage = async () => {
-    const page = new EditAdvertPage('create');
+    const page = new EditAdvertPage({ action: 'create' });
     pageContainer.appendChild(page.getElement());
 };
 

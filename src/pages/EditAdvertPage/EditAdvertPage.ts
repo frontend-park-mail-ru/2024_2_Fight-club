@@ -206,12 +206,13 @@ export default class EditAdvertPage {
                     maxLen: 1000,
                 },
             ];
-            this.#templateContainer.outerHTML = template({
+            this.#templateContainer.innerHTML = template({
                 ...data,
                 inputs: inputsConfig,
                 actionButtonTitle:
                     this.#action === 'create' ? 'Создать' : 'Изменить',
             });
+            this.#templateContainer.style.width = '100%';
 
             this.#mainImg = this.#templateContainer.querySelector(
                 MAIN_IMG_SELECTOR
