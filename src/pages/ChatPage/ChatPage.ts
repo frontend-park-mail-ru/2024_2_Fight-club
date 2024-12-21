@@ -21,7 +21,8 @@ export default class ChatPage extends BaseComponent {
             templateName: 'ChatPage',
         });
 
-        this.chats = chats;
+        if (chats) this.chats = chats;
+        else this.chats = [];
 
         // If a chat should be preopened
         if (!startChatWithRecipientId) return;

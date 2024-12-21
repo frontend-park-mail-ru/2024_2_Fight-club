@@ -6,6 +6,7 @@ import ReactiveComponent from '../../components/ReactiveComponent/ReactiveCompon
 import globalStore from '../../modules/GlobalStore';
 import router from '../../modules/Router';
 import BookingCalendar from '../../components/BookingCalendar/BookingCalendar';
+import AuthPopup from '../../components/AuthPopup/AuthPopup';
 
 const SECONDARY_IMG_SELECTOR = '.js-carousel-img';
 const FULLSCREEN_OVERLAY_SELECTOR = '.js-fullscreen-overlay';
@@ -143,6 +144,20 @@ export default class AdPage extends ReactiveComponent {
             carouselImages,
             this.state.currentIndex as number
         );
+
+        // Write message button
+        document.getElementById('ad-page-write-message-button')!.onclick =
+            () => {
+                if (globalStore.auth.isAuthorized) {
+                    router.navigateTo(
+                        `/chats?recipientId=${this.#data.authorUUID}`
+                    );
+                    return;
+                }
+
+                const auth = new AuthPopup();
+                auth.render(document.body);
+            };
     }
 
     async #renderMap() {
