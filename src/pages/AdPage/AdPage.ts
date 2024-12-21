@@ -23,6 +23,19 @@ export default class AdPage extends ReactiveComponent {
         data: AdvertData,
         authorInfo: ProfileInfo
     ) {
+        let sex;
+        switch (authorInfo.sex) {
+            case 'M':
+                sex = 'Мужской';
+                break;
+            case 'F':
+                sex = 'Женский';
+                break;
+            default:
+                sex = 'Не указан';
+                break;
+        }
+
         super({
             id: 0,
             parent: parent,
@@ -39,7 +52,7 @@ export default class AdPage extends ReactiveComponent {
                 ...authorInfo,
                 rating: ('' + data.author.rating).slice(0, 3),
                 age: calculateAge(authorInfo.birthdate),
-                sex: authorInfo.sex === 'M' ? 'Мужской' : 'Женский',
+                sex: sex,
                 isAuthor: data.authorUUID === globalStore.auth.userId,
             },
             templateName: 'AdPage',
