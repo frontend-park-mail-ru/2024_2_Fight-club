@@ -414,35 +414,46 @@ class ProfileData {
      * @description Изменение фото при загрузке
      */
     #fileUploadEventListener(): void {
-        const fileUpload = document.getElementById(
-            'avatar'
-        ) as HTMLInputElement;
+        const fileUpload = document.getElementById('avatar') as HTMLInputElement;
         const avatarImage = document.querySelector(
             '.edit-form__avatar__image-container__image'
         ) as HTMLImageElement;
-
+    
         fileUpload?.addEventListener('change', (e) => {
             e.preventDefault();
+    
             if (fileUpload && fileUpload.files && fileUpload.files.length > 0) {
-                this.#uploadAvatarImage = fileUpload.files[0];
-                const fileName = fileUpload.files[0].name;
-                const wrapper = fileUpload.closest(
-                    '.edit-form__avatar__file-upload-wrapper'
-                );
+                const file = fileUpload.files[0];
+                const fileName = file.name;
+                const wrapper = fileUpload.closest('.edit-form__avatar__file-upload-wrapper');
+    
+                // Проверка MIME типа файла
+                const mimeType = file.type;
+                const validMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                
+                if (!validMimeTypes.includes(mimeType)) {
+                    const errorMessage = PopupAlert('Неверный формат файла');
+                    document
+                        .querySelector('.page-container')
+                        ?.appendChild(errorMessage);
+                    return;
+                }
+    
                 if (wrapper) {
                     wrapper.setAttribute('data-text', fileName);
                 }
-
+    
                 const reader = new FileReader();
                 reader.onload = () => {
                     if (avatarImage) {
                         avatarImage.src = reader.result as string;
                     }
                 };
-                reader.readAsDataURL(this.#uploadAvatarImage);
+                reader.readAsDataURL(file);
             }
         });
     }
+    
 
     /**
      * @private
@@ -488,7 +499,7 @@ class ProfileData {
                 '.js-avatar-upload-wrapper'
             ) as HTMLInputElement;
             if (this.#profileData.avatar) image.src = this.#profileData.avatar;
-            wrapper.setAttribute('data-text', 'Select your file!');
+            wrapper.setAttribute('data-text', 'Загрузите фото!');
         });
     }
 
