@@ -248,17 +248,32 @@ class JourneyMap {
 
     #addEventListeners() {
         const regions = document.getElementsByTagName('path');
+        const nameDisplay = document.createElement('div'); 
+        nameDisplay.classList.add('region-name-display');
+        document.body.appendChild(nameDisplay);
+    
         for (let i = 0; i < regions.length; i++) {
             const region = regions[i];
-
+    
             // Желтый при наведении
             region.addEventListener('mouseover', () => {
                 region.classList.add('region-hover');
+    
+                const regionName = idAarr2[region.id];
+                if (regionName) {
+                    nameDisplay.textContent = regionName;
+                    nameDisplay.style.display = 'block';
+                    const rect = region.getBoundingClientRect(); 
+                    nameDisplay.style.left = `${rect.right + 10}px`;
+                    nameDisplay.style.top = `${rect.top + rect.height / 2 - nameDisplay.offsetHeight / 2}px`; 
+                }
             });
+    
             region.addEventListener('mouseout', () => {
                 region.classList.remove('region-hover');
+                nameDisplay.style.display = 'none';
             });
-
+    
             // Желтый фиксированно при клике
             if (this.#isMyProfile) {
                 region.addEventListener('click', () => {
@@ -274,19 +289,20 @@ class JourneyMap {
                             this.#choosenRegion.classList.remove('region-choose');
                         }
                         this.#choosenRegion = region;
-                        const isVisited = region.classList.contains('region-visited')
+                        const isVisited = region.classList.contains('region-visited');
                         this.#renderActionContainer(isVisited);
                         if (isVisited) {
                             this.#removeEventListener();
                         } else {
                             this.#submitEventListener();
                         }
-                        
                     }
                 });
             }
         }
     }
+    
+    
 
     #renderActionContainer(isVisited: boolean) {
         if (!this.#isMyProfile) return;
