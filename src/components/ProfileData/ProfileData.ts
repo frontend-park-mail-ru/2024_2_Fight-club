@@ -436,6 +436,7 @@ class ProfileData {
                     document
                         .querySelector('.page-container')
                         ?.appendChild(errorMessage);
+                    fileUpload.value = '';
                     return;
                 }
     
