@@ -206,7 +206,7 @@ export default class EditAdvertPage {
                     maxLen: 1000,
                 },
             ];
-            this.#templateContainer.innerHTML = template({
+            this.#templateContainer.outerHTML = template({
                 ...data,
                 inputs: inputsConfig,
                 actionButtonTitle:

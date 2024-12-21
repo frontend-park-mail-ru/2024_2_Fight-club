@@ -86,30 +86,53 @@
             justify-content: center;
             align-items: center;
         }
+
+        &__content-container {
+            display: flex;
+            gap: 40px;
+            flex-direction: column-reverse;
+        }
+
+        &__adverts-container {
+            flex-direction: column-reverse;
+            gap: 50px;
+        }
     }
+
     .horizontal-ad-card {
-        border: 1px solid black;
-        border-radius: 10px;
-        width: 100%;
+        width: 80%;
+        margin: 0 auto;
+
         display: flex;
         flex-direction: column;
         gap: 40px;
         padding: 10px;
         transition: 0.3s all;
 
+        &__right {
+            width: 100%;
+        }
+
+        &__img {
+            width: 100%;
+        }
+
         &__buttons-container {
             flex-wrap: wrap;
         }
+
         &__open-btn {
             @include mixins.button;
             width: fit-content;
             height: $button-height;
             background-color: #5289ff;
         }
+
         &__edit-btn {
             @include mixins.button;
             height: $button-height;
         }
+
         &__del-btn {
             @include mixins.button;
             background-color: #ff5900;
