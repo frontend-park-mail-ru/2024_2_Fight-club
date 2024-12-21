@@ -238,7 +238,6 @@ $secondary-card-size: 64px;
         &__inner-content {
             margin-top: 30px;
             width: 100%;
-            height: 100%;
             padding: 0 20px;
             box-sizing: border-box;
             display: flex;
@@ -347,8 +346,11 @@ $secondary-card-size: 64px;
 
 @media screen and (max-width: 900px) {
     .ad-page {
+        width: 90%;
         display: flex;
-        flex-direction: column;
+        gap: 50px;
+        flex-direction: column-reverse;
+        margin: 20px auto;
 
         &-profile-container {
             margin-top: 10px;
@@ -375,7 +377,7 @@ $secondary-card-size: 64px;
 
         &__author-info {
             position: static;
-            margin-top: 100px;
+            margin-top: 0;
             width: 100%;
         }
     }

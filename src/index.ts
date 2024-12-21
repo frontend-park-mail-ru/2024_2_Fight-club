@@ -1,7 +1,6 @@
 'use strict';
 
 import Header from './components/Header/Header';
-import AuthPopup from './components/AuthPopup/AuthPopup';
 
 import MainPage from './pages/MainPage/MainPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
@@ -50,14 +49,16 @@ const renderFavoritesPage = () => {
     favouritePage.render(pageContainer);
 };
 
-const renderNotificationsPage = () => {};
-
 const renderAdvertPage = async (id: string) => {
-    const info = await ApiClient.getAd(id);
-    const authorInfo = await ApiClient.getUser(info.authorUUID);
+    try {
+        const info = await ApiClient.getAd(id);
+        const authorInfo = await ApiClient.getUser(info.authorUUID);
 
-    const page = new AdPage(pageContainer, info, authorInfo);
-    page.render();
+        const page = new AdPage(pageContainer, info, authorInfo);
+        page.render();
+    } catch {
+        router.navigateTo('/404');
+    }
 };
 
 const renderEditAdvertPage = async (uuid: string) => {
@@ -72,11 +73,6 @@ const renderCreateAdvertPage = async () => {
     pageContainer.appendChild(page.getElement());
 };
 
-const renderSignInPage = () => {
-    const auth = new AuthPopup();
-    auth.render(root);
-};
-
 const renderProfilePage = async () => {
     clearPage('main-photo', 'main-content');
     const profilePage = new ProfilePage();
@@ -84,15 +80,14 @@ const renderProfilePage = async () => {
 };
 
 const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
-    const sessionData = await APIService.getSessionData();
-    const userId = sessionData['id'];
-    const isHost = (await ApiClient.getUser(userId))['isHost'];
-    if (!userId) {
-        console.error('There is no userId in local storage!');
-        return;
+    if (!globalStore.auth.isAuthorized) {
+        router.navigateTo('/403');
     }
 
-    let data = await ApiClient.getAdsOfUser(userId);
+    const isHost = (await ApiClient.getUser(globalStore.auth.userId!))[
+        'isHost'
+    ];
+    let data = await ApiClient.getAdsOfUser(globalStore.auth.userId!);
     if (!('places' in data)) {
         data = [];
     } else {
@@ -122,13 +117,6 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
     }
 };
 
-/** Объект с коллбеками для header`а */
-const headerCallbacks = {
-    favoritesPage: renderFavoritesPage,
-    notificationsPage: renderNotificationsPage,
-    signInPage: renderSignInPage,
-};
-
 const renderHeader = async () => {
     document.getElementById('header')?.remove();
 
@@ -142,8 +130,8 @@ const renderHeader = async () => {
         globalStore.auth.isAuthorized = false;
     }
 
-    const header = new Header(headerCallbacks, sessionData ? true : false);
-    root.prepend(header.getElement());
+    const header = new Header(root, sessionData);
+    header.render('afterbegin');
 };
 
 router.addRoute('/', async () => {
@@ -205,7 +193,7 @@ router.addRoute('/payment', async (params: URLSearchParams) => {
     const adId = params.get('adId');
 
     if (!adId) {
-        router.navigateTo('/'); // TODO: Maybe 404 / 403 / 400?
+        router.navigateTo('/404');
         return;
     }
 

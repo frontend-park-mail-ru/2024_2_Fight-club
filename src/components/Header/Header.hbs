@@ -1,0 +1,109 @@
+<header id='header' class='header-wrapper'>
+    <div class='header' id='header-inner'>
+        <div class='header__burger' id='header-burger'>
+            <svg
+                class='_25d45facb5--container--izJBY _25d45facb5--display_block--ERcB0 _25d45facb5--color_icon-secondary-default--Pnd5e'
+                aria-hidden='true'
+                width='24'
+                height='24'
+                viewBox='0 0 24 24'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+            ><path
+                    d='M2 5h20v2H2V5Zm0 6h20v2H2v-2Zm20 6H2v2h20v-2Z'
+                    fill='currentColor'
+                ></path></svg>
+        </div>
+        <div class='header__hrefs'>
+            {{#each menu}}
+                <a href='{{this.href}}' class='header__href'>{{this.text}}</a>
+            {{/each}}
+        </div>
+
+        <a class='header__logo-text-link' href='/'>
+            <img class='header__img2' src='/name.png' /></a>
+
+        <div class='header__signs'>
+            {{#each signs}}
+                <a class='header__sign' href='{{this.href}}'>
+                    <img src='{{this.src}}' width='30' />
+                </a>
+            {{/each}}
+        </div>
+
+        {{#if isAuthorized}}
+            <div class='header__avatar-container' id='js-avatar-container'>
+                <img
+                    src='{{sessionData.avatar}}'
+                    id='js-header-avatar'
+                    class='header__avatar'
+                    width='50'
+                    height='50'
+                />
+            </div>
+        {{else}}
+            <button
+                class='header__button'
+                id='header-signin-button'
+            >Войти</button>
+        {{/if}}
+    </div>
+
+    <div class='header-menu' id='mobile-menu'>
+        <button
+            class='header-menu__back-button'
+            id='header-mobile-go-back-button'
+        >
+        </button>
+
+        {{#if isAuthorized}}
+            <div class='header-menu__avatar-container'>
+                <img
+                    src='{{sessionData.avatar}}'
+                    id='js-header-avatar'
+                    class='header__avatar'
+                    width='50'
+                    height='50'
+                />
+                <a href='/profile' class='header-menu__profile-button'>
+                    Личный кабинет
+                </a>
+            </div>
+        {{else}}
+            <div
+                class='header-menu__avatar-container'
+                id='header-menu-sign-in-button'
+            >
+                <img src='/svg/signin.svg' class='header-menu__sign-in-icon' />
+                <a class='header-menu__profile-button'>
+                    Войти
+                </a>
+            </div>
+        {{/if}}
+
+        <ul>
+            {{#each menu}}
+                <li class='header-menu__entry'>
+                    <a href='{{this.href}}'>{{this.text}}</a>
+                </li>
+            {{/each}}
+
+            {{#if isAuthorized}}
+                {{#each signs}}
+                    <li class='header-menu__entry'>
+                        <a href='{{this.href}}'>{{this.text}}</a>
+                    </li>
+                {{/each}}
+
+                <li class='header-menu__entry'>
+                    <a href='/ads/?author=me'>Мои объявления</a></li>
+
+                <li
+                    id='header-mobile-logout-button'
+                    class='header-menu__entry'
+                ><a href='#'>Выйти</a></li>
+            {{/if}}
+        </ul>
+    </div>
+
+</header>
