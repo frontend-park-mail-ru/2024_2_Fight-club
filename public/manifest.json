@@ -20,6 +20,24 @@
             "type": "image/png",
             "sizes": "1901x900",
             "form_factor": "wide"
+        },
+        {
+            "src": "/screenshots/narrow-1.jpg",
+            "type": "image/jpg",
+            "sizes": "576x1059",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "/screenshots/narrow-2.jpg",
+            "type": "image/jpg",
+            "sizes": "576x1059",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "/screenshots/narrow-3.jpg",
+            "type": "image/jpg",
+            "sizes": "576x1059",
+            "form_factor": "narrow"
         }
     ],
     "icons": [
