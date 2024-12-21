@@ -148,6 +148,15 @@ export default class EditAdvertPage {
                     required: true,
                 },
                 {
+                    label: 'Этаж',
+                    name: 'floor',
+                    type: 'number',
+                    min: 0,
+                    max: 200,
+                    value: data?.floor,
+                    required: true,
+                },
+                {
                     label: 'Число комнат',
                     name: 'roomsNumber',
                     type: 'number',
@@ -418,8 +427,7 @@ export default class EditAdvertPage {
         form.onsubmit = (e) => {
             e.preventDefault();
 
-            console.log(this.#uploadedImages.length);
-            if (this.#uploadedImages.length < 2) {
+            if (this.#uploadedImages.length + this.#images.length < 2) {
                 const popup = PopupAlert(
                     'Пожалуйста, загрузите минимум 2 фотографии'
                 );
@@ -507,7 +515,7 @@ export default class EditAdvertPage {
             }
 
             // belowe are the number fields. parse them as integers
-            if (['roomsNumber', 'squareMeters'].includes(key)) {
+            if (['roomsNumber', 'squareMeters', 'floor'].includes(key)) {
                 dataToSend[key] = parseInt(value as string);
             } else if (typeof value === 'string') {
                 dataToSend[key] = value as string;
