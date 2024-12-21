@@ -211,34 +211,43 @@ class ProfileData {
         }
     }
 
-    async #leaveReview(): Promise<void> {
+    async #leaveReview(): Promise<boolean> {
+        const titleInput = document.querySelector('#review-title') as HTMLInputElement;
+        const textInput = document.querySelector('#review-text') as HTMLTextAreaElement;
+        const ratingInput = document.querySelector('input[name="rating"]:checked') as HTMLInputElement | null;
+    
+        if (!titleInput.value.trim() || !textInput.value.trim() || !ratingInput) {
+            const errorMessage = PopupAlert('Заполните все поля');
+            document
+                .querySelector('#profile-content')
+                ?.appendChild(errorMessage);
+            return false;
+        }
+    
         const data: ReviewData = {
             hostId: this.#otherUserId as string,
-            title: (document.querySelector('#review-title') as HTMLInputElement)
-                .value,
-            text: (
-                document.querySelector('#review-text') as HTMLTextAreaElement
-            ).value,
-            rating: Number(
-                (document.querySelector(
-                    'input[name="rating"]:checked'
-                ) as HTMLInputElement)!.value
-            ),
+            title: titleInput.value,
+            text: textInput.value,
+            rating: Number(ratingInput.value),
         };
-
+    
         const response = await ApiClient.leaveReview(data);
         if (response.ok) {
             clearPage('new-rate', 'profile');
             const dataContainer = document.getElementById('container');
             dataContainer?.appendChild(this.#content);
+            return true;
         } else {
             clearPage('profile');
             const errorMessage = PopupAlert('Неверный формат отзыва');
             document
                 .querySelector('#profile-content')
                 ?.appendChild(errorMessage);
+            return false;
         }
+
     }
+    
 
     async #getReviews(): Promise<ReviewData[]> {
         let uuid;
@@ -511,11 +520,13 @@ class ProfileData {
         const leaveReviewButton = document.querySelector('.js-leave-review');
         leaveReviewButton!.addEventListener('click', async (e) => {
             e.preventDefault();
-            await this.#leaveReview();
-            await this.#renderProfileInfo();
-            this.#renderReviews();
-            this.#addButtonEventListener();
-            this.#renderGraphicEventListener();
+            const isSuccess = await this.#leaveReview();
+            if (isSuccess) {
+                this.#renderProfileInfo();
+                this.#renderReviews();
+                this.#addButtonEventListener();
+                this.#renderGraphicEventListener();
+            }
         });
     }
 
