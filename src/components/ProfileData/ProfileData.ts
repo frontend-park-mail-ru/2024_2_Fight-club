@@ -190,6 +190,7 @@ class ProfileData {
         const uuid = userData.id;
         const response = await APIClient.editProfile(uuid, data);
         if (response.ok) {
+            console.log(data);
             clearPage('form', 'profile');
             const dataContainer = document.getElementById('container');
             const header = document.createElement('div');
@@ -457,34 +458,35 @@ class ProfileData {
     
 
     /**
-     * @private
-     * @description Отпаравка формы
-     */
-    #submitButtonEventListener(): void {
-        const submitButton = document.getElementById('submit');
-        submitButton?.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const isDataClean = this.#validateData();
-            if (isDataClean) {
-                await this.#putData();
-                await this.#renderProfileInfo();
-                this.#addButtonEventListener();
-                this.#renderGraphicEventListener();
+ * @private
+ * @description Отправка формы
+ */
+#submitButtonEventListener(): void {
+    const submitButton = document.getElementById('submit');
+    submitButton?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const isDataClean = this.#validateData();
+        if (isDataClean) {
+            await this.#putData();
+            await this.#renderProfileInfo();
+            this.#addButtonEventListener();
+            this.#renderGraphicEventListener();
 
-                //Обновление аватарки в хэдере
-                const headerImg = document.querySelector(
-                    '.js-header-avatar'
-                ) as HTMLImageElement;
-                const profileInfoImg = document.querySelector(
-                    '.js-profile-info-avatar'
-                ) as HTMLImageElement;
-                headerImg.src = profileInfoImg.src;
-                document
-                    .getElementById('data-container')
-                    ?.classList.add('mobile-hidden');
+            // Обновление аватарки в хэдере
+            const headerImg = document.querySelector('#js-header-avatar') as HTMLImageElement;
+            const profileInfoImg = document.querySelector('.js-profile-info-avatar') as HTMLImageElement;
+            const profileImgSrc = profileInfoImg.src;
+            const imagePathStartIndex = profileImgSrc.indexOf('/images');
+            if (imagePathStartIndex !== -1) {
+                const trimmedImagePath = profileImgSrc.substring(imagePathStartIndex);
+                headerImg.src = trimmedImagePath;
             }
-        });
-    }
+
+            document.getElementById('data-container')?.classList.add('mobile-hidden');
+        }
+    });
+}
+
 
     /**
      * @private
