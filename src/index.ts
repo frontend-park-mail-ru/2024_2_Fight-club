@@ -1,8 +1,6 @@
 'use strict';
 
 import Header from './components/Header/Header';
-import AuthPopup from './components/AuthPopup/AuthPopup';
-import ProfilePopup from './components/ProfilePopup/ProfilePopup';
 
 import MainPage from './pages/MainPage/MainPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
@@ -12,7 +10,6 @@ import FavouritePage from './pages/FavouritePage/FavouritePage';
 
 import { clearPage } from './modules/Clear';
 
-import '../precompiled-templates.js';
 import APIService from './modules/ApiClient';
 import AdPage from './pages/AdPage/AdPage';
 import ApiClient from './modules/ApiClient';
@@ -28,6 +25,8 @@ import globalStore from './modules/GlobalStore';
 import ChatPage from './pages/ChatPage/ChatPage';
 import ChatRepository from './repositories/ChatRepository';
 import PaymentPage from './pages/PaymentPage/PaymentPage';
+import Page403 from './pages/Page403/Page403';
+import Page404 from './pages/Page404/Page404';
 
 const renderMainPage = async () => {
     const data = await ApiClient.getAds();
@@ -45,45 +44,33 @@ function renderMapPage(adId?: string) {
     mapPage.render(pageContainer);
 }
 
-const renderArticlesPage = () => {};
-
-const renderMessagesPage = () => {};
-
 const renderFavoritesPage = () => {
     const favouritePage = new FavouritePage();
     favouritePage.render(pageContainer);
 };
 
-const renderNotificationsPage = () => {};
-
 const renderAdvertPage = async (id: string) => {
-    const info = await ApiClient.getAd(id);
-    const authorInfo = await ApiClient.getUser(info.authorUUID);
+    try {
+        const info = await ApiClient.getAd(id);
+        const authorInfo = await ApiClient.getUser(info.authorUUID);
 
-    const page = new AdPage(pageContainer, info, authorInfo);
-    page.render();
+        const page = new AdPage(pageContainer, info, authorInfo);
+        page.render();
+    } catch {
+        router.navigateTo('/404');
+    }
 };
 
 const renderEditAdvertPage = async (uuid: string) => {
     const info = await ApiClient.getAd(uuid);
 
-    const page = new EditAdvertPage('edit', info);
+    const page = new EditAdvertPage({ action: 'edit', data: info });
     pageContainer.appendChild(page.getElement());
 };
 
 const renderCreateAdvertPage = async () => {
-    const page = new EditAdvertPage('create');
+    const page = new EditAdvertPage({ action: 'create' });
     pageContainer.appendChild(page.getElement());
-};
-
-const renderSignInPage = () => {
-    const auth = new AuthPopup();
-    auth.render(root);
-};
-
-const renderProfileList = () => {
-    const profileList = new ProfilePopup();
-    profileList.render(root);
 };
 
 const renderProfilePage = async () => {
@@ -93,15 +80,14 @@ const renderProfilePage = async () => {
 };
 
 const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
-    const sessionData = await APIService.getSessionData();
-    const userId = sessionData['id'];
-    const isHost = (await ApiClient.getUser(userId))['isHost'];
-    if (!userId) {
-        console.error('There is no userId in local storage!');
-        return;
+    if (!globalStore.auth.isAuthorized) {
+        router.navigateTo('/403');
     }
 
-    let data = await ApiClient.getAdsOfUser(userId);
+    const isHost = (await ApiClient.getUser(globalStore.auth.userId!))[
+        'isHost'
+    ];
+    let data = await ApiClient.getAdsOfUser(globalStore.auth.userId!);
     if (!('places' in data)) {
         data = [];
     } else {
@@ -131,17 +117,8 @@ const renderAdListPage = async (action: 'edit' | undefined, adId: string) => {
     }
 };
 
-/** Объект с коллбеками для header`а */
-const headerCallbacks = {
-    messagesPage: renderMessagesPage,
-    favoritesPage: renderFavoritesPage,
-    notificationsPage: renderNotificationsPage,
-    signInPage: renderSignInPage,
-    profileList: renderProfileList,
-};
-
 const renderHeader = async () => {
-    document.querySelector('.header')?.remove();
+    document.getElementById('header')?.remove();
 
     let sessionData;
     try {
@@ -153,8 +130,8 @@ const renderHeader = async () => {
         globalStore.auth.isAuthorized = false;
     }
 
-    const header = new Header(headerCallbacks, sessionData ? true : false);
-    root.prepend(header.getElement());
+    const header = new Header(root, sessionData);
+    header.render('afterbegin');
 };
 
 router.addRoute('/', async () => {
@@ -208,7 +185,7 @@ router.addRoute('/chats', async (params: URLSearchParams) => {
     const recipientId = params.get('recipientId') as string;
 
     const data = await ChatRepository.getAll();
-    const chatPage = new ChatPage(pageContainer, data, recipientId);
+    const chatPage = new ChatPage(pageContainer, data.chats, recipientId);
     chatPage.render();
 });
 
@@ -216,11 +193,21 @@ router.addRoute('/payment', async (params: URLSearchParams) => {
     const adId = params.get('adId');
 
     if (!adId) {
-        router.navigateTo('/'); // TODO: Maybe 404 / 403 / 400?
+        router.navigateTo('/404');
         return;
     }
 
     const page = new PaymentPage(pageContainer, adId, 500);
+    page.render();
+});
+
+router.addRoute('/403', async () => {
+    const page = new Page403(pageContainer);
+    page.render();
+});
+
+router.addRoute('/404', async () => {
+    const page = new Page404(pageContainer);
     page.render();
 });
 

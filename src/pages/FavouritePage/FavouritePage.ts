@@ -6,7 +6,7 @@ import ApiClient from "../../modules/ApiClient";
 import router from "../../modules/Router";
 
 class FavouritePage {
-    #favourites: AdvertData;
+    #favourites: AdvertData[];
     #parent?: HTMLDivElement;
 
     constructor(){}
@@ -22,7 +22,7 @@ class FavouritePage {
         const cards = document
             .querySelectorAll('.favourite-card');
 
-        for (const card of cards) {
+        for (const [index, card] of cards.entries()) {
             //Объявление
             const link: HTMLSpanElement = card.querySelector('.js-favourite-card-link')!;
             link.onclick = () => {
@@ -40,6 +40,11 @@ class FavouritePage {
             deleteButton.onclick = async () => {
                 await ApiClient.removeFromFavourites(card.id);
                 this.render();
+            }
+
+            const chatButton: HTMLButtonElement = card.querySelector('.js-favourite-card-chat')!;
+            chatButton.onclick = async () => {
+                router.navigateTo(`/chats?recipientId=${this.#favourites.housing[index].authorUUID}`)
             }
         }
 

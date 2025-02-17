@@ -111,8 +111,14 @@
             <div class="edit-form__avatar__image-container">
                 <img src="{{data.avatar}}" class="edit-form__avatar__image-container__image js-avatar-upload-image">
             </div>
-            <div class="edit-form__avatar__file-upload-wrapper js-avatar-upload-wrapper" data-text="Select your file!">
-                <input id="avatar" name="avatar" type="file" class="edit-form__avatar__file-upload-wrapper__input" value="">
+            <div class="edit-form__avatar__file-upload-wrapper js-avatar-upload-wrapper" data-text="Загрузите фото!">
+                <input 
+                    id="avatar"
+                    name="avatar"
+                    type="file"
+                    accept="image/png, image/jpeg"
+                    class="edit-form__avatar__file-upload-wrapper__input"
+                    value="">
             </div>
 
             <div class="edit-form__buttons">

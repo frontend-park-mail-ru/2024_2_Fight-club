@@ -2,7 +2,10 @@
 
 interface BaseComponentData {
     parent: HTMLElement;
-    id: number | string;
+    templateName: string /** Name of the template without extension */;
+    id:
+        | number
+        | string /** Id of the component which will be used to refer the HTMLElement. `${templateName}-${id}` */;
     templateData: { [key: string]: unknown };
 }
 
@@ -13,6 +16,9 @@ export default abstract class BaseComponent {
     protected template: HandlebarsTemplateDelegate;
     private elementId: string;
 
+    /** Used for observable */
+    private listeners: Record<string, Set<(arg0: unknown) => void>>;
+
     public thisElement: HTMLElement;
 
     /**
@@ -21,14 +27,14 @@ export default abstract class BaseComponent {
      */
     constructor(data: BaseComponentData) {
         this.thisElement = null as unknown as HTMLElement; // fuck typescript =D
+        this.elementId = data.templateName + '-' + data.id;
 
-        this.elementId = this.constructor.name + '-' + data.id;
+        this.listeners = {};
 
         // Automatic template set
-        const templateName = `${this.constructor.name}.hbs`;
-        this.template = Handlebars.templates[templateName];
+        this.template = Handlebars.templates[`${data.templateName}.hbs`];
         if (!this.template) {
-            throw new Error('No such template found:' + templateName);
+            throw new Error('No such template found:' + data.templateName);
         }
 
         this.parent = data.parent;
@@ -48,9 +54,9 @@ export default abstract class BaseComponent {
     /**
      * Called only once.
      */
-    render() {
+    render(insertPosition?: InsertPosition) {
         this.parent.insertAdjacentHTML(
-            'beforeend',
+            insertPosition ? insertPosition : 'beforeend',
             this.template({
                 id: this.elementId,
                 ...this.templateData,
@@ -66,5 +72,21 @@ export default abstract class BaseComponent {
             this.afterRender();
             this.addEventListeners();
         });
+    }
+
+    public on(event: string, callback: (arg0: unknown) => void) {
+        if (!this.listeners[event]) {
+            this.listeners[event] = new Set();
+        }
+        this.listeners[event].add(callback);
+    }
+
+    public off(event: string, callback: (arg0: unknown) => void) {
+        this.listeners[event]?.delete(callback);
+    }
+
+    protected emit(event: string, data?: unknown) {
+        if (this.listeners[event])
+            this.listeners[event].forEach((listener) => listener(data));
     }
 }

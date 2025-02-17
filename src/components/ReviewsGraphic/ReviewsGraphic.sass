@@ -42,3 +42,30 @@
         p
             font-size: 18px
             margin: 5px 0
+
+@media screen and (max-width: 900px)
+    .canvas-scroll
+        overflow-x: scroll
+
+    .graphic-page
+        overflow: hidden
+    
+        &__graphic
+            width: min-content
+            height: 250px
+
+        &__info
+            width: 100%
+            display: flex
+            flex-direction: row
+            justify-content: space-evenly
+            box-sizing: border-box
+            padding: 0 10px
+
+            span
+                width: 45%
+                text-align: center
+
+                &::before
+                    width: 30px
+                    margin-right: 0

@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Путник — сервис для каучсерфинга</title>
-        <link href="/src/styles/styles.sass" rel="stylesheet" />
+        <link rel="stylesheet" href="/src/styles/styles.scss" />
         <link rel="icon" type="image/x-icon" href="/favicon.png" />
         <link rel="manifest" href="./manifest.json" />
     </head>
@@ -15,7 +15,8 @@
         </noscript>
     </body>
 
-    <script src="/src/include/handlebars.runtime.js"></script>
+    <script src="/include/handlebars.runtime.js"></script>
+    <script type="module" src="/precompiled-templates.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=551883e3-86de-49b9-8447-4485c84e10fd&lang=ru_RU"></script>
-    <script type="module" src="/src/index.ts"></script>
+    <script type="module" src="./src/index.ts"></script>
 </html>

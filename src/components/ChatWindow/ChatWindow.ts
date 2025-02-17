@@ -3,37 +3,54 @@ import globalStore from '../../modules/GlobalStore';
 import { convertTimeToMinutesAndSeconds } from '../../modules/Utils';
 import { Message } from '../../repositories/ChatRepository';
 
+interface BackendReply {
+    response: string;
+    sent: boolean;
+}
+
 export default class ChatWindow extends BaseComponent {
     private messages: Message[];
     private messagesContainer: HTMLDivElement;
     private recipientId: string;
+    private messageQueue: Message[] = [];
 
-    constructor(parent: HTMLElement, recipientId: string, messages: Message[]) {
+    constructor(
+        parent: HTMLElement,
+        recipientId: string,
+        recipientName: string,
+        messages: Message[]
+    ) {
         super({
             parent: parent,
             id: '0',
-            templateData: {},
+            templateData: {
+                recipientName,
+            },
+            templateName: 'ChatWindow',
         });
 
         this.recipientId = recipientId;
         this.messages = messages;
 
-        requestAnimationFrame(() => {
-            this.messagesContainer = document.getElementById('js-messages');
-
-            this.displayMessageHistory();
-
-            this.messagesContainer.scrollTop =
-                this.messagesContainer.scrollHeight;
-        });
-
-        if (globalStore.chat.socket) {
-            globalStore.chat.socket.close();
+        if (
+            !globalStore.chat.socket ||
+            globalStore.chat.socket.readyState === WebSocket.CLOSED ||
+            globalStore.chat.socket.readyState === WebSocket.CLOSING
+        ) {
+            globalStore.chat.socket = new WebSocket(
+                `wss://${window.location.hostname}:${location.port}/websocket`
+            );
         }
+    }
 
-        globalStore.chat.socket = new WebSocket(
-            `wss://${window.location.hostname}/websocket/`
-        );
+    protected afterRender() {
+        this.messagesContainer = document.getElementById(
+            'js-messages'
+        ) as HTMLDivElement;
+
+        this.displayMessageHistory();
+
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
     }
 
     private async displayMessageHistory() {
@@ -50,13 +67,9 @@ export default class ChatWindow extends BaseComponent {
 
         socket.onopen = (e) => {
             console.log('[open] Соединение установлено');
-            console.log('Отправляем данные на сервер');
         };
 
-        socket.onmessage = (event) => {
-            console.log(`[message] Данные получены с сервера: ${event.data}`);
-            this.addNewMessageElement(JSON.parse(event.data) as Message);
-        };
+        socket.onmessage = (e) => this.handleMessageReceive(e);
 
         socket.onclose = function (event) {
             if (event.wasClean) {
@@ -87,46 +100,87 @@ export default class ChatWindow extends BaseComponent {
         const textArea = this.thisElement.querySelector(
             '.js-message-input'
         ) as HTMLInputElement;
-        textArea.oninput = () => {
-            setTimeout(function () {
-                textArea.style.cssText =
-                    'height:' + textArea.scrollHeight + 'px';
-            }, 0);
+
+        /** Resizes <textarea> to fit the content */
+        const resizeTextArea = () => {
+            textArea.style.cssText = 'height: auto';
+            textArea.style.cssText = 'height:' + textArea.scrollHeight + 'px';
         };
+
+        textArea.oninput = resizeTextArea;
 
         const sendMessageButton = document.getElementById(
             'js-send-message-button'
         ) as HTMLButtonElement;
 
-        sendMessageButton.onclick = () => {
+        /** Sends message and clears input */
+        const sendMessage = (e: Event) => {
+            // Prevent from new line
+            e.preventDefault();
+            e.stopPropagation();
+
             const text = textArea.value;
             this.sendMessage(text);
             textArea.value = '';
+            resizeTextArea();
         };
 
+        sendMessageButton.onclick = sendMessage;
+
         textArea.onkeydown = (event) => {
-            if (event.ctrlKey && event.key === 'Enter') {
-                const text = textArea.value;
-                this.sendMessage(text);
-                textArea.value = '';
+            if (!event.shiftKey && !event.ctrlKey && event.key === 'Enter') {
+                sendMessage(event);
             }
         };
     }
 
     private sendMessage(text: string) {
-        globalStore.chat.socket?.send(
-            JSON.stringify({
-                receiverId: this.recipientId,
+        if (!globalStore.chat.socket) return;
+
+        try {
+            globalStore.chat.socket.send(
+                JSON.stringify({
+                    receiverId: this.recipientId,
+                    content: text,
+                })
+            );
+
+            this.messageQueue.push({
                 content: text,
-            })
-        );
-        this.addNewMessageElement({
-            content: text,
-            receiverId: '',
-            senderId: globalStore.auth.userId!,
-            id: 0,
-            createdAt: new Date().toISOString(),
-        });
+                receiverId: '',
+                senderId: globalStore.auth.userId!,
+                id: 0,
+                createdAt: new Date().toISOString(),
+            });
+        } catch (e) {
+            console.error('Error:', e);
+        }
+    }
+
+    private handleMessageReceive(event: MessageEvent) {
+        let message;
+
+        try {
+            message = JSON.parse(event.data) as Message | BackendReply;
+        } catch {
+            console.warn('Received non-JSON message! Ignoring it');
+            return;
+        }
+
+        console.log(`[message] Данные получены с сервера: ${message}`);
+        if ('content' in message) {
+            this.emit('new-message', message.content);
+            this.addNewMessageElement(message);
+
+            this.scrollToTheBottom();
+        } else {
+            const outComingMessage = this.messageQueue.shift();
+            if (!outComingMessage || !message.sent) return;
+
+            this.addNewMessageElement(outComingMessage);
+            this.scrollToTheBottom();
+            this.emit('new-message', outComingMessage.content);
+        }
     }
 
     private addNewMessageElement(message: Message) {
@@ -144,11 +198,13 @@ export default class ChatWindow extends BaseComponent {
         ).textContent = convertTimeToMinutesAndSeconds(message.createdAt);
 
         if (message.senderId == globalStore.auth.userId) {
-            newMessage.children[0]!.classList!.add(
-                'chat-window__chat-window__message--mine'
-            );
+            newMessage.children[0]!.classList!.add('message--mine');
         }
 
         this.messagesContainer.appendChild(newMessage);
+    }
+
+    private scrollToTheBottom() {
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
     }
 }

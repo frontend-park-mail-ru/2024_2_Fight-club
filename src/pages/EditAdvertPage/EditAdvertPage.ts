@@ -51,6 +51,7 @@ interface InputConfig {
     maxLen?: number;
     min?: number;
     max?: number;
+    required?: boolean;
 }
 
 export default class EditAdvertPage {
@@ -126,6 +127,7 @@ export default class EditAdvertPage {
                     isSelect: true,
                     options: citySelectOptions,
                     value: data?.cityName,
+                    required: true,
                 },
                 {
                     label: 'Адрес',
@@ -134,6 +136,7 @@ export default class EditAdvertPage {
                     value: data?.address,
                     minLen: 5,
                     maxLen: 100,
+                    required: true,
                 },
                 {
                     label: 'Тип дома',
@@ -142,6 +145,16 @@ export default class EditAdvertPage {
                     type: 'text',
                     options: housingTypeOptions,
                     value: data?.buildingType,
+                    required: true,
+                },
+                {
+                    label: 'Этаж',
+                    name: 'floor',
+                    type: 'number',
+                    min: 0,
+                    max: 200,
+                    value: data?.floor,
+                    required: true,
                 },
                 {
                     label: 'Число комнат',
@@ -150,6 +163,7 @@ export default class EditAdvertPage {
                     value: data?.roomsNumber,
                     min: 1,
                     max: 20,
+                    required: true,
                 },
                 {
                     label: 'Общая площадь',
@@ -157,6 +171,8 @@ export default class EditAdvertPage {
                     type: 'number',
                     value: data?.squareMeters,
                     min: 1,
+                    max: 500,
+                    required: true,
                 },
                 {
                     label: 'Доступные даты: с',
@@ -165,6 +181,7 @@ export default class EditAdvertPage {
                     value: data
                         ? data.adDateFrom.slice(0, 10)
                         : new Date().toISOString().slice(0, 10),
+                    required: true,
                 },
                 {
                     label: 'Доступные даты: по',
@@ -173,6 +190,7 @@ export default class EditAdvertPage {
                     value: data
                         ? data.adDateTo.slice(0, 10)
                         : new Date().toISOString().slice(0, 10),
+                    required: true,
                 },
                 {
                     label: 'Наличие лифта',
@@ -203,6 +221,7 @@ export default class EditAdvertPage {
                     value: data?.description,
                     minLen: 20,
                     maxLen: 1000,
+                    required: true,
                 },
             ];
             this.#templateContainer.innerHTML = template({
@@ -211,6 +230,7 @@ export default class EditAdvertPage {
                 actionButtonTitle:
                     this.#action === 'create' ? 'Создать' : 'Изменить',
             });
+            this.#templateContainer.style.width = '100%';
 
             this.#mainImg = this.#templateContainer.querySelector(
                 MAIN_IMG_SELECTOR
@@ -404,7 +424,18 @@ export default class EditAdvertPage {
         const form = document.getElementById(
             'js-edit-advert-form'
         ) as HTMLFormElement;
-        form.onsubmit = this.#submitData;
+        form.onsubmit = (e) => {
+            e.preventDefault();
+
+            if (this.#uploadedImages.length + this.#images.length < 2) {
+                const popup = PopupAlert(
+                    'Пожалуйста, загрузите минимум 2 фотографии'
+                );
+                document.body.append(popup);
+            } else {
+                this.#submitData(e);
+            }
+        };
 
         const roomsNumberInput = form.querySelector(
             'input[name=roomsNumber]'
@@ -484,7 +515,7 @@ export default class EditAdvertPage {
             }
 
             // belowe are the number fields. parse them as integers
-            if (['roomsNumber', 'squareMeters'].includes(key)) {
+            if (['roomsNumber', 'squareMeters', 'floor'].includes(key)) {
                 dataToSend[key] = parseInt(value as string);
             } else if (typeof value === 'string') {
                 dataToSend[key] = value as string;

@@ -44,5 +44,25 @@
     &__text {
         color: #737a8e;
         font-size: 14px;
+
+        width: 200px;
+        height: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &--active {
+        background-color: #f3f6ff;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .chat-page {
+        flex-direction: column-reverse;
+        flex: 0 0 auto;
+    }
+
+    .recipients-list {
+        width: 100%;
     }
 }

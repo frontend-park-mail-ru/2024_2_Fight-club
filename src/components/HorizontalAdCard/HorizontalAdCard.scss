@@ -88,3 +88,19 @@
         );
     }
 }
+
+@media screen and (max-width: 900px) {
+    .horizontal-ad-card {
+        border: 2px #e4e4e4 solid;
+
+        &__buttons-container {
+            margin-top: 10px;
+            justify-content: space-evenly;
+        }
+
+        &__boost-button {
+            width: 56px;
+            height: 35px;
+        }
+    }
+}

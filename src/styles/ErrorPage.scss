@@ -1,0 +1,31 @@
+.error-page {
+    margin: 100px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+
+    &__heading {
+        font-weight: 500;
+        font-size: 40px;
+    }
+
+    &__button {
+        max-width: unset;
+        width: 200px;
+    }
+
+    &__desc {
+        color: #737a8e;
+        line-height: 24px;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    &__error-code {
+        margin-top: 40px;
+        font-size: 25px;
+        font-weight: 500;
+    }
+}

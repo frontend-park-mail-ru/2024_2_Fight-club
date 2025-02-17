@@ -1,0 +1,15 @@
+<div
+    class='recipient-card'
+    data-id='{{author.id}}'
+    data-name='{{author.name}}'
+    id='{{id}}'
+>
+    <img class='recipient-card__avatar' src='{{author.avatar}}' />
+    <div class='recipient-card__info'>
+        <p class='recipient-card__name'>{{author.name}}</p>
+        <p
+            class='recipient-card__text'
+            id='recipient-{{author.id}}-last-message'
+        >{{lastMessage}}</p>
+    </div>
+</div>

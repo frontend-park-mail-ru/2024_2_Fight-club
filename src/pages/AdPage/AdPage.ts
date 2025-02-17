@@ -6,6 +6,7 @@ import ReactiveComponent from '../../components/ReactiveComponent/ReactiveCompon
 import globalStore from '../../modules/GlobalStore';
 import router from '../../modules/Router';
 import BookingCalendar from '../../components/BookingCalendar/BookingCalendar';
+import AuthPopup from '../../components/AuthPopup/AuthPopup';
 
 const SECONDARY_IMG_SELECTOR = '.js-carousel-img';
 const FULLSCREEN_OVERLAY_SELECTOR = '.js-fullscreen-overlay';
@@ -22,6 +23,19 @@ export default class AdPage extends ReactiveComponent {
         data: AdvertData,
         authorInfo: ProfileInfo
     ) {
+        let sex;
+        switch (authorInfo.sex) {
+            case 'M':
+                sex = 'Мужской';
+                break;
+            case 'F':
+                sex = 'Женский';
+                break;
+            default:
+                sex = 'Не указан';
+                break;
+        }
+
         super({
             id: 0,
             parent: parent,
@@ -38,9 +52,10 @@ export default class AdPage extends ReactiveComponent {
                 ...authorInfo,
                 rating: ('' + data.author.rating).slice(0, 3),
                 age: calculateAge(authorInfo.birthdate),
-                sex: authorInfo.sex === 'M' ? 'Мужской' : 'Женский',
+                sex: sex,
                 isAuthor: data.authorUUID === globalStore.auth.userId,
             },
+            templateName: 'AdPage',
         });
 
         this.#data = data;
@@ -142,6 +157,20 @@ export default class AdPage extends ReactiveComponent {
             carouselImages,
             this.state.currentIndex as number
         );
+
+        // Write message button
+        document.getElementById('ad-page-write-message-button')!.onclick =
+            () => {
+                if (globalStore.auth.isAuthorized) {
+                    router.navigateTo(
+                        `/chats?recipientId=${this.#data.authorUUID}`
+                    );
+                    return;
+                }
+
+                const auth = new AuthPopup();
+                auth.render(document.body);
+            };
     }
 
     async #renderMap() {

@@ -1,17 +1,35 @@
 #profile-content {
     display: grid;
     grid-template-areas: 'profile actions';
-    grid-template-columns: 1fr 2fr;
-    gap: 3vh;
-    margin-bottom: 5vh;
+    grid-template-columns: 34vw 67vw;
+    gap: 30px;
+    overflow: hidden;
 }
 
 .profile__profile-container {
     grid-area: profile;
     height: calc(100vh - 200px);
+    margin-bottom: 100px;
 }
 
 .profile__data-container {
     grid-area: actions;
     min-height: 100%;
+}
+
+@media screen and (max-width: 900px) {
+    #profile-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        overflow: auto;
+        gap: 0px !important;
+    }
+
+    .profile__data-container {
+        min-height: 200px !important;
+        height: max-content;
+        margin-bottom: 70px;
+    }
 }

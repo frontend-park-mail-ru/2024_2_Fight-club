@@ -11,12 +11,9 @@ import globalStore from '../../modules/GlobalStore';
 /** Карточка объявления на главной странице */
 export default class AdCard extends ReactiveComponent {
     private data;
-    private plannedImageIndex: number | null; // Пикча, которую анимация хотела показать
     private currentImageIndex;
 
-    private oldImage: HTMLImageElement | null;
-    private newImage: HTMLImageElement | null;
-    private imgScrollTimeouts: NodeJS.Timeout[];
+    private image: HTMLImageElement | null;
     private circles!: HTMLCollectionOf<Element>;
 
     /**
@@ -33,24 +30,15 @@ export default class AdCard extends ReactiveComponent {
                 //     return data.images[state.toShowIndex as number].path;
                 // },
             },
+            templateName: 'AdCard',
             templateData: {
                 ...data,
                 rating: ('' + data.author.rating).slice(0, 3),
             },
         });
-        this.plannedImageIndex = null;
+        this.image = null;
         this.currentImageIndex = 0;
         this.data = data;
-        this.oldImage = this.newImage = null;
-        this.imgScrollTimeouts = [];
-
-        this.registerHelper();
-    }
-
-    private registerHelper() {
-        Handlebars.registerHelper('gte', function (a: number, b: number) {
-            return a >= b;
-        });      
     }
 
     addEventListeners() {
@@ -69,6 +57,10 @@ export default class AdCard extends ReactiveComponent {
                 '.js-show-on-map-button'
             ) as HTMLButtonElement
         ).onclick = (e) => this.showOnMap(e);
+
+        (this.thisElement.querySelector('.js-kebab') as HTMLElement).onclick = (
+            e
+        ) => e.stopPropagation();
 
         setTimeout(() => {
             this.addImageScrolling();
@@ -91,11 +83,8 @@ export default class AdCard extends ReactiveComponent {
             'housing-card__circle'
         );
 
-        this.oldImage = this.thisElement.querySelector(
-            '.js-old-img'
-        ) as HTMLImageElement;
-        this.newImage = this.thisElement.querySelector(
-            '.js-new-img'
+        this.image = this.thisElement.querySelector(
+            '.js-img'
         ) as HTMLImageElement;
 
         imgContainer.onmousemove = (e) => this.onMouseMove(e, areaFraction);
@@ -138,65 +127,13 @@ export default class AdCard extends ReactiveComponent {
      */
     private showImage(toShowIndex: number) {
         // Проверяем что images не null
-        if (!this.oldImage || !this.newImage) {
-            throw new Error('oldImage & newImage = nulls!');
+        if (!this.image) {
+            throw new Error('image = null!');
         }
 
-        if (
-            (!this.imgScrollTimeouts.length &&
-                toShowIndex === this.currentImageIndex) ||
-            (this.imgScrollTimeouts.length !== 0 &&
-                toShowIndex === this.plannedImageIndex)
-        ) {
-            return;
-        }
-
+        this.image.src = this.data.images[toShowIndex].path;
         this.markCircleSelected(toShowIndex);
-
-        // Animation begin
-        this.plannedImageIndex = toShowIndex;
-
-        // Новая фотка на задний план, а старая на переднем
-        this.newImage.style.zIndex = '-1';
-        this.oldImage.style.zIndex = '0';
-
-        // Меняем src у новой фотки
-        this.newImage.src = this.data.images[toShowIndex].path;
-        this.newImage.onload = () => {
-            // Теперь просто меняем непрозрачность у старой, чтобы было видно новую
-            this.oldImage!.style.opacity = '0';
-        };
-
-        // После завершения анимации СВАПАЕМ местами старую и новую фотку
-        // и выполняем переключение изображения, если юзер успел в процессе анимации переместить курсор на область фото
-        // сдругим индексом
-        const timeout = setTimeout(() => {
-            if (!this.oldImage || !this.newImage)
-                throw new Error('oldImage & newImage = nulls!');
-
-            // И возвращаем newImage к исходному состоянию
-            this.oldImage.style.zIndex = '-1';
-            this.newImage.style.zIndex = '0';
-
-            this.oldImage.style.opacity = '1';
-
-            // Просто делаем swap переменных, потому по сути newImage теперь oldImage и vice versa
-            const tmp = this.oldImage;
-            this.oldImage = this.newImage;
-            this.newImage = tmp;
-
-            this.imgScrollTimeouts = [];
-            this.currentImageIndex = this.plannedImageIndex!;
-
-            // We've finished the animation
-            this.plannedImageIndex = null;
-        }, 200); // here should be ANIMATION_TIME defined in CSS
-
-        // Clear all old setTimeouts
-        this.imgScrollTimeouts.map((timeoutToClear) =>
-            clearTimeout(timeoutToClear)
-        );
-        this.imgScrollTimeouts = [timeout];
+        this.currentImageIndex = toShowIndex;
     }
 
     /**
@@ -211,11 +148,7 @@ export default class AdCard extends ReactiveComponent {
      */
     async addToFavorite(e: Event) {
         e.stopPropagation();
-        const heartButton = this.thisElement.querySelector(
-            '.js-fill-heart'
-        ) as HTMLButtonElement;
-        
-        console.log(globalStore.auth.isAuthorized)
+
         if (globalStore.auth.isAuthorized) {
             if (!this.data.isFavorite) {
                 await ApiClient.adToFavourites(this.data.id);
@@ -226,7 +159,12 @@ export default class AdCard extends ReactiveComponent {
                 document
                     .querySelector('.page-container')
                     ?.appendChild(successMessage);
-                heartButton.classList.add('already-liked');
+                this.thisElement
+                    .querySelector('.js-filled-heart')
+                    ?.setAttribute('display', 'unset');
+                this.thisElement
+                    .querySelector('.js-empty-heart')
+                    ?.setAttribute('display', 'none');
             } else {
                 this.data.isFavorite = false;
                 await ApiClient.removeFromFavourites(this.data.id);
@@ -234,7 +172,12 @@ export default class AdCard extends ReactiveComponent {
                 document
                     .querySelector('.page-container')
                     ?.appendChild(successMessage);
-                heartButton.classList.remove('already-liked');
+                this.thisElement
+                    .querySelector('.js-filled-heart')
+                    ?.setAttribute('display', 'none');
+                this.thisElement
+                    .querySelector('.js-empty-heart')
+                    ?.setAttribute('display', 'unset');
             }
         } else {
             const errorMessage = PopupAlert('Необходимо зарегистрироваться');

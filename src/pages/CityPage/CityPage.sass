@@ -1,10 +1,10 @@
 .city-information
     width: 100%
-    position: relative
 
     &__center
         display: flex
         justify-content: center
+        position: relative
 
     &__image
         width: 100%
@@ -13,7 +13,8 @@
     
     &__name
         position: absolute
-        top: 40%
+        top: 50%
+        transform: translateY(-50%)
         font-size: 100px
         color: #fff
         // color: #ffa552
@@ -21,15 +22,21 @@
 
     &__description
         color: rgba(0, 0, 0, 0.80)
-        line-height: 1.4
-        width: 95%
-        margin: 10px auto
+        line-height: 1.6
+        width: 85%
+        margin: 20px auto
         padding: 30px
-        background-color: #fff
-        font-size: 20px
+        background-color: #f9f9f9
+        font-size: 18px
         text-align: justify
-        border-radius: 10px
-        border-width: 1px
+        border-radius: 12px
+        border: 1px solid #ddd
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)
+        transition: all 0.3s ease
+
+        &:hover
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2)
+            background-color: #ffffff
 
 .advert
     row-gap: 30px
@@ -47,6 +54,8 @@
         margin: 0 auto
     .city-information
         &__name
-            top: 160px
+            top: 50%
+            font-size: 70px
+            text-align: center
         &__description
             box-sizing: border-box

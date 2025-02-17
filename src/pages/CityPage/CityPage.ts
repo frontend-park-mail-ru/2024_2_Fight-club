@@ -5,6 +5,7 @@ import AdCard from '../../components/AdCard/AdCard';
 import ApiClient from '../../modules/ApiClient';
 
 import { AdvertData } from '../../modules/Types';
+import router from '../../modules/Router';
 
 class CityPage {
     #queryName: string;
@@ -33,7 +34,10 @@ class CityPage {
             this.#description = data.city['description'];
             this.#photo = data.city['image'];
         } else {
-            // console.log('error getting info');
+            if (infoResponse.status === 404) {
+                router.navigateTo('/404');
+                return;
+            }
         }
 
         const placesResponse = await ApiClient.getCitiesAds(name);

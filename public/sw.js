@@ -5,13 +5,13 @@ const ALWAYS_CACHE = [
     '/favicon.png',
     '/journey.jpg',
     '/default_user_icon.png',
-    '/style.css',
+    '/fonts/Inter.ttf',
     '/fonts/Dimkin-Light.ttf',
     '/fonts/Dimkin-Regular.ttf',
     '/fonts/MarckScript-Regular.ttf',
 ];
 
-const CACHE_BLACKLIST = [];
+const CACHE_BLACKLIST = ['/styles.css'];
 
 // Use the install event to pre-cache all initial resources.
 self.addEventListener('install', (event) => {

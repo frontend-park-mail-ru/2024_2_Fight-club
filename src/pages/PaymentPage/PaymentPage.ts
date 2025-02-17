@@ -18,6 +18,7 @@ export default class PaymentPage extends BaseComponent {
             templateData: {
                 price: ('' + price).replace(/\B(?=(\d{3})+(?!\d))/g, ' '),
             },
+            templateName: 'PaymentPage',
         });
 
         this.adId = adId;

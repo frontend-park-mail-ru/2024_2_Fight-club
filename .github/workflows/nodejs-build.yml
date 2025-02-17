@@ -4,8 +4,8 @@
 name: Node.js CI
 
 on:
-    pull_request:
-        branches: ['*']
+    push:
+        branches: ['better-deploy', 'dev']
 
 jobs:
     build:
@@ -26,3 +26,24 @@ jobs:
             - run: npm i
             - run: npm run build
             - run: npm test --if-present
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Install SSH Client
+              run: sudo apt-get update && sudo apt-get install -y openssh-client
+
+            - name: Add SSH key to the agent
+              uses: webfactory/ssh-agent@v0.9.0
+              with:
+                  ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+            - name: Create remote directory (if it doesn't exist)
+              run: ssh ubuntu@pootnick.ru "mkdir -p /home/ubuntu/frontend/"
+
+            - name: Copy build artifacts via SSH
+              run: rsync -avzP ./dist/ ubuntu@pootnick.ru:/home/ubuntu/frontend/

@@ -112,4 +112,25 @@ $new-rate-star-filled: url("/svg/star-filled.svg") // Путь к заполне
         height: 40px
         font-size: 20px
         background-color: #4daf7c
-            
+
+@media screen and (max-width: 900px)
+    .new-rate
+        min-height: 500px
+
+        &__caption
+            font-size: 22px
+
+        &__form
+            h3
+                font-size: 15px
+
+        &__title-container
+            input
+                font-size: 15px
+
+        &__review-container
+            height: min-content
+
+            textarea
+                height: 280px
+                font-size: 15px

@@ -3,6 +3,7 @@
 import ProfileInfo from '../../components/ProfileInfo/ProfileInfo';
 import ProfileData from '../../components/ProfileData/ProfileData';
 import APIClient from '../../modules/ApiClient';
+import router from '../../modules/Router';
 
 class ProfilePage {
     #isMyProfile: boolean;
@@ -55,6 +56,7 @@ class ProfilePage {
         }
 
         const response = await APIClient.profile(uuid);
+        console.log(response);
         if (response.ok) {
             const data = await response.json();
 
@@ -68,6 +70,9 @@ class ProfilePage {
             this.#avatar = data.avatar;
             this.#sex = this.#calculateSex(data.sex);
             this.#age = this.#calculateAge(data.birthdate);
+        } else if (response.status === 404) {
+            router.navigateTo('/404');
+            return;
         } else if (response.status !== 401) {
             console.error('Wrong response from server', response);
         }

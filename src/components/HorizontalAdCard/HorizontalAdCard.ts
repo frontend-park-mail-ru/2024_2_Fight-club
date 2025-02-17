@@ -23,7 +23,7 @@ export default function HorizontalAdCard(
 
     pageContainer.innerHTML = template({
         ...cardData,
-        boostDaysLeft: Math.round(
+        boostDaysLeft: Math.ceil(
             (new Date(cardData.endBoostDate).valueOf() - new Date().valueOf()) /
                 (60 * 60 * 24 * 1000)
         ).toString(),

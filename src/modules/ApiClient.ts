@@ -15,7 +15,7 @@ interface Limit {
 }
 
 class APIClient {
-    BASE_URL = `${location.protocol}//${window.location.hostname}/api/`;
+    BASE_URL = `${location.protocol}//${location.hostname}:${location.port}/api`;
     AUTOADDRESS_KEY = 'pVhps0CwtfR0';
 
     /**
@@ -202,7 +202,7 @@ class APIClient {
             name: name,
             email: email,
             sex: sex,
-            birthdate: birthdate,
+            birthDate: birthdate,
             isHost: isHost,
         };
 
@@ -244,7 +244,7 @@ class APIClient {
     }
 
     async getFavourites(uuid: string) {
-        const url = this.BASE_URL + `users/${uuid}/favorites`;
+        const url = this.BASE_URL + `/users/${uuid}/favorites`;
         return Ajax.get(url);
     }
 
@@ -265,6 +265,27 @@ class APIClient {
                 donationAmount: donationAmount,
             },
         });
+    }
+
+    async addNewRegion(name: string, firstDate: string, secondDate: string) {
+        const url = this.BASE_URL + `/users/regions`;
+        const body = {
+            regionName: name,
+            startVisitedDate: firstDate,
+            endVisitedDate: secondDate
+        }
+
+        return Ajax.post({url, body})
+    }
+
+    async removeRegion(name: string) {
+        const url = this.BASE_URL + `/users/regions/${name}`;
+        return Ajax.delete({url, body: {}})
+    }
+    
+    async getVisitedRegions(uuid: string) {
+        const url = this.BASE_URL + `/users/${uuid}/regions`;
+        return Ajax.get(url);
     }
 }
 

@@ -1,34 +1,33 @@
 <template id='js-chat-message-template'>
-    <div class='chat-window__chat-window__message'>
-        <span class='chat-window__chat-window__message__text js-message-text'>
+    <div class='message'>
+        <span class='message__text js-message-text'>
             Тут текст сообщения
         </span>
-        <div class='chat-window__chat-window__message__time-wrapper'>
-            <span
-                class='chat-window__chat-window__message__time js-message-time'
-            >
+        <div class='message__time-wrapper'>
+            <span class='message__time js-message-time'>
                 00:00
             </span>
         </div>
     </div>
 </template>
 
-<div class='chat-window__chat-window' id='{{id}}'>
-    <div class='chat-window__chat-window__messages' id='js-messages'>
+<div class='chat-window' id='{{id}}'>
+    <div class='chat-window__upper-part'>
+        <p class='chat-window__recipient-name'>{{recipientName}}</p>
+    </div>
+
+    <div class='chat-window__messages' id='js-messages'>
         <!-- Messages will be here -->
     </div>
 
-    <div class='chat-window__chat-window__bottom-part'>
+    <div class='chat-window__bottom-part'>
         <textarea
             placeholder='Написать сообщение'
-            class='chat-window__chat-window__input js-message-input'
+            class='chat-window__input js-message-input'
             rows='1'
             maxlength='300'
         ></textarea>
-        <button
-            class='chat-window__chat-window__send-button'
-            id='js-send-message-button'
-        >
+        <button class='chat-window__send-button' id='js-send-message-button'>
             <svg
                 aria-hidden='true'
                 width='16'
